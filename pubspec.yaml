@@ -1,0 +1,95 @@
+name: rocketbot
+description: Rocketbot
+
+publish_to: 'none'
+
+version: 1.1.11+111
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_secure_storage: ^5.0.2
+  firebase_messaging: any
+  firebase_core: any
+  firebase_auth: any
+  http: ^0.13.4
+  auto_size_text: 3.0.0
+  intl: ^0.17.0
+  fl_chart: ^0.51.0
+  animations: ^2.0.3
+  progress_indicators: ^1.0.0
+  url_launcher: ^6.1.2
+  qr_flutter: ^4.0.0
+  share: any
+  decimal: ^2.2.0
+  vibration: ^1.7.4-nullsafety.0
+  flutter_snake_navigationbar: ^0.6.1
+  flutter_switch: ^0.3.2
+  permission_handler: ^9.2.0
+  local_auth: ^2.1.0
+  flutter_phoenix: ^1.0.0
+  package_info: any
+  path_provider: any
+  flutter_lock_screen: ^2.0.1
+  google_sign_in: ^5.3.2
+  sign_in_with_apple: ^4.0.0
+  flutter_displaymode: ^0.4.0
+  flutter_local_notifications: ^9.5.3+1
+  preload_page_view: ^0.1.6
+  sqflite: ^2.0.2+1
+  jiffy: ^5.0.0
+  sprintf: any
+  slide_to_act: any
+  qr_code_scanner:
+    git:
+      url: https://github.com/xeinebiu/qr_code_scanner.git
+      ref: fix_break_changes_platform
+  flutter_user_agent:
+    git:
+      url: https://github.com/M1chlCZ/flutter_user_agent.git
+      ref: master
+  flutter_biometrics:
+    git:
+      url: https://github.com/M1chlCZ/flutter_biometrics.git
+      ref: main
+  cupertino_icons: ^1.0.4
+linter:
+  rules:
+    -use_super_parameters
+
+
+dev_dependencies:
+  flutter_lints: ^2.0.1
+  flutter_launcher_name: ^0.0.1
+  flutter_test:
+    sdk: flutter
+
+
+
+flutter_launcher_name:
+  name: "RocketBot"
+
+flutter:
+  uses-material-design: true
+
+  generate: true
+
+  assets:
+    - images/
+    - webpages/
+
+
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: fonts/Montserrat-Regular.ttf
+        - asset: fonts/Montserrat-Italic.ttf
+          style: italic
+        - asset: fonts/Montserrat-SemiBold.ttf
+          weight: 300
+
