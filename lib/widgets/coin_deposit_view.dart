@@ -47,9 +47,9 @@ class _CoinDepositViewState extends State<CoinDepositView> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(0.0),
             ),
-            child: InkWell(
-              splashColor: Colors.black54,
-              highlightColor: Colors.black54,
+            child: GestureDetector(
+              // splashColor: Colors.black54,
+              // highlightColor: Colors.black54,
               onTap: () {
                 _showDetails(widget.data);
                 // widget.coinSwitch(widget.coin.priceData!.historyPrices!);
@@ -190,18 +190,15 @@ class _CoinDepositViewState extends State<CoinDepositView> {
                         ),
                       ),
                     ),
-                    Expanded(
+                    const Expanded(
                       flex: 1,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
+                        padding: EdgeInsets.only(left: 10.0),
                         child: SizedBox(
                           height: 25,
                           width: 20,
                           child: NeuButton(
-                            onTap: () {
-                              _showDetails(widget.data);
-                            },
-                            icon: const Icon(Icons.arrow_right, color: Colors.white70,),
+                            icon: Icon(Icons.arrow_right, color: Colors.white70,),
                     ),
                         ),
                       ),

@@ -361,8 +361,9 @@ class MainScreenState extends State<MainScreen> {
     setState(() {
       _selectedPageIndex = value;
     });
-    _pageController.animateToPage(value, duration: const Duration(milliseconds: 300), curve: Curves.easeInOutCirc);
-    // _pageController.jumpToPage(value);
+
+    // _pageController.animateToPage(value, duration: const Duration(milliseconds: 300), curve: Curves.decelerate);
+    _pageController.jumpToPage(value);
   }
 
   Color _getNavBarColor() {

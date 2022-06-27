@@ -321,7 +321,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                               highlightColor: Colors.black54,
                               onTap: () async {
                                 Dialogs.openLogOutBox(context, () async {
-                                  await const FlutterSecureStorage().deleteAll();
+                                  await SecureStorage.deleteAll();
                                   if (mounted) {
                                     Navigator.of(context)
                                       .pushReplacement(

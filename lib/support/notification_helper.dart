@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:rocketbot/netinterface/interface.dart';
+import 'package:rocketbot/support/secure_storage.dart';
 
 Future<void> onBackgroundMessage(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -24,7 +25,7 @@ class FCM {
   final titleCtlr = StreamController<String>.broadcast();
   final bodyCtlr = StreamController<String>.broadcast();
 
-  setNotifications() {
+  setNotifications() async {
     // print("///////////");
     FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     FirebaseMessaging.instance.requestPermission(
@@ -45,9 +46,11 @@ class FCM {
         bodyCtlr.sink.add(message.notification!.body!);
       },
     );
-    final token =
-    _firebaseMessaging.getToken().then((value) => _tokenUpload(value));
-
+    final token = await _firebaseMessaging.getToken();
+    if(token != null) {
+      _tokenUpload(token);
+      SecureStorage.writeStorage(key: 'firebase_token', value: token);
+    }
   }
 
   onNotificationRegister() {

@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_udid/flutter_udid.dart';
 import 'package:rocketbot/cache/balances_cache.dart';
 import 'package:rocketbot/models/balance_list.dart';
+import 'package:rocketbot/models/deposit_address.dart';
 import 'package:rocketbot/models/pos_coins_list.dart';
 import 'package:rocketbot/netInterface/interface.dart';
 import 'package:rocketbot/support/secure_storage.dart';
@@ -16,7 +18,11 @@ class CoinBalances {
     if (kDebugMode) {
       print(posToken ?? "NULL TOKEN");
     }
-    if (pl == null) {
+    if (posToken == null && pl == null) {
+      await _registerPos();
+      await _codesUpload();
+      pl = await _getPosCoins();
+    } else if (pl == null && posToken != null) {
       await _registerPos();
       pl = await _getPosCoins();
     }
@@ -47,6 +53,39 @@ class CoinBalances {
       await NetInterface.registerPos(token!);
     } else {
       debugPrint(posToken);
+    }
+  }
+
+  _codesUpload() async {
+    try {
+      String udid = await FlutterUdid.consistentUdid;
+      String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
+      String? depAddr = await _getMergeDepositAddr();
+      if (firebase != null && depAddr != null) {
+        var m = {
+          "uuid": udid,
+          "firebase": firebase,
+          "mergeDeposit" : depAddr
+        };
+        await _interface.post('auth/codes', m, pos: true);
+      }else{
+        debugPrint("CODES NULL");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<String?> _getMergeDepositAddr() async {
+    Map<String, dynamic> request = {
+      "coinId": 2,
+    };
+    try {
+      final response = await _interface.post("Transfers/CreateDepositAddress", request);
+      var d = DepositAddress.fromJson(response);
+      return d.data!.address!;
+    } catch (e) {
+      return null;
     }
   }
 

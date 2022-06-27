@@ -45,7 +45,7 @@ class NetInterface {
 
       // print(response.statusCode);
       // print(response.body.toString());
-      if (response.statusCode >= 400) {
+      if (response.statusCode == 401 || response.statusCode == 403) {
         await refreshToken(pos: pos);
         var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
         final res = await http.get(Uri.parse(curl), headers: {
@@ -66,7 +66,7 @@ class NetInterface {
 
   Future<dynamic> post(String url, Map<String, dynamic> request, {bool pos = false}) async {
     String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
-    var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
+    var tk = await SecureStorage.readStorage(key: pos ? posToken : token);
     dynamic responseJson;
     var query = json.encoder.convert(request);
     // print(_query);
@@ -90,7 +90,7 @@ class NetInterface {
       );
       // print(response.body);
       // print(response.statusCode);
-      if (response.statusCode >= 400) {
+      if (response.statusCode == 401 || response.statusCode == 403) {
         await refreshToken(pos: pos);
         var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
         final res = await http.post(Uri.parse(curl),

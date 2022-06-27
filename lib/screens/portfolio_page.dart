@@ -17,6 +17,7 @@ import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/about_screen.dart';
 import 'package:rocketbot/screens/main_screen.dart';
+import 'package:rocketbot/screens/referral_screen.dart';
 import 'package:rocketbot/screens/settings_screen.dart';
 import 'package:rocketbot/screens/socials_screen.dart';
 import 'package:rocketbot/storage/app_database.dart';
@@ -630,6 +631,44 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
                             ),
                             SizedBox(
                                 // SizedBox(
+                                height: 40,
+                                child: Center(
+                                  child: Directionality(
+                                    textDirection: TextDirection.ltr,
+                                    child: SizedBox(
+                                      width: 140,
+                                      child: TextButton(
+                                        style: ButtonStyle(
+                                            backgroundColor: MaterialStateProperty.resolveWith((states) => qrColors(states)),
+                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
+                                        onPressed: () {
+                                          setState(() {
+                                            popMenu = false;
+                                          });
+                                          Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+                                            return const ReferralScreen();
+                                          }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                                            return FadeTransition(opacity: animation, child: child);
+                                          }));
+                                        },
+                                        child: Text(
+                                          AppLocalizations.of(context)!.referral.toUpperCase(),
+                                          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 14.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                              child: Container(
+                                height: 0.5,
+                                color: Colors.white12,
+                              ),
+                            ),
+                            SizedBox(
+                              // SizedBox(
                                 height: 40,
                                 child: Center(
                                   child: Directionality(
