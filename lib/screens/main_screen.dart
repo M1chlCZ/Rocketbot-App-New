@@ -150,7 +150,7 @@ class MainScreenState extends State<MainScreen> {
       );
     }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
       return FadeTransition(opacity: animation, child: child);
-    }));
+    })).then((value) => _coinKey.currentState?.getFree());
   }
 
   @override

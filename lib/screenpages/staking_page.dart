@@ -97,6 +97,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
   double? _fee;
   double? _min;
   int _typeGraph = 0;
+  bool amountEmpty = true;
 
   @override
   void initState() {
@@ -107,6 +108,15 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     _coinActive = widget.activeCoin;
     _free = widget.free;
     _amountController.addListener(() {
+      if(_amountController.text.isEmpty) {
+        setState(() {
+          amountEmpty = true;
+        });
+      }else{
+        setState(() {
+          amountEmpty = false;
+        });
+      }
       _percentageKey.currentState!.deActivate();
     });
     _stakeBloc = StakeGraphBloc();
@@ -721,7 +731,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: Colors.black26,
+                                fillColor:amountEmpty ? Colors.red.shade600.withOpacity(0.2) : Colors.black12,
                                 contentPadding: const EdgeInsets.only(left: 4.0, right: 4.0),
                                 hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
                                 hintText: AppLocalizations.of(context)!.stake_amount,
@@ -969,10 +979,16 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     String serverTypePos = "<Rocketbot POS Service error>";
     String problem = serverTypeRckt;
     WithdrawConfirm? rw;
+    if (_amountController.text.isEmpty) {
+      Navigator.of(context).pop();
+      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, AppLocalizations.of(context)!.staking_please_enter);
+      _keyStake.currentState!.reset();
+      return;
+    }
     var amt = double.parse(_amountController.text);
     bool minAmount = amt < _min!;
 
-    if (amt > _free || _amountController.text.isEmpty) {
+    if (amt > _free) {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, AppLocalizations.of(context)!.staking_not_enough);
       _keyStake.currentState!.reset();

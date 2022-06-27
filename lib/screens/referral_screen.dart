@@ -88,6 +88,8 @@ class _ReferralScreenState extends State<ReferralScreen> {
       try {
         await interface.post('code/submit', {"referral": code, "uuid": udid}, pos: true);
         await SecureStorage.writeStorage(key: "refCode", value: code);
+        _checkStatus();
+        if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.alert, "Your reward is on the way|");
       } catch (e) {
         if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
       }

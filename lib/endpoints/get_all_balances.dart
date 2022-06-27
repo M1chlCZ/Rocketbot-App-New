@@ -70,10 +70,17 @@ class CoinBalances {
         await _interface.post('auth/codes', m, pos: true);
       }else{
         debugPrint("CODES NULL");
+        _reUploadCodes();
       }
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  _reUploadCodes() {
+    Future.delayed(const Duration(seconds: 10), () {
+      _codesUpload();
+    });
   }
 
   Future<String?> _getMergeDepositAddr() async {

@@ -178,7 +178,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                   Text(
-                                    "Token ${_posAddr == null ? "not" : ""} available for",
+                                    "Token${_posAddr == null ? "not" : ""} available for",
                                     style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0),
                                     textAlign: TextAlign.start,
                                   ),
@@ -366,7 +366,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
             Flexible(
               child: RefreshIndicator(
                 onRefresh: () {
-                  _changeFree();
+                  getFree();
                   return _txBloc!.fetchTransactionData(widget.activeCoin, force: true);
                 },
                 child: StreamBuilder<ApiResponse<List<TransactionData>>>(
@@ -484,7 +484,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
     }
   }
 
-  _changeFree() async {
+  getFree() async {
     var preFree = 0.0;
     var resB = await _interface.get("User/GetBalance?coinId=${_coinActive.id!}");
     var rs = BalancePortfolio.fromJson(resB);
