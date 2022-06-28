@@ -15,6 +15,11 @@ class FetchDataException extends AppException {
       : super(message, "Error During Communication: ");
 }
 
+class ConflictDataException extends AppException {
+  ConflictDataException(String message)
+      : super(message, "");
+}
+
 class BadRequestException extends AppException {
   BadRequestException([message]) : super(message, "Invalid Request: ");
 }

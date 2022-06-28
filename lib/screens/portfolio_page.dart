@@ -5,11 +5,13 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:flutter_udid/flutter_udid.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/balance_bloc.dart';
 import 'package:rocketbot/cache/price_graph_cache.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:rocketbot/models/balance_list.dart';
+import 'package:rocketbot/models/deposit_address.dart';
 import 'package:rocketbot/models/get_withdraws.dart';
 import 'package:rocketbot/models/pgwid.dart';
 import 'package:rocketbot/models/pos_coins_list.dart';
@@ -82,6 +84,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
     _fillSort();
     _getUserInfo();
     _posHandle();
+    _codesUpload();
     // portCalc = widget.listBalances != null ? true : false;
   }
 
@@ -128,6 +131,69 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
       }
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  _codesUpload() async {
+    await Future.delayed(const Duration(seconds: 2));
+    try {
+      String udid = await FlutterUdid.consistentUdid;
+      String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
+      String? depAddr = await _getMergeDepositAddr();
+      if (firebase != null && depAddr != null) {
+        var m = {
+          "uuid": udid,
+          "firebase": firebase,
+          "mergeDeposit" : depAddr
+        };
+        await _interface.post('auth/codes', m, pos: true);
+        String? rewardCode = await SecureStorage.readStorage(key: 'r_code');
+        if (rewardCode != null && rewardCode.isNotEmpty) {
+          _getReward(rewardCode);
+        }
+      }else{
+        debugPrint("CODES NULL");
+        _reUploadCodes();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  _reUploadCodes() {
+    Future.delayed(const Duration(seconds: 5), () async {
+      await _codesUpload();
+      String? rewardCode = await SecureStorage.readStorage(key: 'r_code');
+      if (rewardCode != null && rewardCode.isNotEmpty) {
+        _getReward(rewardCode);
+      }
+    });
+  }
+
+  Future<String?> _getMergeDepositAddr() async {
+    Map<String, dynamic> request = {
+      "coinId": 2,
+    };
+    try {
+      final response = await _interface.post("Transfers/CreateDepositAddress", request);
+      var d = DepositAddress.fromJson(response);
+      return d.data!.address!;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> _getReward(String? code) async {
+    String udid = await FlutterUdid.consistentUdid;
+    if (code != null) {
+      try {
+        await _interface.post('code/submit', {"referral": code, "uuid": udid}, pos: true);
+        await SecureStorage.writeStorage(key: "refCode", value: code);
+        if (mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way|");
+      } catch (e) {
+        if (mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.error.toLowerCase()}", e.toString());
+      }
+     await SecureStorage.deleteStorage(key: 'r_code');
     }
   }
 

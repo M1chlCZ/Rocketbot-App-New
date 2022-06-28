@@ -19,6 +19,7 @@ import 'package:rocketbot/support/gradient_text.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 import 'package:rocketbot/widgets/button_apple.dart';
 import 'package:rocketbot/widgets/login_register.dart';
+import 'package:rocketbot/widgets/referral_widget.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -42,12 +43,15 @@ class LoginScreenState extends State<LoginScreen> {
   TextEditingController secondNameController = TextEditingController();
   TextEditingController passwordRegController = TextEditingController();
   TextEditingController passwordRegConfirmController = TextEditingController();
+  GlobalKey<ReferralWidgetState> loginRef = GlobalKey();
+  GlobalKey<ReferralWidgetState> registerRef = GlobalKey();
 
   bool _curtain = true;
   bool _termsAgreed = false;
   bool _registerButton = true;
   String _appVersion = "1.0";
   var _page = 0;
+  String? referralCode;
 
   @override
   void initState() {
@@ -206,22 +210,25 @@ class LoginScreenState extends State<LoginScreen> {
 
   _nextPage() async {
     String? res = await SecureStorage.readStorage(key: "PIN");
+    if (referralCode != null && referralCode!.isNotEmpty) {
+      await SecureStorage.writeStorage(key: "r_code", value: referralCode!);
+    }
     // String? res;
     if (res == null) {
       if (mounted) {
         Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-        return const PortfolioScreen();
-      }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-        return FadeTransition(opacity: animation, child: child);
-      }));
+          return const PortfolioScreen();
+        }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+          return FadeTransition(opacity: animation, child: child);
+        }));
       }
     } else {
       if (mounted) {
         Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-        return const AuthScreen();
-      }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-        return FadeTransition(opacity: animation, child: child);
-      }));
+          return const AuthScreen();
+        }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+          return FadeTransition(opacity: animation, child: child);
+        }));
       }
     }
   }
@@ -235,6 +242,9 @@ class LoginScreenState extends State<LoginScreen> {
     emailRegController.text = '';
     passwordRegController.text = '';
     passwordRegConfirmController.text = '';
+    referralCode = null;
+    loginRef.currentState?.clearText();
+    registerRef.currentState?.clearText();
     setState(() {
       _page = page;
     });
@@ -517,20 +527,34 @@ class LoginScreenState extends State<LoginScreen> {
                           height: 20.0,
                         ),
                         Platform.isIOS
-                            ? AppleSignInButton(
-                                onSignIn: (AuthorizationCredentialAppleID value) async {
-                                  var asdf = await NetInterface.getTokenApple(value.authorizationCode);
-                                  if (asdf != null) {
-                                    _nextPage();
-                                  } else {
-                                    if (mounted) Dialogs.openAlertBox(context, "Error", "Error Sign in with Apple");
-                                    setState(() {
-                                      _curtain = false;
-                                    });
-                                  }
-                                },
+                            ? Column(
+                                children: [
+                                  AppleSignInButton(
+                                    onSignIn: (AuthorizationCredentialAppleID value) async {
+                                      var asdf = await NetInterface.getTokenApple(value.authorizationCode);
+                                      if (asdf != null) {
+                                        _nextPage();
+                                      } else {
+                                        if (mounted) Dialogs.openAlertBox(context, "Error", "Error Sign in with Apple");
+                                        setState(() {
+                                          _curtain = false;
+                                        });
+                                      }
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 20.0,
+                                  ),
+                                ],
                               )
                             : Container(),
+                        ReferralWidget(
+                            key: loginRef,
+                            refCode: (value) {
+                              if (value.length == 32) {
+                                referralCode = value;
+                              }
+                            }),
                       ]),
                     ),
                   )),
@@ -670,6 +694,16 @@ class LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ))),
                         ),
+                        const SizedBox(
+                          height: 30.0,
+                        ),
+                        ReferralWidget(
+                            key: registerRef,
+                            refCode: (value) {
+                              if (value.length == 32) {
+                                referralCode = value;
+                              }
+                            }),
                         const SizedBox(
                           height: 30.0,
                         ),

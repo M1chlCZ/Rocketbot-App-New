@@ -9,7 +9,8 @@ import 'package:rocketbot/support/barcode_overlay.dart';
 
 class QScanWidget extends StatefulWidget {
   final Function(String) scanResult;
-  const QScanWidget({Key? key, required this.scanResult}) : super(key: key);
+  final String? header;
+  const QScanWidget({Key? key, required this.scanResult, this.header}) : super(key: key);
 
   @override
   QScanWidgetState createState() => QScanWidgetState();
@@ -43,7 +44,7 @@ class QScanWidgetState extends State<QScanWidget> {
         iconTheme: const IconThemeData(
           color: Colors.white70),
         backgroundColor: Theme.of(context).canvasColor,
-        title: Text('Scan QR code', style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white70),),
+        title: Text( widget.header ?? 'Scan QR code', style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white70),),
         actions: [
           IconButton(
             color: Colors.white,

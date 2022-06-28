@@ -88,8 +88,8 @@ class NetInterface {
           return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
         },
       );
-      // print(response.body);
-      // print(response.statusCode);
+      print(response.body);
+      print(response.statusCode);
       if (response.statusCode == 401 || response.statusCode == 403) {
         await refreshToken(pos: pos);
         var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
@@ -127,6 +127,9 @@ class NetInterface {
         break;
       // throw UnauthorisedException(response.body.toString());
       case 500:
+      case 409:
+        var responseJson = json.decode(response.body.toString());
+        throw ConflictDataException(responseJson['errorMessage']);
       default:
         throw FetchDataException('Error occurred while communication with server: ${response.body}');
     }
@@ -281,7 +284,13 @@ class NetInterface {
     }
   }
 
-  static Future<String?> registerUser({required String email, required String pass, required String passConf, required String name, required String surname, required bool agreed}) async {
+  static Future<String?> registerUser(
+      {required String email,
+      required String pass,
+      required String passConf,
+      required String name,
+      required String surname,
+      required bool agreed}) async {
     try {
       String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
       Map request = {"email": email, "password": pass, "confirmPassword": passConf, "name": name, "surname": surname, "agreeToConditions": agreed};
@@ -401,8 +410,15 @@ class NetInterface {
       Map request = {
         "token": enc,
       };
-      final resp = await http.post(pos ? Uri.parse("http://51.195.168.17:7465/auth/refreshToken") : Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/RefreshToken"),
-          body: json.encode(request), headers: {'User-Agent': userAgent.toLowerCase(), "accept": "application/json", "content-type": "application/json", "Auth-Type": "rsa"}).timeout(
+      final resp = await http.post(
+          pos ? Uri.parse("http://51.195.168.17:7465/auth/refreshToken") : Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/RefreshToken"),
+          body: json.encode(request),
+          headers: {
+            'User-Agent': userAgent.toLowerCase(),
+            "accept": "application/json",
+            "content-type": "application/json",
+            "Auth-Type": "rsa"
+          }).timeout(
         const Duration(seconds: 15),
         onTimeout: () {
           return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
@@ -437,8 +453,12 @@ class NetInterface {
         "token": token,
       };
       var query = json.encoder.convert(request);
-      final response = await http.post(Uri.parse("http://51.195.168.17:7465/auth"),
-          body: query, headers: {"Content-Type": "application/json", "accept": "application/json", 'User-Agent': userAgent.toLowerCase(), "Auth-Type": "rsa"}).timeout(
+      final response = await http.post(Uri.parse("http://51.195.168.17:7465/auth"), body: query, headers: {
+        "Content-Type": "application/json",
+        "accept": "application/json",
+        'User-Agent': userAgent.toLowerCase(),
+        "Auth-Type": "rsa"
+      }).timeout(
         const Duration(seconds: 15),
         onTimeout: () {
           return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
