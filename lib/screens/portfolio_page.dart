@@ -135,7 +135,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
   }
 
   _codesUpload() async {
-    await Future.delayed(const Duration(seconds: 2));
     try {
       String udid = await FlutterUdid.consistentUdid;
       String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
