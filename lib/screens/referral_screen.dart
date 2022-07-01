@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 
@@ -10,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rocketbot/models/deposit_address.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/gradient_text.dart';
@@ -31,12 +31,17 @@ class _ReferralScreenState extends State<ReferralScreen> {
   NetInterface interface = NetInterface();
   String? refCode;
   bool refUsed = true;
+  bool deviceID = false;
+  bool firebaseToken = false;
+  bool mergeAddress = false;
+  bool issues = false;
 
   @override
   void initState() {
     super.initState();
     _getRefCode();
     _checkStatus();
+    _checkIssues();
   }
 
   _getRefCode() async {
@@ -63,26 +68,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
     }
   }
 
-  _checkStatus() async {
-    String? s = await SecureStorage.readStorage(key: 'refCode');
-    if (s == null || s.isEmpty) {
-      String udid = await FlutterUdid.consistentUdid;
-      Map<String, dynamic> m = await interface.post('code/check', {"uuid": udid}, pos: true);
-      if (m[refCode] == true) {
-        setState(() {
-          refUsed = true;
-        });
-      } else {
-        setState(() {
-          refUsed = false;
-        });
-      }
-    } else {
-      setState(() {
-        refUsed = true;
-      });
-    }
-  }
+
 
   Future<void> _getReward(String? code) async {
     String udid = await FlutterUdid.consistentUdid;
@@ -97,6 +83,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
         if (mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.error.toLowerCase()}", e.toString());
       }
     }
+    await SecureStorage.deleteStorage(key: 'r_code');
     _checkStatus();
   }
 
@@ -158,62 +145,110 @@ class _ReferralScreenState extends State<ReferralScreen> {
                       height: 5,
                     ),
                     refUsed == false
-                        ? Container(
-                            padding: const EdgeInsets.all(10.0),
-                            margin: const EdgeInsets.all(0.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              // color: Colors.white.withOpacity(0.05)
-                              gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
-                                Color(0xFF079F7F),
-                                Color(0xFFE9522A),
-                              ]),
-                            ),
-                            child: Column(
-                              children: [
-                                GradientText(
-                                  AppLocalizations.of(context)!.ref_invite,
-                                  align: TextAlign.left,
-                                  gradient: const LinearGradient(colors: [
-                                    Colors.white,
-                                    Colors.white70,
+                        ? Column(
+                          children: [
+                            Container(
+                                padding: const EdgeInsets.all(10.0),
+                                margin: const EdgeInsets.all(0.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  // color: Colors.white.withOpacity(0.05)
+                                  gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
+                                    Color(0xFF079F7F),
+                                    Color(0xFFE9522A),
                                   ]),
-                                  style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18.0, color: Colors.white),
                                 ),
-                                const SizedBox(
-                                  height: 10.0,
+                                child: Column(
+                                  children: [
+                                    GradientText(
+                                      AppLocalizations.of(context)!.ref_invite,
+                                      align: TextAlign.left,
+                                      gradient: const LinearGradient(colors: [
+                                        Colors.white,
+                                        Colors.white70,
+                                      ]),
+                                      style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18.0, color: Colors.white),
+                                    ),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    ReferralWidget(
+                                        key: refKey,
+                                        refCode: (refCode) {
+                                          _getReward(refCode);
+                                        }),
+                                    // SizedBox(
+                                    //   height: 50,
+                                    //   child: FlatCustomButton(
+                                    //     color: Colors.white12,
+                                    //     onTap: () {
+                                    //       _openQRScanner();
+                                    //     },
+                                    //     child: Text('Get the Reward',
+                                    //         style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18.0, color: const Color(0xFFFFFFFF))),
+                                    //   ),
+                                    // ),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    GradientText(
+                                      AppLocalizations.of(context)!.ref_hint,
+                                      align: TextAlign.center,
+                                      gradient: const LinearGradient(colors: [
+                                        Colors.white,
+                                        Colors.white70,
+                                      ]),
+                                      style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 10.0, color: Colors.white),
+                                    ),
+                                  ],
                                 ),
-                                ReferralWidget(
-                                    key: refKey,
-                                    refCode: (refCode) {
-                                      _getReward(refCode);
-                                    }),
-                                // SizedBox(
-                                //   height: 50,
-                                //   child: FlatCustomButton(
-                                //     color: Colors.white12,
-                                //     onTap: () {
-                                //       _openQRScanner();
-                                //     },
-                                //     child: Text('Get the Reward',
-                                //         style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18.0, color: const Color(0xFFFFFFFF))),
-                                //   ),
-                                // ),
-                                const SizedBox(
-                                  height: 10.0,
-                                ),
-                                GradientText(
-                                  AppLocalizations.of(context)!.ref_hint,
-                                  align: TextAlign.center,
-                                  gradient: const LinearGradient(colors: [
-                                    Colors.white,
-                                    Colors.white70,
+                              ),
+                            const SizedBox(height: 20.0,),
+                            Visibility(
+                              visible: issues,
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(10.0),
+                                margin: const EdgeInsets.all(0.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  // color: Colors.white.withOpacity(0.05)
+                                  gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
+                                    Colors.deepOrangeAccent,
+                                    Colors.red,
                                   ]),
-                                  style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 10.0, color: Colors.white),
                                 ),
-                              ],
-                            ),
-                          )
+                                child: Column (
+                                  mainAxisSize: MainAxisSize.max,
+
+                                  children: [
+                                    const Text('Promotion eligibility issues', style: TextStyle(color: Colors.white70),),
+                                    const Divider(height: 1.0, color: Colors.white70,),
+                                    const SizedBox(height: 5.0,),
+                                    Visibility(
+                                      visible: deviceID,
+                                      child: const Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('Device id missing or unobtainable', style: TextStyle(color: Colors.white70))),
+                                    ),
+                                    Visibility(
+                                      visible: firebaseToken,
+                                      child: const Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('Firebase token unobtainable', style: TextStyle(color: Colors.white70))),
+                                    ),
+                                    Visibility(
+                                      visible: mergeAddress,
+                                      child: const Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('Merge Address missing (Check your email for verification)', style: TextStyle(color: Colors.white70))),
+                                    ),
+                                  ],
+                                )
+                              ),
+                            )
+                          ],
+                        )
                         : Container(
                             padding: const EdgeInsets.all(10.0),
                             margin: const EdgeInsets.all(0.0),
@@ -334,5 +369,101 @@ class _ReferralScreenState extends State<ReferralScreen> {
         ),
       ],
     );
+  }
+
+  _codesUpload() async {
+    try {
+      String udid = await FlutterUdid.consistentUdid;
+      String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
+      String? depAddr = await _getMergeDepositAddr();
+      if (depAddr != null) {
+        var m = {
+          "uuid": udid,
+          "firebase": firebase,
+          "mergeDeposit" : depAddr
+        };
+        await interface.post('auth/codes', m, pos: true);
+        String? rewardCode = await SecureStorage.readStorage(key: 'r_code');
+        if (rewardCode != null && rewardCode.isNotEmpty) {
+          _getReward(rewardCode);
+        }
+      }else{
+        debugPrint("CODES NULL");
+        _reUploadCodes();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  _reUploadCodes() {
+    Future.delayed(const Duration(seconds: 5), () async {
+      await _codesUpload();
+      String? rewardCode = await SecureStorage.readStorage(key: 'r_code');
+      if (rewardCode != null && rewardCode.isNotEmpty) {
+        _getReward(rewardCode);
+      }
+    });
+  }
+
+  _checkIssues() async  {
+    String? udid = await FlutterUdid.consistentUdid;
+    // String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
+    String? depAddr = await _getMergeDepositAddr();
+
+    if (udid == null) {
+      deviceID = true;
+      issues = true;
+    }
+    // if (firebase == null) {
+    //   firebaseToken = true;
+    //   issues = true;
+    // }
+    if (depAddr == null) {
+      mergeAddress = true;
+      issues = true;
+    }
+    setState(() {});
+    if (issues == false) {
+      _codesUpload();
+    }
+  }
+
+
+
+  _checkStatus() async {
+    String? s = await SecureStorage.readStorage(key: 'refCode');
+    if (s == null || s.isEmpty) {
+      String udid = await FlutterUdid.consistentUdid;
+      Map<String, dynamic> m = await interface.post('code/check', {"uuid": udid}, pos: true);
+      if (m['refCode'] == true) {
+        setState(() {
+          refUsed = true;
+        });
+      } else {
+        setState(() {
+          refUsed = false;
+        });
+      }
+    } else {
+      setState(() {
+        refUsed = true;
+      });
+    }
+  }
+
+  Future<String?> _getMergeDepositAddr() async {
+    Map<String, dynamic> request = {
+      "coinId": 2,
+    };
+    try {
+      final response = await interface.post("Transfers/CreateDepositAddress", request);
+      var d = DepositAddress.fromJson(response);
+      return d.data!.address!;
+    } catch (e) {
+      // ScaffoldMessenger.maybeOf(context)?.showSnackBar(snackbar);
+      // Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Can't get Merge deposit address, please verify your account!");
+      return null;
+    }
   }
 }

@@ -19,10 +19,10 @@ class CoinBalances {
       print(posToken ?? "NULL TOKEN");
     }
     if (pl == null) {
-      await _registerPos();
+      await NetInterface.registerPosHandle();
       pl = await _getPosCoins();
     } else if (pl == null && posToken != null) {
-      await _registerPos();
+       await NetInterface.registerPosHandle();
       pl = await _getPosCoins();
     }
     // print("|SECOND STAKING DONE| " + DateTime.now().toString());
@@ -45,15 +45,6 @@ class CoinBalances {
     return list;
   }
 
-  _registerPos() async {
-    String? posToken = await SecureStorage.readStorage(key: NetInterface.posToken);
-    if (posToken == null) {
-      String? token = await SecureStorage.readStorage(key: NetInterface.token);
-      await NetInterface.registerPos(token!);
-    } else {
-      debugPrint(posToken);
-    }
-  }
 
   // _codesUpload() async {
   //   try {

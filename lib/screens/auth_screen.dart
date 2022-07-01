@@ -45,16 +45,18 @@ class AuthScreenState extends State<AuthScreen> {
   void _getAuthType() async {
     if (widget.setupPIN != true) {
       var i = await SecureStorage.readStorage(key: "AUTH_TYPE");
-      if (int.parse(i!) == 0) {
-        setState(() {
-          _showFinger = false;
-        });
-      } else if (int.parse(i) == 1) {
-        biometrics();
-      } else {
-        setState(() {
-          _showFinger = true;
-        });
+      if (i != null) {
+        if (int.parse(i) == 0) {
+          setState(() {
+            _showFinger = false;
+          });
+        } else if (int.parse(i) == 1) {
+          biometrics();
+        } else {
+          setState(() {
+            _showFinger = true;
+          });
+        }
       }
     }
   }

@@ -478,4 +478,14 @@ class NetInterface {
       debugPrint(e.toString());
     }
   }
+
+  static Future<void> registerPosHandle() async {
+    String? posToken = await SecureStorage.readStorage(key: NetInterface.posToken);
+    if (posToken == null) {
+      String? token = await SecureStorage.readStorage(key: NetInterface.token);
+      await NetInterface.registerPos(token!);
+    } else {
+      debugPrint(posToken);
+    }
+  }
 }

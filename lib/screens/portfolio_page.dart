@@ -70,6 +70,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
 
   @override
   void initState() {
+    _authPing();
     _bloc = BalancesBloc();
     _initializeLocalNotifications();
     _firebaseMessaging.setNotifications();
@@ -134,12 +135,26 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
     }
   }
 
+  void _authPing() async {
+    try {
+      await _interface.get('auth/ping', pos: true);
+      debugPrint('ok');
+    }catch(e) {
+      debugPrint('register');
+      try {
+        await NetInterface.registerPosHandle();
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    }
+  }
+
   _codesUpload() async {
     try {
       String udid = await FlutterUdid.consistentUdid;
       String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
       String? depAddr = await _getMergeDepositAddr();
-      if (firebase != null && depAddr != null) {
+      if (depAddr != null) {
         var m = {
           "uuid": udid,
           "firebase": firebase,
@@ -169,6 +184,11 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
     });
   }
 
+  final snackbar = const SnackBar(
+    backgroundColor: Colors.deepOrangeAccent,
+      content: Text('Please verify your email', textAlign: TextAlign.center, style: TextStyle(fontSize: 15,),)
+  );
+
   Future<String?> _getMergeDepositAddr() async {
     Map<String, dynamic> request = {
       "coinId": 2,
@@ -178,6 +198,8 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
       var d = DepositAddress.fromJson(response);
       return d.data!.address!;
     } catch (e) {
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(snackbar);
+      // Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Can't get Merge deposit address, please verify your account!");
       return null;
     }
   }
@@ -268,8 +290,8 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: SafeArea(
+    return Scaffold(
+      body: SafeArea(
         child: Stack(
           children: [
             RefreshIndicator(
@@ -990,4 +1012,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
       _bloc!.filterCoinsList(zero: _hideZero);
     });
   }
+
+
 }

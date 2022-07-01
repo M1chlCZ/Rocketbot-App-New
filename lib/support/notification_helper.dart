@@ -5,18 +5,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 
-Future<void> onBackgroundMessage(RemoteMessage message) async {
-  await Firebase.initializeApp();
-
-  if (message.data.containsKey('data')) {
-    final data = message.data['data'];
-  }
-
-  if (message.data.containsKey('notification')) {
-    final notification = message.data['notification'];
-  }
-  // Or do other work.
-}
 
 class FCM {
   final _firebaseMessaging = FirebaseMessaging.instance;
@@ -27,7 +15,7 @@ class FCM {
 
   setNotifications() async {
     // print("///////////");
-    FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+
     FirebaseMessaging.instance.requestPermission(
       alert: true,
       badge: true,

@@ -146,7 +146,7 @@
   "st_more" : "Zobrazit více",
   "referral" : "Referral",
   "ref_code" : "Your referral code",
-  "ref_invite" : "You have not been invited by anyone, scan Rocketbot referral code to receive 50 Merge",
+  "ref_invite" : "You have not been invited by anyone, scan Rocketbot referral code to receive 100 Merge",
   "ref_unvite" : "You've already used the invite promotion, keep an eye on our future ones",
   "ref_hint" : "Just scan the similar looking QR code and you are all set. \nUser is eligible for this promotion only once!"
 }
