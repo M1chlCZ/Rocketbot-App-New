@@ -4,7 +4,21 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/secure_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+Future<void> onBackgroundMessage(RemoteMessage message) async {
+  await Firebase.initializeApp();
+
+  if (message.data.containsKey('data')) {
+    final data = message.data['data'];
+  }
+
+  if (message.data.containsKey('notification')) {
+    final notification = message.data['notification'];
+  }
+  print("shit");
+  // Or do other work.
+}
 
 class FCM {
   final _firebaseMessaging = FirebaseMessaging.instance;
@@ -15,7 +29,7 @@ class FCM {
 
   setNotifications() async {
     // print("///////////");
-
+    FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     FirebaseMessaging.instance.requestPermission(
       alert: true,
       badge: true,
@@ -34,6 +48,17 @@ class FCM {
         bodyCtlr.sink.add(message.notification!.body!);
       },
     );
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      print("onMessageOpenedApp: $message");
+      if (message.data["link"] == true) {
+        try {
+          launchUrl(message.data["dataLink"]);
+        } catch (e) {
+          print(e);
+        }
+    }
+      });
     final token = await _firebaseMessaging.getToken();
     if(token != null) {
       _tokenUpload(token);

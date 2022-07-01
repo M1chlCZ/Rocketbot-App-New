@@ -20,6 +20,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
   await SystemChrome.setPreferredOrientations(
     [
       DeviceOrientation.portraitUp,
@@ -27,7 +32,7 @@ void main() async {
     ],
   );
 
-  FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+
 
   runApp(
     Phoenix(
