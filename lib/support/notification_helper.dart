@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -50,12 +51,11 @@ class FCM {
     );
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      print("onMessageOpenedApp: $message");
-      if (message.data["link"] == true) {
+      if (message.data.keys.first == 'link') {
         try {
-          launchUrl(message.data["dataLink"]);
+          launchUrl(Uri.parse(message.data["dataLink"]));
         } catch (e) {
-          print(e);
+          debugPrint(e.toString());
         }
     }
       });

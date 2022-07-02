@@ -184,23 +184,23 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
     });
   }
 
-  final snackbar = const SnackBar(
-    backgroundColor: Colors.deepOrangeAccent,
-      content: Text('Please verify your email', textAlign: TextAlign.center, style: TextStyle(fontSize: 15,),)
-  );
-
   Future<String?> _getMergeDepositAddr() async {
-    Map<String, dynamic> request = {
-      "coinId": 2,
-    };
-    try {
-      final response = await _interface.post("Transfers/CreateDepositAddress", request);
-      var d = DepositAddress.fromJson(response);
-      return d.data!.address!;
-    } catch (e) {
-      ScaffoldMessenger.maybeOf(context)?.showSnackBar(snackbar);
-      // Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Can't get Merge deposit address, please verify your account!");
-      return null;
+   String? s = await SecureStorage.readStorage(key: 'merge_addr');
+    if (s == null || s.isEmpty) {
+      Map<String, dynamic> request = {
+            "coinId": 2,
+          };
+      try {
+        final response = await _interface.post("Transfers/CreateDepositAddress", request);
+        var d = DepositAddress.fromJson(response);
+        await SecureStorage.writeStorage(key: 'merge_addr', value: d.data!.address!);
+        return d.data!.address!;
+      } catch (e) {
+        // Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Can't get Merge deposit address, please verify your account!");
+        return null;
+      }
+    }else{
+      return s;
     }
   }
 
