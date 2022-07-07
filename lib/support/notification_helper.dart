@@ -62,8 +62,8 @@ class FCM {
           }
           debugPrint(e.toString());
         }
-    }
-      });
+      }
+    });
     final token = await _firebaseMessaging.getToken();
     if(token != null) {
       _tokenUpload(token);
