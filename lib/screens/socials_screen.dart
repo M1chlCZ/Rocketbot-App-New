@@ -410,8 +410,13 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
   void _launchURL(String url) async {
     var kUrl = url.replaceAll(" ", "+");
     try {
-      await launchUrl(Uri.parse(kUrl));
+      launchUrl(Uri.parse(kUrl), mode: LaunchMode.externalNonBrowserApplication);
     } catch (e) {
+      try {
+        launchUrl(Uri.parse(kUrl), mode: LaunchMode.externalApplication);
+      } catch (e) {
+        launchUrl(Uri.parse(kUrl), mode: LaunchMode.platformDefault);
+      }
       debugPrint(e.toString());
     }
   }
