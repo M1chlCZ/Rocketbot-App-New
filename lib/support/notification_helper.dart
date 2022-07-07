@@ -53,12 +53,17 @@ class FCM {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       if (message.data.keys.first == 'link') {
         try {
-          launchUrl(Uri.parse(message.data["dataLink"]));
+          launchUrl(Uri.parse(message.data["dataLink"]), mode: LaunchMode.externalNonBrowserApplication);
         } catch (e) {
+          try {
+            launchUrl(Uri.parse(message.data["dataLink"]), mode: LaunchMode.externalApplication);
+          } catch (e) {
+            launchUrl(Uri.parse(message.data["dataLink"]), mode: LaunchMode.platformDefault);
+          }
           debugPrint(e.toString());
         }
-    }
-      });
+      }
+    });
     final token = await _firebaseMessaging.getToken();
     if(token != null) {
       _tokenUpload(token);
