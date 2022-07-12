@@ -18,8 +18,9 @@ class AboutScreenState extends State<AboutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return  SingleChildScrollView(
-      child: Material(
+    return  Material(
+      color: Theme.of(context).canvasColor,
+      child: SingleChildScrollView(
         child: SafeArea(
           child: Stack(children: [
             Column(
@@ -472,7 +473,7 @@ class AboutScreenState extends State<AboutScreen> {
                       ),
                       RichText(
                         text: TextSpan(
-                          text: "APP dev: \n",
+                          text: "APP + Staking/MN API dev: \n",
                           style: Theme.of(context).textTheme.headline4,
                         ),
                       ),

@@ -12,6 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/component_widgets/container_neu.dart';
 import 'package:rocketbot/models/registration_errors.dart';
 import 'package:rocketbot/netinterface/interface.dart';
+import 'package:rocketbot/screens/main_menu.dart';
 import 'package:rocketbot/screens/portfolio_page.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/firebase_service.dart';
@@ -217,7 +218,7 @@ class LoginScreenState extends State<LoginScreen> {
     if (res == null) {
       if (mounted) {
         Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-          return const PortfolioScreen();
+          return const MainMenuScreen();
         }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
           return FadeTransition(opacity: animation, child: child);
         }));
@@ -802,7 +803,7 @@ class LoginScreenState extends State<LoginScreen> {
                 child: Container(
                   width: double.infinity,
                   height: double.maxFinite,
-                  color: const Color(0xFF1B1B1B),
+                  color: const Color(0xFF252F45),
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(30.0),

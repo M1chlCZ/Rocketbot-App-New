@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/bloc/stake_graph_bloc.dart';
@@ -73,6 +74,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
   final _percentageKey = GlobalKey<PercentSwitchWidgetState>();
   final GlobalKey<SlideActionState> _keyStake = GlobalKey();
   final TextEditingController _amountController = TextEditingController();
+  AppDatabase db = GetIt.I.get<AppDatabase>();
   FocusNode numberFocusNode = FocusNode();
   AnimationController? _animationController;
   Animation<double>? _animation;
@@ -1025,7 +1027,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       };
       var resWith = await _interface.post("Transfers/ConfirmWithdraw", queryID);
       rw = WithdrawConfirm.fromJson(resWith);
-      await AppDatabase().addTX(rw.data!.pgwIdentifier!, _coinActive.id!, double.parse(_amountController.text), widget.depositAddress!);
+      await db.addTX(rw.data!.pgwIdentifier!, _coinActive.id!, double.parse(_amountController.text), widget.depositAddress!);
       problem = serverTypePos;
       Map<String, dynamic> m = {
         "idCoin": _coinActive.id!,
@@ -1071,7 +1073,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
   }
 
   _lostPosTX() async {
-    List<PGWIdentifier> l = await AppDatabase().getUnfinishedTX();
+    List<PGWIdentifier> l = await db.getUnfinishedTX();
     for (var element in l) {
       var coindID = element.getCoinID();
       var pgwid = element.getPGW();
@@ -1102,7 +1104,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
             "tx_id": txid,
           };
           await _interface.post("stake/confirm", m, pos: true);
-          await AppDatabase().finishTX(pgwid!);
+          await db.finishTX(pgwid!);
           await Future.delayed(const Duration(seconds: 3));
           _getPos();
         } catch (e) {

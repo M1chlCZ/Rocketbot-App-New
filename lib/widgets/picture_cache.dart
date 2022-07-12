@@ -25,6 +25,13 @@ class _PictureCacheWidgetState extends State<PictureCacheWidget> {
     }
   }
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   _handleFile() async {
     var documentDirectory = await getApplicationDocumentsDirectory();
     var firstPath = "${documentDirectory.path}/images";

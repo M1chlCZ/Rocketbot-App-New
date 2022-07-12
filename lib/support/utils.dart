@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
   static String getUTC() {
@@ -17,4 +19,30 @@ class Utils {
     }
     return DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(val));
   }
+
+  static void openLink(String? s) async {
+    var succ = false;
+    if (s != null) {
+      try {
+        succ = await launchUrl(Uri.parse(s), mode: LaunchMode.externalNonBrowserApplication);
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+      if (!succ) {
+        try {
+          succ = await launchUrl(Uri.parse(s), mode: LaunchMode.externalApplication);
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+      }
+      if (!succ) {
+        try {
+          await launchUrl(Uri.parse(s), mode: LaunchMode.platformDefault);
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+      }
+    }
+  }
 }
+

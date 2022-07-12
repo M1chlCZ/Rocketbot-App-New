@@ -3,7 +3,7 @@ description: Rocketbot
 
 publish_to: 'none'
 
-version: 1.1.28+128
+version: 1.1.31+131
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -29,7 +29,8 @@ dependencies:
   share: any
   decimal: ^2.2.0
   vibration: ^1.7.4-nullsafety.0
-  flutter_snake_navigationbar: ^0.6.1
+  flutter_snake_navigationbar: any
+  cached_network_image: ^3.2.1
   flutter_switch: ^0.3.2
   permission_handler: ^10.0.0
   local_auth: ^2.1.0
@@ -40,7 +41,7 @@ dependencies:
   google_sign_in: ^5.4.0
   sign_in_with_apple: ^4.0.0
   flutter_displaymode: ^0.4.0
-  flutter_local_notifications: ^9.6.1
+  flutter_local_notifications: ^9.7.0
   flutter_udid: ^2.0.0
   share_extend: ^2.0.0
   sqflite: ^2.0.2+1
@@ -49,6 +50,8 @@ dependencies:
   slide_to_act: any
   mobile_scanner: ^2.0.0
   share_plus: ^4.0.10
+  flutter_native_timezone: any
+  get_it: any
   flutter_user_agent:
     git:
       url: https://github.com/M1chlCZ/flutter_user_agent.git
@@ -58,6 +61,7 @@ dependencies:
       url: https://github.com/M1chlCZ/flutter_biometrics.git
       ref: main
   cupertino_icons: ^1.0.5
+  rxdart: ^0.27.4
 linter:
   rules:
     -use_super_parameters
@@ -65,7 +69,8 @@ linter:
 
 dev_dependencies:
   flutter_lints: ^2.0.1
-  flutter_launcher_name: ^0.0.1
+  #flutter_launcher_name: ^0.0.1
+  flutter_native_splash: ^2.2.4
   flutter_test:
     sdk: flutter
 
@@ -85,11 +90,25 @@ flutter:
 
 
   fonts:
-    - family: Montserrat
+    - family: Poppins
       fonts:
-        - asset: fonts/Montserrat-Regular.ttf
-        - asset: fonts/Montserrat-Italic.ttf
+        - asset: fonts/Poppins-Regular.ttf
+        - asset: fonts/Poppins-Italic.ttf
           style: italic
-        - asset: fonts/Montserrat-SemiBold.ttf
-          weight: 300
+        - asset: fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: fonts/Poppins-Bold.ttf
+          weight: 800
+        - asset: fonts/Poppins-Light.ttf
+          weight: 400
+        - asset: fonts/Poppins-Medium.ttf
+          weight: 500
+    - family: JosefinSans
+      fonts:
+        - asset: fonts/JosefinSans-Regular.ttf
+          weight: 500
+        - asset: fonts/JosefinSans-Medium.ttf
+          weight: 600
+        - asset: fonts/JosefinSans-SemiBold.ttf
+          weight: 800
 

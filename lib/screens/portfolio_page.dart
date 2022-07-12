@@ -5,7 +5,9 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:flutter_udid/flutter_udid.dart';
+import 'package:get_it/get_it.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/balance_bloc.dart';
 import 'package:rocketbot/cache/price_graph_cache.dart';
@@ -44,14 +46,15 @@ class PortfolioScreen extends StatefulWidget {
   PortfolioScreenState createState() => PortfolioScreenState();
 }
 
-class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
+class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with AutomaticKeepAliveClientMixin<PortfolioScreen> {
   final NetInterface _interface = NetInterface();
   final ScrollController _scrollController = ScrollController();
   BalancesBloc? _bloc;
   PosCoinsList? pl;
   List<CoinBalance>? _listCoins;
   final List<int> _socials = [];
-  final _firebaseMessaging = FCM();
+  final _firebaseMessaging = GetIt.I.get<FCM>();
+  AppDatabase db = GetIt.I.get<AppDatabase>();
   User? _me;
 
   bool _socialsOK = true;
@@ -139,7 +142,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
     try {
       await _interface.get('auth/ping', pos: true);
       debugPrint('ok');
-    }catch(e) {
+    } catch (e) {
       debugPrint('register');
       try {
         await NetInterface.registerPosHandle();
@@ -155,17 +158,13 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
       String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
       String? depAddr = await _getMergeDepositAddr();
       if (depAddr != null) {
-        var m = {
-          "uuid": udid,
-          "firebase": firebase,
-          "mergeDeposit" : depAddr
-        };
+        var m = {"uuid": udid, "firebase": firebase, "mergeDeposit": depAddr};
         await _interface.post('auth/codes', m, pos: true);
         String? rewardCode = await SecureStorage.readStorage(key: 'r_code');
         if (rewardCode != null && rewardCode.isNotEmpty) {
           _getReward(rewardCode);
         }
-      }else{
+      } else {
         debugPrint("CODES NULL");
         _reUploadCodes();
       }
@@ -185,11 +184,11 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
   }
 
   Future<String?> _getMergeDepositAddr() async {
-   String? s = await SecureStorage.readStorage(key: 'merge_addr');
+    String? s = await SecureStorage.readStorage(key: 'merge_addr');
     if (s == null || s.isEmpty) {
       Map<String, dynamic> request = {
-            "coinId": 2,
-          };
+        "coinId": 2,
+      };
       try {
         final response = await _interface.post("Transfers/CreateDepositAddress", request);
         var d = DepositAddress.fromJson(response);
@@ -199,7 +198,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
         // Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Can't get Merge deposit address, please verify your account!");
         return null;
       }
-    }else{
+    } else {
       return s;
     }
   }
@@ -214,7 +213,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
       } catch (e) {
         if (mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.error.toLowerCase()}", e.toString());
       }
-     await SecureStorage.deleteStorage(key: 'r_code');
+      await SecureStorage.deleteStorage(key: 'r_code');
     }
   }
 
@@ -248,7 +247,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
   }
 
   _lostPosTX() async {
-    List<PGWIdentifier> l = await AppDatabase().getUnfinishedTX();
+    List<PGWIdentifier> l = await db.getUnfinishedTX();
     for (var element in l) {
       var coindID = element.getCoinID();
       var pgwid = element.getPGW();
@@ -280,7 +279,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
             "tx_id": txid,
           };
           await _interface.post("stake/confirm", m, pos: true);
-          await AppDatabase().finishTX(pgwid!);
+          await db.finishTX(pgwid!);
         } catch (e) {
           debugPrint(e.toString());
         }
@@ -291,6 +290,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: SafeArea(
         child: Stack(
           children: [
@@ -307,7 +307,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
                       padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 0.0),
                       child: Row(
                         children: [
-                          Text(AppLocalizations.of(context)!.portfolio, style: Theme.of(context).textTheme.headline4),
+                          if (_me != null) Text("${_me!.data!.name} ${_me!.data!.surname}", style: Theme.of(context).textTheme.headline3),
                           const SizedBox(
                             width: 50,
                           ),
@@ -320,7 +320,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
+                                padding: const EdgeInsets.only(right: 15.0),
                                 child: SizedBox(
                                   height: 30,
                                   width: 25,
@@ -333,17 +333,10 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
                                           popMenu = true;
                                         }
                                       });
-                                      // await const FlutterSecureStorage().delete(key: "token");
-                                      // Navigator.of(context).pushReplacement(
-                                      //     PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-                                      //       return const LoginScreen();
-                                      //     }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                                      //       return FadeTransition(opacity: animation, child: child);
-                                      //     }));
                                     },
-                                    icon: Icon(
-                                      Icons.more_vert,
-                                      color: _socialsOK ? Colors.white70 : Colors.red,
+                                    imageIcon: Image.asset(
+                                      "images/candle.png",
+                                      color: _socialsOK ? Colors.white : Colors.red,
                                     ),
                                   ),
                                 ),
@@ -355,64 +348,68 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
                     ),
                     SizedBox(
                       width: double.infinity,
-                      height: 250,
+                      height: 120,
                       child: portCalc
-                          ? Stack(
-                              // alignment: AlignmentDirectional.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 0.0, right: 10.0, top: 50.0),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: Transform(
-                                      transform: scaleXYZTransform(),
-                                      child: const Image(
-                                        fit: BoxFit.fitWidth,
-                                        image: AssetImage("images/wave.png"),
+                          ? Container(
+                              margin: const EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                image: const DecorationImage(
+                                    opacity: 0.5,
+                                    scale: 0.5,
+                                    filterQuality: FilterQuality.high,
+                                    alignment: Alignment(0.0, 1.0),
+                                    fit: BoxFit.fitWidth,
+                                    image: AssetImage("images/bal.png")),
+                                gradient: const RadialGradient(center: Alignment(1.5, -3.0), radius: 5.0, colors: [
+                                  Color(0xFF7388FF),
+                                  Color(0xFFCA73FF),
+                                  Color(0xFFFF739D),
+                                ]),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                // alignment: AlignmentDirectional.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(
+                                        width: 20.0,
                                       ),
-                                    ),
+                                      Text(
+                                        AppLocalizations.of(context)!.balance,
+                                        style: Theme.of(context).textTheme.headline2,
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 170.0, right: 0.0, top: 90.0),
-                                  child: Transform.scale(
-                                    scale: 0.35,
-                                    child: const Image(
-                                      image: AssetImage("images/rocket_pin.png"),
-                                    ),
+                                  const SizedBox(
+                                    height: 5.0,
                                   ),
-                                ),
-                                const Align(
-                                  alignment: Alignment.center,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(bottom: 98.0),
-                                    child: AspectRatio(
-                                      aspectRatio: 1.6,
-                                      child: Image(fit: BoxFit.fitWidth, image: AssetImage("images/price_frame.png")),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 130.0, top: 25.0),
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          width: 200,
-                                          child: AutoSizeText(
-                                            "\$${totalUSD.toStringAsFixed(2)}",
-                                            style: Theme.of(context).textTheme.headline1,
-                                            minFontSize: 8.0,
-                                            maxLines: 1,
-                                            textAlign: TextAlign.center,
-                                          ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(
+                                        width: 20.0,
+                                      ),
+                                      SizedBox(
+                                        width: 200,
+                                        child: AutoSizeText(
+                                          "\$${totalUSD.toStringAsFixed(2)}",
+                                          style: Theme.of(context).textTheme.headline1,
+                                          minFontSize: 8.0,
+                                          maxLines: 1,
+                                          textAlign: TextAlign.left,
                                         ),
-                                        const SizedBox(
-                                          height: 3.0,
-                                        ),
-                                        SizedBox(
+                                      ),
+                                      const SizedBox(
+                                        height: 3.0,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 3.0),
+                                        child: SizedBox(
                                           width: 130,
                                           child: AutoSizeText(
                                             "${_formatPrice(totalBTC)} BTC",
@@ -422,11 +419,11 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
                                             textAlign: TextAlign.center,
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             )
                           : Container(),
                     ),
@@ -544,7 +541,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
                     ),
                     Flexible(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 3.0),
+                        padding: const EdgeInsets.only(top: 3.0, left: 5.0, right: 5.0),
                         child: StreamBuilder<ApiResponse<List<CoinBalance>>>(
                           stream: _bloc!.coinsListStream,
                           builder: (context, snapshot) {
@@ -614,8 +611,10 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
                       height: double.infinity,
                     ))),
             Positioned(
-                top: 40.0,
-                right: 4.0,
+              top: 40.0,
+              right: 4.0,
+              child: IgnorePointer(
+                ignoring: popMenu ? false : true,
                 child: AnimatedOpacity(
                   opacity: popMenu ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 300),
@@ -627,7 +626,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
                       borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                       child: Container(
                         width: 120,
-                        color: const Color(0xFF1B1B1B),
+                        color: Theme.of(context).canvasColor,
                         child: Column(
                           children: [
                             SizedBox(
@@ -755,7 +754,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
                               ),
                             ),
                             SizedBox(
-                              // SizedBox(
+                                // SizedBox(
                                 height: 40,
                                 child: Center(
                                   child: Directionality(
@@ -790,12 +789,14 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
                       ),
                     ),
                   ),
-                )),
+                ),
+              ),
+            ),
             Visibility(
               visible: !portCalc,
               child: Container(
                 margin: const EdgeInsets.only(top: 50),
-                color: const Color(0xFF1B1B1B),
+                color: Theme.of(context).canvasColor,
                 child: Center(
                   child: HeartbeatProgressIndicator(
                     startScale: 0.01,
@@ -811,6 +812,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
           ],
         ),
       ),
+
     );
   }
 
@@ -898,7 +900,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
     if (states.any(interactiveStates.contains)) {
       return Colors.white30;
     }
-    return const Color(0xFF1B1B1A);
+    return const Color(0xFF1E273A);
   }
 
   Future _getPinFuture() async {
@@ -1013,5 +1015,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> {
     });
   }
 
-
+  @override
+  bool get wantKeepAlive => true;
 }

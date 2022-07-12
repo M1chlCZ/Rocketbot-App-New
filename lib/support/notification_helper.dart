@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/secure_storage.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:rocketbot/support/utils.dart';
 
 Future<void> onBackgroundMessage(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -17,16 +18,16 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
   if (message.data.containsKey('notification')) {
     final notification = message.data['notification'];
   }
-  print("shit");
   // Or do other work.
 }
 
 class FCM {
   final _firebaseMessaging = FirebaseMessaging.instance;
-  final NetInterface _interface  = NetInterface();
+  final NetInterface _interface = NetInterface();
   final streamCtlr = StreamController<String>.broadcast();
   final titleCtlr = StreamController<String>.broadcast();
   final bodyCtlr = StreamController<String>.broadcast();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   setNotifications() async {
     // print("///////////");
@@ -38,7 +39,7 @@ class FCM {
       sound: true,
     );
     FirebaseMessaging.onMessage.listen(
-          (message) async {
+      (message) async {
         if (message.data.containsKey('data')) {
           streamCtlr.sink.add(message.data['data']);
         }
@@ -52,20 +53,11 @@ class FCM {
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       if (message.data.keys.first == 'link') {
-        try {
-          launchUrl(Uri.parse(message.data["dataLink"]), mode: LaunchMode.externalNonBrowserApplication);
-        } catch (e) {
-          try {
-            launchUrl(Uri.parse(message.data["dataLink"]), mode: LaunchMode.externalApplication);
-          } catch (e) {
-            launchUrl(Uri.parse(message.data["dataLink"]), mode: LaunchMode.platformDefault);
-          }
-          debugPrint(e.toString());
-        }
+        Utils.openLink(message.data["dataLink"]);
       }
     });
     final token = await _firebaseMessaging.getToken();
-    if(token != null) {
+    if (token != null) {
       _tokenUpload(token);
       SecureStorage.writeStorage(key: 'firebase_token', value: token);
     }
@@ -73,7 +65,7 @@ class FCM {
 
   onNotificationRegister() {
     FirebaseMessaging.onMessage.listen(
-          (message) async {
+      (message) async {
         if (message.data.containsKey('data')) {
           streamCtlr.sink.add(message.data['data']);
         }
@@ -87,8 +79,8 @@ class FCM {
   }
 
   void _tokenUpload(String? token) {
-    Map <String, dynamic> req = {
-      "token" : token,
+    Map<String, dynamic> req = {
+      "token": token,
     };
     _interface.post('Security/UpdateFirebaseToken', req);
   }

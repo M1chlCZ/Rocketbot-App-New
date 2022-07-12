@@ -46,46 +46,6 @@ class CoinBalances {
   }
 
 
-  // _codesUpload() async {
-  //   try {
-  //     String udid = await FlutterUdid.consistentUdid;
-  //     String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
-  //     String? depAddr = await _getMergeDepositAddr();
-  //     if (firebase != null && depAddr != null) {
-  //       var m = {
-  //         "uuid": udid,
-  //         "firebase": firebase,
-  //         "mergeDeposit" : depAddr
-  //       };
-  //       await _interface.post('auth/codes', m, pos: true);
-  //     }else{
-  //       debugPrint("CODES NULL");
-  //       _reUploadCodes();
-  //     }
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //   }
-  // }
-  //
-  // _reUploadCodes() {
-  //   Future.delayed(const Duration(seconds: 10), () {
-  //     _codesUpload();
-  //   });
-  // }
-  //
-  // Future<String?> _getMergeDepositAddr() async {
-  //   Map<String, dynamic> request = {
-  //     "coinId": 2,
-  //   };
-  //   try {
-  //     final response = await _interface.post("Transfers/CreateDepositAddress", request);
-  //     var d = DepositAddress.fromJson(response);
-  //     return d.data!.address!;
-  //   } catch (e) {
-  //     return null;
-  //   }
-  // }
-
   Future<PosCoinsList?> _getPosCoins() async {
     try {
       var response = await _interface.get("coin/get", pos: true);

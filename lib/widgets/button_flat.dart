@@ -10,12 +10,17 @@ class FlatCustomButton extends StatelessWidget {
   final Color? splashColor;
   final Image? imageIcon;
   final Widget? child;
+  final double? height;
+  final double? width;
+  final EdgeInsets? padding;
 
-  const FlatCustomButton({Key? key, this.color, this.onTap, this.icon, this.imageIcon, this.splashColor, this.animIcon, this.radius = 4.0, this.child, this.borderColor}) : super(key: key);
+  const FlatCustomButton({Key? key, this.color, this.onTap, this.icon, this.imageIcon, this.splashColor, this.animIcon, this.radius = 4.0, this.child, this.borderColor, this.height, this.width, this.padding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return _getContainer(
+      height,
+      width,
       decoration: BoxDecoration(
         color: color,
         border: borderColor != null ? Border.all(color: borderColor!, width: 1.5) : null,
@@ -30,18 +35,38 @@ class FlatCustomButton extends StatelessWidget {
             splashColor: splashColor ?? Colors.white30,
             highlightColor: splashColor ?? Colors.white30,// splash color
             onTap: onTap, // button pressed
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                animIcon ?? Container(),
-                icon ?? Container(),
-                imageIcon ?? Container(),
-                child ?? Container(), // icon
-              ],
+            child: Container(
+              padding: padding,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  animIcon ?? Container(),
+                  icon ?? Container(),
+                  imageIcon ?? Container(),
+                  child ?? Container(), // icon
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  Container _getContainer(double? height, double? width, {required BoxDecoration decoration, required Widget child}) {
+    if (height != null) {
+      assert(width != null);
+      return Container(
+        height: height,
+        width: width,
+        decoration: decoration,
+        child: child,
+      );
+    } else {
+      return Container(
+        decoration: decoration,
+        child: child,
+      );
+    }
   }
 }

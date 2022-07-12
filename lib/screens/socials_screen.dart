@@ -7,6 +7,7 @@ import 'package:rocketbot/netInterface/interface.dart';
 import 'package:rocketbot/support/auto_size_text_field.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/life_cycle_watcher.dart';
+import 'package:rocketbot/support/utils.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/social_card.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -409,16 +410,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
 
   void _launchURL(String url) async {
     var kUrl = url.replaceAll(" ", "+");
-    try {
-      launchUrl(Uri.parse(kUrl), mode: LaunchMode.externalNonBrowserApplication);
-    } catch (e) {
-      try {
-        launchUrl(Uri.parse(kUrl), mode: LaunchMode.externalApplication);
-      } catch (e) {
-        launchUrl(Uri.parse(kUrl), mode: LaunchMode.platformDefault);
-      }
-      debugPrint(e.toString());
-    }
+    Utils.openLink(kUrl);
   }
 
   @override

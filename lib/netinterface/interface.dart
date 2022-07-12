@@ -22,7 +22,7 @@ class NetInterface {
   static const String posTokenRefresh = "posRefreshToken";
   static bool _refreshingToken = false;
 
-  Future<dynamic> get(String url, {bool pos = false}) async {
+  Future<dynamic> get(String url, {String? request, bool pos = false}) async {
     String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
     var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
     // print(_token);
@@ -31,6 +31,9 @@ class NetInterface {
     try {
       var curl = "";
       pos ? curl = _posUrl + url : curl = _baseUrl + url;
+      if (request != null) {
+        curl += "/?$request";
+      }
       // print(_curl);
       // print(_token);
       final response = await http.get(Uri.parse(curl), headers: {
@@ -129,6 +132,7 @@ class NetInterface {
       case 500:
       case 409:
         var responseJson = json.decode(response.body.toString());
+        print(responseJson);
         throw ConflictDataException(responseJson['errorMessage']);
       default:
         throw FetchDataException('Error occurred while communication with server: ${response.body}');

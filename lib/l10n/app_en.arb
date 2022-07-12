@@ -146,6 +146,8 @@
   "st_more" : "Show more details",
   "referral" : "Referral",
   "ref_code" : "Rocketbot referral code",
-  "ref_invite" : "You have not been invited by anyone, enter Rocketbot referral code on login screen to receive 50 Merge!",
+  "ref_invite" : "You have not been invited by anyone, enter Rocketbot referral code to receive 50 Merge! Referral bonus will be credited after you stake at least 10 Merge tokens.",
   "ref_unvite" : "You've already used the invite promotion, keep an eye on our future ones",
-  "ref_hint" : "Just scan the similar looking QR code and you are all set. \nUser is eligible for this promotion only once!"}
+  "ref_hint" : "Just scan the similar looking QR code and stake 10 Merge (in any order) and you are all set. \nUser is eligible for this promotion only once!",
+  "balance": "Balance"
+}

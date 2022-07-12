@@ -76,79 +76,52 @@ class _CoinListViewState extends State<CoinListView> {
               },
               child: Container(
                 alignment: Alignment.centerLeft,
-                height: 65.0,
+                height: 70.0,
                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                 child: Flex(
                   direction: Axis.horizontal,
                   children: [
                     Expanded(
-                        flex: 2,
-                        child: Row(
-                          children: [
-                            AnimatedCrossFade(
-                              layoutBuilder: (Widget topChild, Key topChildKey, Widget bottomChild, Key bottomChildKey) {
-                                return Stack(
-                                  clipBehavior: Clip.none,
-                                  children: <Widget>[
-                                    Positioned(
-                                      key: bottomChildKey,
-                                      child: bottomChild,
-                                    ),
-                                    Positioned(
-                                      key: topChildKey,
-                                      child: topChild,
-                                    ),
-                                  ],
-                                );
-                              },
-                              duration: const Duration(milliseconds: 1000),
-                              secondChild: Padding(
-                                padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                                child: Image.asset(
-                                  "images/staking_icon.png",
-                                  color: const Color(0xFFFDCB29),
-                                  width: 50,
-                                  fit: BoxFit.fitWidth,
-                                ),
-                              ),
-                              crossFadeState: _crossfade ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                              firstChild: Column(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.fromLTRB(5, 3, 5, 5),
-                                    child: Center(
-                                        child: SizedBox(
-                                      height: 30,
-                                      width: 30.0,
-                                      child: PictureCacheWidget(coin: widget.coin.coin!),
-                                    )),
-                                  ),
-                                  Transform.scale(
-                                      scale: 0.85,
-                                      child: PriceBadge(
-                                        percentage: widget.coin.priceData?.priceChange24HPercent?.usd,
-                                      )),
-                                ],
-                              ),
+                        flex: 3,
+                        child: Container(
+                          margin: const EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: _getColor(widget.coin.posCoin),
                             ),
-                            Container(
-                              height: 50,
-                              width: 0.5,
-                              color: Colors.white10,
-                            ),
-                          ],
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(5, 8, 5, 5),
+                                child: Center(
+                                    child: SizedBox(
+                                  height: 30,
+                                  width: 40.0,
+                                  child: PictureCacheWidget(coin: widget.coin.coin!),
+                                )),
+                              ),
+                              PriceBadge(
+                                percentage: widget.coin.priceData?.priceChange24HPercent?.usd,
+                              ),
+                            ],
+                          ),
                         )),
                     Expanded(
                       flex: 10,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 5.0, top: 5.0),
-                        child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
                                 widget.coin.coin!.ticker!,
-                                style: Theme.of(context).textTheme.headline3,
+                                style: Theme.of(context).textTheme.bodyText2,
                                 maxLines: 1,
                                 textAlign: TextAlign.start,
                                 overflow: TextOverflow.ellipsis,
@@ -157,7 +130,7 @@ class _CoinListViewState extends State<CoinListView> {
                                 width: 4.0,
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(bottom: 1.0),
+                                padding: const EdgeInsets.only(bottom: 3.3),
                                 child: SizedBox(
                                   width: 70,
                                   child: AutoSizeText(
@@ -194,7 +167,10 @@ class _CoinListViewState extends State<CoinListView> {
                                           duration: const Duration(milliseconds: 1000),
                                           firstChild: AutoSizeText(
                                             _formatFree(widget.free!),
-                                            style: Theme.of(context).textTheme.headline3,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .copyWith(fontStyle: FontStyle.normal, fontWeight: FontWeight.w500, fontSize: 16.0),
                                             minFontSize: 8,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
@@ -203,7 +179,10 @@ class _CoinListViewState extends State<CoinListView> {
                                           crossFadeState: _crossfade ? CrossFadeState.showFirst : CrossFadeState.showSecond,
                                           secondChild: AutoSizeText(
                                             "${AppLocalizations.of(context)!.stake_label}: ${_formatFree(Decimal.parse(widget.coin.posCoin!.amount!.toStringAsFixed(4)))}",
-                                            style: Theme.of(context).textTheme.headline3,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .copyWith(fontStyle: FontStyle.normal, fontWeight: FontWeight.w500, fontSize: 16.0),
                                             minFontSize: 8,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
@@ -212,7 +191,10 @@ class _CoinListViewState extends State<CoinListView> {
                                         )
                                       : AutoSizeText(
                                           _formatFree(widget.free!),
-                                          style: Theme.of(context).textTheme.headline3,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(fontStyle: FontStyle.normal, fontWeight: FontWeight.w500, fontSize: 16.0),
                                           minFontSize: 8,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -243,7 +225,7 @@ class _CoinListViewState extends State<CoinListView> {
                                       },
                                       duration: const Duration(milliseconds: 1000),
                                       firstChild: Padding(
-                                        padding: const EdgeInsets.only(top: 12.0, right: 4.0),
+                                        padding: const EdgeInsets.only(top: 10.0, right: 4.0),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
@@ -251,7 +233,10 @@ class _CoinListViewState extends State<CoinListView> {
                                               alignment: Alignment.centerLeft,
                                               child: Text(
                                                 _formatValue(widget.coin.priceData!.prices!.usd!),
-                                                style: Theme.of(context).textTheme.headline3,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1!
+                                                    .copyWith(fontStyle: FontStyle.normal, color: Colors.white70, fontWeight: FontWeight.w500, fontSize: 16.0),
                                                 maxLines: 1,
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.ellipsis,
@@ -261,7 +246,10 @@ class _CoinListViewState extends State<CoinListView> {
                                               alignment: Alignment.centerRight,
                                               child: AutoSizeText(
                                                 "\$${_formatPrice(widget.coin.free! * widget.coin.priceData!.prices!.usd!.toDouble())}",
-                                                style: Theme.of(context).textTheme.headline3,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1!
+                                                    .copyWith(fontStyle: FontStyle.normal, color: Colors.white70, fontWeight: FontWeight.w500, fontSize: 16.0),
                                                 minFontSize: 8,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
@@ -273,7 +261,7 @@ class _CoinListViewState extends State<CoinListView> {
                                       ),
                                       crossFadeState: _crossfade ? CrossFadeState.showFirst : CrossFadeState.showSecond,
                                       secondChild: Padding(
-                                        padding: const EdgeInsets.only(top: 12.0, right: 4.0),
+                                        padding: const EdgeInsets.only(top: 10.0, right: 4.0),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
@@ -281,7 +269,10 @@ class _CoinListViewState extends State<CoinListView> {
                                               alignment: Alignment.centerLeft,
                                               child: Text(
                                                 _formatValue(widget.coin.priceData!.prices!.usd!),
-                                                style: Theme.of(context).textTheme.headline3,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1!
+                                                    .copyWith(fontStyle: FontStyle.normal, fontWeight: FontWeight.w500, fontSize: 16.0),
                                                 maxLines: 1,
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.ellipsis,
@@ -291,7 +282,10 @@ class _CoinListViewState extends State<CoinListView> {
                                               alignment: Alignment.centerRight,
                                               child: AutoSizeText(
                                                 "\$${_formatPrice(widget.coin.posCoin!.amount! * widget.coin.priceData!.prices!.usd!.toDouble())}",
-                                                style: Theme.of(context).textTheme.headline3,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1!
+                                                    .copyWith(fontStyle: FontStyle.normal, color: Colors.white70, fontWeight: FontWeight.w500, fontSize: 16.0),
                                                 minFontSize: 8,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
@@ -347,6 +341,9 @@ class _CoinListViewState extends State<CoinListView> {
               color: Colors.white.withOpacity(0.08),
             ),
           ),
+        ),
+        const SizedBox(
+          height: 10.0,
         )
       ],
     );
@@ -376,6 +373,20 @@ class _CoinListViewState extends State<CoinListView> {
       return "0.0";
     } else {
       return _formatFreeValue(decimal.toDouble());
+    }
+  }
+
+  List<Color> _getColor(dynamic pos) {
+    if(pos != null) {
+      return [
+        const Color(0xFF9D9BFD),
+        const Color(0x009D9BFD),
+      ];
+    }else{
+      return [
+        const Color(0xFF394359),
+        const Color(0x00394359),
+      ];
     }
   }
 
