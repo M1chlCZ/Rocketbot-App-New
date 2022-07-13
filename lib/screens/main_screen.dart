@@ -5,8 +5,8 @@ import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:rocketbot/models/deposit_address.dart';
 import 'package:rocketbot/models/pos_coins_list.dart';
-import 'package:rocketbot/netInterface/interface.dart';
-import 'package:rocketbot/screenPages/coin_page.dart';
+import 'package:rocketbot/netinterface/interface.dart';
+import 'package:rocketbot/screenpages/coin_page.dart';
 import 'package:rocketbot/screenpages/deposit_page.dart';
 import 'package:rocketbot/screenpages/send_page.dart';
 import 'package:rocketbot/screenpages/staking_page.dart';
@@ -41,6 +41,7 @@ class MainScreenState extends State<MainScreen> {
   final _pageController = PageController(initialPage: 1);
   String? _depositAddr;
   String? _posDepositAddr;
+  bool isMN = false;
   int _selectedPageIndex = 1;
   List<CoinBalance>? _lc;
   late Coin _coinActive;
@@ -81,6 +82,7 @@ class MainScreenState extends State<MainScreen> {
       } else {
         _posDepositAddr = null;
       }
+      isMN = widget.posCoinsList!.coinsMn!.contains(c?.id);
       setState(() {});
     } catch (e) {
       _posDepositAddr = null;
@@ -147,6 +149,7 @@ class MainScreenState extends State<MainScreen> {
         free: _free,
         goBack: goBack,
         blockTouch: _blockTouch,
+        masternode: isMN,
       );
     }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
       return FadeTransition(opacity: animation, child: child);
@@ -174,6 +177,7 @@ class MainScreenState extends State<MainScreen> {
               ),
               CoinScreen(
                   key: _coinKey,
+                  masternode: isMN,
                   setActiveCoin: _setActiveCoin,
                   changeFree: _changeFree,
                   activeCoin: _coinActive,

@@ -1,6 +1,6 @@
 import 'package:rocketbot/models/active_giveaways.dart';
 import 'package:rocketbot/models/giveaway_members.dart';
-import 'package:rocketbot/netInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 
 class GiveawayDetail {
   final NetInterface _helper = NetInterface();

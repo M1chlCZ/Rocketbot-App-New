@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_udid/flutter_udid.dart';
 import 'package:rocketbot/cache/balances_cache.dart';
 import 'package:rocketbot/models/balance_list.dart';
-import 'package:rocketbot/models/deposit_address.dart';
 import 'package:rocketbot/models/pos_coins_list.dart';
-import 'package:rocketbot/netInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 
 class CoinBalances {
@@ -49,7 +47,8 @@ class CoinBalances {
   Future<PosCoinsList?> _getPosCoins() async {
     try {
       var response = await _interface.get("coin/get", pos: true);
-      return PosCoinsList.fromJson(response);
+      var p = PosCoinsList.fromJson(response);
+      return p;
     } catch (e) {
       return null;
     }

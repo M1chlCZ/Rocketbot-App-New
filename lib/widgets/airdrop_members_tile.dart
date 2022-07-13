@@ -4,13 +4,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:rocketbot/models/giveaway_members.dart';
+import 'package:rocketbot/models/aidrop_details.dart';
 
-class MembersTile extends StatelessWidget {
-  final Members member;
-  final Function(Members g) callBack;
+class AirdropMembersTile extends StatelessWidget {
+  final AirdropMembers member;
+  final Function(AirdropMembers g) callBack;
 
-  const MembersTile({Key? key, required this.member, required this.callBack}) : super(key: key);
+  const AirdropMembersTile({Key? key, required this.member, required this.callBack}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,20 +68,20 @@ class MembersTile extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
                     ),
                   ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 5.0),
-                        child: AutoSizeText(
-                          parseDate(member.participateAt!),
-                          maxLines: 1,
-                          minFontSize: 8.0,
-                          style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 14.0, color: Colors.white54),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: Align(
+                  //     alignment: Alignment.centerRight,
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.only(right: 5.0),
+                  //       child: AutoSizeText(
+                  //         parseDate(member.participateAt!),
+                  //         maxLines: 1,
+                  //         minFontSize: 8.0,
+                  //         style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 14.0, color: Colors.white54),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               const SizedBox(height: 10.0,),

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/models/socials.dart';
-import 'package:rocketbot/netInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/auto_size_text_field.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/life_cycle_watcher.dart';

@@ -7,6 +7,7 @@ import 'package:rxdart/rxdart.dart';
 
 class GiveawaysBloc {
   final GiveawaysList _coinBalances = GiveawaysList();
+  List<Giveaway>? coins;
 
   BehaviorSubject<ApiResponse<List<Giveaway>>>? _coinListController;
 
@@ -18,23 +19,19 @@ class GiveawaysBloc {
 
   GiveawaysBloc({List<Giveaway>? list}) {
     _coinListController = BehaviorSubject<ApiResponse<List<Giveaway>>>();
-    fetchGiveaways(list: list);
+    fetchGiveaways();
   }
 
-  changeCoin ({List<Giveaway>? list}) {
-    fetchGiveaways(list: list);
-  }
-
-  Future <void> fetchGiveaways({List<Giveaway>? list, bool force = false}) async {
+  Future <void> fetchGiveaways({int page = 1, bool force = false}) async {
     if (!_coinListController!.isClosed) {
       coinsListSink.add(ApiResponse.loading('Fetching Giveaways'));
     }
     try {
-      List<Giveaway>? coins;
-      if(list == null ) {
-        coins = await _coinBalances.fetchGiveaways();
+      if (coins != null && page != 1) {
+        List<Giveaway>? s = await _coinBalances.fetchGiveaways(page);
+        if (s != null) coins!.addAll(s);
       }else{
-        coins = list;
+        coins = await _coinBalances.fetchGiveaways(page);
       }
       if (!_coinListController!.isClosed) {
         coinsListSink.add(ApiResponse.completed(coins));

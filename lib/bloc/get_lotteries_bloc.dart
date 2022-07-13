@@ -1,47 +1,40 @@
 import 'dart:async';
 
-import 'package:rocketbot/endpoints/get_all_giveaways.dart';
 import 'package:rocketbot/endpoints/get_all_lotteries.dart';
-import 'package:rocketbot/models/giveaways.dart';
 import 'package:rocketbot/models/loterries.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LotteriesBloc {
   final LotteryList _coinBalances = LotteryList();
-
+  List<Lottery>? coins;
   BehaviorSubject<ApiResponse<List<Lottery>>>? _coinListController;
 
-  StreamSink<ApiResponse<List<Lottery>>> get coinsListSink =>
-      _coinListController!.sink;
+  StreamSink<ApiResponse<List<Lottery>>> get coinsListSink => _coinListController!.sink;
 
-  Stream<ApiResponse<List<Lottery>>> get coinsListStream =>
-      _coinListController!.stream;
+  Stream<ApiResponse<List<Lottery>>> get coinsListStream => _coinListController!.stream;
 
   LotteriesBloc({List<Lottery>? list}) {
     _coinListController = BehaviorSubject<ApiResponse<List<Lottery>>>();
-    fetchGiveaways(list: list);
+    fetchGiveaways();
   }
 
-  changeCoin ({List<Lottery>? list}) {
-    fetchGiveaways(list: list);
-  }
-
-  Future <void> fetchGiveaways({List<Lottery>? list, bool force = false}) async {
+  Future<void> fetchGiveaways({int page = 1, bool force = false}) async {
     if (!_coinListController!.isClosed) {
       coinsListSink.add(ApiResponse.loading('Fetching Giveaways'));
     }
     try {
-      List<Lottery>? coins;
-      if(list == null ) {
-        coins = await _coinBalances.fetchLotteries();
-      }else{
-        coins = list;
+      if (coins != null && page != 1) {
+        List<Lottery>? s = await _coinBalances.fetchLotteries(page);
+        if (s != null) coins!.addAll(s);
+      } else {
+        coins = await _coinBalances.fetchLotteries(page);
       }
       if (!_coinListController!.isClosed) {
         coinsListSink.add(ApiResponse.completed(coins));
       }
     } catch (e) {
+      print(e);
       if (!_coinListController!.isClosed) {
         coinsListSink.add(ApiResponse.error(e.toString()));
       }

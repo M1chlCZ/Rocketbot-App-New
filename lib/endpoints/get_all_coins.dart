@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:rocketbot/models/coin_graph.dart';
 import 'package:rocketbot/models/coin_list.dart';
-import 'package:rocketbot/netInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 
 class CoinsList {
   final NetInterface _helper = NetInterface();

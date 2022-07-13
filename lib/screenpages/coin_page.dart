@@ -3,7 +3,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_indicators/progress_indicators.dart';
-import 'package:rocketbot/NetInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/bloc/get_transaction_bloc.dart';
 import 'package:rocketbot/cache/price_graph_cache.dart';
 import 'package:rocketbot/models/balance_portfolio.dart';
@@ -32,6 +32,7 @@ class CoinScreen extends StatefulWidget {
   final double? free;
   final Function goToStaking;
   final String? posDepositAddr;
+  final bool masternode;
 
   const CoinScreen({Key? key,
     required this.activeCoin,
@@ -41,7 +42,9 @@ class CoinScreen extends StatefulWidget {
     required this.setActiveCoin,
     required this.blockTouch,
     required this.free,
-    required this.goToStaking, this.posDepositAddr})
+    required this.goToStaking,
+    this.posDepositAddr,
+    required this.masternode})
       : super(key: key);
 
   @override
@@ -213,7 +216,7 @@ Widget build(BuildContext context) {
                                     textAlign: TextAlign.start,
                                   ),
                                   Text(
-                                    "Staking",
+                                    "Staking${widget.masternode ? " & MN hosting" : ""}",
                                     style: Theme
                                         .of(context)
                                         .textTheme

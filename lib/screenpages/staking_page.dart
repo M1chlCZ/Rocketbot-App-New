@@ -5,21 +5,21 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:progress_indicators/progress_indicators.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/bloc/stake_graph_bloc.dart';
-import 'package:rocketbot/models/pgwid.dart';
-import 'package:rocketbot/models/stake_data.dart';
-import 'package:rocketbot/netInterface/api_response.dart';
 import 'package:rocketbot/models/balance_portfolio.dart';
 import 'package:rocketbot/models/fees.dart';
 import 'package:rocketbot/models/get_withdraws.dart';
+import 'package:rocketbot/models/pgwid.dart';
 import 'package:rocketbot/models/stake_check.dart';
+import 'package:rocketbot/models/stake_data.dart';
 import 'package:rocketbot/models/withdraw_confirm.dart';
 import 'package:rocketbot/models/withdraw_pwid.dart';
+import 'package:rocketbot/netInterface/api_response.dart';
 import 'package:rocketbot/netInterface/app_exception.dart';
-import 'package:rocketbot/netInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/keyboard_overlay.dart';
 import 'package:rocketbot/storage/app_database.dart';
 import 'package:rocketbot/support/dialogs.dart';
@@ -29,7 +29,7 @@ import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/percent_switch_widget.dart';
 import 'package:rocketbot/widgets/stake_graph.dart';
 import 'package:slide_to_act/slide_to_act.dart';
-import '../component_widgets/button_neu.dart';
+
 import '../models/balance_list.dart';
 import '../models/coin.dart';
 import '../models/stake_data.dart';
@@ -48,6 +48,7 @@ class StakingPage extends StatefulWidget {
   final Function(Coin? c) setActiveCoin;
   final Function(bool touch) blockTouch;
   final double free;
+  final bool masternode;
 
   const StakingPage({
     Key? key,
@@ -61,6 +62,7 @@ class StakingPage extends StatefulWidget {
     required this.goBack,
     required this.setActiveCoin,
     required this.blockTouch,
+    required this.masternode,
   }) : super(key: key);
 
   @override
@@ -110,11 +112,11 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     _coinActive = widget.activeCoin;
     _free = widget.free;
     _amountController.addListener(() {
-      if(_amountController.text.isEmpty) {
+      if (_amountController.text.isEmpty) {
         setState(() {
           amountEmpty = true;
         });
-      }else{
+      } else {
         setState(() {
           amountEmpty = false;
         });
@@ -125,7 +127,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     _stakeBloc!.stakeBloc();
     _getPos();
     _getFees();
-   _getFocusIOS();
+    _getFocusIOS();
   }
 
   @override
@@ -177,8 +179,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
 
-        if (!currentFocus.hasPrimaryFocus &&
-            currentFocus.focusedChild != null) {
+        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
           FocusManager.instance.primaryFocus?.unfocus();
         }
       },
@@ -197,176 +198,131 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                     SizedBox(
                       height: 30,
                       width: 25,
-                      child: NeuButton(
+                      child: FlatCustomButton(
                         onTap: () {
                           Navigator.of(context).pop();
                         },
                         icon: const Icon(
                           Icons.arrow_back_ios_new,
-                          size: 20.0,
-                          color: Colors.white70,
+                          size: 24.0,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                     const SizedBox(
                       width: 20.0,
                     ),
-                    Text(AppLocalizations.of(context)!.stake_label, style: Theme.of(context).textTheme.headline4),
-                    // SizedBox(
-                    //   height: 30,
-                    //   child: NeuContainer(
-                    //       child: Padding(
-                    //         padding: const EdgeInsets.only(left: 8.0),
-                    //         child: Center(
-                    //           child: DropdownButtonHideUnderline(
-                    //             child: DropdownButton<String>(
-                    //               value: _menuOptions[0],
-                    //               isDense: true,
-                    //               onChanged: (String? coin) {
-                    //                 setState(() {
-                    //                   if (_stakingUI) {
-                    //                     _stakingUI = false;
-                    //                   }else{
-                    //                     _stakingUI = true;
-                    //                   }
-                    //                 });
-                    //               },
-                    //               items: _menuOptions.map((String value) {
-                    //           return DropdownMenuItem<String>(
-                    //           value: value,
-                    //           child: Text(value, style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 12, color: Colors.white),),
-                    //
-                    //           );
-                    //               }).toList(),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       )),
-                    // ),
-                    const SizedBox(
-                      width: 70,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        AppLocalizations.of(context)!.stake_label,
+                        style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 20.0, color: Colors.white),
+                      ),
                     ),
-                    SizedBox(
-                        height: 30,
-                        child: StakeTimeRangeSwitcher(
-                          changeTime: _changeTime,
-                        )),
+
+                    //   const SizedBox(
+                    //     width: 70,
+                    //   ),
+                    //   SizedBox(
+                    //       height: 30,
+                    //       child: StakeTimeRangeSwitcher(
+                    //         changeTime: _changeTime,
+                    //       )),
                   ],
                 ),
               ),
-              Stack(
-                children: [
-                  IgnorePointer(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 13.0, left: 5.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          GradientText(
-                            "|STAKING \n|EARLY \n|ACCESS",
-                            gradient: LinearGradient(colors: [
-                              Colors.white54,
-                              Colors.white10.withOpacity(0.0),
-                            ]),
-                            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 48.0, color: Colors.white12),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 250,
-                    child: RefreshIndicator(
-                      onRefresh: () => _stakeBloc!.fetchStakeData(_coinActive.id!, 0),
-                      child: StreamBuilder<ApiResponse<StakingData>>(
-                          stream: _stakeBloc!.coinsListStream,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              switch (snapshot.data!.status) {
-                                case Status.completed:
-                                  return CoinStakeGraph(
-                                    key: _graphKey,
-                                    stake: snapshot.data?.data,
-                                    activeCoin: _coinActive,
-                                    type: _typeGraph,
-                                    blockTouch: _blockSwipe,
-                                  );
-                                case Status.loading:
-                                  return Center(
-                                    child: HeartbeatProgressIndicator(
-                                      startScale: 0.01,
-                                      endScale: 0.4,
-                                      child: const Image(
-                                        image: AssetImage('images/rocketbot_logo.png'),
-                                        color: Colors.white30,
-                                      ),
+              SizedBox(
+                width: double.infinity,
+                height: 200,
+                child: RefreshIndicator(
+                  onRefresh: () => _stakeBloc!.fetchStakeData(_coinActive.id!, 0),
+                  child: StreamBuilder<ApiResponse<StakingData>>(
+                      stream: _stakeBloc!.coinsListStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          switch (snapshot.data!.status) {
+                            case Status.completed:
+                              return CoinStakeGraph(
+                                key: _graphKey,
+                                stake: snapshot.data?.data,
+                                activeCoin: _coinActive,
+                                type: _typeGraph,
+                                blockTouch: _blockSwipe,
+                              );
+                            case Status.loading:
+                              return Center(
+                                child: HeartbeatProgressIndicator(
+                                  startScale: 0.01,
+                                  endScale: 0.4,
+                                  child: const Image(
+                                    image: AssetImage('images/rocketbot_logo.png'),
+                                    color: Colors.white30,
+                                  ),
+                                ),
+                              );
+                            case Status.error:
+                              return Container(
+                                color: Colors.transparent,
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.graph_no_data,
+                                      style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Colors.red),
                                     ),
-                                  );
-                                case Status.error:
-                                  return Container(
-                                    color: Colors.transparent,
-                                    child: Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          AppLocalizations.of(context)!.graph_no_data,
-                                          style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Colors.red),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                default:
-                                  return Container();
-                              }
-                            } else {
+                                  ),
+                                ),
+                              );
+                            default:
                               return Container();
-                            }
-                          }),
-                    ),
-                  ),
-                ],
+                          }
+                        } else {
+                          return Container();
+                        }
+                      }),
+                ),
+              ),
+              const SizedBox(
+                height: 5.0,
+              ),
+              SizedBox(
+                  height: 40,
+                  child: StakeTimeRangeSwitcher(
+                    changeTime: _changeTime,
+                  )),
+              const SizedBox(
+                height: 15.0,
               ),
               Container(
-                decoration: const BoxDecoration(
-                  border: Border(top: BorderSide(color: Colors.white30, width: 0.5)),
+                width: double.infinity,
+                height: 70.0,
+                margin: const EdgeInsets.only(left: 15.0, right: 15.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.white.withOpacity(0.05),
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  child: GradientText(
-                    _coinActive.cryptoId!,
-                    gradient: const LinearGradient(colors: [
-                      Colors.white70,
-                      Colors.white54,
-                    ]),
-                    // textAlign: TextAlign.end,
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 24.0, color: Colors.white),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        _coinActive.cryptoId!,
+                        // textAlign: TextAlign.end,
+                        style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 24.0, color: Colors.white),
+                      ),
+                      const Text(
+                        "EARN NOW",
+                        // textAlign: TextAlign.end,
+                        style: TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 14.0, color: Colors.white70),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 1.0, bottom: 8.0),
-                  child: GradientText(
-                    "EARN NOW",
-                    gradient: const LinearGradient(colors: [
-                      Colors.white70,
-                      Colors.white54,
-                    ]),
-                    // textAlign: TextAlign.end,
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
-                  ),
-                ),
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  border: Border(top: BorderSide(color: Colors.white30, width: 0.5)),
-                ),
+              const SizedBox(
+                height: 20.0,
               ),
               Stack(
                 children: [
@@ -377,29 +333,32 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                              padding: const EdgeInsets.only(top: 10.0, right: 5.0, left: 10.0),
                               child: Row(
                                 children: [
-                                  GradientText(
+                                  Text(
                                     "${AppLocalizations.of(context)!.stake_available}:",
-                                    gradient: const LinearGradient(colors: [
-                                      Colors.white70,
-                                      Colors.white54,
-                                    ]),
                                     // textAlign: TextAlign.end,
-                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18.0, color: Colors.white70),
+                                    style: TextStyle(
+                                        fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
                                   ),
                                   Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.only(right: 8.0, top: 1.0),
+                                      padding: const EdgeInsets.only(right: 4.0),
                                       child: AutoSizeText(
-                                        "$_free ${_coinActive.cryptoId!}",
+                                        "$_free",
                                         maxLines: 1,
                                         minFontSize: 8.0,
                                         textAlign: TextAlign.end,
-                                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18.0, color: Colors.white70),
+                                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
                                       ),
                                     ),
+                                  ),
+                                  Text(
+                                    _coinActive.cryptoId!,
+                                    // textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                        fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
                                   ),
                                 ],
                               ),
@@ -411,99 +370,114 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                              padding: const EdgeInsets.only(top: 5.0, right: 5.0, left: 10.0),
                               child: Row(
                                 children: [
-                                  GradientText(
+                                  Text(
                                     "${AppLocalizations.of(context)!.stake_staked_amount}:",
-                                    gradient: const LinearGradient(colors: [
-                                      Colors.white70,
-                                      Colors.white54,
-                                    ]),
                                     // textAlign: TextAlign.end,
-                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18.0, color: Colors.white70),
+                                    style: TextStyle(
+                                        fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
                                   ),
                                   Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.only(right: 8.0, top: 1.0),
+                                      padding: const EdgeInsets.only(right: 4.0),
                                       child: AutoSizeText(
-                                        "${_formatPriceString(_amountStaked)} ${_coinActive.cryptoId!}",
+                                        _formatPriceString(_amountStaked),
                                         maxLines: 1,
                                         minFontSize: 8.0,
                                         textAlign: TextAlign.end,
-                                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18.0, color: Colors.white70),
+                                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
                                       ),
                                     ),
+                                  ),
+                                  Text(
+                                    _coinActive.cryptoId!,
+                                    // textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                        fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                          _unconfirmedAmount != 0.0
-                              ? Opacity(
-                                  opacity: 0.6,
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 3.0, left: 10.0),
-                                      child: Row(
-                                        children: [
-                                          GradientText(
-                                            "${AppLocalizations.of(context)!.stake_unconfirmed}:",
-                                            gradient: const LinearGradient(colors: [
-                                              Colors.white70,
-                                              Colors.white54,
-                                            ]),
-                                            // textAlign: TextAlign.end,
-                                            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(right: 8.0, top: 1.0),
-                                              child: AutoSizeText(
-                                                "${_unconfirmedAmount.toStringAsFixed(3)} ${_coinActive.cryptoId!}",
-                                                maxLines: 1,
-                                                minFontSize: 8.0,
-                                                textAlign: TextAlign.end,
-                                                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                          if (_unconfirmedAmount != 0.0)
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 5.0,
+                                ),
+                          Opacity(
+                            opacity: 0.6,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5.0, right: 5.0, left: 10.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "${AppLocalizations.of(context)!.stake_unconfirmed}:",
+                                      // textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                          fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(right: 4.0),
+                                        child: AutoSizeText(
+                                          _unconfirmedAmount.toStringAsFixed(3),
+                                          maxLines: 1,
+                                          minFontSize: 8.0,
+                                          textAlign: TextAlign.end,
+                                          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                )
-                              : Container(),
+                                    Text(
+                                      _coinActive.cryptoId!,
+                                      // textAlign: TextAlign.end,
+                                      style: const TextStyle(
+                                          fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                              ],
+                            ),
                           const SizedBox(
                             height: 5.0,
                           ),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                              padding: const EdgeInsets.only(top: 5.0, right: 5.0, left: 10.0),
                               child: Row(
                                 children: [
-                                  GradientText(
+                                  Text(
                                     "${AppLocalizations.of(context)!.stake_reward}:",
-                                    gradient: const LinearGradient(colors: [
-                                      Colors.white70,
-                                      Colors.white54,
-                                    ]),
                                     // textAlign: TextAlign.end,
-                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18.0, color: Colors.white70),
+                                    style: TextStyle(
+                                        fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
                                   ),
                                   Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.only(right: 8.0, top: 1.0),
+                                      padding: const EdgeInsets.only(right: 4.0),
                                       child: AutoSizeText(
-                                        "$_amountReward ${_coinActive.cryptoId!}",
+                                        _formatPriceString(_amountReward),
                                         maxLines: 1,
                                         minFontSize: 8.0,
                                         textAlign: TextAlign.end,
-                                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18.0, color: Colors.white70),
+                                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
                                       ),
                                     ),
+                                  ),
+                                  Text(
+                                    _coinActive.cryptoId!,
+                                    // textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                        fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
                                   ),
                                 ],
                               ),
@@ -677,25 +651,24 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                 child: Column(
                                   children: [
                                     const SizedBox(
-                                      height: 5.0,
+                                      height: 8.0,
                                     ),
-                                    GradientText(
+                                    Text(
                                       _detailsExtended ? AppLocalizations.of(context)!.st_less : AppLocalizations.of(context)!.st_more,
-                                      gradient: const LinearGradient(colors: [
-                                        Colors.white70,
-                                        Colors.white54,
-                                      ]),
                                       // textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontFamily: 'JosefinSans', fontSize: 14.0, color: Colors.white70),
                                     ),
-                                    RotatedBox(
-                                      quarterTurns: _detailsExtended ? 2 : 0,
-                                      child: const Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Colors.white54,
-                                        size: 18.0,
-                                      ),
+                                    const SizedBox(
+                                      height: 8.0,
                                     ),
+                                    // RotatedBox(
+                                    //   quarterTurns: _detailsExtended ? 2 : 0,
+                                    //   child: const Icon(
+                                    //     Icons.arrow_drop_down,
+                                    //     color: Colors.white54,
+                                    //     size: 18.0,
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -706,42 +679,48 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                               border: Border(top: BorderSide(color: Colors.white12, width: 0.5)),
                             ),
                           ),
-                          SizedBox(
+                          Container(
+                            margin: EdgeInsets.all(5.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
                             width: double.infinity,
                             height: 50.0,
-                            child: AutoSizeTextField(
-                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-                                TextInputFormatter.withFunction((oldValue, newValue) {
-                                  try {
-                                    final text = newValue.text;
-                                    if (text.isNotEmpty) double.parse(text);
-                                    return newValue;
-                                  } catch (e) {
-                                    debugPrint(e.toString());
-                                  }
-                                  return oldValue;
-                                }),
-                              ],
-                              maxLines: 1,
-                              minFontSize: 12.0,
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 18.0),
-                              autocorrect: false,
-                              focusNode: numberFocusNode,
-                              controller: _amountController,
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor:amountEmpty ? Colors.red.shade600.withOpacity(0.2) : Colors.black12,
-                                contentPadding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                                hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
-                                hintText: AppLocalizations.of(context)!.stake_amount,
-                                enabledBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white12),
-                                ),
-                                focusedBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white12),
+                            child: Center(
+                              child: AutoSizeTextField(
+                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+                                  TextInputFormatter.withFunction((oldValue, newValue) {
+                                    try {
+                                      final text = newValue.text;
+                                      if (text.isNotEmpty) double.parse(text);
+                                      return newValue;
+                                    } catch (e) {
+                                      debugPrint(e.toString());
+                                    }
+                                    return oldValue;
+                                  }),
+                                ],
+                                maxLines: 1,
+                                minFontSize: 12.0,
+                                style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 18.0),
+                                autocorrect: false,
+                                focusNode: numberFocusNode,
+                                controller: _amountController,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: amountEmpty ? Colors.red.shade600.withOpacity(0.2) : Colors.black12,
+                                  contentPadding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                                  hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
+                                  hintText: AppLocalizations.of(context)!.stake_amount,
+                                  enabledBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent),
+                                  ),
+                                  focusedBorder: const UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent),
+                                  ),
                                 ),
                               ),
                             ),
@@ -841,7 +820,10 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                                             )
                                                           : Text(
                                                               AppLocalizations.of(context)!.stake_get_reward,
-                                                              style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 18.0, color: Colors.white70, fontWeight: FontWeight.w600),
+                                                              style: Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyText2!
+                                                                  .copyWith(fontSize: 18.0, color: Colors.white70, fontWeight: FontWeight.w600),
                                                             ))),
                                             )),
                                       ),
@@ -871,7 +853,10 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                                         )
                                                       : Text(
                                                           AppLocalizations.of(context)!.stake_get_all,
-                                                          style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 18.0, color: Colors.white70, fontWeight: FontWeight.w600),
+                                                          style: Theme.of(context)
+                                                              .textTheme
+                                                              .bodyText2!
+                                                              .copyWith(fontSize: 18.0, color: Colors.white70, fontWeight: FontWeight.w600),
                                                         ))),
                                         )),
                                   ],
@@ -947,8 +932,8 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     try {
       var split = d.toString().split('.');
       var decimal = split[1];
-      if (decimal.length >= 9) {
-        var sub = decimal.substring(0, 8);
+      if (decimal.length >= 3) {
+        var sub = decimal.substring(0, 3);
         return ("${split[0]}.$sub").trim();
       } else {
         return d.toString().trim();
@@ -1006,7 +991,8 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
 
     if (minAmount) {
       Navigator.of(context).pop();
-      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, AppLocalizations.of(context)!.staking_not_min.replaceAll("{1}", _min!.toString()).replaceAll("{2}", _coinActive.cryptoId!));
+      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error,
+          AppLocalizations.of(context)!.staking_not_min.replaceAll("{1}", _min!.toString()).replaceAll("{2}", _coinActive.cryptoId!));
       _keyStake.currentState!.reset();
       return;
     }
@@ -1146,7 +1132,8 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       setState(() {});
       if (mounted) {
         Navigator.of(context).pop();
-        Dialogs.openAlertBox(context, AppLocalizations.of(context)!.alert, AppLocalizations.of(context)!.staking_with_info.replaceAll("{1}", conf.toString()));
+        Dialogs.openAlertBox(
+            context, AppLocalizations.of(context)!.alert, AppLocalizations.of(context)!.staking_with_info.replaceAll("{1}", conf.toString()));
       }
     } catch (e) {
       Navigator.of(context).pop();

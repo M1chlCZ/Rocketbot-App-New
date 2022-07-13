@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/get_airdrops_bloc.dart';
@@ -23,12 +24,19 @@ class GiveAwayScreen extends StatefulWidget {
   State<GiveAwayScreen> createState() => _GiveAwayScreenState();
 }
 
-class _GiveAwayScreenState extends State<GiveAwayScreen>  with AutomaticKeepAliveClientMixin<GiveAwayScreen>  {
+class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAliveClientMixin<GiveAwayScreen> {
   final NetInterface interface = NetInterface();
+  ScrollController gwScroll = ScrollController();
+  ScrollController adScroll = ScrollController();
+  ScrollController ltScroll = ScrollController();
   int activeSection = 0;
   GiveawaysBloc? gwBlock;
   AirdropsBloc? adBlock;
   LotteriesBloc? ltBlock;
+
+  int giveawayPage = 1;
+  int airdropPage = 1;
+  int lotteryPage = 1;
 
   @override
   void initState() {
@@ -36,6 +44,10 @@ class _GiveAwayScreenState extends State<GiveAwayScreen>  with AutomaticKeepAliv
     gwBlock = GiveawaysBloc();
     adBlock = AirdropsBloc();
     ltBlock = LotteriesBloc();
+
+    _scrollListener(gwScroll, 1);
+    _scrollListener(adScroll, 2);
+    _scrollListener(ltScroll, 3);
   }
 
   @override
@@ -45,23 +57,39 @@ class _GiveAwayScreenState extends State<GiveAwayScreen>  with AutomaticKeepAliv
     ltBlock?.dispose();
     super.dispose();
   }
-  
-  void aidropCallBack(Airdrop a) {
 
-    Navigator.of(context)
-        .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+  void _scrollListener(ScrollController sc, int type) {
+    sc.addListener(() {
+    if (sc.position.pixels >= (sc.position.maxScrollExtent - 250)) {
+      if (type == 1) {
+        giveawayPage++;
+        gwBlock!.fetchGiveaways(page: giveawayPage);
+      }
+      if (type == 2) {
+        airdropPage++;
+        adBlock!.fetchGiveaways(page: airdropPage);
+      }
+      if (type == 3) {
+        lotteryPage++;
+        ltBlock!.fetchGiveaways(page: airdropPage);
+      }
+      // _suggestionBloc.fetchSuggestions();
+    }
+    });
+  }
+
+  void aidropCallBack(Airdrop a) {
+    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
       return AirdropDetailScreen(
         airdrop: a,
       );
     }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
       return FadeTransition(opacity: animation, child: child);
     }));
-    
   }
 
   void giveawayCallback(Giveaway g) async {
-   Navigator.of(context)
-        .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
       return GiveawayDetailScreen(
         giveaway: g,
       );
@@ -73,9 +101,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen>  with AutomaticKeepAliv
   }
 
   void lotteryCallback(Lottery l) {
-
     // var res = interface.get('')
-
   }
 
   @override
@@ -91,7 +117,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen>  with AutomaticKeepAliv
               padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 0.0),
               child: Row(
                 children: [
-                 Text("Giveaways", style: Theme.of(context).textTheme.headline3),
+                  Text("Giveaways", style: Theme.of(context).textTheme.headline3),
                   const SizedBox(
                     width: 50,
                   ),
@@ -100,7 +126,6 @@ class _GiveAwayScreenState extends State<GiveAwayScreen>  with AutomaticKeepAliv
                   //     child: TimeRangeSwitcher(
                   //       changeTime: _changeTime,
                   //     )),
-
                 ],
               ),
             ),
@@ -121,43 +146,70 @@ class _GiveAwayScreenState extends State<GiveAwayScreen>  with AutomaticKeepAliv
                   children: [
                     FlatCustomButton(
                       onTap: () {
-                        setState((){
+                        setState(() {
                           activeSection = 0;
                         });
                       },
                       radius: 5.0,
                       color: Colors.transparent,
                       padding: const EdgeInsets.all(5.0),
-                      child: Text('Giveaway', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: activeSection == 0 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),),),
-                    SizedBox(
-                      width: 20,
-                      child: Text('|', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w200, fontSize: 14.0), textAlign: TextAlign.center,)
+                      child: Text(
+                        'Giveaway',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(fontWeight: activeSection == 0 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),
+                      ),
                     ),
+                    SizedBox(
+                        width: 20,
+                        child: Text(
+                          '|',
+                          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w200, fontSize: 14.0),
+                          textAlign: TextAlign.center,
+                        )),
                     FlatCustomButton(
                       onTap: () {
-                        setState((){
+                        setState(() {
                           activeSection = 1;
                         });
                       },
                       radius: 5.0,
                       color: Colors.transparent,
                       padding: const EdgeInsets.all(5.0),
-                      child: Text('Airdrop', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: activeSection == 1 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),),),
+                      child: Text(
+                        'Airdrop',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(fontWeight: activeSection == 1 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),
+                      ),
+                    ),
                     SizedBox(
                         width: 20,
-                        child: Text('|', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w200, fontSize: 14.0), textAlign: TextAlign.center,)
-                    ),
+                        child: Text(
+                          '|',
+                          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w200, fontSize: 14.0),
+                          textAlign: TextAlign.center,
+                        )),
                     FlatCustomButton(
                       onTap: () {
-                        setState((){
+                        setState(() {
                           activeSection = 2;
                         });
                       },
                       radius: 5.0,
                       color: Colors.transparent,
                       padding: const EdgeInsets.all(5.0),
-                      child: Text('Spin Lottery', style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: activeSection == 2 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),),)
-                ],
+                      child: Text(
+                        'Spin Lottery',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(fontWeight: activeSection == 2 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -193,12 +245,35 @@ class _GiveAwayScreenState extends State<GiveAwayScreen>  with AutomaticKeepAliv
                                       ),
                                     );
                                   case Status.completed:
-                                    return ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: snapshot.data!.data!.length,
-                                        itemBuilder: (ctx, index) {
-                                          return GiveawayTile(giveaway: snapshot.data!.data![index], callBack: giveawayCallback, );
-                                        });
+                                    if (snapshot.data!.data!.isNotEmpty) {
+                                      return ListView.builder(
+                                          key: const PageStorageKey(0),
+                                          controller: gwScroll,
+                                          shrinkWrap: true,
+                                          itemCount: snapshot.data!.data!.length,
+                                          itemBuilder: (ctx, index) {
+                                            return GiveawayTile(
+                                              key: ValueKey<int>(snapshot.data!.data![index].id!),
+                                              giveaway: snapshot.data!.data![index],
+                                              callBack: giveawayCallback,
+                                            );
+                                          });
+                                    } else {
+                                      return Container(
+                                        width: double.infinity,
+                                        height: 60.0,
+                                        margin: const EdgeInsets.only(left: 12.0, right: 12.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white12,
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                          "No giveaway available at this moment",
+                                          style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
+                                        )),
+                                      );
+                                    }
                                   case Status.error:
                                     debugPrint("error");
                                     break;
@@ -240,12 +315,35 @@ class _GiveAwayScreenState extends State<GiveAwayScreen>  with AutomaticKeepAliv
                                       ),
                                     );
                                   case Status.completed:
-                                    return ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: snapshot.data!.data!.length,
-                                        itemBuilder: (ctx, index) {
-                                          return AirdropTile(giveaway: snapshot.data!.data![index], callBack: aidropCallBack, );
-                                        });
+                                    if (snapshot.data!.data!.isNotEmpty) {
+                                      return ListView.builder(
+                                          key: const PageStorageKey(1),
+                                          controller: adScroll,
+                                          shrinkWrap: true,
+                                          itemCount: snapshot.data!.data!.length,
+                                          itemBuilder: (ctx, index) {
+                                            return AirdropTile(
+                                              key: ValueKey<int>(snapshot.data!.data![index].id!),
+                                              airdrop: snapshot.data!.data![index],
+                                              callBack: aidropCallBack,
+                                            );
+                                          });
+                                    } else {
+                                      return Container(
+                                        width: double.infinity,
+                                        height: 60.0,
+                                        margin: const EdgeInsets.only(left: 12.0, right: 12.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white12,
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                          "No airdrop available at this moment",
+                                          style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
+                                        )),
+                                      );
+                                    }
                                   case Status.error:
                                     debugPrint("error");
                                     break;
@@ -287,12 +385,38 @@ class _GiveAwayScreenState extends State<GiveAwayScreen>  with AutomaticKeepAliv
                                       ),
                                     );
                                   case Status.completed:
-                                    return ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: snapshot.data!.data!.length,
-                                        itemBuilder: (ctx, index) {
-                                          return LotteryTile(giveaway: snapshot.data!.data![index], callBack: lotteryCallback, );
-                                        });
+                                    if (snapshot.data!.data!.isNotEmpty) {
+                                      return ListView.builder(
+                                          key: const PageStorageKey(2),
+                                          controller: ltScroll,
+                                          shrinkWrap: true,
+                                          itemCount: snapshot.data!.data!.length,
+                                          itemBuilder: (ctx, index) {
+                                            return LotteryTile(
+                                              key: ValueKey<int>(snapshot.data!.data![index].id!),
+                                              giveaway: snapshot.data!.data![index],
+                                              callBack: lotteryCallback,
+                                            );
+                                          });
+                                    } else {
+                                      return Container(
+                                        width: double.infinity,
+                                        height: 60.0,
+                                        margin: const EdgeInsets.only(left: 12.0, right: 12.0),
+                                        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white12,
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        child: Center(
+                                            child: AutoSizeText(
+                                          "No Spin Lotteries available at this moment",
+                                          maxLines: 1,
+                                          minFontSize: 8.0,
+                                          style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
+                                        )),
+                                      );
+                                    }
                                   case Status.error:
                                     debugPrint("error");
                                     break;

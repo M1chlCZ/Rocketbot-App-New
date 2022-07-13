@@ -1,14 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rocketbot/bloc/airdrop_bloc.dart';
-import 'package:rocketbot/bloc/giveaway_bloc.dart';
 import 'package:rocketbot/models/active_giveaways.dart';
+import 'package:rocketbot/models/aidrop_details.dart';
 import 'package:rocketbot/models/airdrops.dart';
-import 'package:rocketbot/models/giveaway_members.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/support/utils.dart';
+import 'package:rocketbot/widgets/airdrop_members_tile.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
-import 'package:rocketbot/widgets/members_tile.dart';
 
 import '../netinterface/interface.dart';
 
@@ -26,7 +25,7 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
   final NetInterface interface = NetInterface();
   AirdropDetailBloc? bloc;
   ActiveGiveaway? activeGiveaway;
-  List<Members>? giveawayMembers;
+  List<AirdropMembers>? giveawayMembers;
 
   @override
   void initState() {
@@ -44,8 +43,8 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
                   if (snapshot.hasData) {
                     switch (snapshot.data!.status) {
                       case Status.completed:
-                        ActiveGiveaway ag = snapshot.data!.data!["activeGiveaway"];
-                        List<Members> memba = snapshot.data!.data!["members"];
+                        AirdropData ag = snapshot.data!.data!["activeAirdrop"];
+                        List<AirdropMembers>? memba = ag.members;
                         return Stack(
                           children: [
                             SingleChildScrollView(
@@ -65,7 +64,7 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
                                         const SizedBox(
                                           width: 5,
                                         ),
-                                        Text("Giveaway details", style: Theme.of(context).textTheme.headline3),
+                                        Text("Airdrop details", style: Theme.of(context).textTheme.headline3),
                                       ]),
                                     )),
                                 const SizedBox(
@@ -100,13 +99,7 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
                                     child: Row(
                                       children: [
                                         Expanded(
-                                          child: smallBlock(
-                                              ag.isActive != null
-                                                  ? ag.isActive!
-                                                      ? 'Active'
-                                                      : 'Ended'
-                                                  : 'Ended',
-                                              "Status"),
+                                          child: smallBlock(ag.membersLimit!.toString(), "WINNERS LIMIT"),
                                         ),
                                         const SizedBox(
                                           width: 30.0,
@@ -115,7 +108,7 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
                                           child: StreamBuilder(
                                             stream: Stream.periodic(const Duration(seconds: 1)),
                                             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                                              return smallBlock(convertDate(ag.expirationTime!), "Time to end");
+                                              return smallBlock(ag.membersCount!.toString(), "USERS REWARDED");
                                             },
                                           ),
                                         ),
@@ -144,7 +137,7 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                                  child: bigBlock("Giveaway Members"),
+                                  child: bigBlock("Airdrop Winners"),
                                 ),
                                 const SizedBox(
                                   height: 20.0,
@@ -153,9 +146,9 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
                                     child: ListView.builder(
                                         shrinkWrap: true,
                                         physics: const NeverScrollableScrollPhysics(),
-                                        itemCount: memba.length,
+                                        itemCount: memba!.length,
                                         itemBuilder: (ctx, index) {
-                                          return MembersTile(member: memba[index], callBack: (Members s) {});
+                                          return AirdropMembersTile(member: memba[index], callBack: (AirdropMembers a) {});
                                         })),
                                 const SizedBox(height: 100.0,),
                               ]),

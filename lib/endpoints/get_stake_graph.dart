@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:rocketbot/models/stake_data.dart';
-import 'package:rocketbot/netInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/utils.dart';
 
 class StakeList {

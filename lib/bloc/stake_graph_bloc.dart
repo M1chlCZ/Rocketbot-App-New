@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:rocketbot/endpoints/get_stake_graph.dart';
 import 'package:rocketbot/models/stake_data.dart';
 import 'package:rocketbot/netInterface/api_response.dart';
+import 'package:rxdart/rxdart.dart';
 
 class StakeGraphBloc {
   final StakeList _coinsList = StakeList();
@@ -16,7 +17,7 @@ class StakeGraphBloc {
       _coinListController!.stream;
 
   stakeBloc() {
-    _coinListController = StreamController<ApiResponse<StakingData>>();
+    _coinListController = BehaviorSubject<ApiResponse<StakingData>>();
   }
 
   fetchStakeData(int coinID, int type) async {

@@ -1,11 +1,9 @@
-import 'package:rocketbot/models/coin.dart';
-
-import 'Channel.dart';
+import 'coin.dart';
 
 /// message : "string"
 /// hasError : true
 /// error : "string"
-/// data : [{"id":0,"member":true,"reward":0.0,"coin":{"id":0,"rank":0,"name":"string","ticker":"string","cryptoId":"string","isToken":true,"contractAddress":"string","feePercent":0.0,"blockchain":0,"minWithdraw":0.0,"bigImageId":"3fa85f64-5717-4562-b3fc-2c963f66afa6","smallImageId":"3fa85f64-5717-4562-b3fc-2c963f66afa6","isActive":true,"explorerUrl":"string","requiredConfirmations":0,"fullName":"string","tokenStandart":"string","allowWithdraws":true,"allowDeposits":true},"channel":{"id":0,"rocketChannelId":"0","socialMedia":1,"name":"string","url":"string","imageId":"3fa85f64-5717-4562-b3fc-2c963f66afa6","followers":0,"updatedAt":"2022-07-10T20:43:49.262Z"},"socialMedia":1,"createdAt":"2022-07-10T20:43:49.262Z"}]
+/// data : [{"id":0,"member":true,"reward":0,"coin":{"id":0,"rank":0,"name":"string","ticker":"string","cryptoId":"string","isToken":true,"contractAddress":"string","feePercent":0.0,"blockchain":0,"minWithdraw":0.0,"bigImageId":"3fa85f64-5717-4562-b3fc-2c963f66afa6","smallImageId":"3fa85f64-5717-4562-b3fc-2c963f66afa6","isActive":true,"explorerUrl":"string","requiredConfirmations":0,"fullName":"string","tokenStandart":"string","allowWithdraws":true,"allowDeposits":true},"channel":{"id":0,"":"0","socialMedia":1,"name":"string","url":"string","imageId":"3fa85f64-5717-4562-b3fc-2c963f66afa6","followers":0,"updatedAt":"2022-07-12T23:02:23.584Z"},"socialMedia":1,"createdAt":"2022-07-12T23:02:23.584Z"}]
 
 class Airdrops {
   Airdrops({
@@ -63,11 +61,11 @@ Airdrops copyWith({  String? message,
 
 /// id : 0
 /// member : true
-/// reward : 0.0
+/// reward : 0
 /// coin : {"id":0,"rank":0,"name":"string","ticker":"string","cryptoId":"string","isToken":true,"contractAddress":"string","feePercent":0.0,"blockchain":0,"minWithdraw":0.0,"bigImageId":"3fa85f64-5717-4562-b3fc-2c963f66afa6","smallImageId":"3fa85f64-5717-4562-b3fc-2c963f66afa6","isActive":true,"explorerUrl":"string","requiredConfirmations":0,"fullName":"string","tokenStandart":"string","allowWithdraws":true,"allowDeposits":true}
-/// channel : {"id":0,"rocketChannelId":"0","socialMedia":1,"name":"string","url":"string","imageId":"3fa85f64-5717-4562-b3fc-2c963f66afa6","followers":0,"updatedAt":"2022-07-10T20:43:49.262Z"}
+/// channel : {"id":0,"rocketChannelId":"0","socialMedia":1,"name":"string","url":"string","imageId":"3fa85f64-5717-4562-b3fc-2c963f66afa6","followers":0,"updatedAt":"2022-07-12T23:02:23.584Z"}
 /// socialMedia : 1
-/// createdAt : "2022-07-10T20:43:49.262Z"
+/// createdAt : "2022-07-12T23:02:23.584Z"
 
 class Airdrop {
   Airdrop({
@@ -144,3 +142,90 @@ Airdrop copyWith({  int? id,
 
 }
 
+/// id : 0
+/// rocketChannelId : "0"
+/// socialMedia : 1
+/// name : "string"
+/// url : "string"
+/// imageId : "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+/// followers : 0
+/// updatedAt : "2022-07-12T23:02:23.584Z"
+
+class Channel {
+  Channel({
+      int? id, 
+      String? rocketChannelId, 
+      int? socialMedia, 
+      String? name, 
+      String? url, 
+      String? imageId, 
+      int? followers, 
+      String? updatedAt,}){
+    _id = id;
+    _rocketChannelId = rocketChannelId;
+    _socialMedia = socialMedia;
+    _name = name;
+    _url = url;
+    _imageId = imageId;
+    _followers = followers;
+    _updatedAt = updatedAt;
+}
+
+  Channel.fromJson(dynamic json) {
+    _id = json['id'];
+    _rocketChannelId = json['rocketChannelId'].toString();
+    _socialMedia = json['socialMedia'];
+    _name = json['name'];
+    _url = json['url'];
+    _imageId = json['imageId'];
+    _followers = json['followers'];
+    _updatedAt = json['updatedAt'];
+  }
+  int? _id;
+  String? _rocketChannelId;
+  int? _socialMedia;
+  String? _name;
+  String? _url;
+  String? _imageId;
+  int? _followers;
+  String? _updatedAt;
+Channel copyWith({  int? id,
+  String? rocketChannelId,
+  int? socialMedia,
+  String? name,
+  String? url,
+  String? imageId,
+  int? followers,
+  String? updatedAt,
+}) => Channel(  id: id ?? _id,
+  rocketChannelId: rocketChannelId ?? _rocketChannelId,
+  socialMedia: socialMedia ?? _socialMedia,
+  name: name ?? _name,
+  url: url ?? _url,
+  imageId: imageId ?? _imageId,
+  followers: followers ?? _followers,
+  updatedAt: updatedAt ?? _updatedAt,
+);
+  int? get id => _id;
+  String? get rocketChannelId => _rocketChannelId;
+  int? get socialMedia => _socialMedia;
+  String? get name => _name;
+  String? get url => _url;
+  String? get imageId => _imageId;
+  int? get followers => _followers;
+  String? get updatedAt => _updatedAt;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = _id;
+    map['rocketChannelId'] = _rocketChannelId;
+    map['socialMedia'] = _socialMedia;
+    map['name'] = _name;
+    map['url'] = _url;
+    map['imageId'] = _imageId;
+    map['followers'] = _followers;
+    map['updatedAt'] = _updatedAt;
+    return map;
+  }
+
+}

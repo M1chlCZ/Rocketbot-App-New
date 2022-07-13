@@ -5,7 +5,6 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:get_it/get_it.dart';
 import 'package:progress_indicators/progress_indicators.dart';

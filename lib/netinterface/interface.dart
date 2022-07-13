@@ -22,7 +22,7 @@ class NetInterface {
   static const String posTokenRefresh = "posRefreshToken";
   static bool _refreshingToken = false;
 
-  Future<dynamic> get(String url, {String? request, bool pos = false}) async {
+  Future<dynamic> get(String url, {String? request, bool pos = false, bool debug = false}) async {
     String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
     var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
     // print(_token);
@@ -45,9 +45,10 @@ class NetInterface {
           return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
         },
       );
-
-      // print(response.statusCode);
-      // print(response.body.toString());
+      if(debug) {
+        print(response.statusCode);
+        print(response.body.toString());
+      }
       if (response.statusCode == 401 || response.statusCode == 403) {
         await refreshToken(pos: pos);
         var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO

@@ -16,9 +16,11 @@ class StakeTimeRangeSwitcherState extends State<StakeTimeRangeSwitcher> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width * 0.12;
-    return NeuContainer(
-        child: Row(children: [
+    var width = MediaQuery.of(context).size.width * 0.22;
+    return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+            children: [
           SizedBox(
             width: width,
             child: AnimatedOpacity(
@@ -31,10 +33,10 @@ class StakeTimeRangeSwitcherState extends State<StakeTimeRangeSwitcher> {
                     });
                     widget.changeTime(3);
                   },
-                  child: AutoSizeText('Y',
+                  child: AutoSizeText('1Y',
                       minFontSize: 6,
                       maxLines: 1,
-                      style:  Theme.of(context).textTheme.subtitle1
+                      style:  Theme.of(context).textTheme.bodyText1!.copyWith(color: _active == 4 ? const Color(0xFF9BD41E) : Colors.white, fontSize: 16.0)
                   )),),
           ),
           SizedBox(
@@ -50,10 +52,10 @@ class StakeTimeRangeSwitcherState extends State<StakeTimeRangeSwitcher> {
                     widget.changeTime(2);
                   },
                   child: AutoSizeText(
-                      'M',
+                      '1M',
                       minFontSize: 6,
                       maxLines: 1,
-                      style: Theme.of(context).textTheme.subtitle1
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: _active == 3 ? const Color(0xFF9BD41E) : Colors.white, fontSize: 16.0)
                   )),),
           ),
           SizedBox(
@@ -68,10 +70,11 @@ class StakeTimeRangeSwitcherState extends State<StakeTimeRangeSwitcher> {
                     });
                     widget.changeTime(1);
                   },
-                  child: AutoSizeText('W',
+                  child: AutoSizeText('1W',
                       minFontSize: 6,
                       maxLines: 1,
-                      style: Theme.of(context).textTheme.subtitle1)),
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: _active == 2 ? const Color(0xFF9BD41E) : Colors.white, fontSize: 16.0))
+              ),
             ),
           ),
           SizedBox(
@@ -87,10 +90,10 @@ class StakeTimeRangeSwitcherState extends State<StakeTimeRangeSwitcher> {
                     widget.changeTime(0);
                   },
                   child: AutoSizeText(
-                    'D',
+                    '1D',
                     minFontSize: 6,
                     maxLines: 1,
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: _active == 1 ? const Color(0xFF9BD41E) : Colors.white, fontSize: 16.0),
                   )),
             ),
           )

@@ -7,7 +7,7 @@ import 'package:rxdart/rxdart.dart';
 
 class AirdropsBloc {
   final AirdropList _coinBalances = AirdropList();
-
+  List<Airdrop>? coins;
   BehaviorSubject<ApiResponse<List<Airdrop>>>? _coinListController;
 
   StreamSink<ApiResponse<List<Airdrop>>> get coinsListSink =>
@@ -18,28 +18,25 @@ class AirdropsBloc {
 
   AirdropsBloc({List<Airdrop>? list}) {
     _coinListController = BehaviorSubject<ApiResponse<List<Airdrop>>>();
-    fetchGiveaways(list: list);
+    fetchGiveaways();
   }
 
-  changeCoin ({List<Airdrop>? list}) {
-    fetchGiveaways(list: list);
-  }
-
-  Future <void> fetchGiveaways({List<Airdrop>? list, bool force = false}) async {
+  Future <void> fetchGiveaways({int page = 1, bool force = false}) async {
     if (!_coinListController!.isClosed) {
       coinsListSink.add(ApiResponse.loading('Fetching Giveaways'));
     }
     try {
-      List<Airdrop>? coins;
-      if(list == null ) {
-        coins = await _coinBalances.fetchAirdrops();
+      if (coins != null && page != 1) {
+        List<Airdrop>? s = await _coinBalances.fetchAirdrops(page);
+        if (s != null) coins!.addAll(s);
       }else{
-        coins = list;
+        coins = await _coinBalances.fetchAirdrops(page);
       }
       if (!_coinListController!.isClosed) {
         coinsListSink.add(ApiResponse.completed(coins));
       }
     } catch (e) {
+      print(e);
       if (!_coinListController!.isClosed) {
         coinsListSink.add(ApiResponse.error(e.toString()));
       }

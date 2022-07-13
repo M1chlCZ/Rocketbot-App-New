@@ -1,5 +1,5 @@
 import 'package:rocketbot/models/coin_graph.dart';
-import 'package:rocketbot/netInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 
 class CoinPrices {
   final NetInterface _helper = NetInterface();

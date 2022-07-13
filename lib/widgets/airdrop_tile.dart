@@ -1,14 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rocketbot/models/airdrops.dart';
-import 'package:rocketbot/models/giveaways.dart';
 import 'package:rocketbot/widgets/picture_cache.dart';
 
 class AirdropTile extends StatelessWidget {
-  final Airdrop giveaway;
+  final Airdrop airdrop;
   final Function(Airdrop g) callBack;
 
-  const AirdropTile({Key? key, required this.giveaway, required this.callBack}) : super(key: key);
+  const AirdropTile({Key? key, required this.airdrop, required this.callBack}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class AirdropTile extends StatelessWidget {
           InkWell(
             splashColor: Colors.white30,
             onTap: () {
-              callBack(giveaway);
+              callBack(airdrop);
             },
             child: Row(
               children: [
@@ -42,7 +41,7 @@ class AirdropTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   padding: const EdgeInsets.all(8.0),
-                  child: PictureCacheWidget(coin: giveaway.coin!),
+                  child: PictureCacheWidget(coin: airdrop.coin),
                 ),
                 const SizedBox(
                   width: 60.0,
@@ -54,14 +53,14 @@ class AirdropTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AutoSizeText(
-                        "[${giveaway.coin!.ticker!}] ${giveaway.coin!.tokenStandart!}",
+                        "[${airdrop.coin!.ticker!}] ${airdrop.coin!.tokenStandart!}",
                         maxLines: 1,
                         minFontSize: 8.0,
                         textAlign: TextAlign.start,
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
                       ),
                       AutoSizeText(
-                        giveaway.channel!.name!,
+                        airdrop.channel!.name!,
                         maxLines: 1,
                         minFontSize: 8.0,
                         style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 14.0, color: Colors.white),
