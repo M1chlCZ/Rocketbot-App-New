@@ -45,10 +45,10 @@ class NetInterface {
           return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
         },
       );
-      if(debug) {
-        print(response.statusCode);
-        print(response.body.toString());
-      }
+      // if(debug) {
+      //   print(response.statusCode);
+      //   print(response.body.toString());
+      // }
       if (response.statusCode == 401 || response.statusCode == 403) {
         await refreshToken(pos: pos);
         var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
@@ -68,7 +68,7 @@ class NetInterface {
     return responseJson;
   }
 
-  Future<dynamic> post(String url, Map<String, dynamic> request, {bool pos = false}) async {
+  Future<dynamic> post(String url, Map<String, dynamic> request, {bool pos = false, bool debug = false}) async {
     String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
     var tk = await SecureStorage.readStorage(key: pos ? posToken : token);
     dynamic responseJson;
@@ -92,8 +92,10 @@ class NetInterface {
           return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
         },
       );
+      if (debug) {
       print(response.body);
       print(response.statusCode);
+      }
       if (response.statusCode == 401 || response.statusCode == 403) {
         await refreshToken(pos: pos);
         var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
@@ -133,7 +135,6 @@ class NetInterface {
       case 500:
       case 409:
         var responseJson = json.decode(response.body.toString());
-        print(responseJson);
         throw ConflictDataException(responseJson['errorMessage']);
       default:
         throw FetchDataException('Error occurred while communication with server: ${response.body}');

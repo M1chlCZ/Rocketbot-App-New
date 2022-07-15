@@ -11,11 +11,11 @@ import 'package:sprintf/sprintf.dart';
 
 import 'package:rocketbot/support/globals.dart' as globals;
 
-const dbVersion = 2;
+const dbVersion = 3;
 
 class AppDatabase {
   final String stakeTable = sprintf(
-      'CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY, %s STRING, %s INTEGER, %s INTEGER, %s REAL, %s STRING)',
+      'CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY, %s STRING, %s INTEGER, %s INTEGER, %s REAL, %s STRING, %s INTEGER)',
       [
         globals.TABLE_STAKE,
         globals.TS_ID,
@@ -23,7 +23,8 @@ class AppDatabase {
         globals.TS_FINISHED,
         globals.TS_COINID,
         globals.TS_AMOUNT,
-        globals.TS_ADDR
+        globals.TS_ADDR,
+        globals.TS_MASTERNODE
       ]);
   final String coinTable = sprintf(
       'CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY, %s INTEGER, %s STRING, %s STRING, %s STRING, %s INTEGER, %s STRING, %s REAL, %s INTEGER, %s REAL, %s STRING, %s STRING, %s INTEGER, %s STRING, %s INTEGER, %s STRING, %s STRING, %s INTEGER, %s INTEGER)',
@@ -77,14 +78,15 @@ class AppDatabase {
   }
 
   Future addTX(
-      String txid, int idCoin, double amount, String depositAddress) async {
+      String txid, int idCoin, double amount, String depositAddress, {bool masternode = false}) async {
     final dbClient = await db;
     dynamic tx = {
       globals.TS_PWG: txid,
       globals.TS_FINISHED: 0,
       globals.TS_COINID: idCoin,
       globals.TS_AMOUNT: amount,
-      globals.TS_ADDR: depositAddress
+      globals.TS_ADDR: depositAddress,
+      globals.TS_MASTERNODE: masternode ? 1 : 0
     };
     var res = dbClient.insert(globals.TABLE_STAKE, tx);
     return res;
@@ -112,6 +114,7 @@ class AppDatabase {
         amount: res[i][globals.TS_AMOUNT] as double,
         depAddr: res[i][globals.TS_ADDR] as String,
         idCoin: res[i][globals.TS_COINID] as int,
+        masternode: res[i][globals.TS_MASTERNODE] as int? ?? 0
       );
     });
   }
@@ -188,6 +191,16 @@ class AppDatabase {
       case 1:
         try {
           await db.execute(coinTable);
+          await db.execute("ALTER TABLE ${globals.TABLE_STAKE} ADD COLUMN ${globals.TS_MASTERNODE} INTEGER");
+        } catch (e) {
+          if (kDebugMode) {
+            print(e);
+          }
+        }
+        break;
+      case 2:
+        try {
+          await db.execute("ALTER TABLE ${globals.TABLE_STAKE} ADD COLUMN ${globals.TS_MASTERNODE} INTEGER");
         } catch (e) {
           if (kDebugMode) {
             print(e);

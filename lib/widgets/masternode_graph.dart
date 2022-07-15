@@ -7,26 +7,27 @@ import 'package:jiffy/jiffy.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/models/graph_stake_data.dart';
+import 'package:rocketbot/models/masternode_data.dart';
 import 'package:rocketbot/support/duration_extension.dart';
 
 import '../models/stake_data.dart';
 
 
-class CoinStakeGraph extends StatefulWidget {
-  final StakingData? stake;
+class CoinMasternodeGraph extends StatefulWidget {
+  final MasternodeData? rewards;
   final Coin? activeCoin;
   final int type;
   final Function (bool touch) blockTouch;
 
-  const CoinStakeGraph({Key? key, this.stake, required this.type, this.activeCoin, required this.blockTouch}) : super(key: key);
+  const CoinMasternodeGraph({Key? key, this.rewards, required this.type, this.activeCoin, required this.blockTouch}) : super(key: key);
 
   @override
-  CoinStakeGraphState createState() => CoinStakeGraphState();
+  CoinMasternodeGraphState createState() => CoinMasternodeGraphState();
 }
 
-class CoinStakeGraphState extends State<CoinStakeGraph> {
+class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
   var _touch = false;
-  StakingData? _stakes;
+  MasternodeData? _stakes;
   int _dropdownValue = 0;
   String? _date;
   String? _locale;
@@ -47,7 +48,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
       _locale = Localizations.localeOf(context).languageCode;
     });
     _dropdownValue = widget.type;
-    _stakes = widget.stake;
+    _stakes = widget.rewards;
     _getDate();
     _prepareStakeData();
 
@@ -65,7 +66,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
     super.dispose();
   }
 
-  DateTime _dateParse(String? day, int hour, int type) {
+  DateTime _dateParse(String? day, int? hour, int type) {
     if (type == 1 || type == 2) {
       return DateTime.parse(day!);
     }
@@ -80,9 +81,9 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
     var datetime = DateTime.parse(day!);
     DateTime newTime = DateTime.now();
     if (timeDifference >= 0) {
-      newTime = datetime.add(Duration(hours: hour));
+      newTime = datetime.add(Duration(hours: hour!));
     } else {
-      newTime = datetime.add(Duration(hours: hour));
+      newTime = datetime.add(Duration(hours: hour!));
     }
     return newTime.toLocal();
   }
@@ -92,10 +93,10 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
       List<StakeData>? data;
       if (_stakes != null) {
         var amount = 0.0;
-        List<StakeData>? dataPrep = List.generate(_stakes!.stakes!.length, (i) {
+        List<StakeData>? dataPrep = List.generate(_stakes!.rewards!.length, (i) {
           return StakeData(
-            date: _dateParse(_stakes!.stakes![i].day!, _stakes!.stakes![i].hour!, _dropdownValue),
-            amount: _stakes!.stakes![i].amount!,
+            date: _dateParse(_stakes!.rewards![i].day!, _stakes!.rewards![i].hour, _dropdownValue),
+            amount: _stakes!.rewards![i].amount!,
           );
         });
         dataPrep.sort((a, b) => a.date.compareTo(b.date));
@@ -387,6 +388,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
       String tm = time < 10 ? "0$time" : time.toString();
       String dt = "$tm/${dateParts[0]}";
       return '$dt\n';
+      // return '${format.format(date)}\n';
     } else {
       return '${Duration(days: time * 31).inDays.toString()} \n';
     }
@@ -400,7 +402,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
       LineChartBarData(
         spots: _values,
         showingIndicators: showIndexes,
-        color: const Color(0xFF9BD41E),
+        color: const Color(0xFFF68DB2),
         barWidth: 2,
 
         // shadow: const Shadow(
@@ -498,7 +500,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
                 fitInsideVertically: true,
                 tooltipRoundedRadius: 4,
                 tooltipMargin: 12.0,
-                tooltipBgColor: const Color(0xFF9BD41E),
+                tooltipBgColor: const Color(0xFFF68DB2),
                 getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
                   return touchedBarSpots.map((barSpot) {
                     final flSpot = barSpot;
@@ -544,8 +546,8 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
     );
   }
 }
- List<Color> _gradientColors = [
-   const Color.fromRGBO(155, 212, 30, 0.8235294117647058),
-   const Color.fromRGBO(155, 212, 30, 0.25882352941176473),
-   const Color.fromRGBO(255, 255, 255, 0),
+List<Color> _gradientColors = [
+  const Color.fromRGBO(246, 141, 178, 1.0),
+  const Color.fromRGBO(246, 141, 178, 0.25),
+  const Color.fromRGBO(255, 255, 255, 0),
 ];

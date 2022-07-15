@@ -13,8 +13,9 @@ class FlatCustomButton extends StatelessWidget {
   final double? height;
   final double? width;
   final EdgeInsets? padding;
+  final double? borderWidth;
 
-  const FlatCustomButton({Key? key, this.color, this.onTap, this.icon, this.imageIcon, this.splashColor, this.animIcon, this.radius = 4.0, this.child, this.borderColor, this.height, this.width, this.padding}) : super(key: key);
+  const FlatCustomButton({Key? key, this.color, this.onTap, this.icon, this.imageIcon, this.splashColor, this.animIcon, this.radius = 4.0, this.child, this.borderColor, this.height, this.width, this.padding, this.borderWidth}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class FlatCustomButton extends StatelessWidget {
       width,
       decoration: BoxDecoration(
         color: color,
-        border: borderColor != null ? Border.all(color: borderColor!, width: 1.5) : null,
+        border: borderColor != null ? Border.all(color: borderColor!, width: borderWidth ?? 1.5) : null,
         borderRadius: BorderRadius.all(Radius.circular(radius)),
       ),
       child: ClipRRect(

@@ -148,5 +148,12 @@
   "ref_invite" : "You have not been invited by anyone, enter Rocketbot referral code to receive 50 Merge! Referral bonus will be credited after you stake at least 10 Merge tokens.",
   "ref_unvite" : "You've already used the invite promotion, keep an eye on our future ones",
   "ref_hint" : "Just scan the similar looking QR code and stake 10 Merge (in any order) and you are all set. \nUser is eligible for this promotion only once!",
-  "balance": "Balance"
+  "balance": "Balance",
+  "mn_your_mns" : "Your masternodes",
+  "mn_total" : "Total number of {1} masternodes",
+  "mn_average_payrate" : "MN average payrate",
+  "mn_average_start" : "Average time to start MN",
+  "mn_time_to_start" : "Average time to get 1st reward",
+  "mn_lock" : "Coins will be locked for 1 week",
+  "mn_start" : "Deploy new {1} Masternode"
 }

@@ -58,7 +58,7 @@ class Stakes {
 
   Stakes.fromJson(dynamic json) {
     _hour = json['hour'] ?? 0;
-    _amount = json['amount'];
+    _amount = double.parse(json['amount'].toString());
     _day = json['day'];
   }
   int? _hour;

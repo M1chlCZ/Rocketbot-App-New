@@ -7,14 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_indicators/progress_indicators.dart';
-import 'package:rocketbot/bloc/stake_graph_bloc.dart';
+import 'package:rocketbot/bloc/masternode_graph_bloc.dart';
 import 'package:rocketbot/models/balance_portfolio.dart';
 import 'package:rocketbot/models/fees.dart';
 import 'package:rocketbot/models/get_withdraws.dart';
+import 'package:rocketbot/models/masternode_data.dart';
+import 'package:rocketbot/models/masternode_info.dart';
+import 'package:rocketbot/models/masternode_lock.dart';
 import 'package:rocketbot/models/pgwid.dart';
 import 'package:rocketbot/models/stake_check.dart';
-import 'package:rocketbot/models/stake_data.dart';
 import 'package:rocketbot/models/withdraw_confirm.dart';
 import 'package:rocketbot/models/withdraw_pwid.dart';
 import 'package:rocketbot/netInterface/api_response.dart';
@@ -26,19 +29,18 @@ import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/gradient_text.dart';
 import 'package:rocketbot/support/life_cycle_watcher.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:rocketbot/widgets/masternode_graph.dart';
 import 'package:rocketbot/widgets/percent_switch_widget.dart';
 import 'package:rocketbot/widgets/picture_cache.dart';
-import 'package:rocketbot/widgets/stake_graph.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
 import '../models/balance_list.dart';
 import '../models/coin.dart';
-import '../models/stake_data.dart';
 import '../support/auto_size_text_field.dart';
 import '../widgets/coin_price_graph.dart';
 import '../widgets/time_stake_range_switch.dart';
 
-class StakingPage extends StatefulWidget {
+class MasternodePage extends StatefulWidget {
   final Coin activeCoin;
   final CoinBalance coinBalance;
   final String? depositAddress;
@@ -51,7 +53,7 @@ class StakingPage extends StatefulWidget {
   final double free;
   final bool masternode;
 
-  const StakingPage({
+  const MasternodePage({
     Key? key,
     required this.activeCoin,
     required this.coinBalance,
@@ -67,10 +69,10 @@ class StakingPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  StakingPageState createState() => StakingPageState();
+  MasternodePageState createState() => MasternodePageState();
 }
 
-class StakingPageState extends LifecycleWatcherState<StakingPage> {
+class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   // final _storage = const FlutterSecureStorage();
   final NetInterface _interface = NetInterface();
   final _graphKey = GlobalKey<CoinPriceGraphState>();
@@ -81,7 +83,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
   FocusNode numberFocusNode = FocusNode();
   AnimationController? _animationController;
   Animation<double>? _animation;
-  StakeGraphBloc? _stakeBloc;
+  MasternodeGraphBloc? _mnBloc;
   late Coin _coinActive;
 
   bool _staking = false;
@@ -90,12 +92,14 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
   bool _paused = false;
   bool _detailsExtended = false;
 
-  String _amountStaked = "0.0";
+  int _numberNodes = 0;
   double _unconfirmedAmount = 0.0;
   String _amountReward = "0.0";
   double _estimated = 0.0;
   double _percentage = 0.0;
-  double _inPoolTotal = 0.0;
+  int _activeNodes = 0;
+  String _averagePayrate = "00:00:00";
+  String _averateTimeStart = "00:00:00";
   double _price = 0.0;
   double _free = 0.0;
 
@@ -124,8 +128,9 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       }
       _percentageKey.currentState!.deActivate();
     });
-    _stakeBloc = StakeGraphBloc();
-    _stakeBloc!.stakeBloc();
+    _getStakingDetails();
+    _mnBloc = MasternodeGraphBloc();
+    _mnBloc!.stakeBloc();
     _getPos();
     _getFees();
     _getFocusIOS();
@@ -145,8 +150,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
   }
 
   void _getPos() {
-    _stakeBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
-    _getStakingDetails();
+    _mnBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
   }
 
   Future<void> _getStakingDetails() async {
@@ -154,23 +158,19 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       "idCoin": _coinActive.id!,
       // "idCoin": 0
     };
-    var res = await _interface.post("stake/check", m, pos: true);
-    StakeCheck? sc = StakeCheck.fromJson(res);
+    var res = await _interface.post("masternode/info", m, pos: true);
+    MasternodeInfo? sc = MasternodeInfo.fromJson(res);
     if (sc.hasError == true) return;
-    if (sc.active == 0) {
-      _staking = false;
-      _inPoolTotal = sc.inPoolTotal ?? 0.0;
-      setState(() {});
-    } else {
-      _estimated = sc.estimated ?? 0.0;
-      _percentage = sc.contribution ?? 0.0;
-      _inPoolTotal = sc.inPoolTotal ?? 0.0;
-      _amountStaked = sc.amount!.toString();
-      _unconfirmedAmount = sc.unconfirmed!;
-      _amountReward = _formatDecimal(Decimal.parse(sc.stakesAmount.toString()));
-      _staking = true;
-      setState(() {});
-    }
+    _numberNodes = sc.mnList?.length ?? 0;
+    _activeNodes = sc.activeNodes!;
+    double rev =  sc.nodeRewards!.fold(0, (previousValue, element) => previousValue + element.amount!);
+    _amountReward = rev.toString();
+    List<String> partsPayrate = sc.averagePayTime!.split(".");
+    _averagePayrate = partsPayrate[0];
+    List<String> partsStart = sc.averageTimeToStart!.split(".");
+    _averateTimeStart = partsStart[0];
+    _estimated = sc.averageRewardPerDay! * 0.75;
+    _staking = _activeNodes > 0 ? true : false;
   }
 
   @override
@@ -193,16 +193,16 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
               width: MediaQuery.of(context).size.width,
               height: 200,
               child: RefreshIndicator(
-                onRefresh: () => _stakeBloc!.fetchStakeData(_coinActive.id!, 0),
-                child: StreamBuilder<ApiResponse<StakingData>>(
-                    stream: _stakeBloc!.coinsListStream,
+                onRefresh: () => _mnBloc!.fetchStakeData(_coinActive.id!, 0),
+                child: StreamBuilder<ApiResponse<MasternodeData>>(
+                    stream: _mnBloc!.coinsListStream,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         switch (snapshot.data!.status) {
                           case Status.completed:
-                            return CoinStakeGraph(
+                            return CoinMasternodeGraph(
                               key: _graphKey,
-                              stake: snapshot.data?.data,
+                              rewards: snapshot.data?.data,
                               activeCoin: _coinActive,
                               type: _typeGraph,
                               blockTouch: _blockSwipe,
@@ -247,7 +247,8 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
             SizedBox(
                 height: 40,
                 child: StakeTimeRangeSwitcher(
-                  key: const ValueKey<int>(0),
+                  color: const Color(0xFFF68DB2),
+                  key: const ValueKey<int>(1),
                   changeTime: _changeTime,
                 )),
             const SizedBox(
@@ -309,7 +310,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                           _coinActive.cryptoId!,
                           // textAlign: TextAlign.end,
                           style: const TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
+                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
                         ),
                       ],
                     ),
@@ -325,7 +326,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                     child: Row(
                       children: [
                         Text(
-                          "${AppLocalizations.of(context)!.stake_staked_amount}:",
+                          "${AppLocalizations.of(context)!.mn_your_mns}:",
                           // textAlign: TextAlign.end,
                           style: TextStyle(
                               fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
@@ -334,7 +335,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                           child: Padding(
                             padding: const EdgeInsets.only(right: 4.0),
                             child: AutoSizeText(
-                              _formatPriceString(_amountStaked),
+                              _numberNodes.toString(),
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
@@ -342,11 +343,11 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                             ),
                           ),
                         ),
-                        Text(
-                          _coinActive.cryptoId!,
+                        const Text(
+                         "MNs",
                           // textAlign: TextAlign.end,
-                          style: const TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
+                          style: TextStyle(
+                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
                         ),
                       ],
                     ),
@@ -358,43 +359,43 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                       const SizedBox(
                         height: 5.0,
                       ),
-                Opacity(
-                  opacity: 0.6,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 5.0, right: 5.0, left: 10.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "${AppLocalizations.of(context)!.stake_unconfirmed}:",
-                            // textAlign: TextAlign.end,
-                            style: TextStyle(
-                                fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 4.0),
-                              child: AutoSizeText(
-                                _unconfirmedAmount.toStringAsFixed(3),
-                                maxLines: 1,
-                                minFontSize: 8.0,
-                                textAlign: TextAlign.end,
-                                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
-                              ),
+                      Opacity(
+                        opacity: 0.6,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 5.0, right: 5.0, left: 10.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "${AppLocalizations.of(context)!.stake_unconfirmed}:",
+                                  // textAlign: TextAlign.end,
+                                  style: TextStyle(
+                                      fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 4.0),
+                                    child: AutoSizeText(
+                                      _unconfirmedAmount.toStringAsFixed(3),
+                                      maxLines: 1,
+                                      minFontSize: 8.0,
+                                      textAlign: TextAlign.end,
+                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  _coinActive.cryptoId!,
+                                  // textAlign: TextAlign.end,
+                                  style: const TextStyle(
+                                      fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            _coinActive.cryptoId!,
-                            // textAlign: TextAlign.end,
-                            style: const TextStyle(
-                                fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
                     ],
                   ),
                 const SizedBox(
@@ -407,7 +408,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                     child: Row(
                       children: [
                         Text(
-                          "${AppLocalizations.of(context)!.stake_reward}:",
+                          "${AppLocalizations.of(context)!.mn_reward}:",
                           // textAlign: TextAlign.end,
                           style: TextStyle(
                               fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
@@ -428,7 +429,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                           _coinActive.cryptoId!,
                           // textAlign: TextAlign.end,
                           style: const TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
+                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
                         ),
                       ],
                     ),
@@ -455,7 +456,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                             child: Row(
                               children: [
                                 GradientText(
-                                  "${AppLocalizations.of(context)!.staking_total_tokens}:",
+                                  "${AppLocalizations.of(context)!.mn_total.replaceAll("{1}", _coinActive.ticker!)}:",
                                   gradient: const LinearGradient(colors: [
                                     Colors.white70,
                                     Colors.white54,
@@ -467,7 +468,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 8.0, top: 1.0),
                                     child: AutoSizeText(
-                                      "${_inPoolTotal.toStringAsFixed(1)} ${_coinActive.cryptoId!}",
+                                      "$_activeNodes",
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
@@ -486,7 +487,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                             child: Row(
                               children: [
                                 GradientText(
-                                  "${AppLocalizations.of(context)!.staking_monetary_value}:",
+                                  "${AppLocalizations.of(context)!.mn_average_payrate}:",
                                   gradient: const LinearGradient(colors: [
                                     Colors.white70,
                                     Colors.white54,
@@ -498,7 +499,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 8.0, top: 1.0),
                                     child: AutoSizeText(
-                                      "${(_inPoolTotal * _price).toStringAsFixed(2)} USD",
+                                      _averagePayrate,
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
@@ -517,7 +518,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                             child: Row(
                               children: [
                                 GradientText(
-                                  "${AppLocalizations.of(context)!.staking_contrib}:",
+                                  "${AppLocalizations.of(context)!.mn_average_start}:",
                                   gradient: const LinearGradient(colors: [
                                     Colors.white70,
                                     Colors.white54,
@@ -529,7 +530,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 8.0, top: 1.0),
                                     child: AutoSizeText(
-                                      "${_percentage.toStringAsFixed(3)}%",
+                                      _averateTimeStart.toString(),
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
@@ -630,102 +631,28 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                     border: Border(top: BorderSide(color: Colors.white12, width: 0.5)),
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(15.0, 20.0,15.0, 5.0),
-                  width: double.infinity,
-                  height: 50.0,
-                  child: Center(
-                    child: AutoSizeTextField(
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-                        TextInputFormatter.withFunction((oldValue, newValue) {
-                          try {
-                            final text = newValue.text;
-                            if (text.isNotEmpty) double.parse(text);
-                            return newValue;
-                          } catch (e) {
-                            debugPrint(e.toString());
-                          }
-                          return oldValue;
-                        }),
-                      ],
-                      maxLines: 1,
-                      minFontSize: 12.0,
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 18.0),
-                      autocorrect: false,
-                      focusNode: numberFocusNode,
-                      controller: _amountController,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: amountEmpty ? Colors.red.shade600.withOpacity(0.2) : Colors.black12,
-                        contentPadding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                        hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
-                        hintText: AppLocalizations.of(context)!.stake_amount,
-                        // enabledBorder: const UnderlineInputBorder(
-                        //   borderSide: BorderSide(color: Colors.transparent),
-                        // ),
-                        // focusedBorder: const UnderlineInputBorder(
-                        //   borderSide: BorderSide(color: Colors.transparent),
-                        // ),
-                      ),
-                    ),
-                  ),
-                ),
-                PercentSwitchWidget(
-                  key: _percentageKey,
-                  changePercent: _changePercentage,
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    border: Border(top: BorderSide(color: Colors.white12, width: 0.5)),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: Center(
-                      child: Text(
-                    "${AppLocalizations.of(context)!.min_withdraw} $_min \n${AppLocalizations.of(context)!.staking_lock_coins}",
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white30),
-                  )),
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 2.0, right: 2.0),
+                  padding: const EdgeInsets.only(left: 2.0, right: 2.0, top: 30.0),
 
                   child: Container(
                     margin: const EdgeInsets.all(10.0),
                     padding: const EdgeInsets.all(3.0),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.0),
-                      color: const Color(0xFF9BD41E)
+                        borderRadius: BorderRadius.circular(12.0),
+                        color: const Color(0xFFF68DB2)
                     ),
                     child: SlideAction(
                       height: 60.0,
                       sliderButtonIconPadding: 6.0,
                       borderRadius: 10.0,
-                      text: "${AppLocalizations.of(context)!.stake_swipe} ${widget.activeCoin.name!}",
-                      innerColor: const Color(0xFF9BD41E),
+                      text: AppLocalizations.of(context)!.mn_start.replaceAll("{1}", widget.activeCoin.ticker!),
+                      innerColor: const Color(0xFFF68DB2),
                       outerColor: const Color(0xFF252F45),
                       elevation: 0.5,
                       // submittedIcon: const Icon(Icons.check, size: 30.0, color: Colors.lightGreenAccent,),
                       submittedIcon: const CircularProgressIndicator(
                         strokeWidth: 2.0,
-                        color: Colors.lightGreenAccent,
+                        color: Color(0xFFF68DB2),
                       ),
                       sliderButtonIcon: const Icon(
                         Icons.arrow_forward,
@@ -749,83 +676,84 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                   width: double.infinity,
                   child: Center(
                       child: Text(
-                    AppLocalizations.of(context)!.stake_wait,
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white30),
-                  )),
+                        "${AppLocalizations.of(context)!.mn_time_to_start}: $_averateTimeStart \n${AppLocalizations.of(context)!.mn_lock}",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white30),
+                      )),
                 ),
                 const SizedBox(
                   height: 20.0,
                 ),
                 _staking
                     ? Column(
-                        children: [
-                          IgnorePointer(
-                            ignoring: _amountReward == "0.0" ? true : false,
-                            child: Opacity(
-                              opacity: _amountReward == "0.0" ? 0.3 : 1.0,
-                              child: Padding(
-                                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                                  child: FlatCustomButton(
-                                    onTap: () {
-                                      if (!_loadingReward) {
-                                        _unStake(1);
-                                      }
-                                    },
-                                    radius: 10.0,
-                                    color: const Color(0xb26cb30b),
-                                    child: SizedBox(
-                                        height: 45.0,
-                                        child: Center(
-                                            child: _loadingReward
-                                                ? const Padding(
-                                                    padding: EdgeInsets.all(3.0),
-                                                    child: CircularProgressIndicator(
-                                                      strokeWidth: 2.0,
-                                                      color: Colors.white70,
-                                                    ),
-                                                  )
-                                                : Text(
-                                                    AppLocalizations.of(context)!.stake_get_reward,
-                                                    style: const TextStyle(
-                                                        fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Colors.white),
-                                                  ))),
-                                  )),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20.0,
-                          ),
-                          Padding(
-                              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                              child: FlatCustomButton(
-                                onTap: () {
-                                  if (!_loadingCoins) {
-                                    _unStake(0);
-                                  }
-                                },
-                                radius: 10.0,
-                                borderWidth: 2.0,
-                                borderColor: const Color(0xFF9BD41E),
-                                color: Theme.of(context).canvasColor,
-                                child: SizedBox(
-                                    height: 45.0,
-                                    child: Center(
-                                        child: _loadingCoins
-                                            ? const Padding(
-                                                padding: EdgeInsets.all(3.0),
-                                                child: CircularProgressIndicator(
-                                                  strokeWidth: 2.0,
-                                                  color: Colors.white70,
-                                                ),
-                                              )
-                                            : Text(
-                                                AppLocalizations.of(context)!.stake_get_all,
-                                                style:  const TextStyle(
-                                                    fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Color(0xFF9BD41E)),
-                                              ))),
-                              )),
-                        ],
-                      )
+                  children: [
+                    IgnorePointer(
+                      ignoring: _amountReward == "0.0" ? true : false,
+                      child: Opacity(
+                        opacity: _amountReward == "0.0" ? 0.3 : 1.0,
+                        child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                            child: FlatCustomButton(
+                              onTap: () {
+                                if (!_loadingReward) {
+                                  _unStake(1);
+                                }
+                              },
+                              radius: 10.0,
+                              color: const Color(0xFFF68DB2),
+                              child: SizedBox(
+                                  height: 45.0,
+                                  child: Center(
+                                      child: _loadingReward
+                                          ? const Padding(
+                                        padding: EdgeInsets.all(3.0),
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.0,
+                                          color: Colors.white70,
+                                        ),
+                                      )
+                                          : Text(
+                                        AppLocalizations.of(context)!.stake_get_reward,
+                                        style: const TextStyle(
+                                            fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Colors.white),
+                                      ))),
+                            )),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                        child: FlatCustomButton(
+                          onTap: () {
+                            if (!_loadingCoins) {
+                              _unStake(0);
+                            }
+                          },
+                          radius: 10.0,
+                          borderWidth: 2.0,
+                          borderColor: const Color(0xFFF68DB2),
+                          color: Theme.of(context).canvasColor,
+                          child: SizedBox(
+                              height: 45.0,
+                              child: Center(
+                                  child: _loadingCoins
+                                      ? const Padding(
+                                    padding: EdgeInsets.all(3.0),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.0,
+                                      color: Colors.white70,
+                                    ),
+                                  )
+                                      : Text(
+                                    AppLocalizations.of(context)!.mn_manage,
+                                    style:  const TextStyle(
+                                        fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Color(0xFFF68DB2)),
+                                  ))),
+                        )),
+                  ],
+                )
                     : Container(),
               ],
             ),
@@ -841,7 +769,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
   _changeTime(int time) {
     _typeGraph = 0;
     _typeGraph = time;
-    _stakeBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
+    _mnBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
   }
 
   _blockSwipe(bool b) {
@@ -932,7 +860,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       _keyStake.currentState!.reset();
       return;
     }
-    var amt = double.parse(_amountController.text);
+    var amt = 10000;
     bool minAmount = amt < _min!;
 
     if (amt > _free) {
@@ -964,7 +892,17 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     }
 
     try {
-      Map<String, dynamic> query = {"coinId": _coinActive.id!, "fee": _fee, "amount": amt, "toAddress": widget.depositPosAddress};
+      Map<String, dynamic> queryLock = {"coinId": _coinActive.id!};
+      final responseLock = await _interface.post("masternode/lock", queryLock, pos: true);
+      var mnLock = MasternodeLock.fromJson(responseLock);
+      if (mnLock.node?.address == null) {
+        Navigator.of(context).pop();
+        Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Data err");
+        _keyStake.currentState!.reset();
+        return;
+      }
+
+      Map<String, dynamic> query = {"coinId": _coinActive.id!, "fee": _fee, "amount": amt, "toAddress": mnLock.node!.address!};
 
       final response = await _interface.post("Transfers/CreateWithdraw", query);
       var pwid = WithdrawID.fromJson(response);
@@ -973,15 +911,16 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       };
       var resWith = await _interface.post("Transfers/ConfirmWithdraw", queryID);
       rw = WithdrawConfirm.fromJson(resWith);
-      await db.addTX(rw.data!.pgwIdentifier!, _coinActive.id!, double.parse(_amountController.text), widget.depositAddress!);
+      await db.addTX(rw.data!.pgwIdentifier!, _coinActive.id!, double.parse(_amountController.text), widget.depositAddress!, masternode: true);
       problem = serverTypePos;
       Map<String, dynamic> m = {
         "idCoin": _coinActive.id!,
         "depAddr": widget.depositAddress,
         "amount": double.parse(_amountController.text),
         "pwd_id": rw.data!.pgwIdentifier!,
+        "node_id" : mnLock.node!.id!
       };
-      await _interface.post("stake/set", m, pos: true);
+      await _interface.post("masternode/setup", m, pos: true);
       _lostPosTX();
     } on BadRequestException catch (r) {
       if (mounted) Navigator.of(context).pop();
@@ -1013,7 +952,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     widget.changeFree(preFree);
     _keyStake.currentState!.reset();
     await _getStakingDetails();
-    _stakeBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
+    _mnBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
     setState(() {});
     if (mounted) Navigator.of(context).pop();
   }
@@ -1072,9 +1011,13 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     }
     setState(() {});
     try {
-      Map<String, dynamic> m = {"idCoin": _coinActive.id!, "rewardParam": rewardParam};
-
-      await _interface.post("stake/withdraw", m, pos: true);
+      if (rewardParam == 1) {
+        Map<String, dynamic> m = {"idCoin" : _coinActive.id!};
+        await _interface.post("masternode/reward", m, pos: true);
+      }else{
+        Map<String, dynamic> m = {"idCoin": _coinActive.id!, "rewardParam": rewardParam};
+        await _interface.post("stake/withdraw", m, pos: true);
+      }
       var preFree = 0.0;
       var resB = await _interface.get("User/GetBalance?coinId=${_coinActive.id!}");
       var rs = BalancePortfolio.fromJson(resB);
@@ -1082,7 +1025,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       _free = preFree;
       widget.changeFree(preFree);
       await _getStakingDetails();
-      _stakeBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
+      _mnBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
       var conf = _coinActive.requiredConfirmations;
       if (rewardParam == 1) {
         _loadingReward = false;

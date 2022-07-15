@@ -34,6 +34,7 @@ const String TS_FINISHED = "txFinish";
 const String TS_COINID = "idCoin";
 const String TS_ADDR = "depAddr";
 const String TS_AMOUNT = "amount";
+const String TS_MASTERNODE = "masternode";
 
 const String TABLE_COIN = "tableCoin";
 const String TC_ID = "id";

@@ -13,6 +13,7 @@ import 'package:rocketbot/screenpages/staking_page.dart';
 
 import '../component_widgets/button_neu.dart';
 import '../screens/portfolio_page.dart';
+import 'farm_main_screen.dart';
 
 class MainScreen extends StatefulWidget {
   final CoinBalance coinBalance;
@@ -123,7 +124,7 @@ class MainScreenState extends State<MainScreen> {
       "coinId": _coinActive.id!,
     };
     try {
-      final response = await _interface.post("Transfers/CreateDepositAddress", request);
+      final response = await _interface.post("Transfers/CreateDepositAddress", request, debug: true);
       var d = DepositAddress.fromJson(response);
       setState(() {
         _depositAddr = d.data!.address!;
@@ -138,10 +139,10 @@ class MainScreenState extends State<MainScreen> {
 
   _gotoStaking() {
     Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-      return StakingPage(
+      return FarmMainScreen(
         setActiveCoin: _setActiveCoin,
         changeFree: _changeFree,
-        depositAddress: _depositAddr,
+        depositAddress: _depositAddr!,
         depositPosAddress: _posDepositAddr,
         activeCoin: _coinActive,
         coinBalance: _lc!.singleWhere((element) => element.coin!.id! == _coinActive.id!),

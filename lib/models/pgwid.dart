@@ -7,14 +7,17 @@ class PGWIdentifier {
   final int? idCoin;
   final double? amount;
   final String? depAddr;
+  final int? masternode;
 
-  PGWIdentifier(
-      {this.id,
-      this.pgw,
-      this.txFinish,
-      this.idCoin,
-      this.amount,
-      this.depAddr});
+  PGWIdentifier({
+    this.id,
+    this.pgw,
+    this.txFinish,
+    this.idCoin,
+    this.amount,
+    this.depAddr,
+    this.masternode,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -23,7 +26,8 @@ class PGWIdentifier {
       globals.TS_FINISHED: txFinish,
       globals.TS_COINID: idCoin,
       globals.TS_AMOUNT: amount,
-      globals.TS_ADDR: depAddr
+      globals.TS_ADDR: depAddr,
+      globals.TS_MASTERNODE: masternode
     };
   }
 
@@ -34,7 +38,8 @@ class PGWIdentifier {
         txFinish: json[globals.TS_FINISHED],
         idCoin: json[globals.TS_COINID],
         amount: json[globals.TS_AMOUNT],
-        depAddr: json[globals.TS_ADDR]);
+        depAddr: json[globals.TS_ADDR],
+        masternode: json[globals.TS_MASTERNODE]);
   }
 
   String? getPGW() {

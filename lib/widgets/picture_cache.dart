@@ -6,8 +6,9 @@ import 'package:http/http.dart' show get;
 
 class PictureCacheWidget extends StatefulWidget {
   final Coin? coin;
+  final double? size;
 
-  const PictureCacheWidget({Key? key, this.coin}) : super(key: key);
+  const PictureCacheWidget({Key? key, this.coin, this.size}) : super(key: key);
 
   @override
   State<PictureCacheWidget> createState() => _PictureCacheWidgetState();
@@ -53,6 +54,10 @@ class _PictureCacheWidgetState extends State<PictureCacheWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _imageFile != null ? Image.file(_imageFile!) : Container();
+    return _imageFile != null ? SizedBox(
+      width: widget.size ?? double.infinity,
+        height: widget.size ?? double.infinity,
+        child: Image.file(_imageFile!)) :
+    Container();
   }
 }
