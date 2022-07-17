@@ -52,7 +52,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   PosCoinsList? pl;
   List<CoinBalance>? _listCoins;
   final List<int> _socials = [];
-  final _firebaseMessaging = GetIt.I.get<FCM>();
   AppDatabase db = GetIt.I.get<AppDatabase>();
   User? _me;
 
@@ -74,8 +73,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   void initState() {
     _authPing();
     _bloc = BalancesBloc();
-    _initializeLocalNotifications();
-    _firebaseMessaging.setNotifications();
     super.initState();
     _scrollController.addListener(() {
       if (popMenu) {
@@ -246,7 +243,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   }
 
   _lostPosTX() async {
-    List<PGWIdentifier> l = await db.getUnfinishedTX();
+    List<PGWIdentifier> l = await db.getUnfinishedTXPos();
     for (var element in l) {
       var coindID = element.getCoinID();
       var pgwid = element.getPGW();
@@ -279,6 +276,45 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
           };
           await _interface.post("stake/confirm", m, pos: true);
           await db.finishTX(pgwid!);
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+      }
+    }
+
+    List<PGWIdentifier> ll = await db.getUnfinishedTXMN();
+    for (var element in ll) {
+      var coindID = element.getCoinID();
+      var pgwid = element.getPGW();
+      if (element.getStatus() == 0) {
+        String? txid;
+        await Future.doWhile(() async {
+          try {
+            await Future.delayed(const Duration(seconds: 3));
+            final withdrawals = await _interface.get("Transfers/GetWithdraws?page=1&pageSize=10&coinId=$coindID");
+            List<DataWithdrawals>? withrld = WithdrawalsModels.fromJson(withdrawals).data;
+            for (var el in withrld!) {
+              if (el.pgwIdentifier! == pgwid) {
+                if (el.transactionId != null) {
+                  txid = el.transactionId;
+                  return false;
+                }
+              }
+            }
+          } catch (e) {
+            return true;
+          }
+          return true;
+        });
+
+        try {
+          Map<String, dynamic> m = {
+            "pwd_id": pgwid,
+            "tx_id": txid,
+          };
+          await _interface.post("masternode/confirm", m, pos: true);
+          await db.finishTX(pgwid!);
+          await Future.delayed(const Duration(seconds: 3));
         } catch (e) {
           debugPrint(e.toString());
         }
@@ -347,7 +383,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                     ),
                     SizedBox(
                       width: double.infinity,
-                      height: 120,
+                      height: 115,
                       child: portCalc
                           ? Container(
                               margin: const EdgeInsets.all(10.0),
@@ -358,7 +394,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                     scale: 0.5,
                                     filterQuality: FilterQuality.high,
                                     alignment: Alignment(0.0, 1.0),
-                                    fit: BoxFit.fitWidth,
+                                    fit: BoxFit.cover,
                                     image: AssetImage("images/bal.png")),
                                 gradient: const RadialGradient(center: Alignment(1.5, -3.0), radius: 5.0, colors: [
                                   Color(0xFF7388FF),
@@ -387,14 +423,13 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                     height: 5.0,
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       const SizedBox(
-                                        width: 20.0,
+                                        width: 18.0,
                                       ),
-                                      SizedBox(
-                                        width: 200,
+                                      Expanded(
                                         child: AutoSizeText(
                                           "\$${totalUSD.toStringAsFixed(2)}",
                                           style: Theme.of(context).textTheme.headline1,
@@ -406,18 +441,20 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                       const SizedBox(
                                         height: 3.0,
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 3.0),
-                                        child: SizedBox(
-                                          width: 130,
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 3.0),
                                           child: AutoSizeText(
                                             "${_formatPrice(totalBTC)} BTC",
                                             style: Theme.of(context).textTheme.headline2,
                                             minFontSize: 8.0,
                                             maxLines: 1,
-                                            textAlign: TextAlign.center,
+                                            textAlign: TextAlign.right,
                                           ),
                                         ),
+                                      ),
+                                      const SizedBox(
+                                        width: 12.0,
                                       ),
                                     ],
                                   ),
@@ -907,13 +944,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     return s;
   }
 
-  void _onDidReceiveLocalNotification(int id, String? title, String? body, String? payload) {
-    Dialogs.openAlertBox(context, "Alert", payload!);
-  }
-
-  void _onSelectNotification(String? payload) {
-    Dialogs.openAlertBox(context, "Alert", payload!);
-  }
 
   Future<void> _getPin() async {
     final String? pin = await _getPinFuture();
@@ -965,46 +995,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
       }
     }
     return true;
-  }
-
-  void _initializeLocalNotifications() async {
-    if (Platform.isAndroid) {
-      AndroidNotificationChannel channel = const AndroidNotificationChannel(
-        'rocket1', // id
-        'Rocket 1 stuff', // title
-        description: 'This channel is used for transaction notifications.',
-        // description
-        importance: Importance.max,
-        enableVibration: true,
-        enableLights: true,
-        ledColor: Colors.red,
-      );
-
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!
-          .createNotificationChannel(channel);
-
-      AndroidNotificationChannel channel2 = const AndroidNotificationChannel(
-        'rocket2', // id
-        'Rocket 2 stuff', // title
-        description: 'This channel is used for message notifications.',
-        // description
-        importance: Importance.max,
-        enableVibration: true,
-        enableLights: true,
-        ledColor: Colors.red,
-      );
-
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!
-          .createNotificationChannel(channel2);
-    }
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');
-    final IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
-    final InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: _onSelectNotification);
   }
 
   _checkZero() async {

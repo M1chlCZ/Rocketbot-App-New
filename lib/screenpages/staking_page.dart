@@ -1019,8 +1019,9 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
   }
 
   _lostPosTX() async {
-    List<PGWIdentifier> l = await db.getUnfinishedTX();
+    List<PGWIdentifier> l = await db.getUnfinishedTXPos();
     for (var element in l) {
+      var master = element.masternode;
       var coindID = element.getCoinID();
       var pgwid = element.getPGW();
       if (element.getStatus() == 0) {

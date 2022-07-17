@@ -10,6 +10,7 @@ import 'package:rocketbot/screenpages/coin_page.dart';
 import 'package:rocketbot/screenpages/deposit_page.dart';
 import 'package:rocketbot/screenpages/send_page.dart';
 import 'package:rocketbot/screenpages/staking_page.dart';
+import 'package:rocketbot/widgets/button_flat.dart';
 
 import '../component_widgets/button_neu.dart';
 import '../screens/portfolio_page.dart';
@@ -196,160 +197,127 @@ class MainScreenState extends State<MainScreen> {
               ),
             ]),
       ),
-      bottomNavigationBar: SnakeNavigationBar.color(
-        elevation: 2.0,
+      bottomNavigationBar:SnakeNavigationBar.color(
+        elevation: 0.0,
+        height: 50.0,
         onTap: _onTappedBar,
-        behaviour: SnakeBarBehaviour.pinned,
+        behaviour: SnakeBarBehaviour.floating,
         snakeShape: SnakeShape(
             shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        )),
+              borderRadius: BorderRadius.circular(10.0),
+            )),
         currentIndex: _selectedPageIndex,
         selectedItemColor: Colors.red,
-        unselectedItemColor: Colors.amber,
-        backgroundColor: Theme.of(context).canvasColor,
+        backgroundColor: const Color(0xff394359),
         snakeViewColor: _getNavBarColor(),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: NeuButton(
-              width: 45,
-              height: 45,
+            icon: FlatCustomButton(
+              width: 40,
+              height: 40,
+              radius: 10.0,
+              color: Colors.transparent,
               onTap: () {
                 _onTappedBar(0);
               },
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 3.0),
-                child: Image.asset(
-                  "images/receive_nav_icon.png",
-                  width: 25,
-                  fit: BoxFit.fitWidth,
-                ),
-              ),
+              child: Image.asset(
+                "images/linear-send.png",
+                width: 30,
+                height: 30.0,
+                fit: BoxFit.fitWidth,
+                color: Colors.white,
+              )
             ),
             backgroundColor: Colors.amber,
             label: '',
-            activeIcon: NeuButton(
-              width: 45,
-              height: 45,
+            activeIcon: FlatCustomButton(
+              width: 40,
+              height: 40,
+              radius: 10.0,
+              color: Colors.transparent,
               onTap: () {
                 _onTappedBar(0);
               },
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 3.0),
-                child: Image.asset(
-                  "images/receive_nav_icon.png",
-                  color: const Color(0xFF15D37A),
-                  width: 25,
-                  fit: BoxFit.fitWidth,
-                ),
+              child:  Image.asset(
+                "images/bold-recieve.png",
+                color: Colors.white,
+                width: 30,
+                height: 30.0,
+                fit: BoxFit.fitHeight,
               ),
             ),
           ),
           BottomNavigationBarItem(
-            icon: NeuButton(
-              width: 45,
-              height: 45,
+            icon: FlatCustomButton(
+              width: 40,
+              height: 40,
+              radius: 10.0,
+              color: Colors.transparent,
               onTap: () {
                 _onTappedBar(1);
               },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 0.0),
-                child: Image.asset(
-                  "images/coin_nav_icon.png",
-                  color: Colors.white,
-                  width: 34,
-                  fit: BoxFit.fitWidth,
-                ),
-              ),
+              child: Image.asset(
+                "images/linear-transaction.png",
+                width: 30,
+                height: 30.0,
+                fit: BoxFit.fitWidth,
+                color: Colors.white,
+              )
             ),
             label: '',
-            activeIcon: NeuButton(
-              width: 45,
-              height: 45,
+            activeIcon: FlatCustomButton(
+              width: 40,
+              height: 40,
+              radius: 10.0,
+              color: Colors.transparent,
               onTap: () {
-                _onTappedBar(1);
+                _onTappedBar(0);
               },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: Image.asset(
-                  "images/coin_nav_icon.png",
-                  width: 34,
-                  fit: BoxFit.fitWidth,
-                  color: Colors.blue,
-                ),
+              child:  Image.asset(
+                "images/bold-transaction.png",
+                color: Colors.white,
+                width: 30,
+                height: 30.0,
+                fit: BoxFit.fitHeight,
               ),
             ),
           ),
-          // BottomNavigationBarItem(
-          //   icon: NeuButton(
-          //     width: 45,
-          //     height: 45,
-          //     onTap: () {
-          //       if (_posCoin) {
-          //         _onTappedBar(2);
-          //       }
-          //     },
-          //     child: Padding(
-          //       padding: const EdgeInsets.only(bottom: 0.0),
-          //       child: Image.asset(
-          //         "images/staking_icon.png",
-          //         width: 38,
-          //         fit: BoxFit.fitWidth,
-          //         color: _posCoin ? Colors.white : Colors.white30,
-          //       ),
-          //     ),
-          //   ),
-          //   label: '',
-          //   activeIcon: NeuButton(
-          //     width: 45,
-          //     height: 45,
-          //     onTap: () {
-          //       if (_posCoin) {
-          //         _onTappedBar(2);
-          //       }
-          //     },
-          //     child: Padding(
-          //       padding: const EdgeInsets.only(bottom: 0.0),
-          //       child: Image.asset(
-          //         "images/staking_icon.png",
-          //         color: const Color(0xFFFDCB29),
-          //         width: 38,
-          //         fit: BoxFit.fitWidth,
-          //       ),
-          //     ),
-          //   ),
-          // ),
           BottomNavigationBarItem(
-            icon: NeuButton(
-              width: 45,
-              height: 45,
+            icon: FlatCustomButton(
+              width: 40,
+              height: 40,
+              radius: 10.0,
+              color: Colors.transparent,
               onTap: () {
                 _onTappedBar(2);
               },
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 3.0),
-                child: Image.asset(
-                  "images/send_nav_icon.png",
-                  width: 25,
-                  fit: BoxFit.fitWidth,
-                ),
-              ),
+              child: Image.asset(
+                "images/linear-send.png",
+                width: 30,
+                height: 30.0,
+                fit: BoxFit.fitWidth,
+                color: Colors.white,
+              )
             ),
             label: '',
-            activeIcon: NeuButton(
-              width: 45,
-              height: 45,
+            activeIcon: FlatCustomButton(
+              width: 40,
+              height: 40,
+              radius: 10.0,
+              color: Colors.transparent,
               onTap: () {
-                _onTappedBar(2);
+                _onTappedBar(0);
               },
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 3.0),
-                child: Image.asset(
-                  "images/send_nav_icon.png",
-                  color: const Color(0xFFEB3A13),
-                  width: 25,
-                  fit: BoxFit.fitWidth,
-                ),
+              child:  Image.asset(
+                "images/bold-send.png",
+                color: Colors.white,
+                width: 30,
+                height: 30.0,
+                fit: BoxFit.fitHeight,
               ),
             ),
           ),
@@ -372,14 +340,15 @@ class MainScreenState extends State<MainScreen> {
   }
 
   Color _getNavBarColor() {
-    switch (_selectedPageIndex) {
-      case 0:
-        return const Color(0xFF15D37A);
-      case 1:
-        return Colors.blue;
-      case 2:
-        return const Color(0xFFEB3A13);
-    }
-    return Colors.blue;
+    return const Color(0xFF9D9BFD);
+    // switch (_selectedPageIndex) {
+    //   case 0:
+    //     return const Color(0xFF15D37A);
+    //   case 1:
+    //     return Colors.blue;
+    //   case 2:
+    //     return const Color(0xFFEB3A13);
+    // }
+    // return Colors.blue;
   }
 }

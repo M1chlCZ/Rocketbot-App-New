@@ -102,19 +102,36 @@ class AppDatabase {
     return res;
   }
 
-  Future<List<PGWIdentifier>> getUnfinishedTX() async {
+  Future<List<PGWIdentifier>> getUnfinishedTXPos() async {
     final dbClient = await db;
     var res = await dbClient.query(globals.TABLE_STAKE,
-        where: "${globals.TS_FINISHED} = ?", whereArgs: [0]);
+        where: "${globals.TS_FINISHED} = ? AND ${globals.TS_MASTERNODE} = NULL OR ${globals.TS_MASTERNODE} = 0", whereArgs: [0]);
+    return List.generate(res.length, (i) {
+        return PGWIdentifier(
+            id: res[i][globals.TS_ID] as int,
+            pgw: res[i][globals.TS_PWG] as String,
+            txFinish: res[i][globals.TS_FINISHED] as int,
+            amount: res[i][globals.TS_AMOUNT] as double,
+            depAddr: res[i][globals.TS_ADDR] as String,
+            idCoin: res[i][globals.TS_COINID] as int,
+            masternode: 0
+        );
+    });
+  }
+
+  Future<List<PGWIdentifier>> getUnfinishedTXMN() async {
+    final dbClient = await db;
+    var res = await dbClient.query(globals.TABLE_STAKE,
+        where: "${globals.TS_FINISHED} = ? AND ${globals.TS_MASTERNODE} = 1", whereArgs: [0]);
     return List.generate(res.length, (i) {
       return PGWIdentifier(
-        id: res[i][globals.TS_ID] as int,
-        pgw: res[i][globals.TS_PWG] as String,
-        txFinish: res[i][globals.TS_FINISHED] as int,
-        amount: res[i][globals.TS_AMOUNT] as double,
-        depAddr: res[i][globals.TS_ADDR] as String,
-        idCoin: res[i][globals.TS_COINID] as int,
-        masternode: res[i][globals.TS_MASTERNODE] as int? ?? 0
+          id: res[i][globals.TS_ID] as int,
+          pgw: res[i][globals.TS_PWG] as String,
+          txFinish: res[i][globals.TS_FINISHED] as int,
+          amount: res[i][globals.TS_AMOUNT] as double,
+          depAddr: res[i][globals.TS_ADDR] as String,
+          idCoin: res[i][globals.TS_COINID] as int,
+          masternode: 1
       );
     });
   }

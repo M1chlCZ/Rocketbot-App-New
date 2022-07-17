@@ -188,7 +188,7 @@ class LoginScreenState extends State<LoginScreen> {
       String? wer = await SecureStorage.readStorage(key: NetInterface.token);
       if (wer != null) {
         if (mounted) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PortfolioScreen()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MainMenuScreen()));
         }
       }
     } else {

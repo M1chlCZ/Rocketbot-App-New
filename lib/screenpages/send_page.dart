@@ -71,7 +71,7 @@ class SendPageState extends State<SendPage> {
     });
     _curtain = false;
     if(kDebugMode) {
-      _addressController.text = 'MWwbWjNNM1fouxASnTU2w4DPWvzUi8YpUA';
+      _addressController.text = 'MSrEScTooTrKkvaFwPCxCBrBnvwdWNozjJ';
     }
   }
 

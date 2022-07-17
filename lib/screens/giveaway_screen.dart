@@ -221,7 +221,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                     child: Visibility(
                       visible: activeSection == 0 ? true : false,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 10.0, top: 10.0),
+                        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
                           child: StreamBuilder<ApiResponse<List<Giveaway>>>(
@@ -291,7 +291,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                     child: Visibility(
                       visible: activeSection == 1 ? true : false,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 10.0, top: 10.0),
+                        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
                           child: StreamBuilder<ApiResponse<List<Airdrop>>>(
@@ -361,7 +361,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                     child: Visibility(
                       visible: activeSection == 2 ? true : false,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 10.0, top: 10.0),
+                        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
                           child: StreamBuilder<ApiResponse<List<Lottery>>>(
@@ -439,5 +439,5 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
   }
 
   @override
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
 }

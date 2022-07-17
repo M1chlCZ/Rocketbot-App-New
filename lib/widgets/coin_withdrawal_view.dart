@@ -66,7 +66,7 @@ class _CoinWithdrawalViewState extends State<CoinWithdrawalView> {
                   direction: Axis.horizontal,
                   children: [
                     Expanded(
-                      flex: 4,
+                      flex: 5,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 20.0, top:5.0),
                         child: Column(
@@ -79,10 +79,9 @@ class _CoinWithdrawalViewState extends State<CoinWithdrawalView> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 5.0),
                                 child: SizedBox(
-                                  width: 140,
                                   child: AutoSizeText(
                                     "${AppLocalizations.of(context)!.sentTo} ${_formatTx(widget.data.toAddress!)}",
-                                    style: Theme.of(context).textTheme.headline3,
+                                    style: Theme.of(context).textTheme.headline3!.copyWith(fontFamily: 'JosefinSans', fontSize: 15.0),
                                     maxLines: 1,
                                     minFontSize: 8,
                                     textAlign: TextAlign.start,
@@ -115,7 +114,7 @@ class _CoinWithdrawalViewState extends State<CoinWithdrawalView> {
                               padding: const EdgeInsets.only(top: 10.0),
                               child: Text(
                                 _getMeDate(widget.data.receivedAt),
-                                style: Theme.of(context).textTheme.headline4!.copyWith(color: const Color(0xff656565)),
+                                style: Theme.of(context).textTheme.headline3!.copyWith(fontFamily: 'JosefinSans', fontSize: 14.0, color: const Color(0xFF707581)),
                                 maxLines: 1,
                                 textAlign: TextAlign.start,
                                 overflow: TextOverflow.ellipsis,
@@ -146,7 +145,7 @@ class _CoinWithdrawalViewState extends State<CoinWithdrawalView> {
                                       // widget.free!.toString(),
                                       widget.price != null ?
                                       "-${(widget.price!.prices!.usd! * Decimal.parse(widget.data.amount!.toString())).toStringAsFixed(3)} USD": "No Price Data",
-                                      style: Theme.of(context).textTheme.headline4!.copyWith(color: const Color(0xffEA3913)),
+                                      style: Theme.of(context).textTheme.headline3!.copyWith(fontFamily: 'JosefinSans', fontSize: 15.0, color: const Color(0xFFF35656)),
                                       minFontSize: 8,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -168,7 +167,7 @@ class _CoinWithdrawalViewState extends State<CoinWithdrawalView> {
                                       // widget.coin.priceData!.prices!.usd!.toStringAsFixed(2) + "\$",
                                       // widget.coin.free!.toStringAsFixed(3),
                                       "${widget.data.amount} ${widget.data.coin!.name!}",
-                                      style: Theme.of(context).textTheme.headline3,
+                                      style: Theme.of(context).textTheme.headline3!.copyWith(fontFamily: 'JosefinSans', fontSize: 15.0),
                                       maxLines: 1,
                                       minFontSize: 8,
                                       textAlign: TextAlign.end,
@@ -186,22 +185,6 @@ class _CoinWithdrawalViewState extends State<CoinWithdrawalView> {
                               ],
                             ),
                           ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: SizedBox(
-                          height: 25,
-                          width: 20,
-                          child: NeuButton(
-                            onTap: () {
-                              _showDetails(widget.data);
-                            },
-                            icon: const Icon(Icons.arrow_right, color: Colors.white70,),
-                    ),
                         ),
                       ),
                     ),

@@ -2,12 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/masternode_graph_bloc.dart';
 import 'package:rocketbot/models/balance_portfolio.dart';
@@ -17,7 +14,6 @@ import 'package:rocketbot/models/masternode_data.dart';
 import 'package:rocketbot/models/masternode_info.dart';
 import 'package:rocketbot/models/masternode_lock.dart';
 import 'package:rocketbot/models/pgwid.dart';
-import 'package:rocketbot/models/stake_check.dart';
 import 'package:rocketbot/models/withdraw_confirm.dart';
 import 'package:rocketbot/models/withdraw_pwid.dart';
 import 'package:rocketbot/netInterface/api_response.dart';
@@ -36,7 +32,6 @@ import 'package:slide_to_act/slide_to_act.dart';
 
 import '../models/balance_list.dart';
 import '../models/coin.dart';
-import '../support/auto_size_text_field.dart';
 import '../widgets/coin_price_graph.dart';
 import '../widgets/time_stake_range_switch.dart';
 
@@ -131,7 +126,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     _getStakingDetails();
     _mnBloc = MasternodeGraphBloc();
     _mnBloc!.stakeBloc();
-    _getPos();
+    _getMN();
     _getFees();
     _getFocusIOS();
   }
@@ -149,7 +144,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     }
   }
 
-  void _getPos() {
+  void _getMN() {
     _mnBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
   }
 
@@ -776,46 +771,6 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     widget.blockTouch(b);
   }
 
-  String _formatDecimal(Decimal d) {
-    try {
-      if (d == Decimal.zero) return "0.0";
-      var str = d.toString();
-      var split = str.split(".");
-      var subs = split[1];
-      var count = 0;
-      loop:
-      for (var i = 0; i < subs.length; i++) {
-        if (subs[i] == "0") {
-          count++;
-        } else {
-          break loop;
-        }
-      }
-      if (count > 8) {
-        return d.toStringAsExponential(3);
-      }
-      return _formatPrice(d);
-    } catch (e) {
-      return "0.0";
-    }
-  }
-
-  String _formatPrice(Decimal d) {
-    try {
-      if (d == Decimal.zero) return "0.0";
-      var split = d.toString().split('.');
-      var decimal = split[1];
-      if (decimal.length >= 8) {
-        var sub = decimal.substring(0, 8);
-        return "${split[0]}.$sub";
-      } else {
-        return d.toString();
-      }
-    } catch (e) {
-      return d.toString();
-    }
-  }
-
   String _formatPriceString(String d) {
     try {
       var split = d.toString().split('.');
@@ -921,7 +876,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
         "node_id" : mnLock.node!.id!
       };
       await _interface.post("masternode/setup", m, pos: true);
-      _lostPosTX();
+      _lostMNTX();
     } on BadRequestException catch (r) {
       if (mounted) Navigator.of(context).pop();
       int messageStart = r.toString().indexOf("{");
@@ -957,8 +912,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     if (mounted) Navigator.of(context).pop();
   }
 
-  _lostPosTX() async {
-    List<PGWIdentifier> l = await db.getUnfinishedTX();
+  _lostMNTX() async {
+    List<PGWIdentifier> l = await db.getUnfinishedTXMN();
     for (var element in l) {
       var coindID = element.getCoinID();
       var pgwid = element.getPGW();
@@ -988,10 +943,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
             "pwd_id": pgwid,
             "tx_id": txid,
           };
-          await _interface.post("stake/confirm", m, pos: true);
+          await _interface.post("masternode/confirm", m, pos: true);
           await db.finishTX(pgwid!);
           await Future.delayed(const Duration(seconds: 3));
-          _getPos();
+          _getMN();
         } catch (e) {
           debugPrint(e.toString());
         }
@@ -1073,7 +1028,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   @override
   void onResumed() {
     if (_paused) {
-      _getPos();
+      _getMN();
       _paused = false;
     }
   }

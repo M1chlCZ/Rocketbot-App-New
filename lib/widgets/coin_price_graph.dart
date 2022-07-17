@@ -219,10 +219,10 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
   LineChartBarData _lineBarData() {
     return LineChartBarData(
       spots: _values,
-      color: const Color(0xFF257DC1),
+      color: const Color(0xFF9D9BFD),
       barWidth: 1,
       shadow: const Shadow(
-          color: Color(0xFF257DC1),
+          color: Color(0xFF9D9BFD),
           blurRadius: 5.0,
           offset: Offset(0.5, 1)),
       isStrokeCapRound: true,
@@ -258,7 +258,7 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
 
   AxisTitles _bottomTitles() {
     return AxisTitles(sideTitles: SideTitles(
-      showTitles: true,
+      showTitles: false,
       getTitlesWidget:
           (value, meta) {
         final DateTime date =
@@ -308,7 +308,7 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
           )),)
           : LineChart(
               _mainData(),
-              swapAnimationDuration: const Duration(milliseconds: 300),
+              swapAnimationDuration: const Duration(milliseconds: 0),
               swapAnimationCurve: Curves.linearToEaseOut,
             ),
     );
@@ -316,7 +316,7 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
 }
 
 final List<Color> _gradientColors = [
-  const Color.fromRGBO(37, 125, 193, 0.1),
+  const Color.fromRGBO(157, 155, 253, 0.1),
   const Color.fromRGBO(196, 196, 196, 0),
   const Color.fromRGBO(255, 255, 255, 0),
 ];
