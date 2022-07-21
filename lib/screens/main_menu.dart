@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rocketbot/screens/earnings_screen.dart';
 import 'package:rocketbot/screens/giveaway_screen.dart';
 import 'package:rocketbot/screens/portfolio_page.dart';
 import 'package:rocketbot/support/dialogs.dart';
@@ -46,6 +47,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             children: const <Widget> [
               PortfolioScreen(),
               GiveAwayScreen(),
+              EarningsScreen(),
             ]),
       ),
       bottomNavigationBar: Padding(

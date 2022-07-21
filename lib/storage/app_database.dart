@@ -11,7 +11,7 @@ import 'package:sprintf/sprintf.dart';
 
 import 'package:rocketbot/support/globals.dart' as globals;
 
-const dbVersion = 3;
+const dbVersion = 4;
 
 class AppDatabase {
   final String stakeTable = sprintf(
@@ -27,7 +27,27 @@ class AppDatabase {
         globals.TS_MASTERNODE
       ]);
   final String coinTable = sprintf(
-      'CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY, %s INTEGER, %s STRING, %s STRING, %s STRING, %s INTEGER, %s STRING, %s REAL, %s INTEGER, %s REAL, %s STRING, %s STRING, %s INTEGER, %s STRING, %s INTEGER, %s STRING, %s STRING, %s INTEGER, %s INTEGER)',
+      'CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY, '
+          '%s INTEGER, '
+          '%s STRING, '
+          '%s STRING, '
+          '%s STRING, '
+          '%s INTEGER, '
+          '%s STRING, '
+          '%s REAL,'
+          '%s INTEGER, '
+          '%s REAL, '
+          '%s STRING, '
+          '%s STRING, '
+          '%s STRING, '
+          '%s STRING, '
+          '%s INTEGER, '
+          '%s STRING, '
+          '%s INTEGER, '
+          '%s STRING, '
+          '%s STRING, '
+          '%s INTEGER, '
+          '%s INTEGER)',
       [
         globals.TABLE_COIN,
         globals.TC_ID,
@@ -42,6 +62,8 @@ class AppDatabase {
         globals.TC_MIN_WITHDRAW,
         globals.TC_IMAGE_BIG,
         globals.TC_IMAGE_SMALL,
+        globals.TC_IMAGE_BIG_ID,
+        globals.TC_IMAGE_SMALL_ID,
         globals.TC_IS_ACTIVE,
         globals.TC_EXPLORER_URL,
         globals.TC_REQUIRED_CONF,
@@ -218,6 +240,16 @@ class AppDatabase {
       case 2:
         try {
           await db.execute("ALTER TABLE ${globals.TABLE_STAKE} ADD COLUMN ${globals.TS_MASTERNODE} INTEGER");
+        } catch (e) {
+          if (kDebugMode) {
+            print(e);
+          }
+        }
+        break;
+      case 3:
+        try {
+          await db.delete(globals.TABLE_COIN);
+          await db.execute(coinTable);
         } catch (e) {
           if (kDebugMode) {
             print(e);

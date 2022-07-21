@@ -158,5 +158,6 @@
   "mn_lock" : "Tokens will be locked for 1 week",
   "mn_start" : "Swipe to start {1} MN",
   "mn_manage" : "Manage your MNs",
-  "mn_reward" : "Available reward"
+  "mn_reward" : "Available reward",
+  "mn_collateral" : "Cost of masternode"
 }

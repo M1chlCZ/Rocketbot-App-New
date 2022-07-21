@@ -912,7 +912,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
         }
       }
 
-      Future.delayed(const Duration(milliseconds: 200), () {
+      Future.delayed(const Duration(milliseconds: 100), () {
         setState(() {
           portCalc = true;
         });

@@ -68,8 +68,22 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
                                       ]),
                                     )),
                                 const SizedBox(
-                                  height: 50.0,
+                                  height: 30.0,
                                 ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                                  child: SizedBox(
+                                    height: 80.0,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: smallBlock("Like, Retweet, Comment & Follow ${ag.creator?.name ?? ''}", "Rules", color: Colors.green),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 20.0,),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                                   child: SizedBox(
@@ -190,12 +204,12 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
   }
 }
 
-Widget smallBlock(String main, String sub) {
+Widget smallBlock(String main, String sub, {Color color = Colors.white10}) {
   return Container(
     padding: const EdgeInsets.all(8.0),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(5.0),
-      color: Colors.white.withOpacity(0.1),
+      color: color,
     ),
     child: Center(
       child: Column(

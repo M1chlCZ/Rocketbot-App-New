@@ -20,6 +20,7 @@ import 'package:rocketbot/netInterface/api_response.dart';
 import 'package:rocketbot/netInterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/keyboard_overlay.dart';
+import 'package:rocketbot/screens/mn_manage_screen.dart';
 import 'package:rocketbot/storage/app_database.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/gradient_text.dart';
@@ -39,11 +40,7 @@ class MasternodePage extends StatefulWidget {
   final Coin activeCoin;
   final CoinBalance coinBalance;
   final String? depositAddress;
-  final String? depositPosAddress;
   final Function(double free) changeFree;
-  final VoidCallback goBack;
-  final List<CoinBalance>? allCoins;
-  final Function(Coin? c) setActiveCoin;
   final Function(bool touch) blockTouch;
   final double free;
   final bool masternode;
@@ -54,11 +51,7 @@ class MasternodePage extends StatefulWidget {
     required this.coinBalance,
     required this.changeFree,
     this.depositAddress,
-    this.depositPosAddress,
-    this.allCoins,
     required this.free,
-    required this.goBack,
-    required this.setActiveCoin,
     required this.blockTouch,
     required this.masternode,
   }) : super(key: key);
@@ -71,15 +64,15 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   // final _storage = const FlutterSecureStorage();
   final NetInterface _interface = NetInterface();
   final _graphKey = GlobalKey<CoinPriceGraphState>();
-  final _percentageKey = GlobalKey<PercentSwitchWidgetState>();
   final GlobalKey<SlideActionState> _keyStake = GlobalKey();
-  final TextEditingController _amountController = TextEditingController();
   AppDatabase db = GetIt.I.get<AppDatabase>();
   FocusNode numberFocusNode = FocusNode();
   AnimationController? _animationController;
   Animation<double>? _animation;
   MasternodeGraphBloc? _mnBloc;
+  MasternodeInfo? _mnInfo;
   late Coin _coinActive;
+
 
   bool _staking = false;
   bool _loadingReward = false;
@@ -91,7 +84,6 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   double _unconfirmedAmount = 0.0;
   String _amountReward = "0.0";
   double _estimated = 0.0;
-  double _percentage = 0.0;
   int _activeNodes = 0;
   String _averagePayrate = "00:00:00";
   String _averateTimeStart = "00:00:00";
@@ -103,6 +95,9 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   int _typeGraph = 0;
   bool amountEmpty = true;
 
+  int _collateral = 0;
+
+
   @override
   void initState() {
     super.initState();
@@ -111,19 +106,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     _animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _animationController!, curve: Curves.fastLinearToSlowEaseIn));
     _coinActive = widget.activeCoin;
     _free = widget.free;
-    _amountController.addListener(() {
-      if (_amountController.text.isEmpty) {
-        setState(() {
-          amountEmpty = true;
-        });
-      } else {
-        setState(() {
-          amountEmpty = false;
-        });
-      }
-      _percentageKey.currentState!.deActivate();
-    });
-    _getStakingDetails();
+    _getMasternodeDetails();
     _mnBloc = MasternodeGraphBloc();
     _mnBloc!.stakeBloc();
     _getMN();
@@ -144,28 +127,39 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     }
   }
 
+  void _goToManagement() {
+    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+      return MasternodeManageScreen(
+        mnInfo: _mnInfo!,
+      );
+    }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+      return FadeTransition(opacity: animation, child: child);
+    }));
+  }
+
   void _getMN() {
     _mnBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
   }
 
-  Future<void> _getStakingDetails() async {
+  Future<void> _getMasternodeDetails() async {
     Map<String, dynamic> m = {
       "idCoin": _coinActive.id!,
       // "idCoin": 0
     };
     var res = await _interface.post("masternode/info", m, pos: true);
-    MasternodeInfo? sc = MasternodeInfo.fromJson(res);
-    if (sc.hasError == true) return;
-    _numberNodes = sc.mnList?.length ?? 0;
-    _activeNodes = sc.activeNodes!;
-    double rev =  sc.nodeRewards!.fold(0, (previousValue, element) => previousValue + element.amount!);
+    _mnInfo = MasternodeInfo.fromJson(res);
+    if (_mnInfo == null || _mnInfo!.hasError == true) return;
+    _numberNodes = _mnInfo?.mnList?.length ?? 0;
+    _activeNodes = _mnInfo!.activeNodes!;
+    double rev =  _mnInfo!.nodeRewards!.fold(0, (previousValue, element) => previousValue + element.amount!);
     _amountReward = rev.toString();
-    List<String> partsPayrate = sc.averagePayTime!.split(".");
+    List<String> partsPayrate = _mnInfo!.averagePayTime!.split(".");
     _averagePayrate = partsPayrate[0];
-    List<String> partsStart = sc.averageTimeToStart!.split(".");
+    List<String> partsStart = _mnInfo!.averageTimeToStart!.split(".");
     _averateTimeStart = partsStart[0];
-    _estimated = sc.averageRewardPerDay! * 0.75;
+    _estimated = _mnInfo!.averageRewardPerDay! * 0.75;
     _staking = _activeNodes > 0 ? true : false;
+    _collateral = _mnInfo!.collateral!;
   }
 
   @override
@@ -294,6 +288,43 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                             padding: const EdgeInsets.only(right: 4.0),
                             child: AutoSizeText(
                               "$_free",
+                              maxLines: 1,
+                              minFontSize: 8.0,
+                              textAlign: TextAlign.end,
+                              style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          _coinActive.cryptoId!,
+                          // textAlign: TextAlign.end,
+                          style: const TextStyle(
+                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 5.0, right: 5.0, left: 10.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          "${AppLocalizations.of(context)!.mn_collateral}:",
+                          // textAlign: TextAlign.end,
+                          style: TextStyle(
+                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 4.0),
+                            child: AutoSizeText(
+                              _collateral.toString(),
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
@@ -723,7 +754,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         child: FlatCustomButton(
                           onTap: () {
                             if (!_loadingCoins) {
-                              _unStake(0);
+                              _goToManagement();
+                              // _unStake(0);
                             }
                           },
                           radius: 10.0,
@@ -809,26 +841,28 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     String serverTypePos = "<Rocketbot POS Service error>";
     String problem = serverTypeRckt;
     WithdrawConfirm? rw;
-    if (_amountController.text.isEmpty) {
+
+    if(_mnInfo == null) {
       Navigator.of(context).pop();
-      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, AppLocalizations.of(context)!.staking_please_enter);
-      _keyStake.currentState!.reset();
+      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Data error");
+      _keyStake.currentState?.reset();
       return;
     }
-    var amt = 10000;
+
+    var amt = _mnInfo!.collateral!;
     bool minAmount = amt < _min!;
 
     if (amt > _free) {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, AppLocalizations.of(context)!.staking_not_enough);
-      _keyStake.currentState!.reset();
+      _keyStake.currentState?.reset();
       return;
     }
 
     if (widget.depositAddress == null || widget.depositAddress!.isEmpty) {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Data err");
-      _keyStake.currentState!.reset();
+      _keyStake.currentState?.reset();
       return;
     }
 
@@ -836,77 +870,72 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error,
           AppLocalizations.of(context)!.staking_not_min.replaceAll("{1}", _min!.toString()).replaceAll("{2}", _coinActive.cryptoId!));
-      _keyStake.currentState!.reset();
+      _keyStake.currentState?.reset();
       return;
     }
 
     try {
-      await _getStakingDetails();
+      await _getMasternodeDetails();
     } catch (e) {
       debugPrint(e.toString());
     }
 
     try {
-      Map<String, dynamic> queryLock = {"coinId": _coinActive.id!};
-      final responseLock = await _interface.post("masternode/lock", queryLock, pos: true);
+      Map<String, dynamic> queryLock = {"idCoin": _coinActive.id!};
+      final responseLock = await _interface.post("masternode/lock", queryLock, pos: true, debug: true);
       var mnLock = MasternodeLock.fromJson(responseLock);
+      print(mnLock.toJson());
       if (mnLock.node?.address == null) {
         Navigator.of(context).pop();
         Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Data err");
-        _keyStake.currentState!.reset();
+        _keyStake.currentState?.reset();
         return;
       }
 
       Map<String, dynamic> query = {"coinId": _coinActive.id!, "fee": _fee, "amount": amt, "toAddress": mnLock.node!.address!};
 
-      final response = await _interface.post("Transfers/CreateWithdraw", query);
+      final response = await _interface.post("Transfers/CreateWithdraw", query, debug: true);
       var pwid = WithdrawID.fromJson(response);
       Map<String, dynamic> queryID = {
         "id": pwid.data!.pgwIdentifier!,
       };
       var resWith = await _interface.post("Transfers/ConfirmWithdraw", queryID);
       rw = WithdrawConfirm.fromJson(resWith);
-      await db.addTX(rw.data!.pgwIdentifier!, _coinActive.id!, double.parse(_amountController.text), widget.depositAddress!, masternode: true);
+      await db.addTX(rw.data!.pgwIdentifier!, _coinActive.id!, double.parse(_mnInfo!.collateral!.toString()), widget.depositAddress!, masternode: true);
       problem = serverTypePos;
+
       Map<String, dynamic> m = {
         "idCoin": _coinActive.id!,
         "depAddr": widget.depositAddress,
-        "amount": double.parse(_amountController.text),
+        "amount": _mnInfo!.collateral!,
         "pwd_id": rw.data!.pgwIdentifier!,
         "node_id" : mnLock.node!.id!
       };
-      await _interface.post("masternode/setup", m, pos: true);
+
+      debugPrint("masternode/setup/////");
+      await _interface.post("masternode/setup", m, pos: true, debug: true);
       _lostMNTX();
-    } on BadRequestException catch (r) {
-      if (mounted) Navigator.of(context).pop();
-      int messageStart = r.toString().indexOf("{");
-      int messageEnd = r.toString().indexOf("}");
-      var s = r.toString().substring(messageStart, messageEnd + 1);
-      var js = json.decode(s);
-      var wm = WithdrawalsModels.fromJson(js);
-      _keyStake.currentState!.reset();
-      if (mounted) Dialogs.openAlertBox(context, wm.message!, "${wm.error!}\n\n$problem");
     } catch (e) {
+      print(e);
       if (mounted) Navigator.of(context).pop();
-      _keyStake.currentState!.reset();
-      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "$e\n\n$problem");
+      _keyStake.currentState?.reset();
+      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
     }
 
     if (rw == null) {
-      _keyStake.currentState!.reset();
+      _keyStake.currentState?.reset();
       if (mounted) Navigator.of(context).pop();
       if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Couldn't send coins for Staking \n\n$serverTypeRckt");
     }
 
-    _amountController.clear();
     var preFree = 0.0;
     var resB = await _interface.get("User/GetBalance?coinId=${_coinActive.id!}");
     var rs = BalancePortfolio.fromJson(resB);
     preFree = rs.data!.free!;
     _free = preFree;
     widget.changeFree(preFree);
-    _keyStake.currentState!.reset();
-    await _getStakingDetails();
+    _keyStake.currentState?.reset();
+    await _getMasternodeDetails();
     _mnBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
     setState(() {});
     if (mounted) Navigator.of(context).pop();
@@ -943,6 +972,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
             "pwd_id": pgwid,
             "tx_id": txid,
           };
+          debugPrint("masternode/confirm/////");
           await _interface.post("masternode/confirm", m, pos: true);
           await db.finishTX(pgwid!);
           await Future.delayed(const Duration(seconds: 3));
@@ -969,9 +999,6 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       if (rewardParam == 1) {
         Map<String, dynamic> m = {"idCoin" : _coinActive.id!};
         await _interface.post("masternode/reward", m, pos: true);
-      }else{
-        Map<String, dynamic> m = {"idCoin": _coinActive.id!, "rewardParam": rewardParam};
-        await _interface.post("stake/withdraw", m, pos: true);
       }
       var preFree = 0.0;
       var resB = await _interface.get("User/GetBalance?coinId=${_coinActive.id!}");
@@ -979,7 +1006,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       preFree = rs.data!.free!;
       _free = preFree;
       widget.changeFree(preFree);
-      await _getStakingDetails();
+      await _getMasternodeDetails();
       _mnBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
       var conf = _coinActive.requiredConfirmations;
       if (rewardParam == 1) {
@@ -997,11 +1024,6 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
     }
-  }
-
-  _changePercentage(double d) {
-    _amountController.text = _formatPriceString(((_free - _fee!) * d).toString());
-    setState(() {});
   }
 
   @override
@@ -1046,3 +1068,5 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     }
   }
 }
+
+

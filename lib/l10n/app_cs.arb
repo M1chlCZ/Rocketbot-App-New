@@ -158,5 +158,6 @@
   "mn_lock" : "Tokeny budou uzavřeny 1 týden",
   "mn_start" : "Spustit {1} Masternode",
   "mn_manage" : "Spravovat Masternode",
-  "mn_reward" : "Dostupná odměna"
+  "mn_reward" : "Dostupná odměna",
+  "mn_collateral" : "Cena za masternode"
 }

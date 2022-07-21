@@ -4,6 +4,7 @@ import 'package:rocketbot/models/transaction_data.dart';
 import 'package:rocketbot/netInterface/api_response.dart';
 import 'package:rocketbot/endpoints/get_transactions.dart';
 import 'package:rocketbot/models/coin.dart';
+import 'package:rxdart/rxdart.dart';
 
 class TransactionBloc {
   final TransactionList _coinBalances = TransactionList();
@@ -17,7 +18,7 @@ class TransactionBloc {
       _coinListController!.stream;
 
   TransactionBloc(Coin coin, {List<TransactionData>? list}) {
-    _coinListController = StreamController<ApiResponse<List<TransactionData>>>();
+    _coinListController = BehaviorSubject<ApiResponse<List<TransactionData>>>();
     fetchTransactionData(coin, list: list);
   }
 

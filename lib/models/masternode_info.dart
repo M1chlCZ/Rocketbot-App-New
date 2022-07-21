@@ -13,7 +13,8 @@ class MasternodeInfo {
       int? activeNodes, 
       String? averagePayTime, 
       double? averageRewardPerDay, 
-      String? averageTimeToStart, 
+      String? averageTimeToStart,
+    int? collateral,
       List<FreeList>? freeList, 
       bool? hasError, 
       List<MnList>? mnList, 
@@ -28,6 +29,7 @@ class MasternodeInfo {
     _mnList = mnList;
     _nodeRewards = nodeRewards;
     _status = status;
+    _collateral = collateral;
 }
 
   MasternodeInfo.fromJson(dynamic json) {
@@ -35,6 +37,7 @@ class MasternodeInfo {
     _averagePayTime = json['average_pay_time'];
     _averageRewardPerDay = double.parse(json['average_reward_per_day'].toString());
     _averageTimeToStart = json['average_time_to_start'];
+    _collateral = json['collateral'];
     if (json['free_list'] != null) {
       _freeList = [];
       json['free_list'].forEach((v) {
@@ -65,10 +68,12 @@ class MasternodeInfo {
   List<MnList>? _mnList;
   List<NodeRewards>? _nodeRewards;
   String? _status;
+  int? _collateral;
 MasternodeInfo copyWith({  int? activeNodes,
   String? averagePayTime,
   double? averageRewardPerDay,
   String? averageTimeToStart,
+  int? collateral,
   List<FreeList>? freeList,
   bool? hasError,
   List<MnList>? mnList,
@@ -83,6 +88,7 @@ MasternodeInfo copyWith({  int? activeNodes,
   mnList: mnList ?? _mnList,
   nodeRewards: nodeRewards ?? _nodeRewards,
   status: status ?? _status,
+  collateral: collateral ?? _collateral,
 );
   int? get activeNodes => _activeNodes;
   String? get averagePayTime => _averagePayTime;
@@ -93,6 +99,7 @@ MasternodeInfo copyWith({  int? activeNodes,
   List<MnList>? get mnList => _mnList;
   List<NodeRewards>? get nodeRewards => _nodeRewards;
   String? get status => _status;
+  int? get collateral => _collateral;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -100,6 +107,7 @@ MasternodeInfo copyWith({  int? activeNodes,
     map['average_pay_time'] = _averagePayTime;
     map['average_reward_per_day'] = _averageRewardPerDay;
     map['average_time_to_start'] = _averageTimeToStart;
+    map['collateral'] = _collateral;
     if (_freeList != null) {
       map['free_list'] = _freeList?.map((v) => v.toJson()).toList();
     }

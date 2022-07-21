@@ -155,5 +155,6 @@
   "mn_average_start" : "Average time to start MN",
   "mn_time_to_start" : "Average time to get 1st reward",
   "mn_lock" : "Coins will be locked for 1 week",
-  "mn_start" : "Deploy new {1} Masternode"
+  "mn_start" : "Deploy new {1} Masternode",
+  "mn_collateral" : "Cost of masternode"
 }

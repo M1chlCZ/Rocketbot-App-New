@@ -13,9 +13,6 @@ class FarmMainScreen extends StatefulWidget {
   final String depositAddress;
   final String? depositPosAddress;
   final Function(double free) changeFree;
-  final VoidCallback goBack;
-  final List<CoinBalance>? allCoins;
-  final Function(Coin? c) setActiveCoin;
   final Function(bool touch) blockTouch;
   final double free;
   final bool masternode;
@@ -26,9 +23,6 @@ class FarmMainScreen extends StatefulWidget {
     required this.depositAddress,
     this.depositPosAddress,
     required this.changeFree,
-    required this.goBack,
-    this.allCoins,
-    required this.setActiveCoin,
     required this.blockTouch,
     required this.free,
     required this.masternode}) : super(key: key);
@@ -137,17 +131,12 @@ class _FarmMainScreenState extends State<FarmMainScreen> {
                       coinBalance: widget.coinBalance,
                       changeFree: widget.changeFree,
                       free: widget.free,
-                      goBack: widget.goBack,
-                      setActiveCoin: widget.setActiveCoin,
-                      blockTouch: widget.blockTouch,
-                      masternode: widget.masternode),
+                      blockTouch: widget.blockTouch,),
                   MasternodePage(activeCoin: widget.activeCoin,
                       coinBalance: widget.coinBalance,
                       depositAddress: widget.depositAddress,
                       changeFree: widget.changeFree,
                       free: widget.free,
-                      goBack: widget.goBack,
-                      setActiveCoin: widget.setActiveCoin,
                       blockTouch: widget.blockTouch,
                       masternode: widget.masternode)
                 ],),

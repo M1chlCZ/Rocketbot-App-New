@@ -102,7 +102,7 @@ class Data {
     _pgwIdentifier = json['pgwIdentifier'];
     _userId = json['userId'];
     _coin = json['coin'] != null ? Coin.fromJson(json['coin']) : null;
-    _amount = json['amount'];
+    _amount = double.parse(json['amount'].toString());
     _feeCoin = json['feeCoin'] != null ? FeeCoin.fromJson(json['feeCoin']) : null;
     _fee = json['fee'];
     _toAddress = json['toAddress'];

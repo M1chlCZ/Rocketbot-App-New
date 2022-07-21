@@ -141,15 +141,12 @@ class MainScreenState extends State<MainScreen> {
   _gotoStaking() {
     Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
       return FarmMainScreen(
-        setActiveCoin: _setActiveCoin,
         changeFree: _changeFree,
         depositAddress: _depositAddr!,
         depositPosAddress: _posDepositAddr,
         activeCoin: _coinActive,
         coinBalance: _lc!.singleWhere((element) => element.coin!.id! == _coinActive.id!),
-        allCoins: _lc,
         free: _free,
-        goBack: goBack,
         blockTouch: _blockTouch,
         masternode: isMN,
       );
@@ -163,7 +160,7 @@ class MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: SafeArea(
         child: PageView(
-            physics: const AlwaysScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             controller: _pageController,
             onPageChanged: (index) {
               setState(() {

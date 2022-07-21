@@ -44,12 +44,8 @@ class StakingPage extends StatefulWidget {
   final String? depositAddress;
   final String? depositPosAddress;
   final Function(double free) changeFree;
-  final VoidCallback goBack;
-  final List<CoinBalance>? allCoins;
-  final Function(Coin? c) setActiveCoin;
   final Function(bool touch) blockTouch;
   final double free;
-  final bool masternode;
 
   const StakingPage({
     Key? key,
@@ -58,12 +54,8 @@ class StakingPage extends StatefulWidget {
     required this.changeFree,
     this.depositAddress,
     this.depositPosAddress,
-    this.allCoins,
     required this.free,
-    required this.goBack,
-    required this.setActiveCoin,
     required this.blockTouch,
-    required this.masternode,
   }) : super(key: key);
 
   @override
@@ -1021,7 +1013,6 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
   _lostPosTX() async {
     List<PGWIdentifier> l = await db.getUnfinishedTXPos();
     for (var element in l) {
-      var master = element.masternode;
       var coindID = element.getCoinID();
       var pgwid = element.getPGW();
       if (element.getStatus() == 0) {
