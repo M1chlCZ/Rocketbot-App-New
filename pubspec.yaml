@@ -3,7 +3,7 @@ description: Rocketbot
 
 publish_to: 'none'
 
-version: 1.1.38+138
+version: 1.1.42+142
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -71,7 +71,7 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   #flutter_launcher_name: ^0.0.1
   logger: ^1.1.0
-  flutter_native_splash: ^2.2.5
+  flutter_native_splash: ^2.2.6
   flutter_test:
     sdk: flutter
 

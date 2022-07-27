@@ -156,8 +156,12 @@
   "mn_average_start" : "Průměrný čas odstartování MN",
   "mn_time_to_start" : "Průměrný čas pro získání 1. odměny",
   "mn_lock" : "Tokeny budou uzavřeny 1 týden",
-  "mn_start" : "Spustit {1} Masternode",
+  "mn_start" : "Spustit Masternode",
   "mn_manage" : "Spravovat Masternode",
   "mn_reward" : "Dostupná odměna",
-  "mn_collateral" : "Cena za masternode"
+  "mn_collateral" : "Cena za masternode",
+  "mn_uncofirmed" : "Startující masternody",
+  "mn_free" : "Dostupné masternody",
+  "settings_socials": "Socialní Media",
+  "mn_withdraw_box" : "Do you really want to withdraw MN #{1}?"
 }

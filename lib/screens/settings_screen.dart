@@ -4,28 +4,41 @@ import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/component_widgets/container_neu.dart';
 import 'package:rocketbot/main.dart';
+import 'package:rocketbot/netinterface/interface.dart';
+import 'package:rocketbot/screens/about_screen.dart';
 import 'package:rocketbot/screens/auth_screen.dart';
 import 'package:rocketbot/screens/login_screen.dart';
 import 'package:rocketbot/screens/security_screen.dart';
+import 'package:rocketbot/screens/socials_screen.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/globals.dart' as globals;
 import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/widgets/menu_node.dart';
+import 'package:rocketbot/widgets/menu_section.dart';
+
+import '../models/user.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  final VoidCallback socials;
+  const SettingsScreen({Key? key, required this.socials}) : super(key: key);
 
   @override
   SettingsScreenState createState() => SettingsScreenState();
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
+  NetInterface interface = NetInterface();
   var dropLanguageValue = globals.LANGUAGES[0];
+  final List<int> _socials = [];
   var firstValue = false;
   var secondValue = true;
+  bool _socialsOK = true;
+  User? _me;
 
   @override
   void initState() {
     super.initState();
+    _getUserInfo();
     Future.delayed(Duration.zero).then((_) async {
       if (mounted) {
         final Locale appLocale = Localizations.localeOf(context);
@@ -53,29 +66,13 @@ class SettingsScreenState extends State<SettingsScreen> {
             Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
+                  padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 0.0),
                   child: Row(
                     children: [
-                      SizedBox(
-                        height: 30,
-                        width: 25,
-                        child: NeuButton(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: const Icon(
-                            Icons.arrow_back_ios_new,
-                            size: 20.0,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ),
+                      Text("Settings", style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white)),
                       const SizedBox(
-                        width: 20.0,
+                        width: 50,
                       ),
-                      Text(AppLocalizations.of(context)!.settings_screen,
-                          style: Theme.of(context).textTheme.headline4),
                     ],
                   ),
                 ),
@@ -160,7 +157,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                       //   ],
                       // ),
                       const SizedBox(
-                        height: 30.0,
+                        height: 20.0,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -185,6 +182,8 @@ class SettingsScreenState extends State<SettingsScreen> {
                             child: SizedBox(
                               height: 30,
                               child: NeuContainer(
+                                radius: 10.0,
+                                color: Colors.black26,
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
                                   child: DropdownButtonHideUnderline(
@@ -228,8 +227,83 @@ class SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ],
                       ),
+
                       const SizedBox(
+                        height: 30.0,
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.settings_socials,
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1!
+                            .copyWith(fontSize: 14.0, color: Colors.white24),
+                      ),
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      Container(
+                        height: 0.5,
+                        color: Colors.white12,
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      SizedBox(
                         height: 50.0,
+                        child: Card(
+                            elevation: 0,
+                            color: Theme.of(context).canvasColor,
+                            margin: EdgeInsets.zero,
+                            clipBehavior: Clip.antiAlias,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                            ),
+                            child: InkWell(
+                              splashColor: Colors.black54,
+                              highlightColor: Colors.black54,
+                              onTap: () async {
+                               _goToSocials();
+                              },
+                              // widget.coinSwitch(widget.coin);
+                              // widget.activeCoin(widget.coin.coin!);
+
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                        AppLocalizations.of(context)!.socials_popup.toLowerCase().capitalize(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline4!
+                                            .copyWith(
+                                            fontSize: 14.0,
+                                            color: _socialsOK ? Colors.white : const Color(0xFFF35656))),
+                                    const Expanded(
+                                      child: SizedBox(),
+                                    ),
+                                    NeuButton(
+                                        height: 25,
+                                        width: 20,
+                                        onTap: () async {
+                                          _goToSocials();
+                                        },
+                                        child: const Icon(
+                                          Icons.arrow_forward_ios_sharp,
+                                          color: Colors.white,
+                                          size: 22.0,
+                                        ))
+                                  ],
+                                ),
+                              ),
+                            )),
+                      ),
+                      const SizedBox(
+                        height: 20.0,
                       ),
                       Text(
                         AppLocalizations.of(context)!.settings_privacy,
@@ -304,104 +378,13 @@ class SettingsScreenState extends State<SettingsScreen> {
                             )),
                       ),
                       const SizedBox(
-                        height: 10.0,
+                        height: 20.0,
                       ),
-                      SizedBox(
-                        height: 50.0,
-                        child: Card(
-                            elevation: 0,
-                            color: Theme.of(context).canvasColor,
-                            margin: EdgeInsets.zero,
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0.0),
-                            ),
-                            child: InkWell(
-                              splashColor: Colors.black54,
-                              highlightColor: Colors.black54,
-                              onTap: () async {
-                                Dialogs.openLogOutBox(context, () async {
-                                  await SecureStorage.deleteAll();
-                                  if (mounted) {
-                                    Navigator.of(context)
-                                      .pushReplacement(
-                                      PageRouteBuilder(
-                                          pageBuilder:
-                                              (BuildContext
-                                          context,
-                                              _,
-                                              __) {
-                                            return const LoginScreen();
-                                          }, transitionsBuilder: (_,
-                                          Animation<double>
-                                          animation,
-                                          __,
-                                          Widget child) {
-                                        return FadeTransition(
-                                            opacity: animation,
-                                            child: child);
-                                      }));
-                                  }
-                                });
-                              },
-                              // widget.coinSwitch(widget.coin);
-                              // widget.activeCoin(widget.coin.coin!);
-
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(AppLocalizations.of(context)!.log_out,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4!
-                                            .copyWith(
-                                                fontSize: 14.0,
-                                                color: Colors.white)),
-                                    const Expanded(
-                                      child: SizedBox(),
-                                    ),
-                                    NeuButton(
-                                        height: 25,
-                                        width: 20,
-                                        onTap: () async {
-                                          Dialogs.openLogOutBox(context, () async {
-                                            await const FlutterSecureStorage().deleteAll();
-                                            if (mounted) {
-                                              Navigator.of(context)
-                                                .pushReplacement(
-                                                    PageRouteBuilder(
-                                                        pageBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                _,
-                                                                __) {
-                                              return const LoginScreen();
-                                            }, transitionsBuilder: (_,
-                                                            Animation<double>
-                                                                animation,
-                                                            __,
-                                                            Widget child) {
-                                              return FadeTransition(
-                                                  opacity: animation,
-                                                  child: child);
-                                            }));
-                                            }
-                                          });
-                                        },
-                                        child: const Icon(
-                                          Icons.arrow_forward_ios_sharp,
-                                          color: Colors.white,
-                                          size: 22.0,
-                                        ))
-                                  ],
-                                ),
-                              ),
-                            )),
-                      ),
+                      MenuSection(sectionName: "Miscellaneous",
+                          children: [
+                            MenuNode(menuText: AppLocalizations.of(context)!.about, goto: _gotoAbout),
+                            MenuNode(menuText: AppLocalizations.of(context)!.log_out, goto: _logOut)
+                          ]),
                     ],
                   ),
                 )
@@ -442,5 +425,79 @@ class SettingsScreenState extends State<SettingsScreen> {
     }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
       return FadeTransition(opacity: animation, child: child);
     }));
+  }
+
+  void _goToSocials() {
+    Navigator.of(context)
+        .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+      return SocialScreen(
+        socials: _socials,
+        me: _me!,
+      );
+    }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+      return FadeTransition(opacity: animation, child: child);
+    }))
+        .then((value) => _getUserInfo());
+  }
+
+  _getUserInfo() async {
+    try {
+      final response = await interface.get("User/Me");
+      var d = User.fromJson(response);
+      if (d.hasError == false) {
+        _me = d;
+        for (var element in d.data!.socialMediaAccounts!) {
+          _socials.add(element.socialMedia!);
+        }
+        if (_socials.isNotEmpty) {
+          setState(() {
+            _socialsOK = true;
+          });
+        } else {
+          setState(() {
+            _socialsOK = false;
+          });
+        }
+      } else {
+        debugPrint(d.error);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    widget.socials();
+  }
+
+  _gotoAbout() {
+    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+      return const AboutScreen();
+    }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+      return FadeTransition(opacity: animation, child: child);
+    }));
+  }
+
+  _logOut() {
+    Dialogs.openLogOutBox(context, () async {
+      await SecureStorage.deleteAll();
+      if (mounted) {
+        Navigator.of(context)
+            .pushReplacement(
+            PageRouteBuilder(
+                pageBuilder:
+                    (BuildContext
+                context,
+                    _,
+                    __) {
+                  return const LoginScreen();
+                }, transitionsBuilder: (_,
+                Animation<double>
+                animation,
+                __,
+                Widget child) {
+              return FadeTransition(
+                  opacity: animation,
+                  child: child);
+            }));
+      }
+    });
   }
 }

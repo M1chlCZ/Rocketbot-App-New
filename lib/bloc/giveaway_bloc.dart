@@ -15,18 +15,18 @@ class GiveawayDetailBloc {
   Stream<ApiResponse<Map<String, dynamic>>> get coinsListStream =>
       _coinListController!.stream;
 
-  GiveawayDetailBloc(int id) {
+  GiveawayDetailBloc(int id, int socialNetwork,) {
     _coinListController = BehaviorSubject<ApiResponse<Map<String, dynamic>>>();
-    fetchDetail(id);
+    fetchDetail(id, socialNetwork);
   }
 
 
-  Future <void> fetchDetail(int id, {bool force = false}) async {
+  Future <void> fetchDetail(int id, int socialNetwork, {bool force = false}) async {
     if (!_coinListController!.isClosed) {
       coinsListSink.add(ApiResponse.loading('Fetching Giveaway'));
     }
     try {
-      Map<String, dynamic>? mp = await _coinBalances.fetchGiveaways(id);
+      Map<String, dynamic>? mp = await _coinBalances.fetchGiveaways(id, socialNetwork);
       if (!_coinListController!.isClosed) {
         coinsListSink.add(ApiResponse.completed(mp));
       }

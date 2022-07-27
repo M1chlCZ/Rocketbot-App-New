@@ -18,8 +18,9 @@ class MasternodeInfo {
       List<FreeList>? freeList, 
       bool? hasError, 
       List<MnList>? mnList, 
-      List<NodeRewards>? nodeRewards, 
-      String? status,}){
+      List<NodeRewards>? nodeRewards,
+    List<PendingList>? pendingList,
+    String? status,}){
     _activeNodes = activeNodes;
     _averagePayTime = averagePayTime;
     _averageRewardPerDay = averageRewardPerDay;
@@ -29,6 +30,7 @@ class MasternodeInfo {
     _mnList = mnList;
     _nodeRewards = nodeRewards;
     _status = status;
+    _pendingList = pendingList;
     _collateral = collateral;
 }
 
@@ -57,6 +59,12 @@ class MasternodeInfo {
         _nodeRewards?.add(NodeRewards.fromJson(v));
       });
     }
+    if (json['pending_list'] != null) {
+      _pendingList = [];
+      json['pending_list'].forEach((v) {
+        _pendingList?.add(PendingList.fromJson(v));
+      });
+    }
     _status = json['status'];
   }
   int? _activeNodes;
@@ -67,6 +75,7 @@ class MasternodeInfo {
   bool? _hasError;
   List<MnList>? _mnList;
   List<NodeRewards>? _nodeRewards;
+  List<PendingList>? _pendingList;
   String? _status;
   int? _collateral;
 MasternodeInfo copyWith({  int? activeNodes,
@@ -78,6 +87,7 @@ MasternodeInfo copyWith({  int? activeNodes,
   bool? hasError,
   List<MnList>? mnList,
   List<NodeRewards>? nodeRewards,
+  List<PendingList>? pendingList,
   String? status,
 }) => MasternodeInfo(  activeNodes: activeNodes ?? _activeNodes,
   averagePayTime: averagePayTime ?? _averagePayTime,
@@ -87,6 +97,7 @@ MasternodeInfo copyWith({  int? activeNodes,
   hasError: hasError ?? _hasError,
   mnList: mnList ?? _mnList,
   nodeRewards: nodeRewards ?? _nodeRewards,
+  pendingList: pendingList ?? _pendingList,
   status: status ?? _status,
   collateral: collateral ?? _collateral,
 );
@@ -98,6 +109,7 @@ MasternodeInfo copyWith({  int? activeNodes,
   bool? get hasError => _hasError;
   List<MnList>? get mnList => _mnList;
   List<NodeRewards>? get nodeRewards => _nodeRewards;
+  List<PendingList>? get pendingList => _pendingList;
   String? get status => _status;
   int? get collateral => _collateral;
 
@@ -117,6 +129,9 @@ MasternodeInfo copyWith({  int? activeNodes,
     }
     if (_nodeRewards != null) {
       map['node_rewards'] = _nodeRewards?.map((v) => v.toJson()).toList();
+    }
+    if (_pendingList != null) {
+      map['pending_list'] = _pendingList?.map((v) => v.toJson()).toList();
     }
     map['status'] = _status;
     return map;
@@ -241,6 +256,29 @@ MnList copyWith({  int? id,
     map['dateStart'] = _dateStart;
     map['lastSeen'] = _lastSeen;
     map['average_pay_time'] = _averagePayTime;
+    return map;
+  }
+
+}
+
+class PendingList {
+  PendingList({
+    int? idNode,}){
+    _idNode = idNode;
+  }
+
+  PendingList.fromJson(dynamic json) {
+    _idNode = json['idNode'];
+  }
+  int? _idNode;
+  PendingList copyWith({  int? idNode,
+  }) => PendingList(  idNode: idNode ?? _idNode,
+  );
+  int? get idNode => _idNode;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['idNode'] = _idNode;
     return map;
   }
 

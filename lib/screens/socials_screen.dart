@@ -50,11 +50,20 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
     _getAccounts();
   }
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   _loadDirectives() async {
     await _loadDiscordDirective();
     await _loadTwitterDirective();
     await _loadTelegramDirective();
   }
+
+
 
   _getUserInfo() async {
     try {

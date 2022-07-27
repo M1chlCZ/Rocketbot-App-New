@@ -171,7 +171,7 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
                               alignment: Alignment.bottomCenter,
                               child: Container(
                                 height: 50.0,
-                                margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+                                margin: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
                                 child: FlatCustomButton(
                                   color: Colors.green,
                                   child: const Text("Claim the reward"),

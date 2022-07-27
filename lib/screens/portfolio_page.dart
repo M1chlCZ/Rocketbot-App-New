@@ -665,92 +665,92 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                         color: Theme.of(context).canvasColor,
                         child: Column(
                           children: [
-                            SizedBox(
-                                // SizedBox(
-                                height: 40,
-                                child: Center(
-                                  child: Directionality(
-                                    textDirection: TextDirection.ltr,
-                                    child: SizedBox(
-                                      width: 140,
-                                      child: TextButton(
-                                        style: ButtonStyle(
-                                            backgroundColor: MaterialStateProperty.resolveWith((states) => qrColors(states)),
-                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
-                                        onPressed: () {
-                                          setState(() {
-                                            popMenu = false;
-                                          });
-                                          Navigator.of(context)
-                                              .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-                                                return SocialScreen(
-                                                  socials: _socials,
-                                                  me: _me!,
-                                                );
-                                              }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                                                return FadeTransition(opacity: animation, child: child);
-                                              }))
-                                              .then((value) => _getUserInfo());
-                                        },
-                                        child: Text(
-                                          AppLocalizations.of(context)!.socials_popup + (_socialsOK ? '' : ' (!)'),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline1!
-                                              .copyWith(fontSize: 14.0, color: _socialsOK ? Colors.white : Colors.red),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                              child: Container(
-                                height: 0.5,
-                                color: Colors.white12,
-                              ),
-                            ),
-                            SizedBox(
-                                // SizedBox(
-                                height: 40,
-                                child: Center(
-                                  child: Directionality(
-                                    textDirection: TextDirection.ltr,
-                                    child: SizedBox(
-                                      width: 140,
-                                      child: TextButton(
-                                        style: ButtonStyle(
-                                            backgroundColor: MaterialStateProperty.resolveWith((states) => qrColors(states)),
-                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
-                                        onPressed: () {
-                                          setState(() {
-                                            popMenu = false;
-                                          });
-                                          Navigator.of(context)
-                                              .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-                                                return const SettingsScreen();
-                                              }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                                                return FadeTransition(opacity: animation, child: child);
-                                              }))
-                                              .then((value) => _fillSort());
-                                        },
-                                        child: Text(
-                                          AppLocalizations.of(context)!.settings_popup,
-                                          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 14.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                              child: Container(
-                                height: 0.5,
-                                color: Colors.white12,
-                              ),
-                            ),
+                            // SizedBox(
+                            //     // SizedBox(
+                            //     height: 40,
+                            //     child: Center(
+                            //       child: Directionality(
+                            //         textDirection: TextDirection.ltr,
+                            //         child: SizedBox(
+                            //           width: 140,
+                            //           child: TextButton(
+                            //             style: ButtonStyle(
+                            //                 backgroundColor: MaterialStateProperty.resolveWith((states) => qrColors(states)),
+                            //                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            //                     borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
+                            //             onPressed: () {
+                            //               setState(() {
+                            //                 popMenu = false;
+                            //               });
+                            //               Navigator.of(context)
+                            //                   .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+                            //                     return SocialScreen(
+                            //                       socials: _socials,
+                            //                       me: _me!,
+                            //                     );
+                            //                   }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                            //                     return FadeTransition(opacity: animation, child: child);
+                            //                   }))
+                            //                   .then((value) => _getUserInfo());
+                            //             },
+                            //             child: Text(
+                            //               AppLocalizations.of(context)!.socials_popup + (_socialsOK ? '' : ' (!)'),
+                            //               style: Theme.of(context)
+                            //                   .textTheme
+                            //                   .headline1!
+                            //                   .copyWith(fontSize: 14.0, color: _socialsOK ? Colors.white : Colors.red),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     )),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                            //   child: Container(
+                            //     height: 0.5,
+                            //     color: Colors.white12,
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //     // SizedBox(
+                            //     height: 40,
+                            //     child: Center(
+                            //       child: Directionality(
+                            //         textDirection: TextDirection.ltr,
+                            //         child: SizedBox(
+                            //           width: 140,
+                            //           child: TextButton(
+                            //             style: ButtonStyle(
+                            //                 backgroundColor: MaterialStateProperty.resolveWith((states) => qrColors(states)),
+                            //                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            //                     borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
+                            //             onPressed: () {
+                            //               setState(() {
+                            //                 popMenu = false;
+                            //               });
+                            //               // Navigator.of(context)
+                            //               //     .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+                            //               //       return const SettingsScreen();
+                            //               //     }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                            //               //       return FadeTransition(opacity: animation, child: child);
+                            //               //     }))
+                            //               //     .then((value) => _fillSort());
+                            //             },
+                            //             child: Text(
+                            //               AppLocalizations.of(context)!.settings_popup,
+                            //               style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 14.0),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     )),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                            //   child: Container(
+                            //     height: 0.5,
+                            //     color: Colors.white12,
+                            //   ),
+                            // ),
                             SizedBox(
                                 // SizedBox(
                                 height: 40,
@@ -782,44 +782,44 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                     ),
                                   ),
                                 )),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                              child: Container(
-                                height: 0.5,
-                                color: Colors.white12,
-                              ),
-                            ),
-                            SizedBox(
-                                // SizedBox(
-                                height: 40,
-                                child: Center(
-                                  child: Directionality(
-                                    textDirection: TextDirection.ltr,
-                                    child: SizedBox(
-                                      width: 140,
-                                      child: TextButton(
-                                        style: ButtonStyle(
-                                            backgroundColor: MaterialStateProperty.resolveWith((states) => qrColors(states)),
-                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
-                                        onPressed: () {
-                                          setState(() {
-                                            popMenu = false;
-                                          });
-                                          Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-                                            return const AboutScreen();
-                                          }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                                            return FadeTransition(opacity: animation, child: child);
-                                          }));
-                                        },
-                                        child: Text(
-                                          AppLocalizations.of(context)!.about_popup,
-                                          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 14.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                            //   child: Container(
+                            //     height: 0.5,
+                            //     color: Colors.white12,
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //     // SizedBox(
+                            //     height: 40,
+                            //     child: Center(
+                            //       child: Directionality(
+                            //         textDirection: TextDirection.ltr,
+                            //         child: SizedBox(
+                            //           width: 140,
+                            //           child: TextButton(
+                            //             style: ButtonStyle(
+                            //                 backgroundColor: MaterialStateProperty.resolveWith((states) => qrColors(states)),
+                            //                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            //                     borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
+                            //             onPressed: () {
+                            //               setState(() {
+                            //                 popMenu = false;
+                            //               });
+                            //               Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+                            //                 return const AboutScreen();
+                            //               }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                            //                 return FadeTransition(opacity: animation, child: child);
+                            //               }));
+                            //             },
+                            //             child: Text(
+                            //               AppLocalizations.of(context)!.about_popup,
+                            //               style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 14.0),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     )),
                           ],
                         ),
                       ),

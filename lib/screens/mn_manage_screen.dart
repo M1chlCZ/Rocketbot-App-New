@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rocketbot/models/masternode_info.dart';
+import 'package:rocketbot/netInterface/app_exception.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/utils.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
@@ -14,6 +16,19 @@ class MasternodeManageScreen extends StatefulWidget {
 }
 
 class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
+  NetInterface interface = NetInterface();
+  List<MnList> sortedList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    sortedList = widget.mnInfo.mnList!;
+    sortedList.sort((a,b) {
+      var A = a.id!;
+      var B = b.id!;
+      return A.compareTo(B);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,16 +54,16 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                   ]),
                 )),
             const SizedBox(
-              height: 50.0,
+              height: 10.0,
             ),
             Flexible(
               child: ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: widget.mnInfo.mnList!.length,
+                  itemCount: sortedList.length,
                   itemBuilder: (context, index) {
                     return Container(
-                      key: ValueKey(widget.mnInfo.mnList![index].id),
+                      key: ValueKey(sortedList[index].id),
                       margin: const EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12.0),
@@ -69,7 +84,7 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      "${widget.mnInfo.mnList![index].id}",
+                                      "${sortedList[index].id}",
                                       style: const TextStyle(fontSize: 24.0, color: Colors.amberAccent),
                                     ),
                                   )),
@@ -82,7 +97,7 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                                     color: Colors.black26,
                                   ),
                                   child: Text(
-                                    "${widget.mnInfo.mnList![index].ip}",
+                                    "${sortedList[index].ip}",
                                     textAlign: TextAlign.end,
                                     style: const TextStyle(fontSize: 14.0, color: Colors.white70),
                                   ),
@@ -95,7 +110,7 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text("Average payrate:", style: TextStyle(fontSize: 14.0, color: Colors.white70),),
-                              Text(widget.mnInfo.mnList![index].averagePayTime.toString(), style: const TextStyle(fontSize: 14.0, color: Colors.white70),),
+                              Text(averagePayFormat(sortedList[index].averagePayTime.toString()), style: const TextStyle(fontSize: 14.0, color: Colors.white70),),
                             ],
                           ),
                           const SizedBox(height: 10.0,),
@@ -103,7 +118,7 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text("Last seen:", style: TextStyle(fontSize: 14.0, color: Colors.white70),),
-                              Text(Utils.convertDate(widget.mnInfo.mnList![index].lastSeen), style: const TextStyle(fontSize: 14.0, color: Colors.white70),),
+                              Text(Utils.convertDate(sortedList[index].lastSeen), style: const TextStyle(fontSize: 14.0, color: Colors.white70),),
                             ],
                           ),
                           const SizedBox(
@@ -115,20 +130,22 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                               //add some actions, icons...etc
                               FlatCustomButton(
                                   onTap: () {
-                                    Dialogs.openAlertBox(context, "Info", "Not implemented");
+                                    Dialogs.openAlertBox(context, "Info", "Not yet implemented");
                                   },
                                   color: Colors.transparent,
-                                  child: const Text("INFO")),
+                                  child: const Text("INFO", style: TextStyle(color: Colors.white24),)),
                               const SizedBox(
                                 width: 20.0,
                               ),
                               FlatCustomButton(
                                   onTap: () {
-                                    Dialogs.openAlertBox(context, "Info", "Not implemented");
+                                    Dialogs.openMNWithdrawBox(context,sortedList[index].id!, () { _withdrawNode(sortedList[index].id!);});
+                                    // Dialogs.openAlertBox(context, "Info", "Not implemented");
+
                                   },
                                   color: Colors.transparent,
                                   child: const Text(
-                                    "DELETE",
+                                    "WITHDRAW",
                                     style: TextStyle(color: Colors.redAccent),
                                   ))
                             ],
@@ -136,17 +153,33 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                         ],
                       ),
                     );
-                    // return ListTile(
-                    //     key: ValueKey(widget.mnInfo.mnList![index].id),
-                    //     title: Text(widget.mnInfo.mnList![index].ip.toString()),
-                    //     subtitle: Text(Utils.convertDate(widget.mnInfo.mnList![index].lastSeen.toString())),
-                    //     trailing: Text("shit"),
-                    //     leading: Text(widget.mnInfo.mnList![index].id.toString()));
                   }),
             ),
           ]),
         ),
       ),
     );
+  }
+
+  _withdrawNode(int id) async {
+    try {
+      Map<String, dynamic> m = {"idNode" : id};
+      await interface.post("masternode/withdraw", m, pos: true);
+     if(mounted)Dialogs.openAlertBox(context, "Info", "Tokens are on the way!");
+    } catch (e) {
+      var err = e as ConflictDataException;
+      Dialogs.openAlertBox(context, "Error", err.toString());
+    }
+  }
+
+  String averagePayFormat(String s) {
+    if (s == "0") {
+      return "Waiting for first reward";
+    }else if (s == "00:00:00.000000") {
+      return "Only 1 reward received";
+    }else{
+      var split = s.split(".");
+      return split[0];
+    }
   }
 }

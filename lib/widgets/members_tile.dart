@@ -48,8 +48,9 @@ class MembersTile extends StatelessWidget {
                                 value: progress.progress,
                               ),
                             ),
+                            errorWidget: (context, message, dyn) {return  Container();},
                             imageUrl:
-                            "https://app.rocketbot.pro/Image?imageId=${member.socialMediaAccount!.imageId!}",
+                            "https://app.rocketbot.pro/Image?imageId=${member.socialMediaAccount?.imageId ?? ''}",
                           ),
                         ),
                       ),

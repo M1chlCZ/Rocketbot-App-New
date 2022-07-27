@@ -13,7 +13,6 @@ import 'package:rocketbot/component_widgets/container_neu.dart';
 import 'package:rocketbot/models/registration_errors.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/main_menu.dart';
-import 'package:rocketbot/screens/portfolio_page.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/firebase_service.dart';
 import 'package:rocketbot/support/gradient_text.dart';
@@ -61,14 +60,6 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleStuff() async {
-    String? s = await SecureStorage.readStorage(key: "next");
-    if (s == null) {
-      if (kDebugMode) {
-        print("NULL");
-      }
-      await const FlutterSecureStorage().deleteAll();
-      await SecureStorage.writeStorage(key: "next", value: "1");
-    }
     _initPackageInfo();
     Future.delayed(const Duration(milliseconds: 50), () async {
       bool b = await _loggedIN();

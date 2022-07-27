@@ -5,25 +5,26 @@ class NeuContainer extends StatelessWidget {
   final double? height;
   final double? width;
   final double? radius;
-  const NeuContainer({Key? key, this.child, this.height, this.width, this.radius}) : super(key: key);
+  final Color? color;
+  const NeuContainer({Key? key, this.child, this.height, this.width, this.radius, this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return _getContainer(height, width,
       decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor,
+        color: color ?? Theme.of(context).canvasColor,
         borderRadius: BorderRadius.all(Radius.circular(_getRadius())),
         boxShadow: const [
-          BoxShadow(
-            offset: Offset(-1,-1),
-            blurRadius: 4.0,
-            color: Color.fromRGBO(134, 134, 134, 0.05),
-          ),
-          BoxShadow(
-            offset: Offset(1,1),
-            blurRadius: 4.0,
-            color: Color.fromRGBO(2, 2, 2, 0.45),
-          ),
+          // BoxShadow(
+          //   offset: Offset(-1,-1),
+          //   blurRadius: 4.0,
+          //   color: Color.fromRGBO(134, 134, 134, 0.05),
+          // ),
+          // BoxShadow(
+          //   offset: Offset(1,1),
+          //   blurRadius: 4.0,
+          //   color: Color.fromRGBO(2, 2, 2, 0.45),
+          // ),
         ],
       ),
       child: Padding(

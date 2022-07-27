@@ -358,45 +358,9 @@ class NetInterface {
 
   static Future<int> checkToken() async {
     try {
-      // print("check token////");
-      String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
-      String? encoded = await SecureStorage.readStorage(key: NetInterface.token);
-      final response = await http.get(Uri.parse("https://app.rocketbot.pro/api/mobile/User/GetBalance?coinId=2"), headers: {
-        'User-Agent': userAgent.toLowerCase(),
-        "Authorization": " Bearer $encoded",
-      }).timeout(
-        const Duration(seconds: 15),
-        onTimeout: () {
-          return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
-        },
-      );
-      // // print(response.body);
-      // // print(response.statusCode);
-      // debugPrint(_userAgent.toLowerCase());
-      if (response.statusCode == 200) {
-        return 0;
-      } else {
-        await const FlutterSecureStorage().delete(key: NetInterface.token);
-        String? enc = await SecureStorage.readStorage(key: NetInterface.tokenRefresh);
-        Map request = {
-          "token": enc,
-        };
-        final resp = await http.post(Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/RefreshToken"), body: json.encode(request), headers: {
-          'User-Agent': userAgent.toLowerCase(),
-          "accept": "application/json",
-          "content-type": "application/json",
-        });
-        // // print(resp.body);
-        // // print(resp.statusCode);
-        TokenRefresh? res = TokenRefresh.fromJson(json.decode(resp.body));
-        if (res.data!.token != null) {
-          await SecureStorage.writeStorage(key: NetInterface.token, value: res.data!.token!);
-          await SecureStorage.writeStorage(key: NetInterface.tokenRefresh, value: res.data!.refreshToken!);
-          return 0;
-        } else {
-          return 1;
-        }
-      }
+      print("check token////");
+      await refreshToken();
+      return 0;
     } catch (e) {
       debugPrint(e.toString());
       return 1;

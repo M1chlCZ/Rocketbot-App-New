@@ -104,7 +104,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
     super.dispose();
   }
 
-  Future<void> refresh () async {
+  Future<void> refresh() async {
     _txBloc!.fetchTransactionData(_coinActive, force: true);
     await getFree();
   }
@@ -142,7 +142,6 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
 
   @override
   Widget build(BuildContext context) {
-
     return Material(
       child: RefreshIndicator(
         onRefresh: refresh,
@@ -279,44 +278,44 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Center(
                               child: NotificationListener<ScrollNotification>(
-                                onNotification: (scrollNotification) {
-                                  var pp = (scrollNotification.metrics.pixels +50) / 80.0;
-                                  var px = pp.toInt();
+                            onNotification: (scrollNotification) {
+                              var pr = MediaQuery.of(context).size.width * 0.25;
+                              var pp = (scrollNotification.metrics.pixels + 30.0) / pr;
+                              var px = pp.toInt();
 
+                              if (px != _currentIndex) {
+                                _currentIndex = px;
+                                setState(() { });
+                              }
 
-                                  if (px != _currentIndex) {
-                                    _currentIndex = px;
-                                    _setActiveCoin(_listCoins[_currentIndex].coin);
+                              if (scrollNotification is ScrollEndNotification) {
+                                _onEndScroll(scrollNotification.metrics);
+                              }
+                              // Basically you need something like:
+                              // final _index = scrollOffset (or position) / item height;
+                              return true;
+                            },
+                            child: ListView.builder(
+                                itemCount: _listCoins.length + 3,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  if (index > _listCoins.length - 1) {
+                                    return SizedBox(
+                                      width: MediaQuery.of(context).size.width * 0.25,
+                                    );
                                   }
-
-                                  if (scrollNotification is ScrollEndNotification) {
-                                    _onEndScroll(scrollNotification.metrics);
-                                  }
-                                  // Basically you need something like:
-                                  // final _index = scrollOffset (or position) / item height;
-                                  return true;
-                                },
-                                child: ListView.builder(
-                                    itemCount: _listCoins.length + 3 ,
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) {
-                                      if (index > _listCoins.length - 1) {
-                                        return const SizedBox(width: 80.0,);
-                                      }
-                                      return HorizontalListView(
-                                        key: ValueKey<String>(_listCoins[index].coin!.ticker!),
-                                        coin: _listCoins[index].coin!,
-                                        callBack: (Coin c) {
-                                          _setActiveCoin(c);
-                                        },
-                                          index: index,
-                                          currentIndex: _currentIndex,
-                                        active: index == _currentIndex ? true : false
-                                        // active: _listCoins[index].coin! == _coinActive ? true : false,
+                                  return HorizontalListView(
+                                      key: ValueKey<String>(_listCoins[index].coin!.ticker!),
+                                      coin: _listCoins[index].coin!,
+                                      callBack: (Coin c) {},
+                                      index: index,
+                                      currentIndex: _currentIndex,
+                                      active: index == _currentIndex ? true : false
+                                      // active: _listCoins[index].coin! == _coinActive ? true : false,
                                       );
-                                    }),
-                              )),
+                                }),
+                          )),
                         ),
                       )
                     : Container(),
@@ -502,9 +501,15 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
   }
 
   _onEndScroll(ScrollMetrics metrics) {
-    setState(() {
-      _txBloc!.changeCoin(_listCoins[_currentIndex].coin!);
-    });
+    _setOnEnd();
+  }
+
+  void _setOnEnd() async {
+    if (_currentIndex < 0) {
+      _currentIndex == 0;
+    }
+    _setActiveCoin(_listCoins[_currentIndex].coin);
+    _txBloc!.changeCoin(_listCoins[_currentIndex].coin!);
   }
 
   String _formatDecimal(Decimal d) {

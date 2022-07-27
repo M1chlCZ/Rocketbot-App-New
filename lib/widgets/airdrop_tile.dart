@@ -68,11 +68,39 @@ class AirdropTile extends StatelessWidget {
                     ],
                   ),
                 ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: EdgeInsets.only(right:MediaQuery.of(context).size.width * 0.05),
+                      child: SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: socialMedia(airdrop.socialMedia!)),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget socialMedia(int? socials) {
+    if (socials == null) {
+      return const SizedBox();
+    } else {
+      switch (socials) {
+        case 1:
+          return Image.asset("images/discord.png", color: Colors.white30);
+        case 2:
+          return Image.asset("images/telegram.png", color: Colors.white30);
+        case 3:
+          return Image.asset("images/twitter.png", color: Colors.white30);
+      }
+      return const SizedBox();
+    }
   }
 }

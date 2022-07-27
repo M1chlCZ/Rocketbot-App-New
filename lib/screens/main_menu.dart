@@ -4,12 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/earnings_screen.dart';
 import 'package:rocketbot/screens/giveaway_screen.dart';
 import 'package:rocketbot/screens/portfolio_page.dart';
+import 'package:rocketbot/screens/settings_screen.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/notification_helper.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
+
+import '../models/user.dart';
 
 class MainMenuScreen extends StatefulWidget {
   static const String route = "menu";
@@ -20,15 +24,18 @@ class MainMenuScreen extends StatefulWidget {
 }
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
+  NetInterface _interface = NetInterface();
   final _firebaseMessaging = GetIt.I.get<FCM>();
   final _pageController = PageController(initialPage: 0);
   int _selectedPageIndex = 0;
+  bool _socialsOK = true;
 
   @override
   void initState() {
     _initializeLocalNotifications();
     _firebaseMessaging.setNotifications();
     super.initState();
+    _getUserInfo();
   }
 
   @override
@@ -44,10 +51,11 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 _selectedPageIndex = index;
               });
             },
-            children: const <Widget> [
-              PortfolioScreen(),
-              GiveAwayScreen(),
-              EarningsScreen(),
+            children:  <Widget> [
+              const PortfolioScreen(),
+              const GiveAwayScreen(),
+              const EarningsScreen(),
+              SettingsScreen(socials: _getUserInfo,),
             ]),
       ),
       bottomNavigationBar: Padding(
@@ -160,7 +168,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 onTap: () {
                   _onTappedBar(3);
                 },
-                child: Image.asset("images/set_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white),
+                child: Image.asset("images/set_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
               ),
               label: '',
               activeIcon: FlatCustomButton(
@@ -171,7 +179,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 onTap: () {
                   _onTappedBar(3);
                 },
-                child: Image.asset("images/set.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white),
+                child: Image.asset("images/set.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
               ),
             ),
           ],
@@ -239,5 +247,31 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   Color _getNavBarColor() {
     return const Color(0xFF9D9BFD);
+  }
+
+ void _getUserInfo() async {
+    try {
+      List<int> socials = [];
+      final response = await _interface.get("User/Me");
+      var d = User.fromJson(response);
+      if (d.hasError == false) {
+        for (var element in d.data!.socialMediaAccounts!) {
+          socials.add(element.socialMedia!);
+        }
+        if (socials.isNotEmpty) {
+          setState(() {
+            _socialsOK = true;
+          });
+        } else {
+          setState(() {
+            _socialsOK = false;
+          });
+        }
+      } else {
+        debugPrint(d.error);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }

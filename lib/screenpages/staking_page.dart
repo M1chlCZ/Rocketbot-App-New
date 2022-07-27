@@ -104,6 +104,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     _animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _animationController!, curve: Curves.fastLinearToSlowEaseIn));
     _coinActive = widget.activeCoin;
     _free = widget.free;
+    _changeFree();
     _amountController.addListener(() {
       if (_amountController.text.isEmpty) {
         setState(() {
@@ -974,6 +975,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
         "pwd_id": rw.data!.pgwIdentifier!,
       };
       await _interface.post("stake/set", m, pos: true);
+      _getPos();
       _lostPosTX();
     } on BadRequestException catch (r) {
       if (mounted) Navigator.of(context).pop();
@@ -997,12 +999,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     }
 
     _amountController.clear();
-    var preFree = 0.0;
-    var resB = await _interface.get("User/GetBalance?coinId=${_coinActive.id!}");
-    var rs = BalancePortfolio.fromJson(resB);
-    preFree = rs.data!.free!;
-    _free = preFree;
-    widget.changeFree(preFree);
+    _changeFree();
     _keyStake.currentState!.reset();
     await _getStakingDetails();
     _stakeBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
@@ -1067,12 +1064,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       Map<String, dynamic> m = {"idCoin": _coinActive.id!, "rewardParam": rewardParam};
 
       await _interface.post("stake/withdraw", m, pos: true);
-      var preFree = 0.0;
-      var resB = await _interface.get("User/GetBalance?coinId=${_coinActive.id!}");
-      var rs = BalancePortfolio.fromJson(resB);
-      preFree = rs.data!.free!;
-      _free = preFree;
-      widget.changeFree(preFree);
+      _changeFree();
       await _getStakingDetails();
       _stakeBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
       var conf = _coinActive.requiredConfirmations;
@@ -1091,6 +1083,17 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
     }
+  }
+
+
+  void _changeFree() async {
+    var preFree = 0.0;
+    var resB = await _interface.get("User/GetBalance?coinId=${_coinActive.id!}");
+    var rs = BalancePortfolio.fromJson(resB);
+    preFree = rs.data!.free!;
+    _free = preFree;
+    widget.changeFree(preFree);
+    setState(() { });
   }
 
   _changePercentage(double d) {

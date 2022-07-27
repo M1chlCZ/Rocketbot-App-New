@@ -62,21 +62,21 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
 
   void getEarnings() async {
     List<Color> colors = const [
-      Color(0xFFA3BE8C),
-      Color(0xFFBF616A),
-      Color(0xFFD08770),
-      Color(0xFFEBCB8B),
-      Color(0xFFB48EAD),
-      Color(0xFFBF616A),
-      Color(0xFFA3BE8C),
-      Color(0xFFD08770),
-      Color(0xFFEBCB8B),
-      Color(0xFFB48EAD),
+      Color(0xE690C8AC),
+      Color(0xE673A9AD),
+      Color(0xE6D08770),
+      Color(0xE6EBCB8B),
+      Color(0xE6B48EAD),
+      Color(0xE6BF616A),
+      Color(0xE6A3BE8C),
+      Color(0xE6D08770),
+      Color(0xE6EBCB8B),
+      Color(0xE6B48EAD),
     ];
-    List<CoinBalance> balList = await BalanceCache.getAllRecords(forceRefresh: false);
+    List<CoinBalance> balList = await BalanceCache.getAllRecords(forceRefresh: true);
 
     int i = 0;
-    var res = await interface.get("/earnings", pos: true, debug: true);
+    var res = await interface.get("/earnings", pos: true);
     EarnRes ea = EarnRes.fromJson(res);
 
     if (ea.earnings != null) {
@@ -84,7 +84,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
         var val = ee.amount!;
         CoinBalance bal = balList.firstWhere((element) => element.coin!.id! == ee.idCoin);
         Coin c = bal.coin!;
-        totalUSD += bal.priceData!.prices!.usd!.toDouble();
+        totalUSD += bal.priceData!.prices!.usd!.toDouble() * ee.amount!.toDouble();
 
         Sector s = Sector(val: val, col: colors[i], nam: c.cryptoId!, rad: 15);
         list.add(s);
@@ -119,7 +119,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                       padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 0.0),
                       child: Row(
                         children: [
-                          Text("Earnings", style: Theme.of(context).textTheme.headline3),
+                          Text("Earnings", style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white)),
                           const SizedBox(
                             width: 50,
                           ),
@@ -134,9 +134,14 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                       height: 320.0,
                       margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
                       decoration: BoxDecoration(
-                          color: Colors.white,
+                          image: const DecorationImage(
+                              opacity: 1.0,
+                              filterQuality: FilterQuality.high,
+                              alignment: Alignment(0.0, 1.0),
+                              fit: BoxFit.cover,
+                              image: AssetImage("images/earnings_cover.png")),
                           borderRadius: BorderRadius.circular(15.0),
-                          border: Border.all(color: const Color(0xFF6D5EFE), width: 2.0)),
+                          border: Border.all(color: const Color(0x5FFCFCFC), width: 1.0)),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -145,7 +150,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                           ),
                           Text(
                             'Earnings',
-                            style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 40.0, color: Colors.black38),
+                            style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 40.0, color: Colors.black45),
                           ),
                           if (list.isNotEmpty)
                             Column(
@@ -159,14 +164,14 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                                   children: [
                                     Text(
                                       "${_getMonth()} income: ",
-                                      style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 18.0, color: Colors.black38),
+                                      style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 18.0, color: Colors.black45),
                                     ),
                                     const SizedBox(
                                       width: 2.0,
                                     ),
                                     Text(
-                                      "${totalUSD.toStringAsFixed(3)} \$",
-                                      style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 18.0, color: const Color(0xFF9BD41E)),
+                                      "${totalUSD.toStringAsFixed(2)} \$",
+                                      style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w800, fontSize: 18.0, color: const Color(0xFF9EC73F)),
                                     ),
                                   ],
                                 ),

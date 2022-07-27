@@ -10,6 +10,7 @@ import 'package:rocketbot/models/loterries.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/screens/airdrop_detail_screen.dart';
 import 'package:rocketbot/screens/giveaway_detail_screen.dart';
+import 'package:rocketbot/screens/twitter_giveaway_detail_screen.dart';
 import 'package:rocketbot/widgets/airdrop_tile.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/giveaway_tile.dart';
@@ -89,13 +90,23 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
   }
 
   void giveawayCallback(Giveaway g) async {
-    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-      return GiveawayDetailScreen(
-        giveaway: g,
-      );
-    }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-      return FadeTransition(opacity: animation, child: child);
-    }));
+    if (g.socialMedia == 3) {
+      Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+        return TwitterGiveawayDetailScreen(
+          giveaway: g,
+        );
+      }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+        return FadeTransition(opacity: animation, child: child);
+      }));
+    }else{
+      Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+        return GiveawayDetailScreen(
+          giveaway: g,
+        );
+      }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+        return FadeTransition(opacity: animation, child: child);
+      }));
+    }
 
     // var res = interface.get('')
   }

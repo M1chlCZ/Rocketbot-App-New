@@ -156,5 +156,9 @@
   "mn_time_to_start" : "Average time to get 1st reward",
   "mn_lock" : "Coins will be locked for 1 week",
   "mn_start" : "Deploy new {1} Masternode",
-  "mn_collateral" : "Cost of masternode"
+  "mn_collateral" : "Cost of masternode",
+  "mn_uncofirmed" : "Masternodes which are being started",
+  "mn_free" : "Number of masternodes available",
+  "settings_socials": "Social Media",
+  "mn_withdraw_box" : "Do you really want to withdraw MN #{1}?"
 }

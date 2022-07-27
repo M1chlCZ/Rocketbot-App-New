@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -17,7 +16,6 @@ import 'package:rocketbot/models/pgwid.dart';
 import 'package:rocketbot/models/withdraw_confirm.dart';
 import 'package:rocketbot/models/withdraw_pwid.dart';
 import 'package:rocketbot/netInterface/api_response.dart';
-import 'package:rocketbot/netInterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/keyboard_overlay.dart';
 import 'package:rocketbot/screens/mn_manage_screen.dart';
@@ -27,7 +25,6 @@ import 'package:rocketbot/support/gradient_text.dart';
 import 'package:rocketbot/support/life_cycle_watcher.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/masternode_graph.dart';
-import 'package:rocketbot/widgets/percent_switch_widget.dart';
 import 'package:rocketbot/widgets/picture_cache.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
@@ -81,7 +78,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   bool _detailsExtended = false;
 
   int _numberNodes = 0;
-  double _unconfirmedAmount = 0.0;
+  int _freeMN = 0;
+  int _pendingMasternodes = 0;
   String _amountReward = "0.0";
   double _estimated = 0.0;
   int _activeNodes = 0;
@@ -94,7 +92,6 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   double? _min;
   int _typeGraph = 0;
   bool amountEmpty = true;
-
   int _collateral = 0;
 
 
@@ -106,6 +103,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     _animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _animationController!, curve: Curves.fastLinearToSlowEaseIn));
     _coinActive = widget.activeCoin;
     _free = widget.free;
+    _changeFree();
     _getMasternodeDetails();
     _mnBloc = MasternodeGraphBloc();
     _mnBloc!.stakeBloc();
@@ -134,7 +132,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       );
     }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
       return FadeTransition(opacity: animation, child: child);
-    }));
+    })).then((value) => _getMasternodeDetails());
   }
 
   void _getMN() {
@@ -160,6 +158,9 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     _estimated = _mnInfo!.averageRewardPerDay! * 0.75;
     _staking = _activeNodes > 0 ? true : false;
     _collateral = _mnInfo!.collateral!;
+    _freeMN = _mnInfo?.freeList?.length ?? 0;
+    _pendingMasternodes = _mnInfo?.pendingList?.length ?? 0;
+    setState(() { });
   }
 
   @override
@@ -379,7 +380,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                     ),
                   ),
                 ),
-                if (_unconfirmedAmount != 0.0)
+                if (_pendingMasternodes != 0)
                   Column(
                     children: [
                       const SizedBox(
@@ -394,7 +395,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                             child: Row(
                               children: [
                                 Text(
-                                  "${AppLocalizations.of(context)!.stake_unconfirmed}:",
+                                  "${AppLocalizations.of(context)!.mn_uncofirmed}:",
                                   // textAlign: TextAlign.end,
                                   style: TextStyle(
                                       fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
@@ -403,7 +404,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 4.0),
                                     child: AutoSizeText(
-                                      _unconfirmedAmount.toStringAsFixed(3),
+                                      _pendingMasternodes.toString(),
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
@@ -412,7 +413,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                   ),
                                 ),
                                 Text(
-                                  _coinActive.cryptoId!,
+                                  _pendingMasternodes == 1 ? "MN" : "MNs",
                                   // textAlign: TextAlign.end,
                                   style: const TextStyle(
                                       fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
@@ -495,6 +496,37 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     padding: const EdgeInsets.only(right: 8.0, top: 1.0),
                                     child: AutoSizeText(
                                       "$_activeNodes",
+                                      maxLines: 1,
+                                      minFontSize: 8.0,
+                                      textAlign: TextAlign.end,
+                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                            child: Row(
+                              children: [
+                                GradientText(
+                                  "${AppLocalizations.of(context)!.mn_free}:",
+                                  gradient: const LinearGradient(colors: [
+                                    Colors.white70,
+                                    Colors.white54,
+                                  ]),
+                                  // textAlign: TextAlign.end,
+                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0, top: 1.0),
+                                    child: AutoSizeText(
+                                      _freeMN.toString(),
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
@@ -667,31 +699,51 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         borderRadius: BorderRadius.circular(12.0),
                         color: const Color(0xFFF68DB2)
                     ),
-                    child: SlideAction(
-                      height: 60.0,
-                      sliderButtonIconPadding: 6.0,
-                      borderRadius: 10.0,
-                      text: AppLocalizations.of(context)!.mn_start.replaceAll("{1}", widget.activeCoin.ticker!),
-                      innerColor: const Color(0xFFF68DB2),
-                      outerColor: const Color(0xFF252F45),
-                      elevation: 0.5,
-                      // submittedIcon: const Icon(Icons.check, size: 30.0, color: Colors.lightGreenAccent,),
-                      submittedIcon: const CircularProgressIndicator(
-                        strokeWidth: 2.0,
-                        color: Color(0xFFF68DB2),
-                      ),
-                      sliderButtonIcon: const Icon(
-                        Icons.arrow_forward,
-                        color: Color(0xFF252F45),
-                        size: 35.0,
-                      ),
-                      sliderRotate: false,
-                      textStyle: const TextStyle(
-                          fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
-                      key: _keyStake,
-                      onSubmit: () {
-                        _createWithdrawal();
-                      },
+                    child: Stack(
+                      children: [
+                        SlideAction(
+                          height: 60.0,
+                          sliderButtonIconPadding: 6.0,
+                          borderRadius: 10.0,
+                          text: AppLocalizations.of(context)!.mn_start,
+                          innerColor: const Color(0xFFF68DB2),
+                          outerColor: const Color(0xFF252F45),
+                          elevation: 0.5,
+                          // submittedIcon: const Icon(Icons.check, size: 30.0, color: Colors.lightGreenAccent,),
+                          submittedIcon: const CircularProgressIndicator(
+                            strokeWidth: 2.0,
+                            color: Color(0xFFF68DB2),
+                          ),
+                          sliderButtonIcon: const Icon(
+                            Icons.arrow_forward,
+                            color: Color(0xFF252F45),
+                            size: 35.0,
+                          ),
+                          sliderRotate: false,
+                          textStyle: const TextStyle(
+                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
+                          key: _keyStake,
+                          onSubmit: () {
+                            _createWithdrawal();
+                          },
+                        ),
+                        if (_freeMN == 0)
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 60.0,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: const Color(0xFFBE235A)),
+                          child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left:8.0, right: 8.0),
+                                child: AutoSizeText("No ${widget.activeCoin.name} masternode available!",
+                                  maxLines: 1,
+                                  minFontSize: 8.0,
+                                  style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white70),),
+                              )),
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -916,7 +968,6 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       await _interface.post("masternode/setup", m, pos: true, debug: true);
       _lostMNTX();
     } catch (e) {
-      print(e);
       if (mounted) Navigator.of(context).pop();
       _keyStake.currentState?.reset();
       if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
@@ -927,13 +978,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       if (mounted) Navigator.of(context).pop();
       if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Couldn't send coins for Staking \n\n$serverTypeRckt");
     }
-
-    var preFree = 0.0;
-    var resB = await _interface.get("User/GetBalance?coinId=${_coinActive.id!}");
-    var rs = BalancePortfolio.fromJson(resB);
-    preFree = rs.data!.free!;
-    _free = preFree;
-    widget.changeFree(preFree);
+    _changeFree();
     _keyStake.currentState?.reset();
     await _getMasternodeDetails();
     _mnBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
@@ -977,6 +1022,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
           await db.finishTX(pgwid!);
           await Future.delayed(const Duration(seconds: 3));
           _getMN();
+          _getMasternodeDetails();
         } catch (e) {
           debugPrint(e.toString());
         }
@@ -1000,12 +1046,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
         Map<String, dynamic> m = {"idCoin" : _coinActive.id!};
         await _interface.post("masternode/reward", m, pos: true);
       }
-      var preFree = 0.0;
-      var resB = await _interface.get("User/GetBalance?coinId=${_coinActive.id!}");
-      var rs = BalancePortfolio.fromJson(resB);
-      preFree = rs.data!.free!;
-      _free = preFree;
-      widget.changeFree(preFree);
+      _changeFree();
       await _getMasternodeDetails();
       _mnBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
       var conf = _coinActive.requiredConfirmations;
@@ -1024,6 +1065,16 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
     }
+  }
+
+  void _changeFree() async {
+    var preFree = 0.0;
+    var resB = await _interface.get("User/GetBalance?coinId=${_coinActive.id!}");
+    var rs = BalancePortfolio.fromJson(resB);
+    preFree = rs.data!.free!;
+    _free = preFree;
+    widget.changeFree(preFree);
+    setState(() { });
   }
 
   @override

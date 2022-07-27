@@ -19,7 +19,7 @@ class GiveawayTile extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 10.0),
             child: SizedBox(
-              height: 100,
+                height: 100,
                 width: double.infinity,
                 child: Image.asset('images/giveway_tile_background.png', fit: BoxFit.fill,)),
           ),
@@ -57,7 +57,11 @@ class GiveawayTile extends StatelessWidget {
                         maxLines: 1,
                         minFontSize: 8.0,
                         textAlign: TextAlign.start,
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
                       ),
                       AutoSizeText(
                         giveaway.channel!.name!,
@@ -68,11 +72,39 @@ class GiveawayTile extends StatelessWidget {
                     ],
                   ),
                 ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: EdgeInsets.only(right:MediaQuery.of(context).size.width * 0.05),
+                      child: SizedBox(
+                        width: 22,
+                          height: 22,
+                          child: socialMedia(giveaway.socialMedia!)),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget socialMedia(int? socials) {
+    if (socials == null) {
+      return const SizedBox();
+    } else {
+      switch (socials) {
+        case 1:
+          return Image.asset("images/discord.png", color: Colors.white30);
+        case 2:
+          return Image.asset("images/telegram.png", color: Colors.white30);
+        case 3:
+          return Image.asset("images/twitter.png", color: Colors.white30);
+      }
+      return const SizedBox();
+    }
   }
 }
