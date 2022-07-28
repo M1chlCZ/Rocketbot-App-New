@@ -218,11 +218,8 @@ class MainScreenState extends State<MainScreen> {
               height: 40,
               radius: 10.0,
               color: Colors.transparent,
-              onTap: () {
-                _onTappedBar(0);
-              },
               child: Image.asset(
-                "images/linear-send.png",
+                "images/linear-recieve.png",
                 width: 30,
                 height: 30.0,
                 fit: BoxFit.fitWidth,
@@ -254,9 +251,6 @@ class MainScreenState extends State<MainScreen> {
               height: 40,
               radius: 10.0,
               color: Colors.transparent,
-              onTap: () {
-                _onTappedBar(1);
-              },
               child: Image.asset(
                 "images/linear-transaction.png",
                 width: 30,
@@ -289,9 +283,6 @@ class MainScreenState extends State<MainScreen> {
               height: 40,
               radius: 10.0,
               color: Colors.transparent,
-              onTap: () {
-                _onTappedBar(2);
-              },
               child: Image.asset(
                 "images/linear-send.png",
                 width: 30,

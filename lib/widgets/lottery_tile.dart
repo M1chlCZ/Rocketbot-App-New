@@ -1,7 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rocketbot/models/airdrops.dart';
-import 'package:rocketbot/models/giveaways.dart';
 import 'package:rocketbot/models/loterries.dart';
 import 'package:rocketbot/widgets/picture_cache.dart';
 
@@ -23,7 +21,7 @@ class LotteryTile extends StatelessWidget {
             child: SizedBox(
               height: 100,
                 width: double.infinity,
-                child: Image.asset('images/giveway_tile_background.png', fit: BoxFit.fill,)),
+                child: Image.asset('images/giveway_tile_background.png', fit: BoxFit.fill, color: giveaway.member! == true ? Colors.green : const Color(0xFF384259))),
           ),
           InkWell(
             splashColor: Colors.white30,

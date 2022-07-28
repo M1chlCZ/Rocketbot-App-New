@@ -40,7 +40,7 @@ class NetInterface {
         'User-Agent': userAgent.toLowerCase(),
         "Authorization": " ${pos ? "JWT" : "Bearer"} $tk",
       }).timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 30),
         onTimeout: () {
           return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
         },
@@ -87,7 +87,7 @@ class NetInterface {
               },
               body: query)
           .timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 30),
         onTimeout: () {
           return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
         },

@@ -84,9 +84,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 height: 40,
                 radius: 10.0,
                 color: Colors.transparent,
-                onTap: () {
-                  _onTappedBar(0);
-                },
                 child: Image.asset(
                   "images/home_inactive.png",
                   width: 30,
@@ -119,9 +116,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 height: 40,
                 radius: 10.0,
                 color: Colors.transparent,
-                onTap: () {
-                  _onTappedBar(1);
-                },
                 child: Image.asset("images/giveaway_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitWidth, color: Colors.white),
               ),
               label: '',
@@ -142,9 +136,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 height: 40,
                 radius: 10.0,
                 color: Colors.transparent,
-                onTap: () {
-                  _onTappedBar(2);
-                },
                 child: Image.asset("images/wallet_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white),
               ),
               label: '',
@@ -165,9 +156,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 height: 40,
                 radius: 10.0,
                 color: Colors.transparent,
-                onTap: () {
-                  _onTappedBar(3);
-                },
                 child: Image.asset("images/set_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
               ),
               label: '',

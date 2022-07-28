@@ -2,6 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/stake_balance_block.dart';
 import 'package:rocketbot/cache/balances_cache.dart';
@@ -14,6 +15,7 @@ import 'package:rocketbot/models/sector.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/farm_main_screen.dart';
+import 'package:rocketbot/screens/socials_screen.dart';
 import 'package:rocketbot/widgets/coin_list_view.dart';
 import 'package:rocketbot/widgets/earnings_chart.dart';
 
@@ -149,7 +151,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                             height: 20.0,
                           ),
                           Text(
-                            'Earnings',
+                            AppLocalizations.of(context)!.income.toLowerCase().capitalize(),
                             style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 40.0, color: Colors.black45),
                           ),
                           if (list.isNotEmpty)
@@ -163,7 +165,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "${_getMonth()} income: ",
+                                      "${_getMonth()} ${AppLocalizations.of(context)!.income}: ",
                                       style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 18.0, color: Colors.black45),
                                     ),
                                     const SizedBox(

@@ -163,5 +163,6 @@
   "mn_uncofirmed" : "Pending Masternodes",
   "mn_free" : "Number of masternodes available",
   "settings_socials": "Social Media",
-  "mn_withdraw_box" : "Do you really want to withdraw MN #{1}?"
+  "mn_withdraw_box" : "Do you really want to withdraw MN #{1}?",
+  "income" : "income"
 }

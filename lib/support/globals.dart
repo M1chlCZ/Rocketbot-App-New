@@ -59,6 +59,15 @@ const String TC_TOKEN_STANDARD = "tokenStandart";
 const String TC_ALLOW_WITH = "allowWithdraws";
 const String TC_ALLOW_DEP = "allowDeposits";
 
+const String TABLE_NOT = "tableNot";
+const String TN_ID = "id";
+const String TN_IDUSER = "idUser";
+const String TN_TITLE = "title";
+const String TN_BODY = "body";
+const String TN_LINK = "link";
+const String TN_DATE = "datePosted";
+const String TN_READ = "read";
+
 
 
 // ['English', 'Bosnian', 'Croatian', 'Czech', 'Finnish', 'German', 'Hindi', 'Japanese', 'Russian', 'Serbian Latin', 'Serbian Цyриллиц', 'Spanish', 'Panjabi'];

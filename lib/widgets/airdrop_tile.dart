@@ -21,7 +21,7 @@ class AirdropTile extends StatelessWidget {
             child: SizedBox(
               height: 100,
                 width: double.infinity,
-                child: Image.asset('images/giveway_tile_background.png', fit: BoxFit.fill,)),
+                child: Image.asset('images/giveway_tile_background.png', fit: BoxFit.fill, color: airdrop.member! == true ? Colors.green : const Color(0xFF384259))),
           ),
           InkWell(
             splashColor: Colors.white30,

@@ -73,7 +73,7 @@
   "sc_remove_pin" : "Odstranit PIN",
   "sc_change_succ": "Změna PIN úspěšná",
   "sc_change_fuck": "Změna PIN neúspěšná",
-  "sc_security": "Zabezpěčení",
+  "sc_security": "Zabezpečení",
   "sc_pin_removed": "PIN odstraněn",
   "sc_pin_removed_fucked": "PIN hasn't been removed",
   "as_enter_pin" : "Prosím zadejte PIN",
@@ -163,5 +163,6 @@
   "mn_uncofirmed" : "Startující masternody",
   "mn_free" : "Dostupné masternody",
   "settings_socials": "Socialní Media",
-  "mn_withdraw_box" : "Do you really want to withdraw MN #{1}?"
+  "mn_withdraw_box" : "Do you really want to withdraw MN #{1}?",
+  "income" : "příjem"
 }

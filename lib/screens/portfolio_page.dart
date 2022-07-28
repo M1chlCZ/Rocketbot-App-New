@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_udid/flutter_udid.dart';
@@ -14,25 +13,23 @@ import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/models/deposit_address.dart';
 import 'package:rocketbot/models/get_withdraws.dart';
+import 'package:rocketbot/models/notifications.dart';
 import 'package:rocketbot/models/pgwid.dart';
 import 'package:rocketbot/models/pos_coins_list.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/netinterface/interface.dart';
-import 'package:rocketbot/screens/about_screen.dart';
 import 'package:rocketbot/screens/main_screen.dart';
+import 'package:rocketbot/screens/notification_screen.dart';
 import 'package:rocketbot/screens/referral_screen.dart';
-import 'package:rocketbot/screens/settings_screen.dart';
-import 'package:rocketbot/screens/socials_screen.dart';
 import 'package:rocketbot/storage/app_database.dart';
 import 'package:rocketbot/support/dialogs.dart';
+import 'package:rocketbot/support/globals.dart' as globals;
 import 'package:rocketbot/support/life_cycle_watcher.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
+
 import '../models/user.dart';
-import '../support/notification_helper.dart';
 import '../widgets/coin_list_view.dart';
-import 'package:rocketbot/support/globals.dart' as globals;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -54,6 +51,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   final List<int> _socials = [];
   AppDatabase db = GetIt.I.get<AppDatabase>();
   User? _me;
+  int _unreadNot = 0;
 
   bool _socialsOK = true;
 
@@ -85,6 +83,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     _getUserInfo();
     _posHandle();
     _codesUpload();
+    _getNotifications();
     // portCalc = widget.listBalances != null ? true : false;
   }
 
@@ -197,6 +196,29 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     } else {
       return s;
     }
+  }
+
+  Future<void> _getNotifications() async {
+    try {
+      final response = await _interface.post("notification/list", {}, pos: true);
+      Notifications not = Notifications.fromJson(response);
+      db.addNot(not);
+      var i = await db.getNotUnread();
+      if (i == 0) {
+        return;
+      }
+      setState(() {
+        _unreadNot = i;
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  void _getUnread() async {
+    setState(() {
+      _unreadNot = 0;
+    });
   }
 
   Future<void> _getReward(String? code) async {
@@ -356,24 +378,52 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                               alignment: Alignment.centerRight,
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 15.0),
-                                child: SizedBox(
-                                  height: 30,
-                                  width: 25,
-                                  child: NeuButton(
-                                    onTap: () async {
-                                      setState(() {
-                                        if (popMenu) {
-                                          popMenu = false;
-                                        } else {
-                                          popMenu = true;
-                                        }
-                                      });
-                                    },
-                                    imageIcon: Image.asset(
-                                      "images/candle.png",
-                                      color: _socialsOK ? Colors.white : Colors.red,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 30,
+                                      width: 25,
+                                      child: NeuButton(
+                                        onTap: () async {
+                                          setState(() {
+                                            if (popMenu) {
+                                              popMenu = false;
+                                            } else {
+                                              popMenu = true;
+                                            }
+                                          });
+                                        },
+                                        imageIcon: Image.asset(
+                                          "images/candle.png",
+                                          color: _socialsOK ? Colors.white : Colors.red,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    const SizedBox(
+                                      width: 20.0,
+                                    ),
+                                    SizedBox(
+                                      height: 30,
+                                      width: 25,
+                                      child: NeuButton(
+                                        onTap: () {
+                                          Navigator.of(context)
+                                              .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+                                                return const NotificationScreen();
+                                              }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                                                return FadeTransition(opacity: animation, child: child);
+                                              }))
+                                              .then((value) => _getUnread());
+                                        },
+                                        imageIcon: Image.asset(
+                                          _unreadNot > 0 ? "images/notification_on.png" : "images/notification_off.png",
+                                          color: _unreadNot > 0 ? Colors.amber : Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -848,7 +898,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
           ],
         ),
       ),
-
     );
   }
 
@@ -943,7 +992,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     var s = SecureStorage.readStorage(key: "PIN");
     return s;
   }
-
 
   Future<void> _getPin() async {
     final String? pin = await _getPinFuture();
