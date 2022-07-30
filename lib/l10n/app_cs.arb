@@ -164,5 +164,7 @@
   "mn_free" : "Dostupné masternody",
   "settings_socials": "Socialní Media",
   "mn_withdraw_box" : "Do you really want to withdraw MN #{1}?",
-  "income" : "příjem"
+  "income" : "příjem",
+  "st_adjust" : "Změnit množství mincí na stakingu",
+  "st_amount": "Odebrat množství"
 }

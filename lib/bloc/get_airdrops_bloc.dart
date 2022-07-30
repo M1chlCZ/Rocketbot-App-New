@@ -10,26 +10,29 @@ class AirdropsBloc {
   List<Airdrop>? coins;
   BehaviorSubject<ApiResponse<List<Airdrop>>>? _coinListController;
 
-  StreamSink<ApiResponse<List<Airdrop>>> get coinsListSink =>
-      _coinListController!.sink;
+  StreamSink<ApiResponse<List<Airdrop>>> get coinsListSink => _coinListController!.sink;
 
-  Stream<ApiResponse<List<Airdrop>>> get coinsListStream =>
-      _coinListController!.stream;
+  Stream<ApiResponse<List<Airdrop>>> get coinsListStream => _coinListController!.stream;
 
   AirdropsBloc({List<Airdrop>? list}) {
     _coinListController = BehaviorSubject<ApiResponse<List<Airdrop>>>();
     fetchGiveaways();
   }
 
-  Future <void> fetchGiveaways({int page = 1, bool force = false}) async {
-    if (!_coinListController!.isClosed) {
-      coinsListSink.add(ApiResponse.loading('Fetching Giveaways'));
-    }
+  Future<void> fetchGiveaways({int page = 1, bool force = false}) async {
     try {
       if (coins != null && page != 1) {
+        if (!_coinListController!.isClosed) {
+          coinsListSink.add(ApiResponse.loading('Fetching Giveaways'));
+        }
         List<Airdrop>? s = await _coinBalances.fetchAirdrops(page);
         if (s != null) coins!.addAll(s);
-      }else{
+      } else if (coins != null) {
+        coins = await _coinBalances.fetchAirdrops(page);
+      } else {
+        if (!_coinListController!.isClosed) {
+          coinsListSink.add(ApiResponse.loading('Fetching Giveaways'));
+        }
         coins = await _coinBalances.fetchAirdrops(page);
       }
       if (!_coinListController!.isClosed) {

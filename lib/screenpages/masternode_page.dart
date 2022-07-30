@@ -155,7 +155,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     _averagePayrate = partsPayrate[0];
     List<String> partsStart = _mnInfo!.averageTimeToStart!.split(".");
     _averateTimeStart = partsStart[0];
-    _estimated = _mnInfo!.averageRewardPerDay! * 0.75;
+    _estimated = _mnInfo!.averageRewardPerDay!;
     _staking = _activeNodes > 0 ? true : false;
     _collateral = _mnInfo!.collateral!;
     _freeMN = _mnInfo?.freeList?.length ?? 0;
@@ -936,7 +936,6 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       Map<String, dynamic> queryLock = {"idCoin": _coinActive.id!};
       final responseLock = await _interface.post("masternode/lock", queryLock, pos: true, debug: true);
       var mnLock = MasternodeLock.fromJson(responseLock);
-      print(mnLock.toJson());
       if (mnLock.node?.address == null) {
         Navigator.of(context).pop();
         Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Data err");
@@ -968,6 +967,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       await _interface.post("masternode/setup", m, pos: true, debug: true);
       _lostMNTX();
     } catch (e) {
+      Map<String, dynamic> queryLock = {"idCoin": _coinActive.id!};
+      await _interface.post("masternode/unlock", queryLock, pos: true, debug: true);
       if (mounted) Navigator.of(context).pop();
       _keyStake.currentState?.reset();
       if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
@@ -1047,7 +1048,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
         await _interface.post("masternode/reward", m, pos: true);
       }
       _changeFree();
-      await _getMasternodeDetails();
+
       _mnBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
       var conf = _coinActive.requiredConfirmations;
       if (rewardParam == 1) {
@@ -1055,11 +1056,15 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       } else {
         _loadingCoins = false;
       }
+      await _getMasternodeDetails();
+      _getMN();
       setState(() {});
       if (mounted) {
         Navigator.of(context).pop();
-        Dialogs.openAlertBox(
+        await Dialogs.openAlertBox(
             context, AppLocalizations.of(context)!.alert, AppLocalizations.of(context)!.staking_with_info.replaceAll("{1}", conf.toString()));
+        await _getMasternodeDetails();
+        _getMN();
       }
     } catch (e) {
       Navigator.of(context).pop();

@@ -23,14 +23,19 @@ class GiveawaysBloc {
   }
 
   Future <void> fetchGiveaways({int page = 1, bool force = false}) async {
-    if (!_coinListController!.isClosed) {
-      coinsListSink.add(ApiResponse.loading('Fetching Giveaways'));
-    }
     try {
       if (coins != null && page != 1) {
+        if (!_coinListController!.isClosed) {
+          coinsListSink.add(ApiResponse.loading('Fetching Giveaways'));
+        }
         List<Giveaway>? s = await _coinBalances.fetchGiveaways(page);
         if (s != null) coins!.addAll(s);
+      }else if (coins != null) {
+        coins = await _coinBalances.fetchGiveaways(page);
       }else{
+        if (!_coinListController!.isClosed) {
+          coinsListSink.add(ApiResponse.loading('Fetching Giveaways'));
+        }
         coins = await _coinBalances.fetchGiveaways(page);
       }
       if (!_coinListController!.isClosed) {

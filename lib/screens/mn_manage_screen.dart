@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rocketbot/models/masternode_info.dart';
 import 'package:rocketbot/netInterface/app_exception.dart';
@@ -109,16 +110,32 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text("Average payrate:", style: TextStyle(fontSize: 14.0, color: Colors.white70),),
-                              Text(averagePayFormat(sortedList[index].averagePayTime.toString()), style: const TextStyle(fontSize: 14.0, color: Colors.white70),),
+                              const AutoSizeText("Average payrate:",
+                                maxLines: 1,
+                                minFontSize: 8,
+                                style: TextStyle(fontSize: 14.0, color: Colors.white70),),
+                              const SizedBox(width: 20.0,),
+                              Expanded(
+                                child: AutoSizeText(averagePayFormat(sortedList[index].averagePayTime.toString()),
+                                  maxLines: 1,
+                                  minFontSize: 8,
+                                  textAlign: TextAlign.end,
+                                  style: const TextStyle(fontSize: 14.0, color: Colors.white70),),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 10.0,),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text("Last seen:", style: TextStyle(fontSize: 14.0, color: Colors.white70),),
-                              Text(Utils.convertDate(sortedList[index].lastSeen), style: const TextStyle(fontSize: 14.0, color: Colors.white70),),
+                              const AutoSizeText("Last seen:",
+                                maxLines: 1,
+                                minFontSize: 8,
+                                style: TextStyle(fontSize: 14.0, color: Colors.white70),),
+                              AutoSizeText(Utils.convertDate(sortedList[index].lastSeen),
+                                maxLines: 1,
+                                minFontSize: 8,
+                                style: const TextStyle(fontSize: 14.0, color: Colors.white70),),
                             ],
                           ),
                           const SizedBox(

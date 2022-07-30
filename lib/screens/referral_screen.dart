@@ -60,7 +60,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
         final directory = Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
         final imagePath = await File('${directory!.path}/qr_code.png').create();
         await imagePath.writeAsBytes(imageBytes);
-        Share.shareFiles(['${directory.path}/qr_code.png'], text: "Earn 100 free coins now! \nDownload RocketBot wallet app, and get paid to engage on social media with giveaways & airdrops.\n\nUse my referral code: $refCode \n\niOS - https://apple.co/38lAzWO \nAndroid - https://bit.ly/33NZlfS\n#Merge @rocketbotpro"
+        Share.shareFiles(['${directory.path}/qr_code.png'], text: "Earn 50 free coins now! \nDownload RocketBot wallet app, and get paid to engage on social media with giveaways & airdrops.\n\nUse my referral code: $refCode \n\niOS - https://apple.co/38lAzWO \nAndroid - https://bit.ly/33NZlfS\n#Merge @rocketbotpro"
         );
       }
     } catch (e) {

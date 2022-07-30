@@ -21,7 +21,15 @@ class GiveawayTile extends StatelessWidget {
             child: SizedBox(
                 height: 100,
                 width: double.infinity,
-                child: Image.asset('images/giveway_tile_background.png', fit: BoxFit.fill, color: giveaway.member! == true ? Colors.green : const Color(0xFF384259),)),
+                child: Image.asset(
+                  'images/giveway_tile_background.png',
+                  fit: BoxFit.fill,
+                  color: giveaway.member != null
+                      ? giveaway.member!
+                          ? Colors.green
+                          : const Color(0xFF384259)
+                      : const Color(0xFF384259),
+                )),
           ),
           InkWell(
             splashColor: Colors.white30,
@@ -57,11 +65,7 @@ class GiveawayTile extends StatelessWidget {
                         maxLines: 1,
                         minFontSize: 8.0,
                         textAlign: TextAlign.start,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
                       ),
                       AutoSizeText(
                         giveaway.channel!.name!,
@@ -76,11 +80,8 @@ class GiveawayTile extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: Padding(
-                      padding: EdgeInsets.only(right:MediaQuery.of(context).size.width * 0.05),
-                      child: SizedBox(
-                        width: 22,
-                          height: 22,
-                          child: socialMedia(giveaway.socialMedia!)),
+                      padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.05),
+                      child: SizedBox(width: 22, height: 22, child: socialMedia(giveaway.socialMedia!)),
                     ),
                   ),
                 ),

@@ -4,10 +4,10 @@ import 'package:rocketbot/models/loterries.dart';
 import 'package:rocketbot/widgets/picture_cache.dart';
 
 class LotteryTile extends StatelessWidget {
-  final Lottery giveaway;
+  final Lottery lottery;
   final Function(Lottery g) callBack;
 
-  const LotteryTile({Key? key, required this.giveaway, required this.callBack}) : super(key: key);
+  const LotteryTile({Key? key, required this.lottery, required this.callBack}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +19,20 @@ class LotteryTile extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 10.0),
             child: SizedBox(
-              height: 100,
+                height: 100,
                 width: double.infinity,
-                child: Image.asset('images/giveway_tile_background.png', fit: BoxFit.fill, color: giveaway.member! == true ? Colors.green : const Color(0xFF384259))),
+                child: Image.asset('images/giveway_tile_background.png',
+                    fit: BoxFit.fill,
+                    color: lottery.member != null
+                        ? lottery.member
+                            ? Colors.green
+                            : const Color(0xFF384259)
+                        : const Color(0xFF384259))),
           ),
           InkWell(
             splashColor: Colors.white30,
             onTap: () {
-              callBack(giveaway);
+              callBack(lottery);
             },
             child: Row(
               children: [
@@ -41,7 +47,7 @@ class LotteryTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   padding: const EdgeInsets.all(8.0),
-                  child: PictureCacheWidget(coin: giveaway.coin!),
+                  child: PictureCacheWidget(coin: lottery.coin!),
                 ),
                 const SizedBox(
                   width: 60.0,
@@ -53,14 +59,14 @@ class LotteryTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AutoSizeText(
-                        "[${giveaway.coin!.ticker!}] ${giveaway.coin!.tokenStandart!}",
+                        "[${lottery.coin!.ticker!}] ${lottery.coin!.tokenStandart!}",
                         maxLines: 1,
                         minFontSize: 8.0,
                         textAlign: TextAlign.start,
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
                       ),
                       AutoSizeText(
-                        giveaway.channel!.name!,
+                        lottery.channel!.name!,
                         maxLines: 1,
                         minFontSize: 8.0,
                         style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 14.0, color: Colors.white),

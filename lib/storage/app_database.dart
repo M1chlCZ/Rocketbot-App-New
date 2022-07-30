@@ -173,7 +173,7 @@ class AppDatabase {
 
   Future<int> getNotUnread() async {
     final dbClient = await db;
-    var res = await dbClient.query(globals.TABLE_NOT, columns: [globals.TN_READ]);
+    var res = await dbClient.query(globals.TABLE_NOT, columns: [globals.TN_READ], where: "${globals.TN_READ} = ?", whereArgs: [0]);
     return res.length;
   }
 

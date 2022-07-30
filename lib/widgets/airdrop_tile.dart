@@ -19,9 +19,15 @@ class AirdropTile extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 10.0),
             child: SizedBox(
-              height: 100,
+                height: 100,
                 width: double.infinity,
-                child: Image.asset('images/giveway_tile_background.png', fit: BoxFit.fill, color: airdrop.member! == true ? Colors.green : const Color(0xFF384259))),
+                child: Image.asset('images/giveway_tile_background.png',
+                    fit: BoxFit.fill,
+                    color: airdrop.member != null
+                        ? airdrop.member!
+                            ? Colors.green
+                            : const Color(0xFF384259)
+                        : const Color(0xFF384259))),
           ),
           InkWell(
             splashColor: Colors.white30,
@@ -72,11 +78,8 @@ class AirdropTile extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: Padding(
-                      padding: EdgeInsets.only(right:MediaQuery.of(context).size.width * 0.05),
-                      child: SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: socialMedia(airdrop.socialMedia!)),
+                      padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.05),
+                      child: SizedBox(width: 22, height: 22, child: socialMedia(airdrop.socialMedia!)),
                     ),
                   ),
                 ),

@@ -10,6 +10,7 @@ import 'package:rocketbot/models/loterries.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/screens/airdrop_detail_screen.dart';
 import 'package:rocketbot/screens/giveaway_detail_screen.dart';
+import 'package:rocketbot/screens/lottery_detail_screen.dart';
 import 'package:rocketbot/screens/twitter_giveaway_detail_screen.dart';
 import 'package:rocketbot/widgets/airdrop_tile.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
@@ -112,7 +113,15 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
   }
 
   void lotteryCallback(Lottery l) {
-    // var res = interface.get('')
+    if (l.id != 0) {
+      Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+        return LotteryDetailScreen(
+          lottery: l,
+        );
+      }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+        return FadeTransition(opacity: animation, child: child);
+      }));
+    }
   }
 
   @override
@@ -150,7 +159,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                   color: Colors.white10,
                   borderRadius: BorderRadius.circular(5.0),
                 ),
-                margin: const EdgeInsets.only(left: 15.0, right: 15.0),
+                margin: const EdgeInsets.only(left: 50.0, right: 45.0),
                 padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -160,6 +169,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                         setState(() {
                           activeSection = 0;
                         });
+                        gwBlock!.fetchGiveaways(page: giveawayPage, force: true);
                       },
                       radius: 5.0,
                       color: Colors.transparent,
@@ -184,6 +194,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                         setState(() {
                           activeSection = 1;
                         });
+                        adBlock!.fetchGiveaways(page: airdropPage, force: true);
                       },
                       radius: 5.0,
                       color: Colors.transparent,
@@ -208,12 +219,13 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                         setState(() {
                           activeSection = 2;
                         });
+                        ltBlock?.fetchGiveaways(page: lotteryPage);
                       },
                       radius: 5.0,
                       color: Colors.transparent,
                       padding: const EdgeInsets.all(5.0),
                       child: Text(
-                        'Spin Lottery',
+                        'Spin',
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
@@ -405,7 +417,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                           itemBuilder: (ctx, index) {
                                             return LotteryTile(
                                               key: ValueKey<int>(snapshot.data!.data![index].id!),
-                                              giveaway: snapshot.data!.data![index],
+                                              lottery: snapshot.data!.data![index],
                                               callBack: lotteryCallback,
                                             );
                                           });

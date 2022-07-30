@@ -114,7 +114,7 @@ class _FarmMainScreenState extends State<FarmMainScreen> {
               ),
               SizedBox(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 1.3,
+                height: MediaQuery.of(context).size.height * 1.45,
                 child: PageView(
                   onPageChanged: (index) {
                     setState(() {

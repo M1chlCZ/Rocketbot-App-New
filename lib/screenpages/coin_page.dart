@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/get_transaction_bloc.dart';
@@ -61,6 +62,8 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
   late Coin _coinActive;
   Decimal _percentage = Decimal.parse((0.0).toString());
   ScrollController sc = ScrollController();
+  ScrollController scrollCtrl = ScrollController();
+  bool isScrollIdle = true;
   int _currentIndex = 0;
 
   int loadedItems = 8;
@@ -144,6 +147,9 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
   Widget build(BuildContext context) {
     return Material(
       child: RefreshIndicator(
+        notificationPredicate: (not) {
+          return true;
+        },
         onRefresh: refresh,
         child: SingleChildScrollView(
           controller: sc,
@@ -279,17 +285,22 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                           child: Center(
                               child: NotificationListener<ScrollNotification>(
                             onNotification: (scrollNotification) {
-                              var pr = MediaQuery.of(context).size.width * 0.25;
-                              var pp = (scrollNotification.metrics.pixels + 30.0) / pr;
-                              var px = pp.toInt();
+                                var pr = MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width * 0.25;
+                                var pp = (scrollNotification.metrics.pixels + 30.0) / pr;
+                                var px = pp.toInt();
 
-                              if (px != _currentIndex) {
-                                _currentIndex = px;
-                                setState(() { });
-                              }
+                                if (px != _currentIndex) {
+                                  _currentIndex = px;
+                                  setState(() {});
+                                }
+                                isScrollIdle = false;
 
                               if (scrollNotification is ScrollEndNotification) {
                                 _onEndScroll(scrollNotification.metrics);
+                                return false;
                               }
                               // Basically you need something like:
                               // final _index = scrollOffset (or position) / item height;
@@ -299,6 +310,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                                 itemCount: _listCoins.length + 3,
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
+                                controller: scrollCtrl,
                                 itemBuilder: (context, index) {
                                   if (index > _listCoins.length - 1) {
                                     return SizedBox(
@@ -561,6 +573,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
       _free = preFree;
     });
     widget.changeFree(_free);
+    _txBloc!.fetchTransactionData(_coinActive, force: true);
     _calculatePortfolio();
   }
 

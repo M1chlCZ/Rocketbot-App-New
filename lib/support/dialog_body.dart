@@ -11,6 +11,7 @@ class DialogBody extends StatefulWidget {
   final Widget child;
   final bool oneButton;
   final bool noButtons;
+  final double? width;
 
   const DialogBody({
     Key? key,
@@ -19,7 +20,7 @@ class DialogBody extends StatefulWidget {
     required this.child,
     required this.buttonLabel,
     this.oneButton = false,
-    this.buttonCancelLabel = 'Cancel', this.noButtons = false,
+    this.buttonCancelLabel = 'Cancel', this.noButtons = false, this.width,
   }) : super(key: key);
 
   @override
@@ -36,13 +37,15 @@ class DialogBodyState extends State<DialogBody> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        insetPadding: EdgeInsets.zero,
         backgroundColor: Theme.of(context).canvasColor,
         shape: RoundedRectangleBorder(
             side: BorderSide(color: Theme.of(context).canvasColor),
             borderRadius: const BorderRadius.all(Radius.circular(5.0))),
         contentPadding: const EdgeInsets.only(top: 0.01),
         content: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.8,
+            width: widget.width ?? MediaQuery.of(context).size.width * 0.8,
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -79,6 +79,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
   bool _staking = false;
   bool _loadingReward = false;
   bool _loadingCoins = false;
+  bool _adjustReward = false;
   bool _paused = false;
   bool _detailsExtended = false;
 
@@ -258,12 +259,17 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    PictureCacheWidget(coin: widget.activeCoin, size: 30.0,),
-                    const SizedBox(width: 10.0,),
+                    PictureCacheWidget(
+                      coin: widget.activeCoin,
+                      size: 30.0,
+                    ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
                     Text(
                       widget.activeCoin.cryptoId!,
                       // textAlign: TextAlign.end,
-                      style: const TextStyle( fontWeight: FontWeight.w800, fontSize: 24.0, color: Colors.white),
+                      style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 24.0, color: Colors.white),
                     ),
                   ],
                 ),
@@ -283,8 +289,8 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                         Text(
                           "${AppLocalizations.of(context)!.stake_available}:",
                           // textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                          style:
+                              TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
                         ),
                         Expanded(
                           child: Padding(
@@ -301,8 +307,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                         Text(
                           _coinActive.cryptoId!,
                           // textAlign: TextAlign.end,
-                          style: const TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
+                          style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
                         ),
                       ],
                     ),
@@ -320,8 +325,8 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                         Text(
                           "${AppLocalizations.of(context)!.stake_staked_amount}:",
                           // textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                          style:
+                              TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
                         ),
                         Expanded(
                           child: Padding(
@@ -338,8 +343,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                         Text(
                           _coinActive.cryptoId!,
                           // textAlign: TextAlign.end,
-                          style: const TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
+                          style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
                         ),
                       ],
                     ),
@@ -351,43 +355,45 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                       const SizedBox(
                         height: 5.0,
                       ),
-                Opacity(
-                  opacity: 0.6,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 5.0, right: 5.0, left: 10.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "${AppLocalizations.of(context)!.stake_unconfirmed}:",
-                            // textAlign: TextAlign.end,
-                            style: TextStyle(
-                                fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 4.0),
-                              child: AutoSizeText(
-                                _unconfirmedAmount.toStringAsFixed(3),
-                                maxLines: 1,
-                                minFontSize: 8.0,
-                                textAlign: TextAlign.end,
-                                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
-                              ),
+                      Opacity(
+                        opacity: 0.6,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 5.0, right: 5.0, left: 10.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: AutoSizeText(
+                                    "${AppLocalizations.of(context)!.stake_unconfirmed}:",
+                                    // textAlign: TextAlign.end,
+                                    minFontSize: 8.0,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 4.0),
+                                  child: AutoSizeText(
+                                    _unconfirmedAmount.toStringAsFixed(3),
+                                    maxLines: 1,
+                                    minFontSize: 8.0,
+                                    textAlign: TextAlign.end,
+                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                  ),
+                                ),
+                                Text(
+                                  _coinActive.cryptoId!,
+                                  // textAlign: TextAlign.end,
+                                  style: const TextStyle(
+                                      fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            _coinActive.cryptoId!,
-                            // textAlign: TextAlign.end,
-                            style: const TextStyle(
-                                fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
                     ],
                   ),
                 const SizedBox(
@@ -402,8 +408,8 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                         Text(
                           "${AppLocalizations.of(context)!.stake_reward}:",
                           // textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                          style:
+                              TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
                         ),
                         Expanded(
                           child: Padding(
@@ -420,8 +426,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                         Text(
                           _coinActive.cryptoId!,
                           // textAlign: TextAlign.end,
-                          style: const TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
+                          style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
                         ),
                       ],
                     ),
@@ -624,7 +629,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.fromLTRB(15.0, 20.0,15.0, 5.0),
+                  margin: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 5.0),
                   width: double.infinity,
                   height: 50.0,
                   child: Center(
@@ -699,14 +704,10 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 2.0, right: 2.0),
-
                   child: Container(
                     margin: const EdgeInsets.all(10.0),
                     padding: const EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.0),
-                      color: const Color(0xFF9BD41E)
-                    ),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), color: const Color(0xFF9BD41E)),
                     child: SlideAction(
                       height: 60.0,
                       sliderButtonIconPadding: 6.0,
@@ -726,8 +727,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                         size: 35.0,
                       ),
                       sliderRotate: false,
-                      textStyle: const TextStyle(
-                          fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
+                      textStyle: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
                       key: _keyStake,
                       onSubmit: () {
                         _createWithdrawal();
@@ -777,14 +777,53 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                                       color: Colors.white70,
                                                     ),
                                                   )
-                                                : Text(
+                                                : AutoSizeText(
                                                     AppLocalizations.of(context)!.stake_get_reward,
+                                                    maxLines: 1,
+                                                    minFontSize: 8.0,
                                                     style: const TextStyle(
                                                         fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Colors.white),
                                                   ))),
                                   )),
                             ),
                           ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Padding(
+                              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                              child: FlatCustomButton(
+                                onTap: () {
+                                  if (!_adjustReward) {
+                                    // _unStake(2);
+                                    Dialogs.openStakeAdjustment(context, double.parse(_amountStaked), (k) {
+                                      _unStake(2, amount: k);
+                                    });
+                                  }
+                                },
+                                radius: 10.0,
+                                borderWidth: 2.0,
+                                borderColor: const Color(0xFF9BD41E),
+                                color: Theme.of(context).canvasColor,
+                                child: SizedBox(
+                                    height: 45.0,
+                                    child: Center(
+                                        child: _adjustReward
+                                            ? const Padding(
+                                                padding: EdgeInsets.all(3.0),
+                                                child: CircularProgressIndicator(
+                                                  strokeWidth: 2.0,
+                                                  color: Colors.white70,
+                                                ),
+                                              )
+                                            : AutoSizeText(
+                                              AppLocalizations.of(context)!.st_adjust,
+                                                maxLines: 1,
+                                                minFontSize: 8.0,
+                                                style: const TextStyle(
+                                                    fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Color(0xFF9BD41E)),
+                                              ))),
+                              )),
                           const SizedBox(
                             height: 20.0,
                           ),
@@ -811,9 +850,11 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                                   color: Colors.white70,
                                                 ),
                                               )
-                                            : Text(
+                                            : AutoSizeText(
                                                 AppLocalizations.of(context)!.stake_get_all,
-                                                style:  const TextStyle(
+                                                maxLines: 1,
+                                                minFontSize: 8.0,
+                                                style: const TextStyle(
                                                     fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Color(0xFF9BD41E)),
                                               ))),
                               )),
@@ -1049,26 +1090,29 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     }
   }
 
-  _unStake(int rewardParam) async {
-    if (_loadingReward || _loadingCoins) {
+  _unStake(int rewardParam, {double amount = 0.0}) async {
+    if (_loadingReward || _loadingCoins || _adjustReward) {
       return;
     }
     Dialogs.openWaitBox(context);
-    if (rewardParam == 1) {
+    if (rewardParam == 2) {
+      _adjustReward = true;
+    } else if (rewardParam == 1) {
       _loadingReward = true;
     } else {
       _loadingCoins = true;
     }
     setState(() {});
     try {
-      Map<String, dynamic> m = {"idCoin": _coinActive.id!, "rewardParam": rewardParam};
-
+      Map<String, dynamic> m = {"idCoin": _coinActive.id!, "rewardParam": rewardParam, "amount": amount};
       await _interface.post("stake/withdraw", m, pos: true);
       _changeFree();
       await _getStakingDetails();
       _stakeBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
       var conf = _coinActive.requiredConfirmations;
-      if (rewardParam == 1) {
+      if (rewardParam == 2) {
+        _adjustReward = false;
+      }else if (rewardParam == 1) {
         _loadingReward = false;
       } else {
         _loadingCoins = false;
@@ -1080,11 +1124,18 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
             context, AppLocalizations.of(context)!.alert, AppLocalizations.of(context)!.staking_with_info.replaceAll("{1}", conf.toString()));
       }
     } catch (e) {
+      if (rewardParam == 2) {
+        _adjustReward = false;
+      }else if (rewardParam == 1) {
+        _loadingReward = false;
+      } else {
+        _loadingCoins = false;
+      }
+      setState(() {});
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
     }
   }
-
 
   void _changeFree() async {
     var preFree = 0.0;
@@ -1093,7 +1144,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     preFree = rs.data!.free!;
     _free = preFree;
     widget.changeFree(preFree);
-    setState(() { });
+    setState(() {});
   }
 
   _changePercentage(double d) {
