@@ -87,7 +87,6 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
         CoinBalance bal = balList.firstWhere((element) => element.coin!.id! == ee.idCoin);
         Coin c = bal.coin!;
         totalUSD += bal.priceData!.prices!.usd!.toDouble() * ee.amount!.toDouble();
-
         Sector s = Sector(val: val, col: colors[i], nam: c.cryptoId!, rad: 15);
         list.add(s);
         i++;
@@ -308,5 +307,5 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }

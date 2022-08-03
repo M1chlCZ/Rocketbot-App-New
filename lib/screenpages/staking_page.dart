@@ -797,6 +797,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                   if (!_adjustReward) {
                                     // _unStake(2);
                                     Dialogs.openStakeAdjustment(context, double.parse(_amountStaked), (k) {
+                                      Navigator.of(context).pop();
                                       _unStake(2, amount: k);
                                     });
                                   }

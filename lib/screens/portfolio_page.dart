@@ -1022,6 +1022,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   @override
   void onResumed() async {
     await _getPin();
+    await _getNotifications();
     if (_pinEnabled == true && _paused) {
       _paused = false;
       var restart = await _checkCountdown();

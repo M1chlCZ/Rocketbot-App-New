@@ -5,9 +5,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
-import 'package:rocketbot/component_widgets/container_neu.dart';
 import 'package:rocketbot/models/balance_portfolio.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:rocketbot/models/fees.dart';
@@ -16,11 +17,11 @@ import 'package:rocketbot/models/withdraw_pwid.dart';
 import 'package:rocketbot/netinterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/auth_screen.dart';
+import 'package:rocketbot/support/auto_size_text_field.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/qr_code_scanner.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/picture_cache.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
@@ -29,9 +30,7 @@ class SendPage extends StatefulWidget {
   final Function(double free) changeFree;
   final double? free;
 
-  const SendPage(
-      {Key? key, this.coinActive, this.free, required this.changeFree})
-      : super(key: key);
+  const SendPage({Key? key, this.coinActive, this.free, required this.changeFree}) : super(key: key);
 
   @override
   SendPageState createState() => SendPageState();
@@ -70,7 +69,7 @@ class SendPageState extends State<SendPage> {
       }
     });
     _curtain = false;
-    if(kDebugMode) {
+    if (kDebugMode) {
       _addressController.text = 'MSrEScTooTrKkvaFwPCxCBrBnvwdWNozjJ';
     }
   }
@@ -78,8 +77,7 @@ class SendPageState extends State<SendPage> {
   _getFees() async {
     try {
       _free = widget.free!;
-      final response = await _interface
-          .get("Transfers/GetWithdrawFee?coinId=${widget.coinActive!.id!}");
+      final response = await _interface.get("Transfers/GetWithdrawFee?coinId=${widget.coinActive!.id!}");
       var d = Fees.fromJson(response);
       setState(() {
         _feeCrypto = d.data!.feeCrypto!.ticker!;
@@ -104,16 +102,15 @@ class SendPageState extends State<SendPage> {
     }
     if (mounted) {
       Navigator.of(context)
-        .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-          return const AuthScreen(
-            setupPIN: false,
-            type: 2,
-          );
-        }, transitionsBuilder:
-            (_, Animation<double> animation, __, Widget child) {
-          return FadeTransition(opacity: animation, child: child);
-        }))
-        .then((value) => _authCallback(value));
+          .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+            return const AuthScreen(
+              setupPIN: false,
+              type: 2,
+            );
+          }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+            return FadeTransition(opacity: animation, child: child);
+          }))
+          .then((value) => _authCallback(value));
     }
   }
 
@@ -125,14 +122,12 @@ class SendPageState extends State<SendPage> {
   _createWithdrawal() async {
     if (_amountController.text.isEmpty) {
       _keyStake.currentState!.reset();
-      Dialogs.openAlertBox(
-          context, AppLocalizations.of(context)!.error, "Invalid amount!");
+      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Invalid amount!");
       return;
     }
     if (_addressController.text.isEmpty) {
       _keyStake.currentState!.reset();
-      Dialogs.openAlertBox(
-          context, AppLocalizations.of(context)!.error, "Invalid address!");
+      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Invalid address!");
       return;
     }
     try {
@@ -143,8 +138,7 @@ class SendPageState extends State<SendPage> {
         "toAddress": _addressController.text
       };
 
-      final response =
-          await _interface.post("Transfers/CreateWithdraw", query);
+      final response = await _interface.post("Transfers/CreateWithdraw", query);
       var pwid = WithdrawID.fromJson(response);
       if (kDebugMode) {
         print(response);
@@ -159,26 +153,25 @@ class SendPageState extends State<SendPage> {
       _amountController.clear();
 
       var preFree = 0.0;
-      var res =
-          await _interface.get('User/GetBalance?coinId=${_coinActive!.id!}');
+      var res = await _interface.get('User/GetBalance?coinId=${_coinActive!.id!}');
       var rs = BalancePortfolio.fromJson(res);
       preFree = rs.data!.free!;
       widget.changeFree(preFree);
       _keyStake.currentState!.reset();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: SizedBox(
-            height: 50,
-            child: Center(
-                child: Text(
-              AppLocalizations.of(context)!.coin_sent,
-              style: Theme.of(context).textTheme.headline4,
-            ))),
-        duration: const Duration(seconds: 3),
-        backgroundColor: Colors.green,
-        behavior: SnackBarBehavior.fixed,
-        elevation: 5.0,
-      ));
+          content: SizedBox(
+              height: 50,
+              child: Center(
+                  child: Text(
+                AppLocalizations.of(context)!.coin_sent,
+                style: Theme.of(context).textTheme.headline4,
+              ))),
+          duration: const Duration(seconds: 3),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.fixed,
+          elevation: 5.0,
+        ));
       }
     } on BadRequestException catch (r) {
       _keyStake.currentState!.reset();
@@ -192,8 +185,7 @@ class SendPageState extends State<SendPage> {
       Dialogs.openAlertBox(context, wm.message!, wm.error!);
     } catch (e) {
       _keyStake.currentState!.reset();
-      Dialogs.openAlertBox(
-          context, AppLocalizations.of(context)!.error, e.toString());
+      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
     }
   }
 
@@ -201,8 +193,7 @@ class SendPageState extends State<SendPage> {
     ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
     setState(() {
       if (data!.text != null) _addressController.text = data.text!;
-      _addressController.selection =
-          TextSelection.collapsed(offset: _addressController.text.length);
+      _addressController.selection = TextSelection.collapsed(offset: _addressController.text.length);
     });
   }
 
@@ -223,8 +214,7 @@ class SendPageState extends State<SendPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
+                  padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
                   child: Row(
                     children: [
                       SizedBox(
@@ -242,10 +232,9 @@ class SendPageState extends State<SendPage> {
                         ),
                       ),
                       const SizedBox(
-                        width: 20.0,
+                        width: 10.0,
                       ),
-                      Text(AppLocalizations.of(context)!.send,
-                          style: Theme.of(context).textTheme.headline4),
+                      Text(AppLocalizations.of(context)!.send, style: Theme.of(context).textTheme.headline4),
                       const SizedBox(
                         width: 50,
                       ),
@@ -271,11 +260,7 @@ class SendPageState extends State<SendPage> {
                               size: 50.0,
                               color: Colors.white,
                             )
-                          : SizedBox(
-                              width: 50.0,
-                              height: 50.0,
-                              child: PictureCacheWidget(coin: widget.coinActive!)
-                            ),
+                          : SizedBox(width: 50.0, height: 50.0, child: PictureCacheWidget(coin: widget.coinActive!)),
                       const SizedBox(
                         width: 10.0,
                       ),
@@ -290,14 +275,8 @@ class SendPageState extends State<SendPage> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: Text(
-                                    _coinActive == null
-                                        ? AppLocalizations.of(context)!
-                                            .choose_coin
-                                        : _coinActive!.ticker!,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline3!
-                                        .copyWith(fontSize: 18.0),
+                                    _coinActive == null ? AppLocalizations.of(context)!.choose_coin : _coinActive!.ticker!,
+                                    style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 18.0),
                                     maxLines: 1,
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.ellipsis,
@@ -311,15 +290,8 @@ class SendPageState extends State<SendPage> {
                                   child: SizedBox(
                                     width: 70,
                                     child: AutoSizeText(
-                                      _coinActive == null
-                                          ? 'Token'
-                                          : _coinActive!.name!,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(
-                                              fontStyle: FontStyle.normal,
-                                              fontSize: 12.0),
+                                      _coinActive == null ? 'Token' : _coinActive!.name!,
+                                      style: Theme.of(context).textTheme.subtitle2!.copyWith(fontStyle: FontStyle.normal, fontSize: 12.0),
                                       minFontSize: 8,
                                       maxLines: 1,
                                       textAlign: TextAlign.start,
@@ -336,10 +308,7 @@ class SendPageState extends State<SendPage> {
                                   padding: const EdgeInsets.only(top: 0.0),
                                   child: Text(
                                     _free.toString(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline3!
-                                        .copyWith(fontSize: 18.0),
+                                    style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 18.0),
                                     maxLines: 1,
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.ellipsis,
@@ -356,32 +325,28 @@ class SendPageState extends State<SendPage> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                NeuContainer(
+                Container(
                   height: 40.0,
-                  width: MediaQuery.of(context).size.width * 0.95,
+                  margin: const EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: Border.all(color: const Color(0xFF9BD41E), width: 1.0),
+                      color:  Colors.white.withOpacity(0.03)),
                   child: Stack(
                     alignment: AlignmentDirectional.center,
                     children: [
-                      TextField(
+                      AutoSizeTextField(
                           inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'^[a-zA-Z0-9]+')),
+                            FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z0-9]+')),
                           ],
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(color: Colors.white, fontSize: 12.0),
+                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 12.0),
                           autocorrect: false,
                           controller: _addressController,
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
                             isDense: false,
-                            contentPadding: const EdgeInsets.only(bottom: 8.0),
-                            hintStyle: Theme.of(context)
-                                .textTheme
-                                .subtitle2!
-                                .copyWith(
-                                    color: Colors.white54, fontSize: 12.0),
+                            contentPadding: const EdgeInsets.only(bottom: 9.0),
+                            hintStyle: Theme.of(context).textTheme.subtitle2!.copyWith(color: Colors.white54, fontSize: 12.0),
                             hintText: AppLocalizations.of(context)!.address,
                             enabledBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.transparent),
@@ -415,31 +380,26 @@ class SendPageState extends State<SendPage> {
                 const SizedBox(
                   height: 30.0,
                 ),
-                NeuContainer(
+                Container(
                   height: 40.0,
-                  width: MediaQuery.of(context).size.width * 0.95,
+                  margin: const EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: Border.all(color: const Color(0xFF9BD41E), width: 1.0),
+                  color:  Colors.white.withOpacity(0.03)),
                   child: TextField(
-                      keyboardType: Platform.isIOS
-                          ? const TextInputType.numberWithOptions(signed: true)
-                          : TextInputType.number,
+                      keyboardType: Platform.isIOS ? const TextInputType.numberWithOptions(signed: true) : TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d*\.?\d{0,8}')),
+                        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,8}')),
                       ],
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .copyWith(color: Colors.white, fontSize: 12.0),
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 12.0),
                       autocorrect: false,
                       controller: _amountController,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         isDense: false,
-                        contentPadding: const EdgeInsets.only(bottom: 8.0),
-                        hintStyle: Theme.of(context)
-                            .textTheme
-                            .subtitle2!
-                            .copyWith(color: Colors.white54, fontSize: 12.0),
+                        contentPadding: const EdgeInsets.only(bottom: 9.0),
+                        hintStyle: Theme.of(context).textTheme.subtitle2!.copyWith(color: Colors.white54, fontSize: 12.0),
                         hintText: AppLocalizations.of(context)!.amount,
                         enabledBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.transparent),
@@ -452,6 +412,51 @@ class SendPageState extends State<SendPage> {
                 const SizedBox(
                   height: 15.0,
                 ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+                _error
+                    ? Text(
+                        AppLocalizations.of(context)!.dp_error,
+                        style: Theme.of(context).textTheme.headline4!.copyWith(fontWeight: FontWeight.bold, color: Colors.red.withOpacity(0.5)),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(left: 2.0, right: 2.0),
+                        child: Container(
+                          margin: const EdgeInsets.only(left:30.0, right: 30),
+                          padding: const EdgeInsets.all(2.0),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), color: const Color(0xFF9BD41E)),
+                          child: SlideAction(
+                            height: 60.0,
+                            sliderButtonIconPadding: 6.0,
+                            borderRadius: 10.0,
+                            text: AppLocalizations.of(context)!.send,
+                            innerColor: const Color(0xFF9BD41E),
+                            outerColor: const Color(0xFF252F45),
+                            elevation: 0.5,
+                            // submittedIcon: const Icon(Icons.check, size: 30.0, color: Colors.lightGreenAccent,),
+                            submittedIcon: const CircularProgressIndicator(
+                              strokeWidth: 2.0,
+                              color: Colors.lightGreenAccent,
+                            ),
+                            sliderButtonIcon: const Icon(
+                              Icons.arrow_forward,
+                              color: Color(0xFF252F45),
+                              size: 35.0,
+                            ),
+                            sliderRotate: false,
+                            textStyle: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
+                            key: _keyStake,
+                            onSubmit: () {
+                              _handlePIN();
+                            },
+                          ),
+                        ),
+                      ),
+
+                const SizedBox(
+                  height: 10.0,
+                ),
                 AnimatedOpacity(
                   opacity: _feeCrypto.isNotEmpty ? 1.0 : 0.0,
                   duration: const Duration(milliseconds: 200),
@@ -463,21 +468,13 @@ class SendPageState extends State<SendPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                                '${AppLocalizations.of(context)!.min_withdraw}:',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(color: Colors.white54)),
+                            Text('${AppLocalizations.of(context)!.min_withdraw}:',
+                                style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54)),
                             const SizedBox(
                               width: 5.0,
                             ),
-                            Text(
-                                '$_min ${widget.coinActive!.ticker!.toUpperCase()}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(color: Colors.white54)),
+                            Text('$_min ${widget.coinActive!.ticker!.toUpperCase()}',
+                                style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54)),
                             const SizedBox(
                               width: 10.0,
                             ),
@@ -490,18 +487,11 @@ class SendPageState extends State<SendPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text('${AppLocalizations.of(context)!.fees}:',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(color: Colors.white54)),
+                                style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54)),
                             const SizedBox(
                               width: 5.0,
                             ),
-                            Text('$_fee $_feeCrypto',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(color: Colors.white54)),
+                            Text('$_fee $_feeCrypto', style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54)),
                             const SizedBox(
                               width: 10.0,
                             ),
@@ -511,46 +501,6 @@ class SendPageState extends State<SendPage> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 30.0,
-                ),
-                _error
-                    ? Text(
-                        AppLocalizations.of(context)!.dp_error,
-                        style: Theme.of(context).textTheme.headline4!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red.withOpacity(0.5)),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-                        child: SlideAction(
-                          height: 50.0,
-                          sliderButtonIconPadding: 4.0,
-                          sliderButtonIconSize: 40.0,
-                          borderRadius: 5.0,
-                          text: AppLocalizations.of(context)!.send,
-                          innerColor: Colors.black.withOpacity(0.52),
-                          outerColor: Colors.lightGreenAccent.withOpacity(0.35),
-                          elevation: 0.5,
-                          // submittedIcon: const Icon(Icons.check, size: 30.0, color: Colors.lightGreenAccent,),
-                          submittedIcon: CircularProgressIndicator(
-                            strokeWidth: 2.0,
-                            color: Colors.black.withOpacity(0.52),
-                          ),
-                          sliderButtonIcon: const Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: Colors.white70,
-                            size: 25.0,
-                          ),
-                          sliderRotate: false,
-                          textStyle: const TextStyle(
-                              color: Colors.white54, fontSize: 24.0),
-                          key: _keyStake,
-                          onSubmit: () {
-                            _handlePIN();
-                          },
-                        ),
-                      ),
                 const SizedBox(
                   height: 20.0,
                 ),
@@ -565,18 +515,23 @@ class SendPageState extends State<SendPage> {
                 ),
                 Text(
                   AppLocalizations.of(context)!.or_send_scan_qr,
-                  style: Theme.of(context).textTheme.headline3,
+                  style: Theme.of(context).textTheme.subtitle2,
                 ),
                 const SizedBox(
                   height: 20.0,
                 ),
-                NeuButton(
+                FlatCustomButton(
+                  radius: 8.0,
+                  color: Colors.lightGreen.withOpacity(0.5),
                   onTap: () {
                     _openQRScanner();
                   },
                   width: 140,
                   height: 140,
-                  child: Image.asset("images/qr_code_scan.png"),
+                  child: Image.asset(
+                    "images/qr_code_scan.png",
+                    color: Colors.white70,
+                  ),
                 ),
               ],
             ),
@@ -615,32 +570,28 @@ class SendPageState extends State<SendPage> {
         var r = await Permission.camera.request();
         if (r.isGranted) {
           if (mounted) {
-            Navigator.of(context).push(PageRouteBuilder(
-              pageBuilder: (BuildContext context, _, __) {
+            Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+              return QScanWidget(
+                scanResult: (String s) {
+                  _addressController.text = s;
+                },
+              );
+            }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+              return FadeTransition(opacity: animation, child: child);
+            }));
+          }
+        }
+      } else {
+        if (mounted) {
+          Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
             return QScanWidget(
               scanResult: (String s) {
                 _addressController.text = s;
               },
             );
-          }, transitionsBuilder:
-                  (_, Animation<double> animation, __, Widget child) {
+          }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
             return FadeTransition(opacity: animation, child: child);
           }));
-          }
-        }
-      } else {
-        if (mounted) {
-          Navigator.of(context).push(PageRouteBuilder(
-            pageBuilder: (BuildContext context, _, __) {
-          return QScanWidget(
-            scanResult: (String s) {
-              _addressController.text = s;
-            },
-          );
-        }, transitionsBuilder:
-                (_, Animation<double> animation, __, Widget child) {
-          return FadeTransition(opacity: animation, child: child);
-        }));
         }
       }
     });

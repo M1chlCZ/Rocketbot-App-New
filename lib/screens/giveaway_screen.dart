@@ -161,78 +161,86 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                 ),
                 margin: const EdgeInsets.only(left: 50.0, right: 45.0),
                 padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FlatCustomButton(
-                      onTap: () {
-                        setState(() {
-                          activeSection = 0;
-                        });
-                        gwBlock!.fetchGiveaways(page: giveawayPage, force: true);
-                      },
-                      radius: 5.0,
-                      color: Colors.transparent,
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text(
-                        'Giveaway',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(fontWeight: activeSection == 0 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FlatCustomButton(
+                        onTap: () {
+                          setState(() {
+                            activeSection = 0;
+                          });
+                          gwBlock!.fetchGiveaways(page: giveawayPage, force: true);
+                        },
+                        radius: 5.0,
+                        color: Colors.transparent,
+                        padding: const EdgeInsets.all(5.0),
+                        child: AutoSizeText(
+                          'Giveaway',
+                          maxLines: 1,
+                          minFontSize: 8.0,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(fontWeight: activeSection == 0 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                        width: 20,
-                        child: Text(
-                          '|',
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w200, fontSize: 14.0),
-                          textAlign: TextAlign.center,
-                        )),
-                    FlatCustomButton(
-                      onTap: () {
-                        setState(() {
-                          activeSection = 1;
-                        });
-                        adBlock!.fetchGiveaways(page: airdropPage, force: true);
-                      },
-                      radius: 5.0,
-                      color: Colors.transparent,
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text(
-                        'Airdrop',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(fontWeight: activeSection == 1 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),
+                      SizedBox(
+                          width: 20,
+                          child: Text(
+                            '|',
+                            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w200, fontSize: 14.0),
+                            textAlign: TextAlign.center,
+                          )),
+                      FlatCustomButton(
+                        onTap: () {
+                          setState(() {
+                            activeSection = 1;
+                          });
+                          adBlock!.fetchGiveaways(page: airdropPage, force: true);
+                        },
+                        radius: 5.0,
+                        color: Colors.transparent,
+                        padding: const EdgeInsets.all(5.0),
+                        child: AutoSizeText(
+                          'Airdrop',
+                          maxLines: 1,
+                          minFontSize: 8.0,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(fontWeight: activeSection == 1 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                        width: 20,
-                        child: Text(
-                          '|',
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w200, fontSize: 14.0),
-                          textAlign: TextAlign.center,
-                        )),
-                    FlatCustomButton(
-                      onTap: () {
-                        setState(() {
-                          activeSection = 2;
-                        });
-                        ltBlock?.fetchGiveaways(page: lotteryPage);
-                      },
-                      radius: 5.0,
-                      color: Colors.transparent,
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text(
-                        'Spin',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(fontWeight: activeSection == 2 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),
-                      ),
-                    )
-                  ],
+                      SizedBox(
+                          width: 20,
+                          child: Text(
+                            '|',
+                            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w200, fontSize: 14.0),
+                            textAlign: TextAlign.center,
+                          )),
+                      FlatCustomButton(
+                        onTap: () {
+                          setState(() {
+                            activeSection = 2;
+                          });
+                          ltBlock?.fetchGiveaways(page: lotteryPage);
+                        },
+                        radius: 5.0,
+                        color: Colors.transparent,
+                        padding: const EdgeInsets.all(5.0),
+                        child: AutoSizeText(
+                          'Spin',
+                          maxLines: 1,
+                          minFontSize: 8.0,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(fontWeight: activeSection == 2 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

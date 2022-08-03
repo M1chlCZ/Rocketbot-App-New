@@ -7,7 +7,9 @@ import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/picture_cache.dart';
+import 'package:rocketbot/widgets/slider_widget.dart';
 import 'package:share/share.dart';
 import 'package:vibration/vibration.dart';
 
@@ -124,7 +126,7 @@ class DepositPageState extends State<DepositPage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20.0,
+                  height: 10.0,
                 ),
                 SizedBox(
                   width: double.infinity,
@@ -224,102 +226,75 @@ class DepositPageState extends State<DepositPage> {
                   )),
                 ),
                 const SizedBox(
-                  height: 10.0,
+                  height: 120.0,
                 ),
                 Container(
-                  margin: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                  width: double.infinity,
                   height: 40.0,
+                  margin: const EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                    color: Color(0xFF252525),
+                    color: Color(0xFF31669D),
                   ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10.0, right: 8.0),
-                      child: AutoSizeTextField(
-                        maxLines: 1,
-                        minFontSize: 6.0,
-                        style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.white, fontSize: 14.0),
-                        autocorrect: false,
-                        readOnly: true,
-                        controller: _addressController,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                      isDense: true,
-                      hintStyle: Theme.of(context)
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: AutoSizeTextField(
+                          maxLines: 1,
+                          minFontSize: 4.0,
+                          style: Theme.of(context)
                           .textTheme
-                          .subtitle2!
-                          .copyWith(color: Colors.white54, fontSize: 14.0),
-                      hintText: AppLocalizations.of(context)!.address,
-                      enabledBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
+                          .bodyText1!
+                          .copyWith(color: Colors.white, fontSize: 14.0),
+                          autocorrect: false,
+                          readOnly: true,
+                          controller: _addressController,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                        isDense: true,
+                        hintStyle: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
+                            .copyWith(color: Colors.white54, fontSize: 14.0),
+                        hintText: AppLocalizations.of(context)!.address,
+                        enabledBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      NeuButton(
+                      Container(height: double.infinity, width: 2,color: const Color(0xFF537FB0)),
+                      FlatCustomButton(
                         height: 40.0,
                         width: 40.0,
+                        color: Colors.transparent,
                         onTap: () {
-                          _getClipBoardData();
+                          // _getClipBoardData();
+                          Clipboard.setData(ClipboardData(text: _addressController.text));
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: SizedBox(
+                                  height: 30,
+                                  child: Center(
+                                      child: Text(
+                                        "${AppLocalizations.of(context)!.copy} ${AppLocalizations.of(context)!.address.toLowerCase()}",
+                                        style: Theme.of(context).textTheme.headline4,
+                                      ))),
+                              duration: const Duration(seconds: 3),
+                              backgroundColor: Colors.green,
+                              behavior: SnackBarBehavior.fixed,
+                              elevation: 5.0,
+                            ));
+                          }
                         },
                         child: SizedBox(
-                            width: 20.0, child: Image.asset('images/copy.png')),
+                            width: 20.0, child: Image.asset('images/copy.png', color: Colors.white,)),
                       ),
-                      const SizedBox(
-                        width: 30.0,
-                      ),
-                      NeuButton(
-                        height: 40.0,
-                        width: 40.0,
-                        onTap: () {
-                          setState(() {
-                            if (popMenu) {
-                              popMenu = false;
-                            } else {
-                              popMenu = true;
-                            }
-                          });
-                        },
-                        child: SizedBox(
-                            width: 20.0, child: Image.asset('images/share.png')),
-                      )
                     ],
                   ),
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                Container(
-                  height: 0.5,
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  color: Colors.white30,
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                Text(
-                  AppLocalizations.of(context)!.or_scan_qr,
-                  style: Theme.of(context).textTheme.headline3,
                 ),
                 const SizedBox(
                   height: 30.0,
@@ -352,225 +327,225 @@ class DepositPageState extends State<DepositPage> {
               ],
             ),
           ),
-          Visibility(
-            visible: popMenu ? true : false,
-            child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    popMenu = false;
-                  });
-                },
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
-                  child: Container(
-                    color: Colors.black12,
-                    width: double.infinity,
-                    height: double.infinity,
-                  ),
-                )),
-          ),
-          Positioned(
-              top: 180.0,
-              right: 120.0,
-              child: IgnorePointer(
-                ignoring: popMenu ? false : true,
-                child: AnimatedOpacity(
-                  opacity: popMenu ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.decelerate,
-                  child: Card(
-                    elevation: 10.0,
-                    color: Colors.transparent,
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                      child: Container(
-                        width: 140,
-                        color: const Color(0xFF1B1B1B),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                                height: 40,
-                                child: Center(
-                                  child: Directionality(
-                                    textDirection: TextDirection.ltr,
-                                    child: SizedBox(
-                                      width: 140,
-                                      child: TextButton.icon(
-                                        icon: Image.asset(
-                                          'images/telegram.png',
-                                          color: Colors.white,
-                                          fit: BoxFit.fitWidth,
-                                          width: 15.0,
-                                        ),
-                                        label: Text(
-                                          'Telegram',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline1!
-                                              .copyWith(fontSize: 14.0),
-                                        ),
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.resolveWith(
-                                                    (states) =>
-                                                        qrColors(states)),
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            0.0),
-                                                    side: const BorderSide(
-                                                        color: Colors
-                                                            .transparent)))),
-                                        onPressed: () {},
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 4.0, right: 4.0),
-                              child:
-                                  Container(height: 0.5, color: Colors.white12),
-                            ),
-                            SizedBox(
-                                height: 40,
-                                child: Directionality(
-                                  textDirection: TextDirection.ltr,
-                                  child: SizedBox(
-                                    width: 140,
-                                    child: TextButton.icon(
-                                      icon: Image.asset(
-                                        'images/discord.png',
-                                        color: Colors.white,
-                                        fit: BoxFit.fitWidth,
-                                        width: 15.0,
-                                      ),
-                                      label: Text(
-                                        'Discord   ',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline1!
-                                            .copyWith(fontSize: 14.0),
-                                      ),
-                                      style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.resolveWith(
-                                                  (states) => qrColors(states)),
-                                          shape: MaterialStateProperty.all<
-                                                  RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          0.0),
-                                                  side: const BorderSide(
-                                                      color: Colors
-                                                          .transparent)))),
-                                      onPressed: () {},
-                                    ),
-                                  ),
-                                )),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 4.0, right: 4.0),
-                              child:
-                                  Container(height: 0.5, color: Colors.white12),
-                            ),
-                            SizedBox(
-                                height: 40,
-                                child: Center(
-                                  child: Directionality(
-                                    textDirection: TextDirection.ltr,
-                                    child: SizedBox(
-                                      width: 140,
-                                      child: TextButton.icon(
-                                        icon: Image.asset(
-                                          'images/sms.png',
-                                          color: Colors.white,
-                                          fit: BoxFit.fitWidth,
-                                          width: 15.0,
-                                        ),
-                                        label: Text(
-                                          'SMS         ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline1!
-                                              .copyWith(fontSize: 14.0),
-                                        ),
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.resolveWith(
-                                                    (states) =>
-                                                        qrColors(states)),
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            0.0),
-                                                    side: const BorderSide(
-                                                        color: Colors
-                                                            .transparent)))),
-                                        onPressed: () {},
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 4.0, right: 4.0),
-                              child:
-                                  Container(height: 0.5, color: Colors.white12),
-                            ),
-                            SizedBox(
-                                height: 40,
-                                child: Center(
-                                  child: Directionality(
-                                    textDirection: TextDirection.ltr,
-                                    child: SizedBox(
-                                      width: 140,
-                                      child: TextButton.icon(
-                                        icon: Image.asset(
-                                          'images/email.png',
-                                          color: Colors.white,
-                                          fit: BoxFit.fitWidth,
-                                          width: 15.0,
-                                        ),
-                                        label: Text(
-                                          'E-mail     ',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline1!
-                                              .copyWith(fontSize: 14.0),
-                                        ),
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.resolveWith(
-                                                    (states) =>
-                                                        qrColors(states)),
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            0.0),
-                                                    side: const BorderSide(
-                                                        color: Colors
-                                                            .transparent)))),
-                                        onPressed: () {},
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              )),
+          // Visibility(
+          //   visible: popMenu ? true : false,
+          //   child: GestureDetector(
+          //       onTap: () {
+          //         setState(() {
+          //           popMenu = false;
+          //         });
+          //       },
+          //       child: BackdropFilter(
+          //         filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+          //         child: Container(
+          //           color: Colors.black12,
+          //           width: double.infinity,
+          //           height: double.infinity,
+          //         ),
+          //       )),
+          // ),
+          // Positioned(
+          //     top: 180.0,
+          //     right: 120.0,
+          //     child: IgnorePointer(
+          //       ignoring: popMenu ? false : true,
+          //       child: AnimatedOpacity(
+          //         opacity: popMenu ? 1.0 : 0.0,
+          //         duration: const Duration(milliseconds: 300),
+          //         curve: Curves.decelerate,
+          //         child: Card(
+          //           elevation: 10.0,
+          //           color: Colors.transparent,
+          //           child: ClipRRect(
+          //             borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+          //             child: Container(
+          //               width: 140,
+          //               color: const Color(0xFF1B1B1B),
+          //               child: Column(
+          //                 mainAxisAlignment: MainAxisAlignment.center,
+          //                 children: [
+          //                   SizedBox(
+          //                       height: 40,
+          //                       child: Center(
+          //                         child: Directionality(
+          //                           textDirection: TextDirection.ltr,
+          //                           child: SizedBox(
+          //                             width: 140,
+          //                             child: TextButton.icon(
+          //                               icon: Image.asset(
+          //                                 'images/telegram.png',
+          //                                 color: Colors.white,
+          //                                 fit: BoxFit.fitWidth,
+          //                                 width: 15.0,
+          //                               ),
+          //                               label: Text(
+          //                                 'Telegram',
+          //                                 style: Theme.of(context)
+          //                                     .textTheme
+          //                                     .headline1!
+          //                                     .copyWith(fontSize: 14.0),
+          //                               ),
+          //                               style: ButtonStyle(
+          //                                   backgroundColor:
+          //                                       MaterialStateProperty.resolveWith(
+          //                                           (states) =>
+          //                                               qrColors(states)),
+          //                                   shape: MaterialStateProperty.all<
+          //                                           RoundedRectangleBorder>(
+          //                                       RoundedRectangleBorder(
+          //                                           borderRadius:
+          //                                               BorderRadius.circular(
+          //                                                   0.0),
+          //                                           side: const BorderSide(
+          //                                               color: Colors
+          //                                                   .transparent)))),
+          //                               onPressed: () {},
+          //                             ),
+          //                           ),
+          //                         ),
+          //                       )),
+          //                   Padding(
+          //                     padding:
+          //                         const EdgeInsets.only(left: 4.0, right: 4.0),
+          //                     child:
+          //                         Container(height: 0.5, color: Colors.white12),
+          //                   ),
+          //                   SizedBox(
+          //                       height: 40,
+          //                       child: Directionality(
+          //                         textDirection: TextDirection.ltr,
+          //                         child: SizedBox(
+          //                           width: 140,
+          //                           child: TextButton.icon(
+          //                             icon: Image.asset(
+          //                               'images/discord.png',
+          //                               color: Colors.white,
+          //                               fit: BoxFit.fitWidth,
+          //                               width: 15.0,
+          //                             ),
+          //                             label: Text(
+          //                               'Discord   ',
+          //                               style: Theme.of(context)
+          //                                   .textTheme
+          //                                   .headline1!
+          //                                   .copyWith(fontSize: 14.0),
+          //                             ),
+          //                             style: ButtonStyle(
+          //                                 backgroundColor:
+          //                                     MaterialStateProperty.resolveWith(
+          //                                         (states) => qrColors(states)),
+          //                                 shape: MaterialStateProperty.all<
+          //                                         RoundedRectangleBorder>(
+          //                                     RoundedRectangleBorder(
+          //                                         borderRadius:
+          //                                             BorderRadius.circular(
+          //                                                 0.0),
+          //                                         side: const BorderSide(
+          //                                             color: Colors
+          //                                                 .transparent)))),
+          //                             onPressed: () {},
+          //                           ),
+          //                         ),
+          //                       )),
+          //                   Padding(
+          //                     padding:
+          //                         const EdgeInsets.only(left: 4.0, right: 4.0),
+          //                     child:
+          //                         Container(height: 0.5, color: Colors.white12),
+          //                   ),
+          //                   SizedBox(
+          //                       height: 40,
+          //                       child: Center(
+          //                         child: Directionality(
+          //                           textDirection: TextDirection.ltr,
+          //                           child: SizedBox(
+          //                             width: 140,
+          //                             child: TextButton.icon(
+          //                               icon: Image.asset(
+          //                                 'images/sms.png',
+          //                                 color: Colors.white,
+          //                                 fit: BoxFit.fitWidth,
+          //                                 width: 15.0,
+          //                               ),
+          //                               label: Text(
+          //                                 'SMS         ',
+          //                                 style: Theme.of(context)
+          //                                     .textTheme
+          //                                     .headline1!
+          //                                     .copyWith(fontSize: 14.0),
+          //                               ),
+          //                               style: ButtonStyle(
+          //                                   backgroundColor:
+          //                                       MaterialStateProperty.resolveWith(
+          //                                           (states) =>
+          //                                               qrColors(states)),
+          //                                   shape: MaterialStateProperty.all<
+          //                                           RoundedRectangleBorder>(
+          //                                       RoundedRectangleBorder(
+          //                                           borderRadius:
+          //                                               BorderRadius.circular(
+          //                                                   0.0),
+          //                                           side: const BorderSide(
+          //                                               color: Colors
+          //                                                   .transparent)))),
+          //                               onPressed: () {},
+          //                             ),
+          //                           ),
+          //                         ),
+          //                       )),
+          //                   Padding(
+          //                     padding:
+          //                         const EdgeInsets.only(left: 4.0, right: 4.0),
+          //                     child:
+          //                         Container(height: 0.5, color: Colors.white12),
+          //                   ),
+          //                   SizedBox(
+          //                       height: 40,
+          //                       child: Center(
+          //                         child: Directionality(
+          //                           textDirection: TextDirection.ltr,
+          //                           child: SizedBox(
+          //                             width: 140,
+          //                             child: TextButton.icon(
+          //                               icon: Image.asset(
+          //                                 'images/email.png',
+          //                                 color: Colors.white,
+          //                                 fit: BoxFit.fitWidth,
+          //                                 width: 15.0,
+          //                               ),
+          //                               label: Text(
+          //                                 'E-mail     ',
+          //                                 style: Theme.of(context)
+          //                                     .textTheme
+          //                                     .headline1!
+          //                                     .copyWith(fontSize: 14.0),
+          //                               ),
+          //                               style: ButtonStyle(
+          //                                   backgroundColor:
+          //                                       MaterialStateProperty.resolveWith(
+          //                                           (states) =>
+          //                                               qrColors(states)),
+          //                                   shape: MaterialStateProperty.all<
+          //                                           RoundedRectangleBorder>(
+          //                                       RoundedRectangleBorder(
+          //                                           borderRadius:
+          //                                               BorderRadius.circular(
+          //                                                   0.0),
+          //                                           side: const BorderSide(
+          //                                               color: Colors
+          //                                                   .transparent)))),
+          //                               onPressed: () {},
+          //                             ),
+          //                           ),
+          //                         ),
+          //                       )),
+          //                 ],
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //     )),
         ],
       ),
     );

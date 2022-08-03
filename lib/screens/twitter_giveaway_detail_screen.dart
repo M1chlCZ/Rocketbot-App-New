@@ -276,24 +276,29 @@ Widget followBlock(Conditions? c, String sub, {Color color = Colors.white10}) {
               itemCount: c!.mustFollowAccounts!.length,
                 itemBuilder: (context, index) {
                   MustFollowAccounts item = c.mustFollowAccounts![index];
-              return FlatCustomButton(
-                onTap: () {
-                  Utils.openLink("https://twitter.com/${item.username!}");
-                },
-                color: const Color(0xFF1DA1F2),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-                  child: Center(
-                      child: Column(
-                        children: [
-                          Text(item.name!,style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Colors.white),),
-                          // Text("Open >",style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 8.0, color: Colors.white54),),
-                    SizedBox(
-                      height: 15.0,
-                        child: Image.asset("images/twitter.png", color: Colors.white54)),
-                        ],
-                      )),
-                ),
+              return Row(
+                children: [
+                  FlatCustomButton(
+                    onTap: () {
+                      Utils.openLink("https://twitter.com/${item.username!}");
+                    },
+                    color: const Color(0xFF1DA1F2),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+                      child: Center(
+                          child: Column(
+                            children: [
+                              Text(item.name!,style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Colors.white),),
+                              // Text("Open >",style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 8.0, color: Colors.white54),),
+                        SizedBox(
+                          height: 15.0,
+                            child: Image.asset("images/twitter.png", color: Colors.white54)),
+                            ],
+                          )),
+                    ),
+                  ),
+                  const SizedBox(width: 10.0,)
+                ],
               );
             }),
           ),

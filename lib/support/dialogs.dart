@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/support/dialog_body.dart';
 import 'package:rocketbot/widgets/percent_switch_widget.dart';
+import 'package:rocketbot/widgets/slider_widget.dart';
 
 class Dialogs {
   static Future<void> openAlertBox(
@@ -290,18 +294,33 @@ class Dialogs {
         builder: (BuildContext context) {
           double amount = 0.0;
           TextEditingController codeControl = TextEditingController();
+          bool tooMuch = false;
           void changePercentage(double percent) {
             amount = totalCoins * percent;
             codeControl.text = amount.toString();
           }
+
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter sState) {
+                codeControl.addListener(() {
+                  if (double.parse(codeControl.text.toString()) > totalCoins) {
+                    tooMuch = true;
+                  }else{
+                    tooMuch = false;
+                  }
+                  sState((){});
+                });
                 return DialogBody(
                   header: AppLocalizations.of(context)!.st_amount,
                   buttonLabel: 'OK',
                   onTap: (){
-                    amount = double.parse(codeControl.text.toString());
-                    func(amount);
+                    if (tooMuch) {
+                      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Amount has to be lower than your whole staking balance");
+                    }else {
+                      amount = double.parse(codeControl.text.toString());
+                      func(amount);
+
+                    }
                   },
                   width: MediaQuery.of(context).size.width * 0.97,
                   child: Column(
@@ -314,10 +333,17 @@ class Dialogs {
                           child: ClipRRect(
                             borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                             child: Container(
-                              color: Colors.black38,
+                              color: tooMuch ? Colors.red.withOpacity(0.3) : Colors.black38,
                               padding: const EdgeInsets.all(15.0),
                               child: TextField(
                                 autofocus: true,
+                                keyboardType: Platform.isIOS
+                                    ? const TextInputType.numberWithOptions(signed: true)
+                                    : TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'^\d*\.?\d{0,8}')),
+                                ],
                                 controller: codeControl,
                                 textAlign: TextAlign.center,
                                 maxLines: 1,

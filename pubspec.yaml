@@ -3,7 +3,7 @@ description: Rocketbot
 
 publish_to: 'none'
 
-version: 1.1.45+145
+version: 1.2.0+147
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -18,22 +18,22 @@ dependencies:
   firebase_core: any
   firebase_auth: any
   firebase_dynamic_links: any
-  http: ^0.13.4
+  http: ^0.13.5
   auto_size_text: 3.0.0
   intl: ^0.17.0
-  fl_chart: ^0.55.0
+  fl_chart: ^0.55.1
   animations: ^2.0.3
   progress_indicators: ^1.0.0
   url_launcher: ^6.1.5
   qr_flutter: ^4.0.0
   share: any
   decimal: ^2.2.0
-  vibration: ^1.7.4-nullsafety.0
+  vibration: ^1.7.5
   flutter_snake_navigationbar: any
   cached_network_image: ^3.2.1
   flutter_switch: ^0.3.2
   permission_handler: ^10.0.0
-  local_auth: ^2.1.0
+  local_auth: ^2.1.1
   flutter_phoenix: ^1.0.0
   package_info: any
   path_provider: any
@@ -70,7 +70,7 @@ linter:
 dev_dependencies:
   flutter_lints: ^2.0.1
   logger: ^1.1.0
-  flutter_native_splash: ^2.2.6
+  flutter_native_splash: ^2.2.7
   flutter_test:
     sdk: flutter
 
