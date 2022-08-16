@@ -93,8 +93,8 @@ class NetInterface {
         },
       );
       if (debug) {
-      print(response.body);
-      print(response.statusCode);
+      // print(response.body);
+      // print(response.statusCode);
       }
       if (response.statusCode == 401 || response.statusCode == 403) {
         await refreshToken(pos: pos);

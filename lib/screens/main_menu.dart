@@ -24,7 +24,7 @@ class MainMenuScreen extends StatefulWidget {
 }
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
-  NetInterface _interface = NetInterface();
+  final NetInterface _interface = NetInterface();
   final _firebaseMessaging = GetIt.I.get<FCM>();
   final _pageController = PageController(initialPage: 0);
   int _selectedPageIndex = 0;

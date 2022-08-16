@@ -145,10 +145,6 @@ class SliderWidgetState extends State<SliderWidget>
                 ),
               ),
             ),
-            Positioned(
-              left: _dragPosition.dx,
-                top: _isDragging ?  _dragPosition.dy : (_sliderAnimation!.value -10),
-                child: Center(child: Container(width: 20,height: 20, color: Colors.red,)))
           ],
         ),
       ),

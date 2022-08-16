@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/get_transaction_bloc.dart';
@@ -84,6 +83,10 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
   PriceData? _priceData;
   String? _posAddr;
 
+  bool _preventScroll = false;
+
+  double pr = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -145,6 +148,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
 
   @override
   Widget build(BuildContext context) {
+    pr = MediaQuery.of(context).size.width * 0.25;
     return Material(
       child: RefreshIndicator(
         notificationPredicate: (not) {
@@ -285,22 +289,21 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                           child: Center(
                               child: NotificationListener<ScrollNotification>(
                             onNotification: (scrollNotification) {
-                                var pr = MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 0.25;
-                                var pp = (scrollNotification.metrics.pixels + 30.0) / pr;
-                                var px = pp.toInt();
+                              var pp = (scrollNotification.metrics.pixels + 30.0) / pr;
+                              var px = pp.toInt();
 
-                                if (px != _currentIndex) {
-                                  _currentIndex = px;
-                                  setState(() {});
-                                }
-                                isScrollIdle = false;
+                              if (px != _currentIndex) {
+                                _currentIndex = px;
+                                setState(() {});
+                              }
+                              isScrollIdle = false;
 
                               if (scrollNotification is ScrollEndNotification) {
-                                _onEndScroll(scrollNotification.metrics);
-                                return false;
+                                if (!_preventScroll) {
+                                  _preventScroll = true;
+                                  _onEndScroll(scrollNotification.metrics);
+                                }
+                                return true;
                               }
                               // Basically you need something like:
                               // final _index = scrollOffset (or position) / item height;
@@ -320,9 +323,10 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                                   return HorizontalListView(
                                       key: ValueKey<String>(_listCoins[index].coin!.ticker!),
                                       coin: _listCoins[index].coin!,
-                                      callBack: (Coin c) {},
+                                      callBack: (int i) {
+                                        _jumpTo(i);
+                                      },
                                       index: index,
-                                      currentIndex: _currentIndex,
                                       active: index == _currentIndex ? true : false
                                       // active: _listCoins[index].coin! == _coinActive ? true : false,
                                       );
@@ -522,6 +526,24 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
     }
     _setActiveCoin(_listCoins[_currentIndex].coin);
     _txBloc!.changeCoin(_listCoins[_currentIndex].coin!);
+    Future.delayed(const Duration(milliseconds: 50), () async {
+      var scrollPosition = pr * _currentIndex;
+      await scrollCtrl.animateTo(scrollPosition, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
+      Future.delayed(const Duration(milliseconds: 10), () {
+        _preventScroll = false;
+      });
+    });
+  }
+
+  void _jumpTo(int index) {
+    _currentIndex = index;
+    Future.delayed(const Duration(milliseconds: 50), () async {
+      var scrollPosition = pr * _currentIndex;
+      await scrollCtrl.animateTo(scrollPosition, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
+      Future.delayed(const Duration(milliseconds: 10), () {
+        _preventScroll = false;
+      });
+    });
   }
 
   String _formatDecimal(Decimal d) {
@@ -617,7 +639,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
       for (var element in _listCoins) {
         if (element.coin == _coinActive) {
           Decimal? priceUSD = element.priceData!.prices!.usd!;
-          Decimal? priceBTC = element.priceData!.prices!.btc!;
+          // Decimal? priceBTC = element.priceData!.prices!.btc!;
           _percentage = element.priceData!.priceChange24HPercent!.usd!;
           usdCost = element.priceData!.prices!.usd!;
 

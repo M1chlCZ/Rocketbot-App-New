@@ -20,8 +20,12 @@ class SliderPainter extends CustomPainter {
     path.moveTo(0, size.height / 2);
     path.quadraticBezierTo(
         dragPosition.dx, dragPosition.dy, size.width, size.height / 2);
-
     canvas.drawPath(path, paint);
+
+    var paint1 = Paint()
+      ..color = Color(0xffaa44aa)
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(Offset(dragPosition.dx , dragPosition.dy/2 + size.height / 4), 10, paint1);
   }
 
   @override

@@ -1,11 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:get_it/get_it.dart';
+import 'package:get_version/get_version.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/balance_bloc.dart';
 import 'package:rocketbot/cache/price_graph_cache.dart';
@@ -52,6 +54,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   AppDatabase db = GetIt.I.get<AppDatabase>();
   User? _me;
   int _unreadNot = 0;
+  bool auth = false;
 
   bool _socialsOK = true;
 
@@ -84,6 +87,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     _posHandle();
     _codesUpload();
     _getNotifications();
+
     // portCalc = widget.listBalances != null ? true : false;
   }
 
@@ -107,7 +111,21 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     });
   }
 
+  Future<bool> _initPlatform() async  {
+    try {
+      var projectAppID = await GetVersion.appID;
+      if (projectAppID == "com.m1chl.rocketbot") {
+        return true;
+      }else{
+        return false;
+      }
+    } on PlatformException {
+      return false;
+    }
+  }
+
   _getUserInfo() async {
+   auth = await _initPlatform();
     try {
       final response = await _interface.get("User/Me");
       var d = User.fromJson(response);
@@ -382,22 +400,25 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    SizedBox(
-                                      height: 30,
-                                      width: 25,
-                                      child: NeuButton(
-                                        onTap: () async {
-                                          setState(() {
-                                            if (popMenu) {
-                                              popMenu = false;
-                                            } else {
-                                              popMenu = true;
-                                            }
-                                          });
-                                        },
-                                        imageIcon: Image.asset(
-                                          "images/candle.png",
-                                          color: _socialsOK ? Colors.white : Colors.red,
+                                    Visibility(
+                                      visible: auth,
+                                      child: SizedBox(
+                                        height: 30,
+                                        width: 25,
+                                        child: NeuButton(
+                                          onTap: () async {
+                                            setState(() {
+                                              if (popMenu) {
+                                                popMenu = false;
+                                              } else {
+                                                popMenu = true;
+                                              }
+                                            });
+                                          },
+                                          imageIcon: Image.asset(
+                                            "images/candle.png",
+                                            color: _socialsOK ? Colors.white : Colors.red,
+                                          ),
                                         ),
                                       ),
                                     ),

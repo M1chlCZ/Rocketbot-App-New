@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rocketbot/models/notifications.dart';
 import 'package:rocketbot/support/utils.dart';
 
@@ -48,17 +51,23 @@ class NotificationTile extends StatelessWidget {
                     const SizedBox(
                       height: 5.0,
                     ),
-                    AutoSizeText(node.body!,
+                    AutoSizeText(utf8convert(node.body!),
                         maxLines: 1,
                         minFontSize: 8.0,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400)),
+                        style: const TextStyle( fontWeight: FontWeight.w500, fontSize: 14.0, color: Colors.white),
+                    ),
                   ],
                 ),
               ),
             ),
           ),
         ));
+  }
+
+  String utf8convert(String text) {
+    List<int> bytes = text.toString().codeUnits;
+    return utf8.decode(bytes);
   }
 
   Color _getColor(String? link) {

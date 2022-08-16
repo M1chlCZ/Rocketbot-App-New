@@ -123,7 +123,7 @@
   "stake_get_all" : "Vybrat všechny mince",
   "stake_get_reward": "Vybrat odměnu",
   "stake_swipe": "Odeslat na staking",
-  "stake_amount" : "Množství mincí pro staking",
+  "stake_amount" : "Zadejte množství mincí pro staking",
   "stake_wait": "Chvíli to potrvá!",
   "stake_reward" : "Odměna",
   "stake_unconfirmed": "Nepotvrzené množství mincí stakingu",

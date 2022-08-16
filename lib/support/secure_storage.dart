@@ -7,7 +7,7 @@ class SecureStorage {
   static Future<String?> readStorage({required String key}) {
     try {
       const FlutterSecureStorage storage = FlutterSecureStorage();
-      const optionsApple = IOSOptions(accessibility: IOSAccessibility.first_unlock);
+      var optionsApple = const IOSOptions(accessibility: KeychainAccessibility.first_unlock);
       const optionsAndroid = AndroidOptions(encryptedSharedPreferences: true);
       return  storage.read(key: key, iOptions: optionsApple, aOptions: optionsAndroid);
     } catch (e) {
@@ -21,7 +21,7 @@ class SecureStorage {
   static Future<void> writeStorage({required String key,required String value}) {
     try {
       const FlutterSecureStorage storage = FlutterSecureStorage();
-      const optionsApple = IOSOptions(accessibility: IOSAccessibility.first_unlock);
+      const optionsApple = IOSOptions(accessibility: KeychainAccessibility.first_unlock);
       const optionsAndroid = AndroidOptions(encryptedSharedPreferences: true);
       return  storage.write(key: key, value: value, iOptions: optionsApple, aOptions: optionsAndroid);
     } catch (e) {
@@ -36,7 +36,7 @@ class SecureStorage {
   static Future<void> deleteStorage({required String key}) {
     try {
       const FlutterSecureStorage storage = FlutterSecureStorage();
-      const optionsApple = IOSOptions(accessibility: IOSAccessibility.first_unlock);
+      const optionsApple = IOSOptions(accessibility: KeychainAccessibility.first_unlock);
       const optionsAndroid = AndroidOptions(encryptedSharedPreferences: true);
       return   storage.delete(key: key, iOptions: optionsApple, aOptions: optionsAndroid);
     } catch (e) {
@@ -50,7 +50,7 @@ class SecureStorage {
   static Future<void> deleteAll() {
     try {
       const FlutterSecureStorage storage = FlutterSecureStorage();
-      const optionsApple = IOSOptions(accessibility: IOSAccessibility.first_unlock);
+      const optionsApple = IOSOptions(accessibility: KeychainAccessibility.first_unlock);
       const optionsAndroid = AndroidOptions(encryptedSharedPreferences: true);
       return   storage.deleteAll(iOptions: optionsApple, aOptions: optionsAndroid);
     } catch (e) {

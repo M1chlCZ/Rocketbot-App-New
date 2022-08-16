@@ -4,11 +4,10 @@ import 'package:rocketbot/models/coin.dart';
 
 class HorizontalListView extends StatelessWidget {
   final Coin coin;
-  final Function(Coin) callBack;
+  final Function(int) callBack;
   final bool active;
   final int index;
-  final int currentIndex;
-  const HorizontalListView({Key? key, required this.coin, required this.callBack, required this.active, required this.index, required this.currentIndex}) : super(key: key);
+  const HorizontalListView({Key? key, required this.coin, required this.callBack, required this.active, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +15,7 @@ class HorizontalListView extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.25,
       child: GestureDetector(
         onTap: () {
-          callBack(coin);
+          callBack(index);
         },
         child: Container(
           padding: EdgeInsets.only(left: 10, right: 10.0),
@@ -25,7 +24,7 @@ class HorizontalListView extends StatelessWidget {
               maxLines: 1,
               minFontSize: 8.0,
               textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 14.0, color: index == currentIndex ? Colors.white : Colors.white54),),
+              style: TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 14.0, color: active? Colors.white : Colors.white54),),
         ),
       ),
     );
