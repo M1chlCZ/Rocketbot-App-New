@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_version/get_version.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/balance_bloc.dart';
 import 'package:rocketbot/cache/price_graph_cache.dart';
@@ -112,15 +115,22 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   }
 
   Future<bool> _initPlatform() async  {
-    try {
-      var projectAppID = await GetVersion.appID;
-      if (projectAppID == "com.m1chl.rocketbot") {
-        return true;
-      }else{
+    if (Platform.isAndroid) {
+      try {
+        Directory tempDir = await getTemporaryDirectory();
+        String tempPath = tempDir.path;
+        var st = tempPath.split("/data/user");
+        var projectAppID = await GetVersion.appID;
+        if (projectAppID == "com.m1chl.rocketbot" && st.length == 2 && !tempPath.contains("/999/")) {
+          return true;
+        } else {
+          return false;
+        }
+      } on PlatformException {
         return false;
       }
-    } on PlatformException {
-      return false;
+    }else{
+      return true;
     }
   }
 
@@ -220,7 +230,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     try {
       final response = await _interface.post("notification/list", {}, pos: true);
       Notifications not = Notifications.fromJson(response);
-      db.addNot(not);
+      await db.addNot(not);
       var i = await db.getNotUnread();
       if (i == 0) {
         return;
@@ -417,7 +427,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                           },
                                           imageIcon: Image.asset(
                                             "images/candle.png",
-                                            color: _socialsOK ? Colors.white : Colors.red,
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ),

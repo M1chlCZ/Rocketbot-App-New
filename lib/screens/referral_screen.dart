@@ -10,6 +10,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/models/deposit_address.dart';
+import 'package:rocketbot/netInterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/gradient_text.dart';
@@ -35,6 +36,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
   bool firebaseToken = false;
   bool mergeAddress = false;
   bool issues = false;
+  bool codeErr = false;
 
   @override
   void initState() {
@@ -45,9 +47,20 @@ class _ReferralScreenState extends State<ReferralScreen> {
   }
 
   _getRefCode() async {
-    var res = await interface.get('code/get', pos: true);
-    refCode = res['refCode'];
+    try {
+      var res = await interface.get('code/get', request: "version=1", pos: true, debug: true);
+      refCode = res['refCode'];
+      codeErr = false;
+    }on ConflictDataException catch (e) {
+      Dialogs.openAlertBox(context, "Error", e.toString());
+      codeErr = true;
+    } catch (e) {
+      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error,e.toString());
+      debugPrint(e.toString());
+      codeErr = true;
+    }
     setState(() {});
+
   }
 
   Future<void> _share() async {
@@ -308,7 +321,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                 color: Colors.transparent,
                               ),
                               child: Center(
-                                child: refCode == null
+                                child:!codeErr ? refCode == null
                                     ? const Center(
                                         child: CircularProgressIndicator(
                                           color: Colors.black54,
@@ -324,10 +337,9 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                           foregroundColor: const Color(0xFF681E6E),
                                           backgroundColor: Colors.white,
                                           version: QrVersions.auto,
-                                          embeddedImage: const AssetImage("images/rocket_pin.png"),
                                           gapless: false,
                                         ),
-                                      ),
+                                      ) : Text("There has been issues with getting the code", style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18.0, color: Colors.black87), textAlign: TextAlign.center, ),
                               ),
                             ),
                           ],
