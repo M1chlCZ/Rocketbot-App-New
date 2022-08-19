@@ -4,11 +4,11 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/models/deposit_address.dart';
 import 'package:rocketbot/netInterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
@@ -31,6 +31,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
   GlobalKey<ReferralWidgetState> refKey = GlobalKey();
   NetInterface interface = NetInterface();
   String? refCode;
+  double reward = 0.0;
   bool refUsed = true;
   bool deviceID = false;
   bool firebaseToken = false;
@@ -50,17 +51,17 @@ class _ReferralScreenState extends State<ReferralScreen> {
     try {
       var res = await interface.get('code/get', request: "version=1", pos: true, debug: true);
       refCode = res['refCode'];
+      reward = double.parse(res['reward'].toString());
       codeErr = false;
-    }on ConflictDataException catch (e) {
+    } on ConflictDataException catch (e) {
       Dialogs.openAlertBox(context, "Error", e.toString());
       codeErr = true;
     } catch (e) {
-      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error,e.toString());
+      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
       debugPrint(e.toString());
       codeErr = true;
     }
     setState(() {});
-
   }
 
   Future<void> _share() async {
@@ -73,21 +74,20 @@ class _ReferralScreenState extends State<ReferralScreen> {
         final directory = Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
         final imagePath = await File('${directory!.path}/qr_code.png').create();
         await imagePath.writeAsBytes(imageBytes);
-        Share.shareFiles(['${directory.path}/qr_code.png'], text: "Earn 50 free coins now! \nDownload RocketBot wallet app, and get paid to engage on social media with giveaways & airdrops.\n\nUse my referral code: $refCode \n\niOS - https://apple.co/38lAzWO \nAndroid - https://bit.ly/33NZlfS\n#Merge @rocketbotpro"
-        );
+        Share.shareFiles(['${directory.path}/qr_code.png'],
+            text:
+                "Earn 50 free coins now! \nDownload RocketBot wallet app, and get paid to engage on social media with giveaways & airdrops.\n\nUse my referral code: $refCode \n\niOS - https://apple.co/38lAzWO \nAndroid - https://bit.ly/33NZlfS\n#Merge @rocketbotpro");
       }
     } catch (e) {
       print(e);
     }
   }
 
-
-
   Future<void> _getReward(String? code) async {
     String udid = await FlutterUdid.consistentUdid;
     if (code != null) {
       try {
-        await interface.post('code/submit', {"referral": code, "uuid": udid}, pos: true);
+        await interface.post('code/submit', {"referral": code, "uuid": udid, "ver": 2}, pos: true);
         await SecureStorage.writeStorage(key: "refCode", value: code);
         _checkStatus();
         if (mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way!");
@@ -99,7 +99,6 @@ class _ReferralScreenState extends State<ReferralScreen> {
     await SecureStorage.deleteStorage(key: 'r_code');
     _checkStatus();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -159,8 +158,8 @@ class _ReferralScreenState extends State<ReferralScreen> {
                     ),
                     refUsed == false
                         ? Column(
-                          children: [
-                            Container(
+                            children: [
+                              Container(
                                 padding: const EdgeInsets.all(10.0),
                                 margin: const EdgeInsets.all(0.0),
                                 decoration: BoxDecoration(
@@ -174,7 +173,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                 child: Column(
                                   children: [
                                     GradientText(
-                                      AppLocalizations.of(context)!.ref_invite,
+                                      AppLocalizations.of(context)!.ref_invite.replaceAll("{1}", reward.toString()),
                                       align: TextAlign.left,
                                       gradient: const LinearGradient(colors: [
                                         Colors.white,
@@ -216,52 +215,61 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                   ],
                                 ),
                               ),
-                            const SizedBox(height: 20.0,),
-                            Visibility(
-                              visible: issues,
-                              child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(10.0),
-                                margin: const EdgeInsets.all(0.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  // color: Colors.white.withOpacity(0.05)
-                                  gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
-                                    Colors.deepOrangeAccent,
-                                    Colors.red,
-                                  ]),
-                                ),
-                                child: Column (
-                                  mainAxisSize: MainAxisSize.max,
-
-                                  children: [
-                                    const Text('Promotion eligibility issues', style: TextStyle(color: Colors.white70),),
-                                    const Divider(height: 1.0, color: Colors.white70,),
-                                    const SizedBox(height: 5.0,),
-                                    Visibility(
-                                      visible: deviceID,
-                                      child: const Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text('Device id missing or unobtainable', style: TextStyle(color: Colors.white70))),
-                                    ),
-                                    Visibility(
-                                      visible: firebaseToken,
-                                      child: const Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text('Firebase token unobtainable', style: TextStyle(color: Colors.white70))),
-                                    ),
-                                    Visibility(
-                                      visible: mergeAddress,
-                                      child: const Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text('Merge Address missing (Check your email for verification)', style: TextStyle(color: Colors.white70))),
-                                    ),
-                                  ],
-                                )
+                              const SizedBox(
+                                height: 20.0,
                               ),
-                            )
-                          ],
-                        )
+                              Visibility(
+                                visible: issues,
+                                child: Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(10.0),
+                                    margin: const EdgeInsets.all(0.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      // color: Colors.white.withOpacity(0.05)
+                                      gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
+                                        Colors.deepOrangeAccent,
+                                        Colors.red,
+                                      ]),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        const Text(
+                                          'Promotion eligibility issues',
+                                          style: TextStyle(color: Colors.white70),
+                                        ),
+                                        const Divider(
+                                          height: 1.0,
+                                          color: Colors.white70,
+                                        ),
+                                        const SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Visibility(
+                                          visible: deviceID,
+                                          child: const Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text('Device id missing or unobtainable', style: TextStyle(color: Colors.white70))),
+                                        ),
+                                        Visibility(
+                                          visible: firebaseToken,
+                                          child: const Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text('Firebase token unobtainable', style: TextStyle(color: Colors.white70))),
+                                        ),
+                                        Visibility(
+                                          visible: mergeAddress,
+                                          child: const Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text('Merge Address missing (Check your email for verification)',
+                                                  style: TextStyle(color: Colors.white70))),
+                                        ),
+                                      ],
+                                    )),
+                              )
+                            ],
+                          )
                         : Container(
                             padding: const EdgeInsets.all(10.0),
                             margin: const EdgeInsets.all(0.0),
@@ -321,25 +329,31 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                 color: Colors.transparent,
                               ),
                               child: Center(
-                                child:!codeErr ? refCode == null
-                                    ? const Center(
-                                        child: CircularProgressIndicator(
-                                          color: Colors.black54,
-                                        ),
-                                      )
-                                    : ClipRRect(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        child: QrImage(
-                                          dataModuleStyle: const QrDataModuleStyle(dataModuleShape: QrDataModuleShape.circle),
-                                          eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.circle),
-                                          errorCorrectionLevel: QrErrorCorrectLevel.H,
-                                          data: refCode ?? 'empty',
-                                          foregroundColor: const Color(0xFF681E6E),
-                                          backgroundColor: Colors.white,
-                                          version: QrVersions.auto,
-                                          gapless: false,
-                                        ),
-                                      ) : Text("There has been issues with getting the code", style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18.0, color: Colors.black87), textAlign: TextAlign.center, ),
+                                child: !codeErr
+                                    ? refCode == null
+                                        ? const Center(
+                                            child: CircularProgressIndicator(
+                                              color: Colors.black54,
+                                            ),
+                                          )
+                                        : ClipRRect(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            child: QrImage(
+                                              dataModuleStyle: const QrDataModuleStyle(dataModuleShape: QrDataModuleShape.circle),
+                                              eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.circle),
+                                              errorCorrectionLevel: QrErrorCorrectLevel.H,
+                                              data: refCode ?? 'empty',
+                                              foregroundColor: const Color(0xFF681E6E),
+                                              backgroundColor: Colors.white,
+                                              version: QrVersions.auto,
+                                              gapless: false,
+                                            ),
+                                          )
+                                    : Text(
+                                        "There has been issues with getting the code",
+                                        style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18.0, color: Colors.black87),
+                                        textAlign: TextAlign.center,
+                                      ),
                               ),
                             ),
                           ],
@@ -389,17 +403,13 @@ class _ReferralScreenState extends State<ReferralScreen> {
       String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
       String? depAddr = await _getMergeDepositAddr();
       if (depAddr != null) {
-        var m = {
-          "uuid": udid,
-          "firebase": firebase,
-          "mergeDeposit" : depAddr
-        };
+        var m = {"uuid": udid, "firebase": firebase, "mergeDeposit": depAddr};
         await interface.post('auth/codes', m, pos: true);
         String? rewardCode = await SecureStorage.readStorage(key: 'r_code');
         if (rewardCode != null && rewardCode.isNotEmpty) {
           _getReward(rewardCode);
         }
-      }else{
+      } else {
         debugPrint("CODES NULL");
         _reUploadCodes();
       }
@@ -418,7 +428,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
     });
   }
 
-  _checkIssues() async  {
+  _checkIssues() async {
     String? udid = await FlutterUdid.consistentUdid;
     // String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
     String? depAddr = await _getMergeDepositAddr();
@@ -440,8 +450,6 @@ class _ReferralScreenState extends State<ReferralScreen> {
       _codesUpload();
     }
   }
-
-
 
   _checkStatus() async {
     String? s = await SecureStorage.readStorage(key: 'refCode');
@@ -479,7 +487,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
         // Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Can't get Merge deposit address, please verify your account!");
         return null;
       }
-    }else{
+    } else {
       return s;
     }
   }

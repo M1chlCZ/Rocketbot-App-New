@@ -6,8 +6,8 @@ import 'package:rocketbot/models/loterries.dart';
 import 'package:rocketbot/models/lottery_details.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/support/utils.dart';
-import 'package:rocketbot/widgets/airdrop_members_tile.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:rocketbot/widgets/lottery_member_tile.dart';
 
 import '../netinterface/interface.dart';
 
@@ -43,8 +43,8 @@ class _LotteryDetailScreenState extends State<LotteryDetailScreen> {
                   if (snapshot.hasData) {
                     switch (snapshot.data!.status) {
                       case Status.completed:
-                        AirdropData ag = snapshot.data!.data!["activeLottery"];
-                        List<AirdropMembers>? memba = ag.members;
+                        LotteryDetailsData ag = snapshot.data!.data!["activeLottery"];
+                        List<Members>? memba = ag.members;
                         return Stack(
                           children: [
                             SingleChildScrollView(
@@ -64,7 +64,7 @@ class _LotteryDetailScreenState extends State<LotteryDetailScreen> {
                                         const SizedBox(
                                           width: 5,
                                         ),
-                                        Text("Airdrop details", style: Theme.of(context).textTheme.headline3),
+                                        Text("Spin detail", style: Theme.of(context).textTheme.headline3),
                                       ]),
                                     )),
                                 const SizedBox(
@@ -73,11 +73,11 @@ class _LotteryDetailScreenState extends State<LotteryDetailScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                                   child: SizedBox(
-                                    height: 80.0,
+                                    height: 100.0,
                                     child: Row(
                                       children: [
                                         Expanded(
-                                          child: smallBlock("Like, Retweet, Comment & Follow ${ag.creator?.name ?? ''}", "Rules", color: Colors.green),
+                                          child: smallBlockTwo("Reply with phrase #${ag.coin?.cryptoId ?? ""}, retweet & like the tweet to take part in ${ag.coin?.cryptoId ?? ""} spin wheel", "Rules", color: Colors.green),
                                         ),
                                       ],
                                     ),
@@ -162,7 +162,7 @@ class _LotteryDetailScreenState extends State<LotteryDetailScreen> {
                                         physics: const NeverScrollableScrollPhysics(),
                                         itemCount: memba!.length,
                                         itemBuilder: (ctx, index) {
-                                          return AirdropMembersTile(member: memba[index], callBack: (AirdropMembers a) {});
+                                          return LotteryMembersTile(member: memba[index], callBack: (AirdropMembers a) {});
                                         })),
                                 const SizedBox(height: 100.0,),
                               ]),
@@ -220,6 +220,38 @@ Widget smallBlock(String main, String sub, {Color color = Colors.white10}) {
             child: AutoSizeText(
               main,
               maxLines: 1,
+              minFontSize: 8.0,
+              style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Colors.white),
+            ),
+          ),
+          AutoSizeText(
+            sub,
+            maxLines: 1,
+            minFontSize: 8.0,
+            style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 13.0, color: Colors.white54),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget smallBlockTwo(String main, String sub, {Color color = Colors.white10}) {
+  return Container(
+    padding: const EdgeInsets.all(8.0),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(5.0),
+      color: color,
+    ),
+    child: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 50.0,
+            child: AutoSizeText(
+              main,
+              maxLines: 2,
               minFontSize: 8.0,
               style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Colors.white),
             ),

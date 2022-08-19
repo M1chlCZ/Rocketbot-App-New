@@ -321,7 +321,7 @@ class SocialMediaAccount {
   SocialMediaAccount.fromJson(dynamic json) {
     _id = json['id'];
     _userId = json['userId'];
-    _rocketAccountId = json['rocketAccountId'];
+    _rocketAccountId = json['rocketAccountId'].toString();
     _name = json['name'];
     _surname = json['surname'];
     _username = json['username'];
@@ -641,7 +641,7 @@ class Creator {
   Creator.fromJson(dynamic json) {
     _id = json['id'];
     _userId = json['userId'];
-    _rocketAccountId = json['rocketAccountId'];
+    _rocketAccountId = json['rocketAccountId'].toString();
     _name = json['name'];
     _surname = json['surname'];
     _username = json['username'];
