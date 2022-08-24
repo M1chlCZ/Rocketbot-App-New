@@ -18,6 +18,7 @@ import 'package:rocketbot/screens/farm_main_screen.dart';
 import 'package:rocketbot/screens/socials_screen.dart';
 import 'package:rocketbot/widgets/coin_list_view.dart';
 import 'package:rocketbot/widgets/earnings_chart.dart';
+import 'package:rocketbot/widgets/three_card.dart';
 
 class EarningsScreen extends StatefulWidget {
   const EarningsScreen({Key? key}) : super(key: key);

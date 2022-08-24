@@ -73,6 +73,7 @@ class LoginScreenState extends State<LoginScreen> {
         });
       }
     });
+    setState(() { });
   }
 
   void _initPackageInfo() async {
@@ -82,27 +83,6 @@ class LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  Future<bool> _initPlatform() async  {
-    if (Platform.isAndroid) {
-      try {
-        Directory tempDir = await getTemporaryDirectory();
-        String tempPath = tempDir.path;
-        var st = tempPath.split("/data/user");
-        var projectAppID = await GetVersion.appID;
-        var a = await GetVersion.appName;
-        if (mounted) Dialogs.openAlertBox(context, "Info", "$tempPath | $projectAppID | $a");
-        if (projectAppID == "com.m1chl.rocketbot" && st.length == 2 && !tempPath.contains("/999/")) {
-          return true;
-        } else {
-          return false;
-        }
-      } on PlatformException {
-        return false;
-      }
-    }else{
-      return true;
-    }
-  }
 
   @override
   void setState(fn) {

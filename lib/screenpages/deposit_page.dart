@@ -9,9 +9,7 @@ import 'package:rocketbot/models/coin.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/picture_cache.dart';
-import 'package:rocketbot/widgets/slider_widget.dart';
 import 'package:share/share.dart';
-import 'package:vibration/vibration.dart';
 
 import '../support/auto_size_text_field.dart';
 
@@ -633,7 +631,6 @@ class DepositPageState extends State<DepositPage> {
                             Navigator.pop(context);
                           },
                           onLongPress: () {
-                            Vibration.vibrate(duration: 200);
                             Share.share(qr);
                             Navigator.pop(context);
                           },

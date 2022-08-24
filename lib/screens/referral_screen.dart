@@ -470,6 +470,10 @@ class _ReferralScreenState extends State<ReferralScreen> {
         refUsed = true;
       });
     }
+
+    setState(() {
+      refUsed = false;
+    });
   }
 
   Future<String?> _getMergeDepositAddr() async {

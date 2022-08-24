@@ -486,10 +486,10 @@ class AboutScreenState extends State<AboutScreen> {
                           height: 25,
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
-                            child: Image.asset("images/telegram.png", color: Colors.white70),
+                            child: Image.asset("images/linked.png", color: Colors.white70),
                           ),
                           onTap: () {
-                            _launchURL("https://t.me/m1chlcz");
+                            _launchURL("https://www.linkedin.com/in/michal-%C5%BE%C3%ADdek-b9b71b98/");
                           },
                         ),
                         const SizedBox(

@@ -90,8 +90,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     _posHandle();
     _codesUpload();
     _getNotifications();
-
-    // portCalc = widget.listBalances != null ? true : false;
   }
 
   void _fillSort() {
@@ -692,6 +690,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                   return ListView.builder(
                                       shrinkWrap: true,
                                       physics: const NeverScrollableScrollPhysics(),
+                                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                                       itemCount: snapshot.data!.data!.length,
                                       itemBuilder: (ctx, index) {
                                         return CoinListView(

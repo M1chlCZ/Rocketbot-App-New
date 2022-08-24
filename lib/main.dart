@@ -15,6 +15,7 @@ import 'package:rocketbot/support/get_setup.dart';
 import 'package:rocketbot/support/globals.dart' as globals;
 import 'package:rocketbot/support/notification_helper.dart';
 import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/utils.dart';
 
 import 'Support/material_color_generator.dart';
 
@@ -37,6 +38,11 @@ void main() async {
     badge: true,
     sound: true,
   );
+  RemoteMessage? initialMessage =
+  await FirebaseMessaging.instance.getInitialMessage();
+  if (initialMessage != null && initialMessage.data['link'] != null) {
+    Utils.openLink(initialMessage.data["dataLink"]);
+  }
 
   runApp(
     Phoenix(
