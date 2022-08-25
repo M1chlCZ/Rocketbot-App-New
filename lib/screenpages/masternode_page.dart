@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/masternode_graph_bloc.dart';
 import 'package:rocketbot/models/balance_portfolio.dart';
@@ -69,6 +70,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   MasternodeGraphBloc? _mnBloc;
   MasternodeInfo? _mnInfo;
   late Coin _coinActive;
+  var formatter = NumberFormat('#,###');
 
 
   bool _staking = false;
@@ -87,6 +89,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   String _averateTimeStart = "00:00:00";
   double _price = 0.0;
   double _free = 0.0;
+  List<int> _collateralTiers=[];
 
   double? _fee;
   double? _min;
@@ -160,6 +163,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     _collateral = _mnInfo!.collateral!;
     _freeMN = _mnInfo?.freeList?.length ?? 0;
     _pendingMasternodes = _mnInfo?.pendingList?.length ?? 0;
+    _collateralTiers = _mnInfo?.collateralTiers ?? [_collateral];
     setState(() { });
   }
 
@@ -325,7 +329,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                           child: Padding(
                             padding: const EdgeInsets.only(right: 4.0),
                             child: AutoSizeText(
-                              _collateral.toString(),
+                             _collateralTiers.length > 1 ? "MULTIPLE" : _collateral.toString(),
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
@@ -333,11 +337,14 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                             ),
                           ),
                         ),
-                        Text(
-                          _coinActive.cryptoId!,
-                          // textAlign: TextAlign.end,
-                          style: const TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2.0),
+                          child: Text(
+                            _collateralTiers.length > 1 ? "TIERS" :  _coinActive.cryptoId!,
+                            // textAlign: TextAlign.end,
+                            style: const TextStyle(
+                                fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
+                          ),
                         ),
                       ],
                     ),
@@ -690,61 +697,111 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 2.0, right: 2.0, top: 30.0),
-
-                  child: Container(
-                    margin: const EdgeInsets.all(10.0),
-                    padding: const EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.0),
-                        color: const Color(0xFFF68DB2)
-                    ),
-                    child: Stack(
-                      children: [
-                        SlideAction(
-                          height: 60.0,
-                          sliderButtonIconPadding: 6.0,
-                          borderRadius: 10.0,
-                          text: AppLocalizations.of(context)!.mn_start,
-                          innerColor: const Color(0xFFF68DB2),
-                          outerColor: const Color(0xFF252F45),
-                          elevation: 0.5,
-                          // submittedIcon: const Icon(Icons.check, size: 30.0, color: Colors.lightGreenAccent,),
-                          submittedIcon: const CircularProgressIndicator(
-                            strokeWidth: 2.0,
-                            color: Color(0xFFF68DB2),
-                          ),
-                          sliderButtonIcon: const Icon(
-                            Icons.arrow_forward,
-                            color: Color(0xFF252F45),
-                            size: 35.0,
-                          ),
-                          sliderRotate: false,
-                          textStyle: const TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
-                          key: _keyStake,
-                          onSubmit: () {
-                            _createWithdrawal();
-                          },
-                        ),
-                        if (_freeMN == 0)
+                  padding: const EdgeInsets.only(left: 2.0, right: 2.0, top: 15.0),
+                  child: Column(
+                    children: [
+                      if(_collateralTiers.length > 1)
                         Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60.0,
+                          margin: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(10.0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              color: const Color(0xFFBE235A)),
-                          child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left:8.0, right: 8.0),
-                                child: AutoSizeText("No ${widget.activeCoin.name} masternode available!",
-                                  maxLines: 1,
-                                  minFontSize: 8.0,
-                                  style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white70),),
-                              )),
-                        )
-                      ],
-                    ),
+                              borderRadius: BorderRadius.circular(12.0),
+                              color: const Color(0xFFF68DB2)
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Padding(
+                                  padding:  EdgeInsets.only(top: 4.0),
+                                  child: Text("Masternode tier", style: TextStyle(
+                                      fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white)),
+                                ),
+                                Theme(
+                                  data: Theme.of(context).copyWith(
+                                      canvasColor: const Color(0xFFF68DB2)
+                                  ),
+                                  child: DropdownButton<int>(
+                                    value: _collateral,
+                                    isDense: true,
+                                    onChanged: (int? val) async {
+                                      _collateral = val!;
+                                      setState(() { });
+                                    },
+                                    items: _collateralTiers
+                                        .map((e) => DropdownMenuItem(
+                                        value: e,
+                                        child: SizedBox(
+                                            width: 130,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(bottom: 2.0),
+                                              child: Text("${formatter.format(e).replaceAll(',', ' ')} ${_coinActive.cryptoId!}",
+                                                  style:const TextStyle(
+                                                      fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
+                                                textAlign: TextAlign.center,),
+                                            ))))
+                                        .toList(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      Container(
+                        margin: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(3.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                            color: const Color(0xFFF68DB2)
+                        ),
+                        child: Stack(
+                          children: [
+                            SlideAction(
+                              height: 60.0,
+                              sliderButtonIconPadding: 6.0,
+                              borderRadius: 10.0,
+                              text: AppLocalizations.of(context)!.mn_start,
+                              innerColor: const Color(0xFFF68DB2),
+                              outerColor: const Color(0xFF252F45),
+                              elevation: 0.5,
+                              // submittedIcon: const Icon(Icons.check, size: 30.0, color: Colors.lightGreenAccent,),
+                              submittedIcon: const CircularProgressIndicator(
+                                strokeWidth: 2.0,
+                                color: Color(0xFFF68DB2),
+                              ),
+                              sliderButtonIcon: const Icon(
+                                Icons.arrow_forward,
+                                color: Color(0xFF252F45),
+                                size: 35.0,
+                              ),
+                              sliderRotate: false,
+                              textStyle: const TextStyle(
+                                  fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
+                              key: _keyStake,
+                              onSubmit: () {
+                                _createWithdrawal();
+                              },
+                            ),
+                            if (_freeMN == 0)
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 60.0,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: const Color(0xFFBE235A)),
+                              child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left:8.0, right: 8.0),
+                                    child: AutoSizeText("No ${widget.activeCoin.name} masternode available!",
+                                      maxLines: 1,
+                                      minFontSize: 8.0,
+                                      style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white70),),
+                                  )),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(
@@ -901,7 +958,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       return;
     }
 
-    var amt = _mnInfo!.collateral!;
+    var amt = _collateral;
     bool minAmount = amt < _min!;
 
     if (amt > _free) {

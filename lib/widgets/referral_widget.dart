@@ -36,7 +36,6 @@ class ReferralWidgetState extends State<ReferralWidget> {
         });
       }
     });
-    controller.text = "Sdk1Q6oo-V@Bd#ZS-vpTYvya-CL6rcI7";
     handleStuff();
   }
 

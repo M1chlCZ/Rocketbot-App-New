@@ -15,6 +15,7 @@ class MasternodeInfo {
       double? averageRewardPerDay, 
       String? averageTimeToStart,
     int? collateral,
+    List<int>? collateralTiers,
       List<FreeList>? freeList, 
       bool? hasError, 
       List<MnList>? mnList, 
@@ -32,6 +33,7 @@ class MasternodeInfo {
     _status = status;
     _pendingList = pendingList;
     _collateral = collateral;
+    _collateralTiers = _collateralTiers;
 }
 
   MasternodeInfo.fromJson(dynamic json) {
@@ -40,6 +42,7 @@ class MasternodeInfo {
     _averageRewardPerDay = double.parse(json['average_reward_per_day'].toString());
     _averageTimeToStart = json['average_time_to_start'];
     _collateral = json['collateral'];
+    _collateralTiers = json['collateral_tiers'] != null ? json['collateral_tiers'].cast<int>() : [];
     if (json['free_list'] != null) {
       _freeList = [];
       json['free_list'].forEach((v) {
@@ -78,6 +81,7 @@ class MasternodeInfo {
   List<PendingList>? _pendingList;
   String? _status;
   int? _collateral;
+  List<int>? _collateralTiers;
 MasternodeInfo copyWith({  int? activeNodes,
   String? averagePayTime,
   double? averageRewardPerDay,
@@ -100,6 +104,7 @@ MasternodeInfo copyWith({  int? activeNodes,
   pendingList: pendingList ?? _pendingList,
   status: status ?? _status,
   collateral: collateral ?? _collateral,
+  collateralTiers: collateralTiers ?? _collateralTiers,
 );
   int? get activeNodes => _activeNodes;
   String? get averagePayTime => _averagePayTime;
@@ -112,6 +117,7 @@ MasternodeInfo copyWith({  int? activeNodes,
   List<PendingList>? get pendingList => _pendingList;
   String? get status => _status;
   int? get collateral => _collateral;
+  List<int>? get collateralTiers => _collateralTiers;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -120,6 +126,7 @@ MasternodeInfo copyWith({  int? activeNodes,
     map['average_reward_per_day'] = _averageRewardPerDay;
     map['average_time_to_start'] = _averageTimeToStart;
     map['collateral'] = _collateral;
+    map['collateral_tiers'] = _collateralTiers;
     if (_freeList != null) {
       map['free_list'] = _freeList?.map((v) => v.toJson()).toList();
     }

@@ -36,7 +36,7 @@ class NotificationTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
-                            child: AutoSizeText(node.title!,
+                            child: AutoSizeText(utf8convert(node.title!),
                                 maxLines: 1,
                                 minFontSize: 8.0,
                                 overflow: TextOverflow.ellipsis,

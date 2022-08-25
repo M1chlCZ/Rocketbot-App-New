@@ -254,7 +254,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     String udid = await FlutterUdid.consistentUdid;
     if (code != null) {
       try {
-        await _interface.post('code/submit', {"referral": code, "uuid": udid, "ver": 2}, pos: true);
+        await _interface.post('code/submit', {"referral": code, "uuid": udid, "ver": 3}, pos: true);
         await SecureStorage.writeStorage(key: "refCode", value: code);
         if (mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way|");
       } catch (e) {

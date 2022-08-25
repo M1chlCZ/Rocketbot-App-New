@@ -71,15 +71,15 @@ class _ReferralScreenState extends State<ReferralScreen> {
       final byteData = await image?.toByteData(format: ImageByteFormat.png);
       final imageBytes = byteData?.buffer.asUint8List();
       if (imageBytes != null) {
-        final directory = Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
-        final imagePath = await File('${directory!.path}/qr_code.png').create();
+        final directory = await getTemporaryDirectory();
+        final imagePath = await File('${directory.path}/qr_code.png').create();
         await imagePath.writeAsBytes(imageBytes);
         Share.shareFiles(['${directory.path}/qr_code.png'],
             text:
-                "Earn 50 free coins now! \nDownload RocketBot wallet app, and get paid to engage on social media with giveaways & airdrops.\n\nUse my referral code: $refCode \n\niOS - https://apple.co/38lAzWO \nAndroid - https://bit.ly/33NZlfS\n#Merge @rocketbotpro");
+                "Earn $reward free coins now! \nDownload RocketBot wallet app, and get paid to engage on social media with giveaways & airdrops.\n\nUse my referral code: $refCode \n\niOS - https://apple.co/38lAzWO \nAndroid - https://bit.ly/33NZlfS\n#Merge @rocketbotpro");
       }
     } catch (e) {
-      print(e);
+      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
     }
   }
 
@@ -87,7 +87,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
     String udid = await FlutterUdid.consistentUdid;
     if (code != null) {
       try {
-        await interface.post('code/submit', {"referral": code, "uuid": udid, "ver": 2}, pos: true);
+        await interface.post('code/submit', {"referral": code, "uuid": udid, "ver": 3}, pos: true);
         await SecureStorage.writeStorage(key: "refCode", value: code);
         _checkStatus();
         if (mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way!");
@@ -470,10 +470,6 @@ class _ReferralScreenState extends State<ReferralScreen> {
         refUsed = true;
       });
     }
-
-    setState(() {
-      refUsed = false;
-    });
   }
 
   Future<String?> _getMergeDepositAddr() async {
