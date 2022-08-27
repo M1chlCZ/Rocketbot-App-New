@@ -1,9 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:rocketbot/models/masternode_info.dart';
 import 'package:rocketbot/netInterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/dialogs.dart';
+import 'package:rocketbot/support/duration_extension.dart';
 import 'package:rocketbot/support/utils.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 
@@ -24,12 +26,13 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
   void initState() {
     super.initState();
     sortedList = widget.mnInfo.mnList!;
-    sortedList.sort((a,b) {
+    sortedList.sort((a, b) {
       var A = a.id!;
       var B = b.id!;
       return A.compareTo(B);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,36 +109,76 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10.0,),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const AutoSizeText("Average payrate:",
+                              const AutoSizeText(
+                                "Running time:",
                                 maxLines: 1,
                                 minFontSize: 8,
-                                style: TextStyle(fontSize: 14.0, color: Colors.white70),),
-                              const SizedBox(width: 20.0,),
+                                style: TextStyle(fontSize: 14.0, color: Colors.white70),
+                              ),
+                              const SizedBox(
+                                width: 20.0,
+                              ),
                               Expanded(
-                                child: AutoSizeText(averagePayFormat(sortedList[index].averagePayTime.toString()),
+                                child: AutoSizeText(
+                                  timeActive(sortedList[index].timeActive ?? 0),
                                   maxLines: 1,
                                   minFontSize: 8,
                                   textAlign: TextAlign.end,
-                                  style: const TextStyle(fontSize: 14.0, color: Colors.white70),),
+                                  style: const TextStyle(fontSize: 14.0, color: Colors.white70),
+                                ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10.0,),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const AutoSizeText("Last seen:",
+                              const AutoSizeText(
+                                "Average payrate:",
                                 maxLines: 1,
                                 minFontSize: 8,
-                                style: TextStyle(fontSize: 14.0, color: Colors.white70),),
-                              AutoSizeText(Utils.convertDate(sortedList[index].lastSeen),
+                                style: TextStyle(fontSize: 14.0, color: Colors.white70),
+                              ),
+                              const SizedBox(
+                                width: 20.0,
+                              ),
+                              Expanded(
+                                child: AutoSizeText(
+                                  averagePayFormat(sortedList[index].averagePayTime.toString()),
+                                  maxLines: 1,
+                                  minFontSize: 8,
+                                  textAlign: TextAlign.end,
+                                  style: const TextStyle(fontSize: 14.0, color: Colors.white70),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const AutoSizeText(
+                                "Last seen:",
                                 maxLines: 1,
                                 minFontSize: 8,
-                                style: const TextStyle(fontSize: 14.0, color: Colors.white70),),
+                                style: TextStyle(fontSize: 14.0, color: Colors.white70),
+                              ),
+                              AutoSizeText(
+                                Utils.convertDate(sortedList[index].lastSeen),
+                                maxLines: 1,
+                                minFontSize: 8,
+                                style: const TextStyle(fontSize: 14.0, color: Colors.white70),
+                              ),
                             ],
                           ),
                           const SizedBox(
@@ -150,15 +193,19 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                                     Dialogs.openAlertBox(context, "Info", "Not yet implemented");
                                   },
                                   color: Colors.transparent,
-                                  child: const Text("INFO", style: TextStyle(color: Colors.white24),)),
+                                  child: const Text(
+                                    "INFO",
+                                    style: TextStyle(color: Colors.white24),
+                                  )),
                               const SizedBox(
                                 width: 20.0,
                               ),
                               FlatCustomButton(
                                   onTap: () {
-                                    Dialogs.openMNWithdrawBox(context,sortedList[index].id!, () { _withdrawNode(sortedList[index].id!);});
+                                    Dialogs.openMNWithdrawBox(context, sortedList[index].id!, () {
+                                      _withdrawNode(sortedList[index].id!);
+                                    });
                                     // Dialogs.openAlertBox(context, "Info", "Not implemented");
-
                                   },
                                   color: Colors.transparent,
                                   child: const Text(
@@ -180,23 +227,36 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
 
   _withdrawNode(int id) async {
     try {
-      Map<String, dynamic> m = {"idNode" : id};
+      Map<String, dynamic> m = {"idNode": id};
       await interface.post("masternode/withdraw", m, pos: true);
-     if(mounted)Dialogs.openAlertBox(context, "Info", "Tokens are on the way!");
-    } catch (e) {
-      var err = e as ConflictDataException;
-      Dialogs.openAlertBox(context, "Error", err.toString());
+      if (mounted) Dialogs.openAlertBox(context, "Info", "Tokens are on the way!");
+    } catch (ee) {
+      try {
+        var err = ee as ConflictDataException;
+        Dialogs.openAlertBox(context, "Error", err.toString());
+      } catch (e) {
+        Dialogs.openAlertBox(context, "Error", ee.toString());
+      }
     }
   }
 
   String averagePayFormat(String s) {
     if (s == "0") {
       return "Waiting for first reward";
-    }else if (s == "00:00:00.000000") {
+    } else if (s == "00:00:00.000000") {
       return "Only 1 reward received";
-    }else{
+    } else {
       var split = s.split(".");
       return split[0];
+    }
+  }
+
+  String timeActive(int s) {
+    if (s == 0) {
+      return "Node just started";
+    } else {
+      var time = Duration(seconds: s);
+      return Utils.formatDuration(time);
     }
   }
 }

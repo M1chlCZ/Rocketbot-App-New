@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -31,7 +32,9 @@ import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/globals.dart' as globals;
 import 'package:rocketbot/support/life_cycle_watcher.dart';
 import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/utils.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:walletconnect_dart/walletconnect_dart.dart';
 
 import '../models/user.dart';
 import '../widgets/coin_list_view.dart';
@@ -373,6 +376,37 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     }
   }
 
+  Future<void> connectWallet() async {
+    // Create a connector
+    final connector = WalletConnect(
+      bridge: 'https://bridge.walletconnect.org',
+      clientMeta: PeerMeta(
+        name: 'WalletConnect',
+        description: 'WalletConnect Developer App',
+        url: 'https://walletconnect.org',
+        icons: [
+          'https://gblobscdn.gitbook.com/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'
+        ],
+      ),
+    );
+
+// Subscribe to events
+    connector.on('connect', (session) => print(session));
+    connector.on('session_update', (payload) => print(payload));
+    connector.on('disconnect', (session) => print(session));
+
+// Create a new session
+    if (!connector.connected) {
+      final session = await connector.createSession(
+        chainId: 1,
+        onDisplayUri: (uri) =>  Utils.openLink(uri),
+      );
+     var s = await connector.approveSession(chainId: 1, accounts: ['0x4292...931B3']);
+     print(s);
+    }
+    connector.killSession();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -397,11 +431,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                           const SizedBox(
                             width: 50,
                           ),
-                          // SizedBox(
-                          //     height: 30,
-                          //     child: TimeRangeSwitcher(
-                          //       changeTime: _changeTime,
-                          //     )),
                           Expanded(
                             child: Align(
                               alignment: Alignment.centerRight,
@@ -455,6 +484,20 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                         ),
                                       ),
                                     ),
+                                    const SizedBox(
+                                      width: 20.0,
+                                    ),
+                                    if (kDebugMode)
+                                    SizedBox(
+                                      height: 30,
+                                      width: 25,
+                                      child: NeuButton(
+                                        onTap: () {
+                                          connectWallet();
+                                        },
+                                        icon: Icon(Icons.add, color: Colors.white),
+                                        ),
+                                      ),
                                   ],
                                 ),
                               ),

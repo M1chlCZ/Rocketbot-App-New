@@ -9,7 +9,7 @@ import 'package:rocketbot/models/coin.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/picture_cache.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../support/auto_size_text_field.dart';
 

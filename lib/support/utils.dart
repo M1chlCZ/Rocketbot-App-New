@@ -40,6 +40,30 @@ class Utils {
     // return "${days < 10 ? "0$days" : "$days"}d:${hours < 10 ? "0$hours" : "$hours"}h:${minutes < 10 ? "0$minutes" : "$minutes"}m:${seconds < 10 ? "0$seconds" : "$seconds"}s";
   }
 
+  static String formatDuration(Duration d) {
+    var seconds = d.inSeconds;
+    final days = seconds~/Duration.secondsPerDay;
+    seconds -= days*Duration.secondsPerDay;
+    final hours = seconds~/Duration.secondsPerHour;
+    seconds -= hours*Duration.secondsPerHour;
+    final minutes = seconds~/Duration.secondsPerMinute;
+    seconds -= minutes*Duration.secondsPerMinute;
+
+    final List<String> tokens = [];
+    if (days != 0) {
+      tokens.add('${days}d');
+    }
+    if (tokens.isNotEmpty || hours != 0){
+      tokens.add('${hours}h');
+    }
+    if (tokens.isNotEmpty || minutes != 0) {
+      tokens.add('${minutes}m');
+    }
+    tokens.add('${seconds}s');
+
+    return tokens.join(':');
+  }
+
   static void openLink(String? s) async {
     var succ = false;
     if (s != null) {

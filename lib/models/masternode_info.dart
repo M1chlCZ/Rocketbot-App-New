@@ -156,7 +156,7 @@ class NodeRewards {
   NodeRewards({
       String? ip, 
       int? idNode, 
-      double? amount, 
+      double? amount,
       String? lastRewardDate, 
       String? address,}){
     _ip = ip;
@@ -218,12 +218,14 @@ class MnList {
       int? id, 
       String? ip, 
       String? dateStart, 
-      String? lastSeen, 
+      String? lastSeen,
+    int? timeActive,
       String? averagePayTime,}){
     _id = id;
     _ip = ip;
     _dateStart = dateStart;
     _lastSeen = lastSeen;
+    _timeActive = timeActive;
     _averagePayTime = averagePayTime;
 }
 
@@ -232,6 +234,7 @@ class MnList {
     _ip = json['ip'];
     _dateStart = json['dateStart'];
     _lastSeen = json['lastSeen'];
+    _timeActive = json['timeActive'];
     _averagePayTime = json['average_pay_time'];
   }
   int? _id;
@@ -239,22 +242,26 @@ class MnList {
   String? _dateStart;
   String? _lastSeen;
   String? _averagePayTime;
+  int? _timeActive;
 MnList copyWith({  int? id,
   String? ip,
   String? dateStart,
   String? lastSeen,
   String? averagePayTime,
+  int? timeActive,
 }) => MnList(  id: id ?? _id,
   ip: ip ?? _ip,
   dateStart: dateStart ?? _dateStart,
   lastSeen: lastSeen ?? _lastSeen,
   averagePayTime: averagePayTime ?? _averagePayTime,
+  timeActive: timeActive ?? _timeActive,
 );
   int? get id => _id;
   String? get ip => _ip;
   String? get dateStart => _dateStart;
   String? get lastSeen => _lastSeen;
   String? get averagePayTime => _averagePayTime;
+  int? get timeActive => _timeActive;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -263,6 +270,7 @@ MnList copyWith({  int? id,
     map['dateStart'] = _dateStart;
     map['lastSeen'] = _lastSeen;
     map['average_pay_time'] = _averagePayTime;
+    map['timeActive'] = _timeActive;
     return map;
   }
 

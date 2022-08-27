@@ -25,6 +25,7 @@ import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/gradient_text.dart';
 import 'package:rocketbot/support/life_cycle_watcher.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:rocketbot/widgets/dropdown_menu_icon.dart';
 import 'package:rocketbot/widgets/masternode_graph.dart';
 import 'package:rocketbot/widgets/picture_cache.dart';
 import 'package:slide_to_act/slide_to_act.dart';
@@ -59,7 +60,6 @@ class MasternodePage extends StatefulWidget {
 }
 
 class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
-  // final _storage = const FlutterSecureStorage();
   final NetInterface _interface = NetInterface();
   final _graphKey = GlobalKey<CoinPriceGraphState>();
   final GlobalKey<SlideActionState> _keyStake = GlobalKey();
@@ -72,7 +72,6 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   late Coin _coinActive;
   var formatter = NumberFormat('#,###');
 
-
   bool _staking = false;
   bool _loadingReward = false;
   bool _loadingCoins = false;
@@ -80,6 +79,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   bool _detailsExtended = false;
 
   int _numberNodes = 0;
+  int _dropdownValue = 0;
   int _freeMN = 0;
   int _pendingMasternodes = 0;
   String _amountReward = "0.0";
@@ -89,14 +89,13 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   String _averateTimeStart = "00:00:00";
   double _price = 0.0;
   double _free = 0.0;
-  List<int> _collateralTiers=[];
+  List<int> _collateralTiers = [];
 
   double? _fee;
   double? _min;
   int _typeGraph = 0;
   bool amountEmpty = true;
   int _collateral = 0;
-
 
   @override
   void initState() {
@@ -129,13 +128,15 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   }
 
   void _goToManagement() {
-    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-      return MasternodeManageScreen(
-        mnInfo: _mnInfo!,
-      );
-    }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-      return FadeTransition(opacity: animation, child: child);
-    })).then((value) => _getMasternodeDetails());
+    Navigator.of(context)
+        .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+          return MasternodeManageScreen(
+            mnInfo: _mnInfo!,
+          );
+        }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+          return FadeTransition(opacity: animation, child: child);
+        }))
+        .then((value) => _getMasternodeDetails());
   }
 
   void _getMN() {
@@ -152,7 +153,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     if (_mnInfo == null || _mnInfo!.hasError == true) return;
     _numberNodes = _mnInfo?.mnList?.length ?? 0;
     _activeNodes = _mnInfo!.activeNodes!;
-    double rev =  _mnInfo!.nodeRewards!.fold(0, (previousValue, element) => previousValue + element.amount!);
+    double rev = _mnInfo!.nodeRewards!.fold(0, (previousValue, element) => previousValue + element.amount!);
     _amountReward = rev.toString();
     List<String> partsPayrate = _mnInfo!.averagePayTime!.split(".");
     _averagePayrate = partsPayrate[0];
@@ -164,7 +165,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     _freeMN = _mnInfo?.freeList?.length ?? 0;
     _pendingMasternodes = _mnInfo?.pendingList?.length ?? 0;
     _collateralTiers = _mnInfo?.collateralTiers ?? [_collateral];
-    setState(() { });
+    setState(() {});
   }
 
   @override
@@ -260,12 +261,17 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    PictureCacheWidget(coin: widget.activeCoin, size: 30.0,),
-                    const SizedBox(width: 10.0,),
+                    PictureCacheWidget(
+                      coin: widget.activeCoin,
+                      size: 30.0,
+                    ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
                     Text(
                       widget.activeCoin.cryptoId!,
                       // textAlign: TextAlign.end,
-                      style: const TextStyle( fontWeight: FontWeight.w800, fontSize: 24.0, color: Colors.white),
+                      style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 24.0, color: Colors.white),
                     ),
                   ],
                 ),
@@ -285,8 +291,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         Text(
                           "${AppLocalizations.of(context)!.stake_available}:",
                           // textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                          style:
+                              TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
                         ),
                         Expanded(
                           child: Padding(
@@ -303,8 +309,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         Text(
                           _coinActive.cryptoId!,
                           // textAlign: TextAlign.end,
-                          style: const TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
+                          style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
                         ),
                       ],
                     ),
@@ -322,14 +327,14 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         Text(
                           "${AppLocalizations.of(context)!.mn_collateral}:",
                           // textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                          style:
+                              TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
                         ),
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(right: 4.0),
                             child: AutoSizeText(
-                             _collateralTiers.length > 1 ? "MULTIPLE" : _collateral.toString(),
+                              _collateralTiers.length > 1 ? "MULTIPLE" : _collateral.toString(),
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
@@ -340,10 +345,9 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 2.0),
                           child: Text(
-                            _collateralTiers.length > 1 ? "TIERS" :  _coinActive.cryptoId!,
+                            _collateralTiers.length > 1 ? "TIERS" : _coinActive.cryptoId!,
                             // textAlign: TextAlign.end,
-                            style: const TextStyle(
-                                fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
+                            style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
                           ),
                         ),
                       ],
@@ -362,8 +366,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         Text(
                           "${AppLocalizations.of(context)!.mn_your_mns}:",
                           // textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                          style:
+                              TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
                         ),
                         Expanded(
                           child: Padding(
@@ -378,10 +382,9 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                           ),
                         ),
                         const Text(
-                         "MNs",
+                          "MNs",
                           // textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
+                          style: TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
                         ),
                       ],
                     ),
@@ -444,8 +447,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         Text(
                           "${AppLocalizations.of(context)!.mn_reward}:",
                           // textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                          style:
+                              TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
                         ),
                         Expanded(
                           child: Padding(
@@ -462,8 +465,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         Text(
                           _coinActive.cryptoId!,
                           // textAlign: TextAlign.end,
-                          style: const TextStyle(
-                              fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
+                          style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
                         ),
                       ],
                     ),
@@ -700,60 +702,66 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                   padding: const EdgeInsets.only(left: 2.0, right: 2.0, top: 15.0),
                   child: Column(
                     children: [
-                      if(_collateralTiers.length > 1)
+                      if (_collateralTiers.length > 1)
                         Container(
                           margin: const EdgeInsets.all(10.0),
                           padding: const EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.0),
-                              color: const Color(0xFFF68DB2)
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Padding(
-                                  padding:  EdgeInsets.only(top: 4.0),
-                                  child: Text("Masternode tier", style: TextStyle(
-                                      fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white)),
-                                ),
-                                Theme(
-                                  data: Theme.of(context).copyWith(
-                                      canvasColor: const Color(0xFFF68DB2)
-                                  ),
-                                  child: DropdownButton<int>(
-                                    value: _collateral,
-                                    isDense: true,
-                                    onChanged: (int? val) async {
-                                      _collateral = val!;
-                                      setState(() { });
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), color: const Color(0xFFF68DB2)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(top: 4.0),
+                                child: Text("Masternode tier",
+                                    style: TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white)),
+                              ),
+                              SizedBox(
+                                width: 175,
+                                child: DropDownIcon(
+                                    onChange: (int value, int index) {
+                                      setState(() {
+                                        _collateral = value;
+                                        _dropdownValue = index;
+                                      });
                                     },
+                                    dropdownButtonStyle: const DropdownButtonStyle(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      height: 40,
+                                      elevation: 5,
+                                      backgroundColor: Colors.transparent,
+                                      primaryColor: Colors.white,
+                                    ),
+                                    dropdownStyle: DropdownStyle(
+                                      borderRadius: BorderRadius.circular(5),
+                                      elevation: 5,
+                                      padding: const EdgeInsets.all(5),
+                                      color: const Color(0xFFEC4681),
+                                      offset: const Offset(5, 55),
+                                    ),
                                     items: _collateralTiers
-                                        .map((e) => DropdownMenuItem(
-                                        value: e,
-                                        child: SizedBox(
-                                            width: 130,
+                                        .asMap()
+                                        .entries
+                                        .map(
+                                          (item) => DropdownItem<int>(
+                                            value: item.key + 1,
                                             child: Padding(
-                                              padding: const EdgeInsets.only(bottom: 2.0),
-                                              child: Text("${formatter.format(e).replaceAll(',', ' ')} ${_coinActive.cryptoId!}",
-                                                  style:const TextStyle(
-                                                      fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
-                                                textAlign: TextAlign.center,),
-                                            ))))
+                                              padding: const EdgeInsets.all(10.0),
+                                              child: Text("${formatter.format(item.value).replaceAll(",", " ")} ${_coinActive.cryptoId!}",
+                                                  style: Theme.of(context).textTheme.button!.copyWith(fontSize: 16.0, color: Colors.white), textAlign: TextAlign.start,),
+                                            ),
+                                          ),
+                                        )
                                         .toList(),
-                                  ),
-                                ),
-                              ],
-                            ),
+                                    currentIndex: _dropdownValue,
+                                    child: const SizedBox.shrink()),
+                              )
+                            ],
                           ),
                         ),
                       Container(
                         margin: const EdgeInsets.all(10.0),
                         padding: const EdgeInsets.all(3.0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                            color: const Color(0xFFF68DB2)
-                        ),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), color: const Color(0xFFF68DB2)),
                         child: Stack(
                           children: [
                             SlideAction(
@@ -775,29 +783,28 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                 size: 35.0,
                               ),
                               sliderRotate: false,
-                              textStyle: const TextStyle(
-                                  fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
+                              textStyle: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
                               key: _keyStake,
                               onSubmit: () {
                                 _createWithdrawal();
                               },
                             ),
                             if (_freeMN == 0)
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 60.0,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: const Color(0xFFBE235A)),
-                              child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left:8.0, right: 8.0),
-                                    child: AutoSizeText("No ${widget.activeCoin.name} masternode available!",
-                                      maxLines: 1,
-                                      minFontSize: 8.0,
-                                      style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white70),),
-                                  )),
-                            )
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 60.0,
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: const Color(0xFFBE235A)),
+                                child: Center(
+                                    child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                                  child: AutoSizeText(
+                                    "No ${widget.activeCoin.name} masternode available!",
+                                    maxLines: 1,
+                                    minFontSize: 8.0,
+                                    style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white70),
+                                  ),
+                                )),
+                              )
                           ],
                         ),
                       ),
@@ -811,85 +818,85 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                   width: double.infinity,
                   child: Center(
                       child: Text(
-                        "${AppLocalizations.of(context)!.mn_time_to_start}: $_averateTimeStart \n${AppLocalizations.of(context)!.mn_lock}",
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white30),
-                      )),
+                    "${AppLocalizations.of(context)!.mn_time_to_start}: $_averateTimeStart \n${AppLocalizations.of(context)!.mn_lock}",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white30),
+                  )),
                 ),
                 const SizedBox(
                   height: 20.0,
                 ),
                 _staking
                     ? Column(
-                  children: [
-                    IgnorePointer(
-                      ignoring: _amountReward == "0.0" ? true : false,
-                      child: Opacity(
-                        opacity: _amountReward == "0.0" ? 0.3 : 1.0,
-                        child: Padding(
-                            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                            child: FlatCustomButton(
-                              onTap: () {
-                                if (!_loadingReward) {
-                                  _unStake(1);
-                                }
-                              },
-                              radius: 10.0,
-                              color: const Color(0xFFF68DB2),
-                              child: SizedBox(
-                                  height: 45.0,
-                                  child: Center(
-                                      child: _loadingReward
-                                          ? const Padding(
-                                        padding: EdgeInsets.all(3.0),
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2.0,
-                                          color: Colors.white70,
-                                        ),
-                                      )
-                                          : Text(
-                                        AppLocalizations.of(context)!.stake_get_reward,
-                                        style: const TextStyle(
-                                            fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Colors.white),
-                                      ))),
-                            )),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                        child: FlatCustomButton(
-                          onTap: () {
-                            if (!_loadingCoins) {
-                              _goToManagement();
-                              // _unStake(0);
-                            }
-                          },
-                          radius: 10.0,
-                          borderWidth: 2.0,
-                          borderColor: const Color(0xFFF68DB2),
-                          color: Theme.of(context).canvasColor,
-                          child: SizedBox(
-                              height: 45.0,
-                              child: Center(
-                                  child: _loadingCoins
-                                      ? const Padding(
-                                    padding: EdgeInsets.all(3.0),
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.0,
-                                      color: Colors.white70,
-                                    ),
-                                  )
-                                      : Text(
-                                    AppLocalizations.of(context)!.mn_manage,
-                                    style:  const TextStyle(
-                                        fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Color(0xFFF68DB2)),
-                                  ))),
-                        )),
-                  ],
-                )
+                        children: [
+                          IgnorePointer(
+                            ignoring: _amountReward == "0.0" ? true : false,
+                            child: Opacity(
+                              opacity: _amountReward == "0.0" ? 0.3 : 1.0,
+                              child: Padding(
+                                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                                  child: FlatCustomButton(
+                                    onTap: () {
+                                      if (!_loadingReward) {
+                                        _unStake(1);
+                                      }
+                                    },
+                                    radius: 10.0,
+                                    color: const Color(0xFFF68DB2),
+                                    child: SizedBox(
+                                        height: 45.0,
+                                        child: Center(
+                                            child: _loadingReward
+                                                ? const Padding(
+                                                    padding: EdgeInsets.all(3.0),
+                                                    child: CircularProgressIndicator(
+                                                      strokeWidth: 2.0,
+                                                      color: Colors.white70,
+                                                    ),
+                                                  )
+                                                : Text(
+                                                    AppLocalizations.of(context)!.stake_get_reward,
+                                                    style: const TextStyle(
+                                                        fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Colors.white),
+                                                  ))),
+                                  )),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Padding(
+                              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                              child: FlatCustomButton(
+                                onTap: () {
+                                  if (!_loadingCoins) {
+                                    _goToManagement();
+                                    // _unStake(0);
+                                  }
+                                },
+                                radius: 10.0,
+                                borderWidth: 2.0,
+                                borderColor: const Color(0xFFF68DB2),
+                                color: Theme.of(context).canvasColor,
+                                child: SizedBox(
+                                    height: 45.0,
+                                    child: Center(
+                                        child: _loadingCoins
+                                            ? const Padding(
+                                                padding: EdgeInsets.all(3.0),
+                                                child: CircularProgressIndicator(
+                                                  strokeWidth: 2.0,
+                                                  color: Colors.white70,
+                                                ),
+                                              )
+                                            : Text(
+                                                AppLocalizations.of(context)!.mn_manage,
+                                                style: const TextStyle(
+                                                    fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Color(0xFFF68DB2)),
+                                              ))),
+                              )),
+                        ],
+                      )
                     : Container(),
               ],
             ),
@@ -951,7 +958,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     String problem = serverTypeRckt;
     WithdrawConfirm? rw;
 
-    if(_mnInfo == null) {
+    if (_mnInfo == null) {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Data error");
       _keyStake.currentState?.reset();
@@ -1009,7 +1016,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       };
       var resWith = await _interface.post("Transfers/ConfirmWithdraw", queryID);
       rw = WithdrawConfirm.fromJson(resWith);
-      await db.addTX(rw.data!.pgwIdentifier!, _coinActive.id!, double.parse(_mnInfo!.collateral!.toString()), widget.depositAddress!, masternode: true);
+      await db.addTX(rw.data!.pgwIdentifier!, _coinActive.id!, double.parse(_mnInfo!.collateral!.toString()), widget.depositAddress!,
+          masternode: true);
       problem = serverTypePos;
 
       Map<String, dynamic> m = {
@@ -1017,7 +1025,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
         "depAddr": widget.depositAddress,
         "amount": _mnInfo!.collateral!,
         "pwd_id": rw.data!.pgwIdentifier!,
-        "node_id" : mnLock.node!.id!
+        "node_id": mnLock.node!.id!
       };
 
       debugPrint("masternode/setup/////");
@@ -1101,7 +1109,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     setState(() {});
     try {
       if (rewardParam == 1) {
-        Map<String, dynamic> m = {"idCoin" : _coinActive.id!};
+        Map<String, dynamic> m = {"idCoin": _coinActive.id!};
         await _interface.post("masternode/reward", m, pos: true);
       }
       _changeFree();
@@ -1136,7 +1144,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     preFree = rs.data!.free!;
     _free = preFree;
     widget.changeFree(preFree);
-    setState(() { });
+    setState(() {});
   }
 
   @override
@@ -1181,5 +1189,3 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     }
   }
 }
-
-
