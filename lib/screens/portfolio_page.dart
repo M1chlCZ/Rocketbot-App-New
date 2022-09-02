@@ -484,20 +484,20 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      width: 20.0,
-                                    ),
-                                    if (kDebugMode)
-                                    SizedBox(
-                                      height: 30,
-                                      width: 25,
-                                      child: NeuButton(
-                                        onTap: () {
-                                          connectWallet();
-                                        },
-                                        icon: Icon(Icons.add, color: Colors.white),
-                                        ),
-                                      ),
+                                    // const SizedBox(
+                                    //   width: 20.0,
+                                    // ),
+                                    // if (kDebugMode)
+                                    // SizedBox(
+                                    //   height: 30,
+                                    //   width: 25,
+                                    //   child: NeuButton(
+                                    //     onTap: () {
+                                    //       connectWallet();
+                                    //     },
+                                    //     icon: Icon(Icons.add, color: Colors.white),
+                                    //     ),
+                                    //   ),
                                   ],
                                 ),
                               ),

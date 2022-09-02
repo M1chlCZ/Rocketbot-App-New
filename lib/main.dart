@@ -122,7 +122,6 @@ class MyAppState extends State<MyApp> {
     precacheImage(const AssetImage('images/rocketbot_logo.png'), context);
     precacheImage(const AssetImage('images/logo_big.png'), context);
     precacheImage(const AssetImage('images/apple.png'), context);
-    precacheImage(const AssetImage('images/earnings_cover.png'), context);
   }
 
   void _getSetLang() async {

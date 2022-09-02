@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
@@ -54,124 +55,140 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             children:  <Widget> [
               const PortfolioScreen(),
               const GiveAwayScreen(),
+             // Container(), //TODO NFT SCREEN
               const EarningsScreen(),
               SettingsScreen(socials: _getUserInfo,),
             ]),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 0.0),
-        child: SnakeNavigationBar.color(
-          elevation: 0.0,
-          height: 50.0,
-          onTap: _onTappedBar,
-          behaviour: SnakeBarBehaviour.floating,
-          snakeShape: SnakeShape(
-              shape: RoundedRectangleBorder(
+      bottomNavigationBar: SnakeNavigationBar.color(
+        elevation: 0.0,
+        height: 60.0,
+        onTap: _onTappedBar,
+        behaviour: SnakeBarBehaviour.floating,
+        snakeShape: SnakeShape(
+          centered: false,
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           )),
-          currentIndex: _selectedPageIndex,
-          selectedItemColor: Colors.red,
-          backgroundColor: const Color(0xff394359),
-          snakeViewColor: _getNavBarColor(),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          ),
-          padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: FlatCustomButton(
-                width: 40,
-                height: 40,
-                radius: 10.0,
-                color: Colors.transparent,
-                child: Image.asset(
-                  "images/home_inactive.png",
-                  width: 30,
-                  height: 30.0,
-                  fit: BoxFit.fitWidth,
-                  color: Colors.white,
-                ),
-              ),
-              label: 'Home',
-              activeIcon: FlatCustomButton(
-                width: 40,
-                height: 40,
-                radius: 10.0,
-                color: Colors.transparent,
-                onTap: () {
-                  _onTappedBar(0);
-                },
-                child: Image.asset(
-                  "images/home.png",
-                  color: Colors.white,
-                  width: 30,
-                  height: 30.0,
-                  fit: BoxFit.fitHeight,
-                ),
-              ),
-            ),
-            BottomNavigationBarItem(
-              icon: FlatCustomButton(
-                width: 40,
-                height: 40,
-                radius: 10.0,
-                color: Colors.transparent,
-                child: Image.asset("images/giveaway_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitWidth, color: Colors.white),
-              ),
-              label: '',
-              activeIcon: FlatCustomButton(
-                width: 40,
-                height: 40,
-                radius: 10.0,
-                color: Colors.transparent,
-                onTap: () {
-                  _onTappedBar(1);
-                },
-                child: Image.asset("images/giveaway.png", width: 30, height: 30.0, fit: BoxFit.fitWidth, color: Colors.white),
-              ),
-            ),
-            BottomNavigationBarItem(
-              icon: FlatCustomButton(
-                width: 40,
-                height: 40,
-                radius: 10.0,
-                color: Colors.transparent,
-                child: Image.asset("images/wallet_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white),
-              ),
-              label: '',
-              activeIcon: FlatCustomButton(
-                width: 40,
-                height: 40,
-                radius: 10.0,
-                color: Colors.transparent,
-                onTap: () {
-                  _onTappedBar(2);
-                },
-                child: Image.asset("images/wallet.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white),
-              ),
-            ),
-            BottomNavigationBarItem(
-              icon: FlatCustomButton(
-                width: 40,
-                height: 40,
-                radius: 10.0,
-                color: Colors.transparent,
-                child: Image.asset("images/set_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
-              ),
-              label: '',
-              activeIcon: FlatCustomButton(
-                width: 40,
-                height: 40,
-                radius: 10.0,
-                color: Colors.transparent,
-                onTap: () {
-                  _onTappedBar(3);
-                },
-                child: Image.asset("images/set.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
-              ),
-            ),
-          ],
+        unselectedLabelStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 12.0,
         ),
+        selectedLabelStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 12.0,
+        ),
+        showUnselectedLabels: true,
+        showSelectedLabels: true,
+        currentIndex: _selectedPageIndex,
+        selectedItemColor: Colors.white,
+        backgroundColor: const Color(0xff394359),
+        snakeViewColor: _getNavBarColor(),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            tooltip: 'Portfolio',
+            icon: FlatCustomButton(
+              width: 40,
+              height: 30,
+              radius: 10.0,
+              color: Colors.transparent,
+              child: Image.asset(
+                "images/home_inactive.png",
+                width: 30,
+                height: 30.0,
+                fit: BoxFit.fitWidth,
+                color: Colors.white,
+              ),
+            ),
+            label: 'Home',
+            activeIcon: FlatCustomButton(
+              width: 40,
+              height: 30,
+              radius: 10.0,
+              color: Colors.transparent,
+              child: Image.asset(
+                "images/home.png",
+                color: Colors.white,
+                width: 30,
+                height: 30.0,
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: FlatCustomButton(
+              width: 40,
+              height: 30,
+              radius: 10.0,
+              color: Colors.transparent,
+              child: Image.asset("images/giveaway_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitWidth, color: Colors.white),
+            ),
+            label: 'Games',
+            activeIcon: FlatCustomButton(
+              width: 40,
+              height: 30,
+              radius: 10.0,
+              color: Colors.transparent,
+              child: Image.asset("images/giveaway.png", width: 30, height: 30.0, fit: BoxFit.fitWidth, color: Colors.white),
+            ),
+          ),
+
+          // BottomNavigationBarItem(
+          //   icon: FlatCustomButton(
+          //     width: 40,
+          //     height: 30,
+          //     radius: 10.0,
+          //     color: Colors.transparent,
+          //     child: Image.asset("images/mona.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white30),
+          //   ),
+          //   label: 'NFT',
+          //   activeIcon: FlatCustomButton(
+          //     width: 40,
+          //     height: 30,
+          //     radius: 10.0,
+          //     color: Colors.transparent,
+          //     child: Image.asset("images/mona.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white30),
+          //   ),
+          // ),
+          BottomNavigationBarItem(
+            icon: FlatCustomButton(
+              width: 40,
+              height: 30,
+              radius: 10.0,
+              color: Colors.transparent,
+              child: Image.asset("images/wallet_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white),
+            ),
+            label: 'Earn',
+            activeIcon: FlatCustomButton(
+              width: 40,
+              height: 30,
+              radius: 10.0,
+              color: Colors.transparent,
+              child: Image.asset("images/wallet.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white),
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: FlatCustomButton(
+              width: 40,
+              height: 30,
+              radius: 10.0,
+              color: Colors.transparent,
+              child: Image.asset("images/set_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitWidth, color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
+            ),
+            label: 'Settings',
+            activeIcon: FlatCustomButton(
+              width: 40,
+              height: 30,
+              radius: 10.0,
+              color: Colors.transparent,
+              child: Image.asset("images/set.png", width: 30, height: 30.0, fit: BoxFit.fitWidth, color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -226,6 +243,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
 
   void _onTappedBar(int value) {
+    // if (value == 2) {
+    //   _pageController.jumpToPage(_selectedPageIndex);
+    //   return;
+    // }
     setState(() {
       _selectedPageIndex = value;
     });

@@ -1,11 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:rocketbot/models/masternode_info.dart';
 import 'package:rocketbot/netInterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/dialogs.dart';
-import 'package:rocketbot/support/duration_extension.dart';
 import 'package:rocketbot/support/utils.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 
@@ -73,17 +71,20 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                         borderRadius: BorderRadius.circular(12.0),
                         color: Colors.white10,
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
                       child: Column(
                         children: <Widget>[
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                  width: 65.0,
+                                  width: 85.0,
                                   height: 40.0,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.0),
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10.0),
+                                      bottomLeft: Radius.circular(10.0),
+                                    ),
                                     color: Colors.black12,
                                   ),
                                   child: Center(
@@ -96,8 +97,11 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                                 child: Container(
                                   height: 40.0,
                                   padding: const EdgeInsets.all(10.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.0),
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(10.0),
+                                      bottomRight: Radius.circular(10.0),
+                                    ),
                                     color: Colors.black26,
                                   ),
                                   child: Text(
@@ -110,96 +114,107 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                             ],
                           ),
                           const SizedBox(
-                            height: 10.0,
+                            height: 5.0,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const AutoSizeText(
-                                "Running time:",
-                                maxLines: 1,
-                                minFontSize: 8,
-                                style: TextStyle(fontSize: 14.0, color: Colors.white70),
-                              ),
-                              const SizedBox(
-                                width: 20.0,
-                              ),
-                              Expanded(
-                                child: AutoSizeText(
-                                  timeActive(sortedList[index].timeActive ?? 0),
-                                  maxLines: 1,
-                                  minFontSize: 8,
-                                  textAlign: TextAlign.end,
-                                  style: const TextStyle(fontSize: 14.0, color: Colors.white70),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: Colors.black26,
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const AutoSizeText(
+                                      "Running time:",
+                                      maxLines: 1,
+                                      minFontSize: 8,
+                                      style: TextStyle(fontSize: 14.0, color: Colors.white70),
+                                    ),
+                                    const SizedBox(
+                                      width: 20.0,
+                                    ),
+                                    Expanded(
+                                      child: AutoSizeText(
+                                        timeActive(sortedList[index].timeActive ?? 0),
+                                        maxLines: 1,
+                                        minFontSize: 8,
+                                        textAlign: TextAlign.end,
+                                        style: const TextStyle(fontSize: 14.0, color: Colors.white70),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const AutoSizeText(
-                                "Average payrate:",
-                                maxLines: 1,
-                                minFontSize: 8,
-                                style: TextStyle(fontSize: 14.0, color: Colors.white70),
-                              ),
-                              const SizedBox(
-                                width: 20.0,
-                              ),
-                              Expanded(
-                                child: AutoSizeText(
-                                  averagePayFormat(sortedList[index].averagePayTime.toString()),
-                                  maxLines: 1,
-                                  minFontSize: 8,
-                                  textAlign: TextAlign.end,
-                                  style: const TextStyle(fontSize: 14.0, color: Colors.white70),
+                                const SizedBox(
+                                  height: 10.0,
                                 ),
-                              ),
-                            ],
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const AutoSizeText(
+                                      "Average payrate:",
+                                      maxLines: 1,
+                                      minFontSize: 8,
+                                      style: TextStyle(fontSize: 14.0, color: Colors.white70),
+                                    ),
+                                    const SizedBox(
+                                      width: 20.0,
+                                    ),
+                                    Expanded(
+                                      child: AutoSizeText(
+                                        averagePayFormat(sortedList[index].averagePayTime.toString()),
+                                        maxLines: 1,
+                                        minFontSize: 8,
+                                        textAlign: TextAlign.end,
+                                        style: const TextStyle(fontSize: 14.0, color: Colors.white70),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const AutoSizeText(
+                                      "Last seen:",
+                                      maxLines: 1,
+                                      minFontSize: 8,
+                                      style: TextStyle(fontSize: 14.0, color: Colors.white70),
+                                    ),
+                                    AutoSizeText(
+                                      Utils.convertDate(sortedList[index].lastSeen),
+                                      maxLines: 1,
+                                      minFontSize: 8,
+                                      style: const TextStyle(fontSize: 14.0, color: Colors.white70),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const AutoSizeText(
-                                "Last seen:",
-                                maxLines: 1,
-                                minFontSize: 8,
-                                style: TextStyle(fontSize: 14.0, color: Colors.white70),
-                              ),
-                              AutoSizeText(
-                                Utils.convertDate(sortedList[index].lastSeen),
-                                maxLines: 1,
-                                minFontSize: 8,
-                                style: const TextStyle(fontSize: 14.0, color: Colors.white70),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               //add some actions, icons...etc
-                              FlatCustomButton(
-                                  onTap: () {
-                                    Dialogs.openAlertBox(context, "Info", "Not yet implemented");
-                                  },
-                                  color: Colors.transparent,
-                                  child: const Text(
-                                    "INFO",
-                                    style: TextStyle(color: Colors.white24),
-                                  )),
-                              const SizedBox(
-                                width: 20.0,
-                              ),
+                              // FlatCustomButton(
+                              //     onTap: () {
+                              //       Dialogs.openAlertBox(context, "Info", "Not yet implemented");
+                              //     },
+                              //     color: Colors.transparent,
+                              //     child: const Text(
+                              //       "INFO",
+                              //       style: TextStyle(color: Colors.white24),
+                              //     )),
+                              // const SizedBox(
+                              //   width: 20.0,
+                              // ),
                               FlatCustomButton(
                                   onTap: () {
                                     Dialogs.openMNWithdrawBox(context, sortedList[index].id!, () {

@@ -148,7 +148,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       "idCoin": _coinActive.id!,
       // "idCoin": 0
     };
-    var res = await _interface.post("masternode/info", m, pos: true);
+    var res = await _interface.post("masternode/info", m, pos: true, debug: true);
     _mnInfo = MasternodeInfo.fromJson(res);
     if (_mnInfo == null || _mnInfo!.hasError == true) return;
     _numberNodes = _mnInfo?.mnList?.length ?? 0;
@@ -156,11 +156,11 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     double rev = _mnInfo!.nodeRewards!.fold(0, (previousValue, element) => previousValue + element.amount!);
     _amountReward = rev.toString();
     List<String> partsPayrate = _mnInfo!.averagePayTime!.split(".");
-    _averagePayrate = partsPayrate[0];
+    _averagePayrate = partsPayrate[0].isEmpty ? "00:00:00" : partsPayrate[0];
     List<String> partsStart = _mnInfo!.averageTimeToStart!.split(".");
-    _averateTimeStart = partsStart[0];
+    _averateTimeStart = partsStart[0].isEmpty ? "00:00:00" : partsStart[0];
     _estimated = _mnInfo!.averageRewardPerDay!;
-    _staking = _activeNodes > 0 ? true : false;
+    _staking = _mnInfo!.mnList!.isNotEmpty ? true : false;
     _collateral = _mnInfo!.collateral!;
     _freeMN = _mnInfo?.freeList?.length ?? 0;
     _pendingMasternodes = _mnInfo?.pendingList?.length ?? 0;
@@ -307,7 +307,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                           ),
                         ),
                         Text(
-                          _coinActive.cryptoId!,
+                          _coinActive.ticker!,
                           // textAlign: TextAlign.end,
                           style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
                         ),
@@ -345,7 +345,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 2.0),
                           child: Text(
-                            _collateralTiers.length > 1 ? "TIERS" : _coinActive.cryptoId!,
+                            _collateralTiers.length > 1 ? "TIERS" : _coinActive.ticker!,
                             // textAlign: TextAlign.end,
                             style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
                           ),
@@ -463,7 +463,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                           ),
                         ),
                         Text(
-                          _coinActive.cryptoId!,
+                          _coinActive.ticker!,
                           // textAlign: TextAlign.end,
                           style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
                         ),
@@ -628,7 +628,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 8.0, top: 1.0),
                                     child: AutoSizeText(
-                                      "${_estimated.toStringAsFixed(3)} ${_coinActive.cryptoId!}/${AppLocalizations.of(context)!.staking_day.toString().toUpperCase()}",
+                                      "${_estimated.toStringAsFixed(3)} ${_coinActive.ticker!}/${AppLocalizations.of(context)!.staking_day.toString().toUpperCase()}",
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
@@ -746,8 +746,11 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                             value: item.key + 1,
                                             child: Padding(
                                               padding: const EdgeInsets.all(10.0),
-                                              child: Text("${formatter.format(item.value).replaceAll(",", " ")} ${_coinActive.cryptoId!}",
-                                                  style: Theme.of(context).textTheme.button!.copyWith(fontSize: 16.0, color: Colors.white), textAlign: TextAlign.start,),
+                                              child: Text(
+                                                "${formatter.format(item.value).replaceAll(",", " ")} ${_coinActive.ticker!}",
+                                                style: Theme.of(context).textTheme.button!.copyWith(fontSize: 16.0, color: Colors.white),
+                                                textAlign: TextAlign.start,
+                                              ),
                                             ),
                                           ),
                                         )
@@ -818,7 +821,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                   width: double.infinity,
                   child: Center(
                       child: Text(
-                    "${AppLocalizations.of(context)!.mn_time_to_start}: $_averateTimeStart \n${AppLocalizations.of(context)!.mn_lock}",
+                    "${AppLocalizations.of(context)!.fees} $_fee ${_coinActive.ticker} \n ${AppLocalizations.of(context)!.mn_time_to_start}: $_averateTimeStart \n${AppLocalizations.of(context)!.mn_lock}",
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white30),
                   )),
@@ -865,36 +868,45 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                           const SizedBox(
                             height: 20.0,
                           ),
-                          Padding(
-                              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                              child: FlatCustomButton(
-                                onTap: () {
-                                  if (!_loadingCoins) {
-                                    _goToManagement();
-                                    // _unStake(0);
-                                  }
-                                },
-                                radius: 10.0,
-                                borderWidth: 2.0,
-                                borderColor: const Color(0xFFF68DB2),
-                                color: Theme.of(context).canvasColor,
-                                child: SizedBox(
-                                    height: 45.0,
-                                    child: Center(
-                                        child: _loadingCoins
-                                            ? const Padding(
-                                                padding: EdgeInsets.all(3.0),
-                                                child: CircularProgressIndicator(
-                                                  strokeWidth: 2.0,
-                                                  color: Colors.white70,
-                                                ),
-                                              )
-                                            : Text(
-                                                AppLocalizations.of(context)!.mn_manage,
-                                                style: const TextStyle(
-                                                    fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Color(0xFFF68DB2)),
-                                              ))),
-                              )),
+                          IgnorePointer(
+                            ignoring: _staking == false ? true : false,
+                            child: Opacity(
+                              opacity: _staking == false ? 0.3 : 1.0,
+                              child: Padding(
+                                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                                  child: FlatCustomButton(
+                                    onTap: () {
+                                      if (!_loadingCoins) {
+                                        _goToManagement();
+                                        // _unStake(0);
+                                      }
+                                    },
+                                    radius: 10.0,
+                                    borderWidth: 2.0,
+                                    borderColor: const Color(0xFFF68DB2),
+                                    color: Theme.of(context).canvasColor,
+                                    child: SizedBox(
+                                        height: 45.0,
+                                        child: Center(
+                                            child: _loadingCoins
+                                                ? const Padding(
+                                                    padding: EdgeInsets.all(3.0),
+                                                    child: CircularProgressIndicator(
+                                                      strokeWidth: 2.0,
+                                                      color: Colors.white70,
+                                                    ),
+                                                  )
+                                                : Text(
+                                                    AppLocalizations.of(context)!.mn_manage,
+                                                    style: const TextStyle(
+                                                        fontFamily: 'JosefinSans',
+                                                        fontWeight: FontWeight.w800,
+                                                        fontSize: 18.0,
+                                                        color: Color(0xFFF68DB2)),
+                                                  ))),
+                                  )),
+                            ),
+                          ),
                         ],
                       )
                     : Container(),
@@ -985,7 +997,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     if (minAmount) {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error,
-          AppLocalizations.of(context)!.staking_not_min.replaceAll("{1}", _min!.toString()).replaceAll("{2}", _coinActive.cryptoId!));
+          AppLocalizations.of(context)!.staking_not_min.replaceAll("{1}", _min!.toString()).replaceAll("{2}", _coinActive.ticker!));
       _keyStake.currentState?.reset();
       return;
     }

@@ -41,16 +41,16 @@ PODS:
     - FirebaseCoreInternal (~> 9.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
-  - FirebaseCoreDiagnostics (9.4.0):
+  - FirebaseCoreDiagnostics (9.5.0):
     - GoogleDataTransport (< 10.0.0, >= 9.1.4)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseCoreInternal (9.4.0):
+  - FirebaseCoreInternal (9.5.0):
     - "GoogleUtilities/NSData+zlib (~> 7.7)"
   - FirebaseDynamicLinks (9.4.0):
     - FirebaseCore (~> 9.0)
-  - FirebaseInstallations (9.4.0):
+  - FirebaseInstallations (9.5.0):
     - FirebaseCore (~> 9.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/UserDefaults (~> 7.7)
@@ -70,8 +70,6 @@ PODS:
   - flutter_local_notifications (0.0.1):
     - Flutter
   - flutter_native_splash (0.0.1):
-    - Flutter
-  - flutter_native_timezone (0.0.1):
     - Flutter
   - flutter_secure_storage (3.3.1):
     - Flutter
@@ -175,10 +173,6 @@ PODS:
   - PromisesObjC (2.1.1)
   - Protobuf (3.21.5)
   - SAMKeychain (1.5.3)
-  - share (0.0.1):
-    - Flutter
-  - share_extend (0.0.1):
-    - Flutter
   - share_plus (0.0.1):
     - Flutter
   - sign_in_with_apple (0.0.1):
@@ -198,7 +192,6 @@ DEPENDENCIES:
   - flutter_biometrics (from `.symlinks/plugins/flutter_biometrics/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
-  - flutter_native_timezone (from `.symlinks/plugins/flutter_native_timezone/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_udid (from `.symlinks/plugins/flutter_udid/ios`)
   - flutter_user_agent (from `.symlinks/plugins/flutter_user_agent/ios`)
@@ -209,8 +202,6 @@ DEPENDENCIES:
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
-  - share (from `.symlinks/plugins/share/ios`)
-  - share_extend (from `.symlinks/plugins/share_extend/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -262,8 +253,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
-  flutter_native_timezone:
-    :path: ".symlinks/plugins/flutter_native_timezone/ios"
   flutter_secure_storage:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   flutter_udid:
@@ -284,10 +273,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
-  share:
-    :path: ".symlinks/plugins/share/ios"
-  share_extend:
-    :path: ".symlinks/plugins/share_extend/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
   sign_in_with_apple:
@@ -306,16 +291,15 @@ SPEC CHECKSUMS:
   firebase_messaging: 97401c71ed93be5334441e911a953e37c2dbc3c3
   FirebaseAuth: ae5d4402e1516497357d909162b091b3ca2a2e9c
   FirebaseCore: 9a2b10270a854731c4d4d8a97d0aa8380ec3458d
-  FirebaseCoreDiagnostics: aaa87098082c4d4bdd1a9557b1186d18ca85ce8c
-  FirebaseCoreInternal: a13302b0088fbf5f38b79b6ece49c2af7d3e05d6
+  FirebaseCoreDiagnostics: 17cbf4e72b1dbd64bfdc33d4b1f07bce4f16f1d8
+  FirebaseCoreInternal: 50a8e39cae8abf72d5145d07ea34c3244f70862b
   FirebaseDynamicLinks: 311bb05788180e31a502bd0d413215413a4b3357
-  FirebaseInstallations: 61db1054e688d2bdc4e2b3f744c1b086e913b742
+  FirebaseInstallations: 41f811b530c41dd90973d0174381cdb3fcb5e839
   FirebaseMessaging: 4e220eddd356181469ba2ec5f7d5fafbc2312841
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_biometrics: 9eac93b2f20887ddff75c253fcd1eae37f338a71
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
-  flutter_native_timezone: 5f05b2de06c9776b4cc70e1839f03de178394d22
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
   flutter_udid: 0848809dbed4c055175747ae6a45a8b4f6771e1c
   flutter_user_agent: a2bd08a251e6ea57147aa7e32f896260f0488dd1
@@ -343,8 +327,6 @@ SPEC CHECKSUMS:
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   Protobuf: 7504b04fffcf6662ad629694db8231f5e744327f
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
-  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
-  share_extend: b6748dc53695587891126a89533b862b92548c7b
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904

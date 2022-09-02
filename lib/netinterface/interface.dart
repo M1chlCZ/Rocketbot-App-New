@@ -45,10 +45,10 @@ class NetInterface {
           return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
         },
       );
-      // if(debug) {
-      //   print(response.statusCode);
-      //   print(response.body.toString());
-      // }
+      if(debug) {
+        print(response.statusCode);
+        print(response.body.toString());
+      }
       if (response.statusCode == 401 || response.statusCode == 403) {
         await refreshToken(pos: pos);
         var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
@@ -93,8 +93,8 @@ class NetInterface {
         },
       );
       if (debug) {
-      // print(response.body);
-      // print(response.statusCode);
+      print(response.body);
+      print(response.statusCode);
       }
       if (response.statusCode == 401 || response.statusCode == 403) {
         await refreshToken(pos: pos);

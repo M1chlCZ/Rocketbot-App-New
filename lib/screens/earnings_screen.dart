@@ -15,10 +15,8 @@ import 'package:rocketbot/models/sector.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/farm_main_screen.dart';
-import 'package:rocketbot/screens/socials_screen.dart';
 import 'package:rocketbot/widgets/coin_list_view.dart';
 import 'package:rocketbot/widgets/earnings_chart.dart';
-import 'package:rocketbot/widgets/three_card.dart';
 
 class EarningsScreen extends StatefulWidget {
   const EarningsScreen({Key? key}) : super(key: key);
@@ -65,9 +63,9 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
 
   void getEarnings() async {
     List<Color> colors = const [
-      Color(0xE690C8AC),
-      Color(0xE673A9AD),
-      Color(0xE6D08770),
+      Color(0xE6A6D23F),
+      Color(0xE66B3FD2),
+      Color(0xE6D23FA6),
       Color(0xE6EBCB8B),
       Color(0xE6B48EAD),
       Color(0xE6BF616A),
@@ -79,7 +77,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
     List<CoinBalance> balList = await BalanceCache.getAllRecords(forceRefresh: true);
 
     int i = 0;
-    var res = await interface.get("/earnings", pos: true);
+    var res = await interface.get("/earnings", pos: true, debug: true);
     EarnRes ea = EarnRes.fromJson(res);
 
     if (ea.earnings != null) {
@@ -133,65 +131,87 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                     ),
                     Container(
                       width: double.infinity,
-                      height: 320.0,
-                      margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                      height: 252.0,
+                      margin: const EdgeInsets.only(left: 15, right: 15, top: 20),
                       decoration: BoxDecoration(
-                          image: const DecorationImage(
-                              opacity: 1.0,
-                              filterQuality: FilterQuality.high,
-                              alignment: Alignment(0.0, 1.0),
-                              fit: BoxFit.cover,
-                              image: AssetImage("images/earnings_cover.png")),
+                        gradient: const RadialGradient(center: Alignment(0.8, 1.0), radius: 1.5, colors: [
+                          Color(0xFF346CBD),
+                          Color(0xFF9D9BFD),
+                        ]),
                           borderRadius: BorderRadius.circular(15.0),
-                          border: Border.all(color: const Color(0x5FFCFCFC), width: 1.0)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                          border: Border.all(color: Colors.white24, width: 1.0),
+                          boxShadow: [
+                            const BoxShadow(color: Colors.black26, blurRadius: 1.8, spreadRadius: 0.5),
+                            BoxShadow(
+                              color: Colors.white.withOpacity(0.1),
+                              blurRadius: 10.0,
+                              spreadRadius: 5.0,
+                              offset: const Offset(0.0, 0.0),
+                            ),
+                          ],
+                      ),
+                      child: Stack(
                         children: [
-                          const SizedBox(
-                            height: 20.0,
+                          Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                  width: 85,
+                                  child: Image.asset("images/equity.png", color: Colors.white54, fit: BoxFit.fitWidth)),
+                            ),
                           ),
-                          Text(
-                            AppLocalizations.of(context)!.income.toLowerCase().capitalize(),
-                            style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 40.0, color: Colors.black45),
-                          ),
-                          if (list.isNotEmpty)
-                            Column(
-                              children: [
-                                const SizedBox(
-                                  height: 10.0,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              if (list.isNotEmpty)
+                                Column(
                                   children: [
-                                    Text(
-                                      "${_getMonth()} ${AppLocalizations.of(context)!.income}: ",
-                                      style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 18.0, color: Colors.black45),
-                                    ),
                                     const SizedBox(
-                                      width: 2.0,
+                                      height: 10.0,
                                     ),
-                                    Text(
-                                      "${totalUSD.toStringAsFixed(2)} \$",
-                                      style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w800, fontSize: 18.0, color: const Color(0xFF9EC73F)),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "${_getMonth()} ${AppLocalizations.of(context)!.income}: ",
+                                          style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 18.0, color: Colors.white70),
+                                        ),
+                                        const SizedBox(
+                                          width: 2.0,
+                                        ),
+                                        Text(
+                                          "${totalUSD.toStringAsFixed(2)} \$",
+                                          style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w800, fontSize: 18.0, color: const Color(
+                                              0xFFC3F649)),
+                                        ),
+                                      ],
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 5.0),
+                                      child: Divider(height: 2.0, color: Colors.white70,),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 80.0),
+                                      child: SizedBox(
+                                          height: 200,
+                                          width: 100,
+                                          child: EarningsChart(list)),
                                     ),
                                   ],
+                                )
+                              else
+                                const SizedBox(
+                                  height: 200,
+                                  child:
+                                   Center(child: CircularProgressIndicator(color: Colors.black54,),),
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 5.0),
-                                  child: Divider(height: 2.0, color: Colors.black38,),
-                                ),
-                                SizedBox(
-                                    height: 200,
-                                    child: EarningsChart(list)),
-                              ],
-                            )
-                          else
-                            const SizedBox(
-                              height: 200,
-                              child:
-                               Center(child: CircularProgressIndicator(color: Colors.black54,),),
-                            ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -308,5 +328,5 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
   }
 
   @override
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
 }

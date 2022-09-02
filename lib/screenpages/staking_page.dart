@@ -305,7 +305,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                           ),
                         ),
                         Text(
-                          _coinActive.cryptoId!,
+                          _coinActive.ticker!,
                           // textAlign: TextAlign.end,
                           style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
                         ),
@@ -341,7 +341,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                           ),
                         ),
                         Text(
-                          _coinActive.cryptoId!,
+                          _coinActive.ticker!,
                           // textAlign: TextAlign.end,
                           style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
                         ),
@@ -384,7 +384,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                   ),
                                 ),
                                 Text(
-                                  _coinActive.cryptoId!,
+                                  _coinActive.ticker!,
                                   // textAlign: TextAlign.end,
                                   style: const TextStyle(
                                       fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
@@ -424,7 +424,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                           ),
                         ),
                         Text(
-                          _coinActive.cryptoId!,
+                          _coinActive.ticker!,
                           // textAlign: TextAlign.end,
                           style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFF9BD41E)),
                         ),
@@ -465,7 +465,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 8.0, top: 1.0),
                                     child: AutoSizeText(
-                                      "${_inPoolTotal.toStringAsFixed(1)} ${_coinActive.cryptoId!}",
+                                      "${_inPoolTotal.toStringAsFixed(1)} ${_coinActive.ticker!}",
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
@@ -558,7 +558,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 8.0, top: 1.0),
                                     child: AutoSizeText(
-                                      "${_estimated.toStringAsFixed(3)} ${_coinActive.cryptoId!}/${AppLocalizations.of(context)!.staking_day.toString().toUpperCase()}",
+                                      "${_estimated.toStringAsFixed(3)} ${_coinActive.ticker!}/${AppLocalizations.of(context)!.staking_day.toString().toUpperCase()}",
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
@@ -632,6 +632,13 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                   margin: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 5.0),
                   width: double.infinity,
                   height: 50.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(
+                      color: amountEmpty ?  Colors.red.shade600 : Colors.transparent,
+                      width: 1.0,
+                    ),
+                  ),
                   child: Center(
                     child: AutoSizeTextField(
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -666,7 +673,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                         filled: true,
                         fillColor: amountEmpty ? Colors.red.shade600.withOpacity(0.2) : Colors.black12,
                         contentPadding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                        hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
+                        hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white70, fontSize: 14.0),
                         hintText: AppLocalizations.of(context)!.stake_amount,
                         // enabledBorder: const UnderlineInputBorder(
                         //   borderSide: BorderSide(color: Colors.transparent),
@@ -694,7 +701,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                   width: double.infinity,
                   child: Center(
                       child: Text(
-                    "${AppLocalizations.of(context)!.min_withdraw} $_min \n${AppLocalizations.of(context)!.staking_lock_coins}",
+                    "${AppLocalizations.of(context)!.min_withdraw} $_min | ${AppLocalizations.of(context)!.fees} $_fee ${_coinActive.ticker} \n${AppLocalizations.of(context)!.staking_lock_coins}",
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white30),
                   )),
@@ -987,7 +994,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     if (minAmount) {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error,
-          AppLocalizations.of(context)!.staking_not_min.replaceAll("{1}", _min!.toString()).replaceAll("{2}", _coinActive.cryptoId!));
+          AppLocalizations.of(context)!.staking_not_min.replaceAll("{1}", _min!.toString()).replaceAll("{2}", _coinActive.ticker!));
       _keyStake.currentState!.reset();
       return;
     }

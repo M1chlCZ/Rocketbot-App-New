@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:rocketbot/screens/portfolio_page.dart';
+import 'package:rocketbot/screens/main_menu.dart';
 import 'package:rocketbot/screens/security_screen.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 import 'package:rocketbot/widgets/screen_lock.dart';
@@ -140,7 +140,7 @@ class AuthScreenState extends State<AuthScreen> {
                       if (widget.type == 0) {
                         Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder:
                             (BuildContext context, _, __) {
-                          return const PortfolioScreen();
+                          return const MainMenuScreen();
                         }, transitionsBuilder:
                             (_, Animation<double> animation, __, Widget child) {
                           return FadeTransition(

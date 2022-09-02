@@ -220,21 +220,27 @@ class SendPageState extends State<SendPage> {
                       SizedBox(
                         height: 30,
                         width: 25,
-                        child: NeuButton(
+                        child: FlatCustomButton(
                           onTap: () {
                             Navigator.of(context).pop();
                           },
                           icon: const Icon(
                             Icons.arrow_back_ios_new,
-                            size: 20.0,
+                            size: 24.0,
                             color: Colors.white70,
                           ),
                         ),
                       ),
                       const SizedBox(
-                        width: 10.0,
+                        width: 20.0,
                       ),
-                      Text(AppLocalizations.of(context)!.send, style: Theme.of(context).textTheme.headline4),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4.0),
+                        child: Text(AppLocalizations.of(context)!.send,
+                          style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 20.0, color: Colors.white),
+
+                        ),
+                      ),
                       const SizedBox(
                         width: 50,
                       ),

@@ -9,10 +9,8 @@ import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screenpages/coin_page.dart';
 import 'package:rocketbot/screenpages/deposit_page.dart';
 import 'package:rocketbot/screenpages/send_page.dart';
-import 'package:rocketbot/screenpages/staking_page.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 
-import '../component_widgets/button_neu.dart';
 import '../screens/portfolio_page.dart';
 import 'farm_main_screen.dart';
 
@@ -196,15 +194,26 @@ class MainScreenState extends State<MainScreen> {
       ),
       bottomNavigationBar:SnakeNavigationBar.color(
         elevation: 0.0,
-        height: 50.0,
+        height: 60.0,
         onTap: _onTappedBar,
         behaviour: SnakeBarBehaviour.floating,
         snakeShape: SnakeShape(
+          centered: false,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             )),
         currentIndex: _selectedPageIndex,
-        selectedItemColor: Colors.red,
+        selectedItemColor: Colors.white,
+        unselectedLabelStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 12.0,
+        ),
+        selectedLabelStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 12.0,
+        ),
+        showUnselectedLabels: true,
+        showSelectedLabels: true,
         backgroundColor: const Color(0xff394359),
         snakeViewColor: _getNavBarColor(),
         shape: const RoundedRectangleBorder(
@@ -215,7 +224,7 @@ class MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: FlatCustomButton(
               width: 40,
-              height: 40,
+              height: 30,
               radius: 10.0,
               color: Colors.transparent,
               child: Image.asset(
@@ -227,10 +236,10 @@ class MainScreenState extends State<MainScreen> {
               )
             ),
             backgroundColor: Colors.amber,
-            label: '',
+            label: 'Receive',
             activeIcon: FlatCustomButton(
               width: 40,
-              height: 40,
+              height: 30,
               radius: 10.0,
               color: Colors.transparent,
               onTap: () {
@@ -248,7 +257,7 @@ class MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: FlatCustomButton(
               width: 40,
-              height: 40,
+              height: 30,
               radius: 10.0,
               color: Colors.transparent,
               child: Image.asset(
@@ -259,10 +268,10 @@ class MainScreenState extends State<MainScreen> {
                 color: Colors.white,
               )
             ),
-            label: '',
+            label: 'Transactions',
             activeIcon: FlatCustomButton(
               width: 40,
-              height: 40,
+              height: 30,
               radius: 10.0,
               color: Colors.transparent,
               onTap: () {
@@ -280,7 +289,7 @@ class MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: FlatCustomButton(
               width: 40,
-              height: 40,
+              height: 30,
               radius: 10.0,
               color: Colors.transparent,
               child: Image.asset(
@@ -291,10 +300,10 @@ class MainScreenState extends State<MainScreen> {
                 color: Colors.white,
               )
             ),
-            label: '',
+            label: 'Send',
             activeIcon: FlatCustomButton(
               width: 40,
-              height: 40,
+              height: 30,
               radius: 10.0,
               color: Colors.transparent,
               onTap: () {

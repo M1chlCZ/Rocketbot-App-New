@@ -100,6 +100,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
     _txBloc = TransactionBloc(widget.activeCoin);
     _getGraphData();
     sc.addListener(_scrollListener);
+    _getActiveCoinPosition();
   }
 
   @override
@@ -113,6 +114,13 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
   Future<void> refresh() async {
     _txBloc!.fetchTransactionData(_coinActive, force: true);
     await getFree();
+  }
+
+  _getActiveCoinPosition() {
+    Future.delayed(const Duration(milliseconds: 10), () {
+      var i = _listCoins.indexWhere((element) => element.coin!.id! == _coinActive.id!);
+      _jumpTo(i);
+    });
   }
 
   @override
@@ -528,7 +536,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
     _txBloc!.changeCoin(_listCoins[_currentIndex].coin!);
     Future.delayed(const Duration(milliseconds: 50), () async {
       var scrollPosition = pr * _currentIndex;
-      await scrollCtrl.animateTo(scrollPosition, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
+      await scrollCtrl.animateTo(scrollPosition, duration: const Duration(milliseconds: 800), curve: Curves.elasticOut);
       Future.delayed(const Duration(milliseconds: 10), () {
         _preventScroll = false;
       });
@@ -539,7 +547,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
     _currentIndex = index;
     Future.delayed(const Duration(milliseconds: 50), () async {
       var scrollPosition = pr * _currentIndex;
-      await scrollCtrl.animateTo(scrollPosition, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
+      await scrollCtrl.animateTo(scrollPosition, duration: const Duration(milliseconds: 800), curve: Curves.elasticOut);
       Future.delayed(const Duration(milliseconds: 10), () {
         _preventScroll = false;
       });
@@ -621,7 +629,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
       widget.setActiveCoin(coin);
       _coinActive = coin!;
       _balanceData = _listCoins.singleWhere((element) => element.coin!.id! == _coinActive.id!);
-      _graphKey.currentState!.updatePrices(_balanceData!.priceData?.historyPrices);
+      _graphKey.currentState?.updatePrices(_balanceData!.priceData?.historyPrices);
       _priceBlock!.changeCoin(coin.cryptoId!, coin.id!);
       _coinNameOpacity = 0.0;
       _txBloc!.changeCoin(coin);
