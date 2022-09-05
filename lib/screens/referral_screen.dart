@@ -91,9 +91,11 @@ class _ReferralScreenState extends State<ReferralScreen> {
         await SecureStorage.writeStorage(key: "refCode", value: code);
         _checkStatus();
         if (mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way!");
+      } on ConflictDataException catch (e) {
+       if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
       } catch (e) {
-        refKey.currentState?.clearText();
-        if (mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.error.toLowerCase()}", e.toString());
+        if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
+        debugPrint(e.toString());
       }
     }
     await SecureStorage.deleteStorage(key: 'r_code');

@@ -17,6 +17,7 @@ import 'package:rocketbot/models/pgwid.dart';
 import 'package:rocketbot/models/withdraw_confirm.dart';
 import 'package:rocketbot/models/withdraw_pwid.dart';
 import 'package:rocketbot/netInterface/api_response.dart';
+import 'package:rocketbot/netInterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/keyboard_overlay.dart';
 import 'package:rocketbot/screens/mn_manage_screen.dart';
@@ -87,6 +88,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   int _activeNodes = 0;
   String _averagePayrate = "00:00:00";
   String _averateTimeStart = "00:00:00";
+  double _averagePayDay = 0.0;
+  double _roi = 0.0;
   double _price = 0.0;
   double _free = 0.0;
   List<int> _collateralTiers = [];
@@ -162,9 +165,11 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     _estimated = _mnInfo!.averageRewardPerDay!;
     _staking = _mnInfo!.mnList!.isNotEmpty ? true : false;
     _collateral = _mnInfo!.collateral!;
+    _averagePayDay = _mnInfo!.averagePayDay!;
     _freeMN = _mnInfo?.freeList?.length ?? 0;
     _pendingMasternodes = _mnInfo?.pendingList?.length ?? 0;
     _collateralTiers = _mnInfo?.collateralTiers ?? [_collateral];
+    _roi = _mnInfo?.roi ?? 0.0;
     setState(() {});
   }
 
@@ -547,6 +552,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                             ),
                           ),
                         ),
+
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
@@ -609,6 +615,39 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                             ),
                           ),
                         ),
+                        if (!_staking)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                              child: Row(
+                                children: [
+                                  GradientText(
+                                    "${AppLocalizations.of(context)!.mn_day_reward.replaceAll("{1}", _coinActive.ticker!)}:",
+                                    gradient: const LinearGradient(colors: [
+                                      Colors.white70,
+                                      Colors.white54,
+                                    ]),
+                                    // textAlign: TextAlign.end,
+                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 8.0, top: 1.0),
+                                      child: AutoSizeText(
+                                        "${_averagePayDay.toStringAsFixed(3)} ${_coinActive.ticker!}",
+                                        maxLines: 1,
+                                        minFontSize: 8.0,
+                                        textAlign: TextAlign.end,
+                                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        if(_staking)
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
@@ -629,6 +668,37 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     padding: const EdgeInsets.only(right: 8.0, top: 1.0),
                                     child: AutoSizeText(
                                       "${_estimated.toStringAsFixed(3)} ${_coinActive.ticker!}/${AppLocalizations.of(context)!.staking_day.toString().toUpperCase()}",
+                                      maxLines: 1,
+                                      minFontSize: 8.0,
+                                      textAlign: TextAlign.end,
+                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                            child: Row(
+                              children: [
+                                GradientText(
+                                  "${AppLocalizations.of(context)!.mn_roi}:",
+                                  gradient: const LinearGradient(colors: [
+                                    Colors.white70,
+                                    Colors.white54,
+                                  ]),
+                                  // textAlign: TextAlign.end,
+                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0, top: 1.0),
+                                    child: AutoSizeText(
+                                      "${_roi.toStringAsFixed(2)}%",
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
@@ -748,7 +818,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                               padding: const EdgeInsets.all(10.0),
                                               child: Text(
                                                 "${formatter.format(item.value).replaceAll(",", " ")} ${_coinActive.ticker!}",
-                                                style: Theme.of(context).textTheme.button!.copyWith(fontSize: 16.0, color: Colors.white),
+                                                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.0, color: Colors.white),
                                                 textAlign: TextAlign.start,
                                               ),
                                             ),
@@ -1007,11 +1077,11 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     } catch (e) {
       debugPrint(e.toString());
     }
-
+    MasternodeLock? mnLock;
     try {
       Map<String, dynamic> queryLock = {"idCoin": _coinActive.id!};
       final responseLock = await _interface.post("masternode/lock", queryLock, pos: true, debug: true);
-      var mnLock = MasternodeLock.fromJson(responseLock);
+      mnLock = MasternodeLock.fromJson(responseLock);
       if (mnLock.node?.address == null) {
         Navigator.of(context).pop();
         Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Data err");
@@ -1039,12 +1109,16 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
         "pwd_id": rw.data!.pgwIdentifier!,
         "node_id": mnLock.node!.id!
       };
-
-      debugPrint("masternode/setup/////");
       await _interface.post("masternode/setup", m, pos: true, debug: true);
       _lostMNTX();
+    } on ConflictDataException catch (e) {
+      Map<String, dynamic> queryLock = {"idNode": mnLock?.node?.id};
+      await _interface.post("masternode/unlock", queryLock, pos: true, debug: true);
+      if (mounted) Navigator.of(context).pop();
+      _keyStake.currentState?.reset();
+      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
     } catch (e) {
-      Map<String, dynamic> queryLock = {"idCoin": _coinActive.id!};
+      Map<String, dynamic> queryLock = {"idNode": mnLock?.node?.id};
       await _interface.post("masternode/unlock", queryLock, pos: true, debug: true);
       if (mounted) Navigator.of(context).pop();
       _keyStake.currentState?.reset();
@@ -1143,6 +1217,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
         await _getMasternodeDetails();
         _getMN();
       }
+    } on ConflictDataException catch (e) {
+      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
     } catch (e) {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());

@@ -33,7 +33,6 @@ import 'package:slide_to_act/slide_to_act.dart';
 
 import '../models/balance_list.dart';
 import '../models/coin.dart';
-import '../models/stake_data.dart';
 import '../support/auto_size_text_field.dart';
 import '../widgets/coin_price_graph.dart';
 import '../widgets/time_stake_range_switch.dart';
@@ -635,7 +634,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5.0),
                     border: Border.all(
-                      color: amountEmpty ?  Colors.red.shade600 : Colors.transparent,
+                      color: amountEmpty ? Colors.red.shade600 : Colors.transparent,
                       width: 1.0,
                     ),
                   ),
@@ -825,7 +824,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                                 ),
                                               )
                                             : AutoSizeText(
-                                              AppLocalizations.of(context)!.st_adjust,
+                                                AppLocalizations.of(context)!.st_adjust,
                                                 maxLines: 1,
                                                 minFontSize: 8.0,
                                                 style: const TextStyle(
@@ -1035,6 +1034,15 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       var wm = WithdrawalsModels.fromJson(js);
       _keyStake.currentState!.reset();
       if (mounted) Dialogs.openAlertBox(context, wm.message!, "${wm.error!}\n\n$problem");
+    } on ConflictDataException catch (r) {
+      if (mounted) Navigator.of(context).pop();
+      int messageStart = r.toString().indexOf("{");
+      int messageEnd = r.toString().indexOf("}");
+      var s = r.toString().substring(messageStart, messageEnd + 1);
+      var js = json.decode(s);
+      var wm = WithdrawalsModels.fromJson(js);
+      _keyStake.currentState!.reset();
+      if (mounted) Dialogs.openAlertBox(context, wm.message!, "${wm.error!}\n\n$problem");
     } catch (e) {
       if (mounted) Navigator.of(context).pop();
       _keyStake.currentState!.reset();
@@ -1120,7 +1128,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       var conf = _coinActive.requiredConfirmations;
       if (rewardParam == 2) {
         _adjustReward = false;
-      }else if (rewardParam == 1) {
+      } else if (rewardParam == 1) {
         _loadingReward = false;
       } else {
         _loadingCoins = false;
@@ -1131,10 +1139,21 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
         Dialogs.openAlertBox(
             context, AppLocalizations.of(context)!.alert, AppLocalizations.of(context)!.staking_with_info.replaceAll("{1}", conf.toString()));
       }
+    } on ConflictDataException catch (e) {
+      if (rewardParam == 2) {
+        _adjustReward = false;
+      } else if (rewardParam == 1) {
+        _loadingReward = false;
+      } else {
+        _loadingCoins = false;
+      }
+      setState(() {});
+      Navigator.of(context).pop();
+      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
     } catch (e) {
       if (rewardParam == 2) {
         _adjustReward = false;
-      }else if (rewardParam == 1) {
+      } else if (rewardParam == 1) {
         _loadingReward = false;
       } else {
         _loadingCoins = false;

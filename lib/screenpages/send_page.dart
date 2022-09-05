@@ -183,6 +183,16 @@ class SendPageState extends State<SendPage> {
       // _showError(wm.error!);
 
       Dialogs.openAlertBox(context, wm.message!, wm.error!);
+    } on ConflictDataException catch (r) {
+      _keyStake.currentState!.reset();
+      int messageStart = r.toString().indexOf("{");
+      int messageEnd = r.toString().indexOf("}");
+      var s = r.toString().substring(messageStart, messageEnd + 1);
+      var js = json.decode(s);
+      var wm = WithdrawalsModels.fromJson(js);
+      // _showError(wm.error!);
+
+      Dialogs.openAlertBox(context, wm.message!, wm.error!);
     } catch (e) {
       _keyStake.currentState!.reset();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
@@ -436,7 +446,7 @@ class SendPageState extends State<SendPage> {
                             height: 60.0,
                             sliderButtonIconPadding: 6.0,
                             borderRadius: 10.0,
-                            text: AppLocalizations.of(context)!.send,
+                            text: AppLocalizations.of(context)!.send_swipe,
                             innerColor: const Color(0xFF9BD41E),
                             outerColor: const Color(0xFF252F45),
                             elevation: 0.5,

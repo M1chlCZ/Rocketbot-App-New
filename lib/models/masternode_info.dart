@@ -14,6 +14,8 @@ class MasternodeInfo {
       String? averagePayTime, 
       double? averageRewardPerDay, 
       String? averageTimeToStart,
+    double? averagePayDay,
+    double? roi,
     int? collateral,
     List<int>? collateralTiers,
       List<FreeList>? freeList, 
@@ -26,6 +28,8 @@ class MasternodeInfo {
     _averagePayTime = averagePayTime;
     _averageRewardPerDay = averageRewardPerDay;
     _averageTimeToStart = averageTimeToStart;
+_averagePayDay = averagePayDay;
+_roi = roi;
     _freeList = freeList;
     _hasError = hasError;
     _mnList = mnList;
@@ -41,6 +45,8 @@ class MasternodeInfo {
     _averagePayTime = json['average_pay_time'];
     _averageRewardPerDay = double.parse(json['average_reward_per_day'].toString());
     _averageTimeToStart = json['average_time_to_start'];
+    _averagePayDay = double.parse(json['average_pay_day'].toString());
+    _roi = double.parse(json['roi'].toString());
     _collateral = json['collateral'];
     _collateralTiers = json['collateral_tiers'] != null ? json['collateral_tiers'].cast<int>() : [];
     if (json['free_list'] != null) {
@@ -74,6 +80,8 @@ class MasternodeInfo {
   String? _averagePayTime;
   double? _averageRewardPerDay;
   String? _averageTimeToStart;
+  double? _averagePayDay;
+  double? _roi;
   List<FreeList>? _freeList;
   bool? _hasError;
   List<MnList>? _mnList;
@@ -86,6 +94,8 @@ MasternodeInfo copyWith({  int? activeNodes,
   String? averagePayTime,
   double? averageRewardPerDay,
   String? averageTimeToStart,
+  double? averagePayDay,
+  double? roi,
   int? collateral,
   List<FreeList>? freeList,
   bool? hasError,
@@ -97,6 +107,8 @@ MasternodeInfo copyWith({  int? activeNodes,
   averagePayTime: averagePayTime ?? _averagePayTime,
   averageRewardPerDay: averageRewardPerDay ?? _averageRewardPerDay,
   averageTimeToStart: averageTimeToStart ?? _averageTimeToStart,
+  averagePayDay: averagePayDay ?? _averagePayDay,
+  roi: roi ?? _roi,
   freeList: freeList ?? _freeList,
   hasError: hasError ?? _hasError,
   mnList: mnList ?? _mnList,
@@ -110,6 +122,8 @@ MasternodeInfo copyWith({  int? activeNodes,
   String? get averagePayTime => _averagePayTime;
   double? get averageRewardPerDay => _averageRewardPerDay;
   String? get averageTimeToStart => _averageTimeToStart;
+  double? get averagePayDay => _averagePayDay;
+  double? get roi => _roi;
   List<FreeList>? get freeList => _freeList;
   bool? get hasError => _hasError;
   List<MnList>? get mnList => _mnList;
@@ -125,6 +139,8 @@ MasternodeInfo copyWith({  int? activeNodes,
     map['average_pay_time'] = _averagePayTime;
     map['average_reward_per_day'] = _averageRewardPerDay;
     map['average_time_to_start'] = _averageTimeToStart;
+    map['average_pay_day'] = _averagePayDay;
+    map['roi'] = _roi;
     map['collateral'] = _collateral;
     map['collateral_tiers'] = _collateralTiers;
     if (_freeList != null) {
