@@ -40,8 +40,6 @@ class StakingMasternodeSwitcherState extends State<StakingMasternodeSwitcher> {
                 decoration: BoxDecoration(
                     color: _active == 0 ? const Color(0xFF9BD41E) : Colors.transparent,
                     borderRadius: BorderRadius.circular(8.0)),
-
-                // opacity: _active == 0 ? 1.0 : 0.4,
                 duration: _duration,
                 child: FlatCustomButton(
                   color: Colors.transparent,

@@ -63,6 +63,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   bool auth = false;
 
   bool _socialsOK = true;
+  bool _emailOK = false;
 
   double totalUSD = 0.0;
   double totalBTC = 0.0;
@@ -115,7 +116,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     });
   }
 
-  Future<bool> _initPlatform() async  {
+  Future<bool> _initPlatform() async {
     if (Platform.isAndroid) {
       try {
         Directory tempDir = await getTemporaryDirectory();
@@ -133,13 +134,13 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
       } on PlatformException {
         return false;
       }
-    }else{
+    } else {
       return true;
     }
   }
 
   _getUserInfo() async {
-   auth = await _initPlatform();
+    auth = await _initPlatform();
     try {
       final response = await _interface.get("User/Me");
       var d = User.fromJson(response);
@@ -155,6 +156,15 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
         } else {
           setState(() {
             _socialsOK = false;
+          });
+        }
+        if (d.data!.emailConfirmed != null && d.data!.emailConfirmed!) {
+          setState(() {
+            _emailOK = true;
+          });
+        } else {
+          setState(() {
+            _emailOK = false;
           });
         }
       } else {
@@ -380,13 +390,11 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     // Create a connector
     final connector = WalletConnect(
       bridge: 'https://bridge.walletconnect.org',
-      clientMeta: PeerMeta(
+      clientMeta: const PeerMeta(
         name: 'WalletConnect',
         description: 'WalletConnect Developer App',
         url: 'https://walletconnect.org',
-        icons: [
-          'https://gblobscdn.gitbook.com/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'
-        ],
+        icons: ['https://gblobscdn.gitbook.com/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'],
       ),
     );
 
@@ -399,10 +407,10 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     if (!connector.connected) {
       final session = await connector.createSession(
         chainId: 1,
-        onDisplayUri: (uri) =>  Utils.openLink(uri),
+        onDisplayUri: (uri) => Utils.openLink(uri),
       );
-     var s = await connector.approveSession(chainId: 1, accounts: ['0x4292...931B3']);
-     print(s);
+      var s = await connector.approveSession(chainId: 1, accounts: ['0x4292...931B3']);
+      print(s);
     }
     connector.killSession();
   }
@@ -425,85 +433,75 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 0.0),
-                      child: Row(
-                        children: [
-                          if (_me != null) Text("${_me!.data!.name} ${_me!.data!.surname}", style: Theme.of(context).textTheme.headline3),
-                          const SizedBox(
-                            width: 50,
-                          ),
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 15.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Visibility(
-                                      visible: auth,
-                                      child: SizedBox(
-                                        height: 30,
-                                        width: 25,
-                                        child: NeuButton(
-                                          onTap: () async {
-                                            setState(() {
-                                              if (popMenu) {
-                                                popMenu = false;
-                                              } else {
-                                                popMenu = true;
-                                              }
-                                            });
-                                          },
-                                          imageIcon: Image.asset(
-                                            "images/candle.png",
-                                            color: Colors.white,
+                      child: AnimatedOpacity(
+                        opacity: _me != null ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 800),
+                        child: Row(
+                          children: [
+                            if (_me != null) Text("${_me!.data!.name} ${_me!.data!.surname}", style: Theme.of(context).textTheme.headline3),
+                            const SizedBox(
+                              width: 50,
+                            ),
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 15.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Visibility(
+                                        visible: auth,
+                                        child: SizedBox(
+                                          height: 30,
+                                          width: 25,
+                                          child: NeuButton(
+                                            onTap: () async {
+                                              setState(() {
+                                                if (popMenu) {
+                                                  popMenu = false;
+                                                } else {
+                                                  popMenu = true;
+                                                }
+                                              });
+                                            },
+                                            imageIcon: Image.asset(
+                                              "images/candle.png",
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 20.0,
-                                    ),
-                                    SizedBox(
-                                      height: 30,
-                                      width: 25,
-                                      child: NeuButton(
-                                        onTap: () {
-                                          Navigator.of(context)
-                                              .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-                                                return const NotificationScreen();
-                                              }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                                                return FadeTransition(opacity: animation, child: child);
-                                              }))
-                                              .then((value) => _getUnread());
-                                        },
-                                        imageIcon: Image.asset(
-                                          _unreadNot > 0 ? "images/notification_on.png" : "images/notification_off.png",
-                                          color: _unreadNot > 0 ? Colors.amber : Colors.white,
+                                      const SizedBox(
+                                        width: 20.0,
+                                      ),
+                                      SizedBox(
+                                        height: 30,
+                                        width: 25,
+                                        child: NeuButton(
+                                          onTap: () {
+                                            Navigator.of(context)
+                                                .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+                                                  return const NotificationScreen();
+                                                }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                                                  return FadeTransition(opacity: animation, child: child);
+                                                }))
+                                                .then((value) => _getUnread());
+                                          },
+                                          imageIcon: Image.asset(
+                                            _unreadNot > 0 ? "images/notification_on.png" : "images/notification_off.png",
+                                            color: _unreadNot > 0 ? Colors.amber : Colors.white,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    // const SizedBox(
-                                    //   width: 20.0,
-                                    // ),
-                                    // if (kDebugMode)
-                                    // SizedBox(
-                                    //   height: 30,
-                                    //   width: 25,
-                                    //   child: NeuButton(
-                                    //     onTap: () {
-                                    //       connectWallet();
-                                    //     },
-                                    //     icon: Icon(Icons.add, color: Colors.white),
-                                    //     ),
-                                    //   ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
-                        ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -588,8 +586,45 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                             )
                           : Container(),
                     ),
+                    if(!_emailOK)
+                    GestureDetector(
+                      onTap: () {
+                        Utils.openLink("https://app.rocketbot.pro/Account/General");
+                      },
+                      child: Container(
+                          height: 30,
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 3.0),
+                          decoration: BoxDecoration(
+                              gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
+                                Color(0xFFF05523),
+                                Color(0xFF812D88),
+                              ]),
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: Center(
+                              child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children:const [
+                               Text(
+                                "Please confirm your email",
+                                style: TextStyle(fontSize: 12.0, color: Colors.white),
+                              ),
+                               SizedBox(
+                                width: 5.0,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 1.0),
+                                child: Icon(
+                                  Icons.open_in_new,
+                                  color: Colors.white,
+                                  size: 12.0,
+                                ),
+                              ),
+                            ],
+                          ))),
+                    ),
                     const SizedBox(
-                      height: 5.0,
+                      height: 2.0,
                     ),
                     SizedBox(
                       height: 25.0,

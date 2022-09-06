@@ -9,24 +9,33 @@ import 'package:rocketbot/models/giveaways.dart';
 import 'package:rocketbot/models/loterries.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/screens/airdrop_detail_screen.dart';
+import 'package:rocketbot/screens/games_switch.dart';
 import 'package:rocketbot/screens/giveaway_detail_screen.dart';
 import 'package:rocketbot/screens/lottery_detail_screen.dart';
 import 'package:rocketbot/screens/twitter_giveaway_detail_screen.dart';
 import 'package:rocketbot/widgets/airdrop_tile.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/giveaway_tile.dart';
 import 'package:rocketbot/widgets/lottery_tile.dart';
 
 import '../netinterface/interface.dart';
 
 class GiveAwayScreen extends StatefulWidget {
-  const GiveAwayScreen({Key? key}) : super(key: key);
+  final VoidCallback prevScreen;
+  final VoidCallback nextScreen;
+
+  const GiveAwayScreen({
+    Key? key,
+    required this.prevScreen,
+    required this.nextScreen,
+  }) : super(key: key);
 
   @override
   State<GiveAwayScreen> createState() => _GiveAwayScreenState();
 }
 
 class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAliveClientMixin<GiveAwayScreen> {
+  final _pageController = PageController(initialPage: 0);
+  final _switchKey = GlobalKey<GameSwitcherState>();
   final NetInterface interface = NetInterface();
   ScrollController gwScroll = ScrollController();
   ScrollController adScroll = ScrollController();
@@ -40,6 +49,8 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
   int airdropPage = 1;
   int lotteryPage = 1;
 
+  double widthScreen = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +61,21 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
     _scrollListener(gwScroll, 1);
     _scrollListener(adScroll, 2);
     _scrollListener(ltScroll, 3);
+
+    _pageController.addListener(() {
+      print(_pageController.position);
+      if (_pageController.page == 0) {
+        if (_pageController.offset < -120) {
+          widget.prevScreen();
+          _pageController.jumpToPage(0);
+        }
+      } else if (_pageController.page == 2) {
+        if (_pageController.offset > widthScreen * 2 + 120) {
+          widget.nextScreen();
+          _pageController.jumpToPage(0);
+        }
+      }
+    });
   }
 
   @override
@@ -57,26 +83,27 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
     gwBlock?.dispose();
     adBlock?.dispose();
     ltBlock?.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
   void _scrollListener(ScrollController sc, int type) {
     sc.addListener(() {
-    if (sc.position.pixels >= (sc.position.maxScrollExtent - 250)) {
-      if (type == 1) {
-        giveawayPage++;
-        gwBlock!.fetchGiveaways(page: giveawayPage);
+      if (sc.position.pixels >= (sc.position.maxScrollExtent - 250)) {
+        if (type == 1) {
+          giveawayPage++;
+          gwBlock!.fetchGiveaways(page: giveawayPage);
+        }
+        if (type == 2) {
+          airdropPage++;
+          adBlock!.fetchGiveaways(page: airdropPage);
+        }
+        if (type == 3) {
+          lotteryPage++;
+          ltBlock!.fetchGiveaways(page: airdropPage);
+        }
+        // _suggestionBloc.fetchSuggestions();
       }
-      if (type == 2) {
-        airdropPage++;
-        adBlock!.fetchGiveaways(page: airdropPage);
-      }
-      if (type == 3) {
-        lotteryPage++;
-        ltBlock!.fetchGiveaways(page: airdropPage);
-      }
-      // _suggestionBloc.fetchSuggestions();
-    }
     });
   }
 
@@ -99,7 +126,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
       }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
         return FadeTransition(opacity: animation, child: child);
       }));
-    }else{
+    } else {
       Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
         return GiveawayDetailScreen(
           giveaway: g,
@@ -126,6 +153,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
 
   @override
   Widget build(BuildContext context) {
+    widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -133,335 +161,225 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 0.0),
-              child: Row(
-                children: [
-                  Text("Giveaways", style: Theme.of(context).textTheme.headline3),
-                  const SizedBox(
-                    width: 50,
-                  ),
-                  // SizedBox(
-                  //     height: 30,
-                  //     child: TimeRangeSwitcher(
-                  //       changeTime: _changeTime,
-                  //     )),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white10,
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                margin: const EdgeInsets.only(left: 50.0, right: 45.0),
-                padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FlatCustomButton(
-                        onTap: () {
-                          setState(() {
-                            activeSection = 0;
-                          });
-                          gwBlock!.fetchGiveaways(page: giveawayPage, force: true);
-                        },
-                        radius: 5.0,
-                        color: Colors.transparent,
-                        padding: const EdgeInsets.all(5.0),
-                        child: AutoSizeText(
-                          'Giveaway',
-                          maxLines: 1,
-                          minFontSize: 8.0,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(fontWeight: activeSection == 0 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),
-                        ),
-                      ),
-                      SizedBox(
-                          width: 20,
-                          child: Text(
-                            '|',
-                            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w200, fontSize: 14.0),
-                            textAlign: TextAlign.center,
-                          )),
-                      FlatCustomButton(
-                        onTap: () {
-                          setState(() {
-                            activeSection = 1;
-                          });
-                          adBlock!.fetchGiveaways(page: airdropPage, force: true);
-                        },
-                        radius: 5.0,
-                        color: Colors.transparent,
-                        padding: const EdgeInsets.all(5.0),
-                        child: AutoSizeText(
-                          'Airdrop',
-                          maxLines: 1,
-                          minFontSize: 8.0,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(fontWeight: activeSection == 1 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),
-                        ),
-                      ),
-                      SizedBox(
-                          width: 20,
-                          child: Text(
-                            '|',
-                            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w200, fontSize: 14.0),
-                            textAlign: TextAlign.center,
-                          )),
-                      FlatCustomButton(
-                        onTap: () {
-                          setState(() {
-                            activeSection = 2;
-                          });
-                          ltBlock?.fetchGiveaways(page: lotteryPage);
-                        },
-                        radius: 5.0,
-                        color: Colors.transparent,
-                        padding: const EdgeInsets.all(5.0),
-                        child: AutoSizeText(
-                          'Spin',
-                          maxLines: 1,
-                          minFontSize: 8.0,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(fontWeight: activeSection == 2 ? FontWeight.w600 : FontWeight.w200, fontSize: 14.0),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
             Expanded(
-              child: Stack(
+              child: PageView(
+                physics: const BouncingScrollPhysics(),
+                onPageChanged: (index) {
+                  setState(() {
+                    activeSection = index;
+                    _switchKey.currentState?.currentPage(index);
+                  });
+                },
+                controller: _pageController,
                 children: [
-                  IgnorePointer(
-                    ignoring: activeSection == 0 ? false : true,
-                    child: Visibility(
-                      visible: activeSection == 0 ? true : false,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: StreamBuilder<ApiResponse<List<Giveaway>>>(
-                            stream: gwBlock!.coinsListStream,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                switch (snapshot.data!.status) {
-                                  case Status.loading:
-                                    return Align(
-                                      alignment: Alignment.center,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 0.0),
-                                        child: HeartbeatProgressIndicator(
-                                          startScale: 0.01,
-                                          endScale: 0.2,
-                                          child: const Image(
-                                            image: AssetImage('images/rocketbot_logo.png'),
-                                            color: Colors.white30,
-                                          ),
-                                        ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: StreamBuilder<ApiResponse<List<Giveaway>>>(
+                        stream: gwBlock!.coinsListStream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            switch (snapshot.data!.status) {
+                              case Status.loading:
+                                return Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 0.0),
+                                    child: HeartbeatProgressIndicator(
+                                      startScale: 0.01,
+                                      endScale: 0.2,
+                                      child: const Image(
+                                        image: AssetImage('images/rocketbot_logo.png'),
+                                        color: Colors.white30,
                                       ),
-                                    );
-                                  case Status.completed:
-                                    if (snapshot.data!.data!.isNotEmpty) {
-                                      return ListView.builder(
-                                          key: const PageStorageKey(0),
-                                          controller: gwScroll,
-                                          shrinkWrap: true,
-                                          itemCount: snapshot.data!.data!.length,
-                                          itemBuilder: (ctx, index) {
-                                            return GiveawayTile(
-                                              key: ValueKey<int>(snapshot.data!.data![index].id!),
-                                              giveaway: snapshot.data!.data![index],
-                                              callBack: giveawayCallback,
-                                            );
-                                          });
-                                    } else {
-                                      return Container(
-                                        width: double.infinity,
-                                        height: 60.0,
-                                        margin: const EdgeInsets.only(left: 12.0, right: 12.0),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white12,
-                                          borderRadius: BorderRadius.circular(10.0),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                          "No giveaway available at this moment",
-                                          style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
-                                        )),
-                                      );
-                                    }
-                                  case Status.error:
-                                    debugPrint("error");
-                                    break;
+                                    ),
+                                  ),
+                                );
+                              case Status.completed:
+                                if (snapshot.data!.data!.isNotEmpty) {
+                                  return ListView.builder(
+                                      key: const PageStorageKey(0),
+                                      controller: gwScroll,
+                                      shrinkWrap: true,
+                                      itemCount: snapshot.data!.data!.length,
+                                      itemBuilder: (ctx, index) {
+                                        return GiveawayTile(
+                                          key: ValueKey<int>(snapshot.data!.data![index].id!),
+                                          giveaway: snapshot.data!.data![index],
+                                          callBack: giveawayCallback,
+                                        );
+                                      });
+                                } else {
+                                  return Container(
+                                    width: double.infinity,
+                                    height: 60.0,
+                                    margin: const EdgeInsets.only(left: 12.0, right: 12.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white12,
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      "No giveaway available at this moment",
+                                      style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
+                                    )),
+                                  );
                                 }
-                              }
-                              return Container();
-                            },
-                          ),
-                        ),
+                              case Status.error:
+                                debugPrint("error");
+                                break;
+                            }
+                          }
+                          return Container();
+                        },
                       ),
                     ),
                   ),
-                  IgnorePointer(
-                    ignoring: activeSection == 1 ? false : true,
-                    child: Visibility(
-                      visible: activeSection == 1 ? true : false,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: StreamBuilder<ApiResponse<List<Airdrop>>>(
-                            stream: adBlock!.coinsListStream,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                switch (snapshot.data!.status) {
-                                  case Status.loading:
-                                    return Align(
-                                      alignment: Alignment.center,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 0.0),
-                                        child: HeartbeatProgressIndicator(
-                                          startScale: 0.01,
-                                          endScale: 0.2,
-                                          child: const Image(
-                                            image: AssetImage('images/rocketbot_logo.png'),
-                                            color: Colors.white30,
-                                          ),
-                                        ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: StreamBuilder<ApiResponse<List<Airdrop>>>(
+                        stream: adBlock!.coinsListStream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            switch (snapshot.data!.status) {
+                              case Status.loading:
+                                return Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 0.0),
+                                    child: HeartbeatProgressIndicator(
+                                      startScale: 0.01,
+                                      endScale: 0.2,
+                                      child: const Image(
+                                        image: AssetImage('images/rocketbot_logo.png'),
+                                        color: Colors.white30,
                                       ),
-                                    );
-                                  case Status.completed:
-                                    if (snapshot.data!.data!.isNotEmpty) {
-                                      return ListView.builder(
-                                          key: const PageStorageKey(1),
-                                          controller: adScroll,
-                                          shrinkWrap: true,
-                                          itemCount: snapshot.data!.data!.length,
-                                          itemBuilder: (ctx, index) {
-                                            return AirdropTile(
-                                              key: ValueKey<int>(snapshot.data!.data![index].id!),
-                                              airdrop: snapshot.data!.data![index],
-                                              callBack: aidropCallBack,
-                                            );
-                                          });
-                                    } else {
-                                      return Container(
-                                        width: double.infinity,
-                                        height: 60.0,
-                                        margin: const EdgeInsets.only(left: 12.0, right: 12.0),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white12,
-                                          borderRadius: BorderRadius.circular(10.0),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                          "No airdrop available at this moment",
-                                          style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
-                                        )),
-                                      );
-                                    }
-                                  case Status.error:
-                                    debugPrint("error");
-                                    break;
+                                    ),
+                                  ),
+                                );
+                              case Status.completed:
+                                if (snapshot.data!.data!.isNotEmpty) {
+                                  return ListView.builder(
+                                      key: const PageStorageKey(1),
+                                      controller: adScroll,
+                                      shrinkWrap: true,
+                                      itemCount: snapshot.data!.data!.length,
+                                      itemBuilder: (ctx, index) {
+                                        return AirdropTile(
+                                          key: ValueKey<int>(snapshot.data!.data![index].id!),
+                                          airdrop: snapshot.data!.data![index],
+                                          callBack: aidropCallBack,
+                                        );
+                                      });
+                                } else {
+                                  return Container(
+                                    width: double.infinity,
+                                    height: 60.0,
+                                    margin: const EdgeInsets.only(left: 12.0, right: 12.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white12,
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      "No airdrop available at this moment",
+                                      style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
+                                    )),
+                                  );
                                 }
-                              }
-                              return Container();
-                            },
-                          ),
-                        ),
+                              case Status.error:
+                                debugPrint("error");
+                                break;
+                            }
+                          }
+                          return Container();
+                        },
                       ),
                     ),
                   ),
-                  IgnorePointer(
-                    ignoring: activeSection == 2 ? false : true,
-                    child: Visibility(
-                      visible: activeSection == 2 ? true : false,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: StreamBuilder<ApiResponse<List<Lottery>>>(
-                            stream: ltBlock!.coinsListStream,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                switch (snapshot.data!.status) {
-                                  case Status.loading:
-                                    return Align(
-                                      alignment: Alignment.center,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 0.0),
-                                        child: HeartbeatProgressIndicator(
-                                          startScale: 0.01,
-                                          endScale: 0.2,
-                                          child: const Image(
-                                            image: AssetImage('images/rocketbot_logo.png'),
-                                            color: Colors.white30,
-                                          ),
-                                        ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: StreamBuilder<ApiResponse<List<Lottery>>>(
+                        stream: ltBlock!.coinsListStream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            switch (snapshot.data!.status) {
+                              case Status.loading:
+                                return Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 0.0),
+                                    child: HeartbeatProgressIndicator(
+                                      startScale: 0.01,
+                                      endScale: 0.2,
+                                      child: const Image(
+                                        image: AssetImage('images/rocketbot_logo.png'),
+                                        color: Colors.white30,
                                       ),
-                                    );
-                                  case Status.completed:
-                                    if (snapshot.data!.data!.isNotEmpty) {
-                                      return ListView.builder(
-                                          key: const PageStorageKey(2),
-                                          controller: ltScroll,
-                                          shrinkWrap: true,
-                                          itemCount: snapshot.data!.data!.length,
-                                          itemBuilder: (ctx, index) {
-                                            return LotteryTile(
-                                              key: ValueKey<int>(snapshot.data!.data![index].id!),
-                                              lottery: snapshot.data!.data![index],
-                                              callBack: lotteryCallback,
-                                            );
-                                          });
-                                    } else {
-                                      return Container(
-                                        width: double.infinity,
-                                        height: 60.0,
-                                        margin: const EdgeInsets.only(left: 12.0, right: 12.0),
-                                        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white12,
-                                          borderRadius: BorderRadius.circular(10.0),
-                                        ),
-                                        child: Center(
-                                            child: AutoSizeText(
-                                          "No Spin Lotteries available at this moment",
-                                          maxLines: 1,
-                                          minFontSize: 8.0,
-                                          style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
-                                        )),
-                                      );
-                                    }
-                                  case Status.error:
-                                    debugPrint("error");
-                                    break;
+                                    ),
+                                  ),
+                                );
+                              case Status.completed:
+                                if (snapshot.data!.data!.isNotEmpty) {
+                                  return ListView.builder(
+                                      key: const PageStorageKey(2),
+                                      controller: ltScroll,
+                                      shrinkWrap: true,
+                                      itemCount: snapshot.data!.data!.length,
+                                      itemBuilder: (ctx, index) {
+                                        return LotteryTile(
+                                          key: ValueKey<int>(snapshot.data!.data![index].id!),
+                                          lottery: snapshot.data!.data![index],
+                                          callBack: lotteryCallback,
+                                        );
+                                      });
+                                } else {
+                                  return Container(
+                                    width: double.infinity,
+                                    height: 60.0,
+                                    margin: const EdgeInsets.only(left: 12.0, right: 12.0),
+                                    padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white12,
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
+                                        child: AutoSizeText(
+                                      "No Spin Lotteries available at this moment",
+                                      maxLines: 1,
+                                      minFontSize: 8.0,
+                                      style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
+                                    )),
+                                  );
                                 }
-                              }
-                              return Container();
-                            },
-                          ),
-                        ),
+                              case Status.error:
+                                debugPrint("error");
+                                break;
+                            }
+                          }
+                          return Container();
+                        },
                       ),
                     ),
                   ),
                 ],
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GameSwitcher(
+                  key: _switchKey,
+                  changeType: (page) {
+                    setState(() {
+                      activeSection = page;
+                    });
+                    _pageController.animateToPage(page, duration: const Duration(milliseconds: 300), curve: Curves.decelerate);
+                  }),
             ),
           ],
         ),

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -1116,7 +1117,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       await _interface.post("masternode/unlock", queryLock, pos: true, debug: true);
       if (mounted) Navigator.of(context).pop();
       _keyStake.currentState?.reset();
-      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
+      var err = json.decode(e.toString());
+      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage']);
     } catch (e) {
       Map<String, dynamic> queryLock = {"idNode": mnLock?.node?.id};
       await _interface.post("masternode/unlock", queryLock, pos: true, debug: true);
@@ -1218,7 +1220,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
         _getMN();
       }
     } on ConflictDataException catch (e) {
-      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
+      var err = json.decode(e.toString());
+      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage'].toString());
     } catch (e) {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());

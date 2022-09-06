@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -54,7 +55,8 @@ class _ReferralScreenState extends State<ReferralScreen> {
       reward = double.parse(res['reward'].toString());
       codeErr = false;
     } on ConflictDataException catch (e) {
-      Dialogs.openAlertBox(context, "Error", e.toString());
+      var err = json.decode(e.toString());
+      Dialogs.openAlertBox(context, "Error", err['errorMessage'].toString());
       codeErr = true;
     } catch (e) {
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());

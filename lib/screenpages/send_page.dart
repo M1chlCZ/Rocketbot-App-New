@@ -8,11 +8,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_indicators/progress_indicators.dart';
-import 'package:rocketbot/component_widgets/button_neu.dart';
+import 'package:rocketbot/models/Invalid_req.dart';
 import 'package:rocketbot/models/balance_portfolio.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:rocketbot/models/fees.dart';
-import 'package:rocketbot/models/get_withdraws.dart';
 import 'package:rocketbot/models/withdraw_pwid.dart';
 import 'package:rocketbot/netinterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
@@ -161,7 +160,7 @@ class SendPageState extends State<SendPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: SizedBox(
-              height: 50,
+              height: 30,
               child: Center(
                   child: Text(
                 AppLocalizations.of(context)!.coin_sent,
@@ -173,29 +172,14 @@ class SendPageState extends State<SendPage> {
           elevation: 5.0,
         ));
       }
-    } on BadRequestException catch (r) {
-      _keyStake.currentState!.reset();
-      int messageStart = r.toString().indexOf("{");
-      int messageEnd = r.toString().indexOf("}");
-      var s = r.toString().substring(messageStart, messageEnd + 1);
-      var js = json.decode(s);
-      var wm = WithdrawalsModels.fromJson(js);
-      // _showError(wm.error!);
-
-      Dialogs.openAlertBox(context, wm.message!, wm.error!);
     } on ConflictDataException catch (r) {
       _keyStake.currentState!.reset();
-      int messageStart = r.toString().indexOf("{");
-      int messageEnd = r.toString().indexOf("}");
-      var s = r.toString().substring(messageStart, messageEnd + 1);
-      var js = json.decode(s);
-      var wm = WithdrawalsModels.fromJson(js);
-      // _showError(wm.error!);
-
-      Dialogs.openAlertBox(context, wm.message!, wm.error!);
-    } catch (e) {
+      var err = json.decode(r.toString());
+      Dialogs.openAlertBox(context,AppLocalizations.of(context)!.error, err['error']);
+    }catch(e){
       _keyStake.currentState!.reset();
-      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
+      var err = InvalidReq.fromJson(e.toString());
+      Dialogs.openAlertBox(context,AppLocalizations.of(context)!.error, err.message ?? "Invalid Request");
     }
   }
 

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
@@ -18,6 +17,7 @@ import '../models/user.dart';
 
 class MainMenuScreen extends StatefulWidget {
   static const String route = "menu";
+
   const MainMenuScreen({Key? key}) : super(key: key);
 
   @override
@@ -39,6 +39,20 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     _getUserInfo();
   }
 
+  gotoPreviousScreen() {
+    setState(() {
+      _selectedPageIndex = 0;
+    });
+    _pageController.animateToPage(_selectedPageIndex, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
+  }
+
+  gotoNextScreen() {
+      setState(() {
+       _selectedPageIndex = 2;
+      });
+    _pageController.animateToPage(_selectedPageIndex, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,12 +66,17 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 _selectedPageIndex = index;
               });
             },
-            children:  <Widget> [
+            children: <Widget>[
               const PortfolioScreen(),
-              const GiveAwayScreen(),
-             // Container(), //TODO NFT SCREEN
+              GiveAwayScreen(
+                prevScreen: gotoPreviousScreen,
+                nextScreen: gotoNextScreen,
+              ),
+              // Container(), //TODO NFT SCREEN
               const EarningsScreen(),
-              SettingsScreen(socials: _getUserInfo,),
+              SettingsScreen(
+                socials: _getUserInfo,
+              ),
             ]),
       ),
       bottomNavigationBar: SnakeNavigationBar.color(
@@ -66,10 +85,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         onTap: _onTappedBar,
         behaviour: SnakeBarBehaviour.floating,
         snakeShape: SnakeShape(
-          centered: false,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          )),
+            centered: false,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            )),
         unselectedLabelStyle: const TextStyle(
           color: Colors.white,
           fontSize: 12.0,
@@ -177,7 +196,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               height: 30,
               radius: 10.0,
               color: Colors.transparent,
-              child: Image.asset("images/set_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitWidth, color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
+              child: Image.asset("images/set_inactive.png",
+                  width: 30, height: 30.0, fit: BoxFit.fitWidth, color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
             ),
             label: 'Settings',
             activeIcon: FlatCustomButton(
@@ -185,7 +205,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               height: 30,
               radius: 10.0,
               color: Colors.transparent,
-              child: Image.asset("images/set.png", width: 30, height: 30.0, fit: BoxFit.fitWidth, color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
+              child: Image.asset("images/set.png",
+                  width: 30, height: 30.0, fit: BoxFit.fitWidth, color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
             ),
           ),
         ],
@@ -227,9 +248,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     }
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');
     final IOSInitializationSettings initializationSettingsIOS =
-    IOSInitializationSettings(onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
+        IOSInitializationSettings(onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
     final InitializationSettings initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+        InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: _onSelectNotification);
   }
 
@@ -240,7 +261,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   void _onSelectNotification(String? payload) {
     Dialogs.openAlertBox(context, "Alert", payload!);
   }
-
 
   void _onTappedBar(int value) {
     // if (value == 2) {
@@ -258,7 +278,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     return const Color(0xFF9D9BFD);
   }
 
- void _getUserInfo() async {
+  void _getUserInfo() async {
     try {
       List<int> socials = [];
       final response = await _interface.get("User/Me");

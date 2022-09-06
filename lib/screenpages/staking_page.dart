@@ -1027,22 +1027,13 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       _lostPosTX();
     } on BadRequestException catch (r) {
       if (mounted) Navigator.of(context).pop();
-      int messageStart = r.toString().indexOf("{");
-      int messageEnd = r.toString().indexOf("}");
-      var s = r.toString().substring(messageStart, messageEnd + 1);
-      var js = json.decode(s);
-      var wm = WithdrawalsModels.fromJson(js);
       _keyStake.currentState!.reset();
-      if (mounted) Dialogs.openAlertBox(context, wm.message!, "${wm.error!}\n\n$problem");
+      if (mounted) Dialogs.openAlertBox(context,AppLocalizations.of(context)!.error, r.toString());
     } on ConflictDataException catch (r) {
       if (mounted) Navigator.of(context).pop();
-      int messageStart = r.toString().indexOf("{");
-      int messageEnd = r.toString().indexOf("}");
-      var s = r.toString().substring(messageStart, messageEnd + 1);
-      var js = json.decode(s);
-      var wm = WithdrawalsModels.fromJson(js);
       _keyStake.currentState!.reset();
-      if (mounted) Dialogs.openAlertBox(context, wm.message!, "${wm.error!}\n\n$problem");
+      var err = json.decode(r.toString());
+      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage']);
     } catch (e) {
       if (mounted) Navigator.of(context).pop();
       _keyStake.currentState!.reset();

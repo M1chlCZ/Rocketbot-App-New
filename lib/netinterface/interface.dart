@@ -132,8 +132,7 @@ class NetInterface {
       // throw UnauthorisedException(response.body.toString());
       case 500:
       case 409:
-        var responseJson = json.decode(response.body.toString());
-        throw ConflictDataException(responseJson['errorMessage'] ?? '');
+        throw ConflictDataException(response.body.toString() ?? '');
       default:
         throw FetchDataException('Error occurred while communication with server: ${response.body}');
     }
