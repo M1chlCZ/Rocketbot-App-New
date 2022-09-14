@@ -16,7 +16,7 @@ class GameSwitcher extends StatefulWidget {
 
 class GameSwitcherState extends State<GameSwitcher> {
   var _active = 0;
-  final _duration = const Duration(milliseconds: 300);
+  final _duration = const Duration(milliseconds: 500);
 
   currentPage(int p) {
     setState(() {
@@ -29,17 +29,17 @@ class GameSwitcherState extends State<GameSwitcher> {
     return SizedBox(
       width: 300,
       child: Container(
-          padding: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(3.0),
           decoration: BoxDecoration(
               color: const Color(0xFF394359),
-              borderRadius: BorderRadius.circular(10.0)
+              borderRadius: BorderRadius.circular(8.0)
           ),
           child: Row(children: [
             Expanded(
               child: AnimatedContainer(
                 decoration: BoxDecoration(
-                    color: _active == 0 ?   const Color(0xFF9D9BFD) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(3.0)),
+                    color: _active == 0 ?   const Color(0xFF9D9BFD) : const Color(0x009D9BFD),
+                    borderRadius: BorderRadius.circular(5.0)),
                 duration: _duration,
                 child: FlatCustomButton(
                     color: Colors.transparent,
@@ -70,8 +70,8 @@ class GameSwitcherState extends State<GameSwitcher> {
             Expanded(
               child: AnimatedContainer(
                 decoration: BoxDecoration(
-                    color: _active == 1 ? const Color(0xFF9D9BFD) : Colors.transparent ,
-                    borderRadius: BorderRadius.circular(3.0)),
+                    color: _active == 1 ? const Color(0xFF9D9BFD) : const Color(0x009D9BFD),
+                    borderRadius: BorderRadius.circular(5.0)),
                 // opacity: _active == 1 ? 1.0 : 0.4,
                 duration: _duration,
                 child: FlatCustomButton(
@@ -102,8 +102,8 @@ class GameSwitcherState extends State<GameSwitcher> {
             Expanded(
               child: AnimatedContainer(
                 decoration: BoxDecoration(
-                    color: _active == 2 ? const Color(0xFF9D9BFD) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(3.0)),
+                    color: _active == 2 ? const Color(0xFF9D9BFD) : const Color(0x009D9BFD),
+                    borderRadius: BorderRadius.circular(5.0)),
                 // opacity: _active == 1 ? 1.0 : 0.4,
                 duration: _duration,
                 child: FlatCustomButton(

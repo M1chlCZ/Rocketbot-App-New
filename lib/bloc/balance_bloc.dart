@@ -6,6 +6,7 @@ import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/support/globals.dart' as globals;
 import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rxdart/rxdart.dart';
 
 class BalancesBloc {
   final CoinBalances _balanceList = CoinBalances();
@@ -23,7 +24,8 @@ class BalancesBloc {
       _coinListController!.stream;
 
   BalancesBloc() {
-    _coinListController = StreamController<ApiResponse<List<CoinBalance>>>();
+    _coinListController = BehaviorSubject<ApiResponse<List<CoinBalance>>>();
+
     fetchBalancesList();
   }
 

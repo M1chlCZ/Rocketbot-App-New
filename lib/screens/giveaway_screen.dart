@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/get_airdrops_bloc.dart';
 import 'package:rocketbot/bloc/get_giveaways_bloc.dart';
@@ -18,6 +19,7 @@ import 'package:rocketbot/widgets/giveaway_tile.dart';
 import 'package:rocketbot/widgets/lottery_tile.dart';
 
 import '../netinterface/interface.dart';
+import '../widgets/animted_list_item_wrapper.dart';
 
 class GiveAwayScreen extends StatefulWidget {
   final VoidCallback prevScreen;
@@ -35,6 +37,7 @@ class GiveAwayScreen extends StatefulWidget {
 
 class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAliveClientMixin<GiveAwayScreen> {
   final _pageController = PageController(initialPage: 0);
+  final ValueNotifier<ScrollDirection> scrollDirectionNotifier = ValueNotifier<ScrollDirection>(ScrollDirection.forward);
   final _switchKey = GlobalKey<GameSwitcherState>();
   final NetInterface interface = NetInterface();
   ScrollController gwScroll = ScrollController();
@@ -63,14 +66,13 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
     _scrollListener(ltScroll, 3);
 
     _pageController.addListener(() {
-      print(_pageController.position);
       if (_pageController.page == 0) {
-        if (_pageController.offset < -120) {
+        if (_pageController.offset < -widthScreen * 0.2) {
           widget.prevScreen();
           _pageController.jumpToPage(0);
         }
       } else if (_pageController.page == 2) {
-        if (_pageController.offset > widthScreen * 2 + 120) {
+        if (_pageController.offset > (widthScreen * 2) + (widthScreen * 0.2)) {
           widget.nextScreen();
           _pageController.jumpToPage(0);
         }
@@ -198,18 +200,34 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                 );
                               case Status.completed:
                                 if (snapshot.data!.data!.isNotEmpty) {
-                                  return ListView.builder(
-                                      key: const PageStorageKey(0),
-                                      controller: gwScroll,
-                                      shrinkWrap: true,
-                                      itemCount: snapshot.data!.data!.length,
-                                      itemBuilder: (ctx, index) {
-                                        return GiveawayTile(
-                                          key: ValueKey<int>(snapshot.data!.data![index].id!),
-                                          giveaway: snapshot.data!.data![index],
-                                          callBack: giveawayCallback,
-                                        );
-                                      });
+                                  return NotificationListener<UserScrollNotification>(
+                                    onNotification: (UserScrollNotification notification) {
+                                      if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
+                                        scrollDirectionNotifier.value = notification.direction;
+                                      }
+
+                                      return true;
+                                    },
+                                    child: ListView.builder(
+                                        key: const PageStorageKey(0),
+                                        controller: gwScroll,
+                                        shrinkWrap: true,
+                                        itemCount: snapshot.data!.data!.length,
+                                        itemBuilder: (ctx, index) {
+                                          return ValueListenableBuilder(
+                                              valueListenable: scrollDirectionNotifier,
+                                              child: GiveawayTile(
+                                                  key: ValueKey<int>(snapshot.data!.data![index].id!),
+                                                  giveaway: snapshot.data!.data![index],
+                                                  callBack: giveawayCallback),
+                                              builder: (BuildContext context, scrollDirection, Widget? child) {
+                                                return AnimatedListItemWrapper(
+                                                  scrollDirection: scrollDirection,
+                                                  child: child!,
+                                                );
+                                              });
+                                        }),
+                                  );
                                 } else {
                                   return Container(
                                     width: double.infinity,
@@ -262,18 +280,35 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                 );
                               case Status.completed:
                                 if (snapshot.data!.data!.isNotEmpty) {
-                                  return ListView.builder(
-                                      key: const PageStorageKey(1),
-                                      controller: adScroll,
-                                      shrinkWrap: true,
-                                      itemCount: snapshot.data!.data!.length,
-                                      itemBuilder: (ctx, index) {
-                                        return AirdropTile(
-                                          key: ValueKey<int>(snapshot.data!.data![index].id!),
-                                          airdrop: snapshot.data!.data![index],
-                                          callBack: aidropCallBack,
-                                        );
-                                      });
+                                  return NotificationListener<UserScrollNotification>(
+                                    onNotification: (UserScrollNotification notification) {
+                                      if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
+                                        scrollDirectionNotifier.value = notification.direction;
+                                      }
+
+                                      return true;
+                                    },
+                                    child: ListView.builder(
+                                        key: const PageStorageKey(1),
+                                        controller: adScroll,
+                                        shrinkWrap: true,
+                                        itemCount: snapshot.data!.data!.length,
+                                        itemBuilder: (ctx, index) {
+                                          return ValueListenableBuilder(
+                                              valueListenable: scrollDirectionNotifier,
+                                              child: AirdropTile(
+                                                key: ValueKey<int>(snapshot.data!.data![index].id!),
+                                                airdrop: snapshot.data!.data![index],
+                                                callBack: aidropCallBack,
+                                              ),
+                                              builder: (BuildContext context, scrollDirection, Widget? child) {
+                                                return AnimatedListItemWrapper(
+                                                  scrollDirection: scrollDirection,
+                                                  child: child!,
+                                                );
+                                              });
+                                        }),
+                                  );
                                 } else {
                                   return Container(
                                     width: double.infinity,
@@ -326,18 +361,35 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                 );
                               case Status.completed:
                                 if (snapshot.data!.data!.isNotEmpty) {
-                                  return ListView.builder(
-                                      key: const PageStorageKey(2),
-                                      controller: ltScroll,
-                                      shrinkWrap: true,
-                                      itemCount: snapshot.data!.data!.length,
-                                      itemBuilder: (ctx, index) {
-                                        return LotteryTile(
-                                          key: ValueKey<int>(snapshot.data!.data![index].id!),
-                                          lottery: snapshot.data!.data![index],
-                                          callBack: lotteryCallback,
-                                        );
-                                      });
+                                  return NotificationListener<UserScrollNotification>(
+                                    onNotification: (UserScrollNotification notification) {
+                                      if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
+                                        scrollDirectionNotifier.value = notification.direction;
+                                      }
+
+                                      return true;
+                                    },
+                                    child: ListView.builder(
+                                        key: const PageStorageKey(2),
+                                        controller: ltScroll,
+                                        shrinkWrap: true,
+                                        itemCount: snapshot.data!.data!.length,
+                                        itemBuilder: (ctx, index) {
+                                          return ValueListenableBuilder(
+                                              valueListenable: scrollDirectionNotifier,
+                                              child: LotteryTile(
+                                                key: ValueKey<int>(snapshot.data!.data![index].id!),
+                                                lottery: snapshot.data!.data![index],
+                                                callBack: lotteryCallback,
+                                              ),
+                                              builder: (BuildContext context, scrollDirection, Widget? child) {
+                                                return AnimatedListItemWrapper(
+                                                  scrollDirection: scrollDirection,
+                                                  child: child!,
+                                                );
+                                              });
+                                        }),
+                                  );
                                 } else {
                                   return Container(
                                     width: double.infinity,
@@ -388,5 +440,5 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }

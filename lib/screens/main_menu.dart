@@ -30,6 +30,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   final _pageController = PageController(initialPage: 0);
   int _selectedPageIndex = 0;
   bool _socialsOK = true;
+  double widthScreen = 0.0;
 
   @override
   void initState() {
@@ -55,6 +56,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   @override
   Widget build(BuildContext context) {
+    widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(bottom: 5.0),

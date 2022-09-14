@@ -37,17 +37,17 @@ class AirdropTile extends StatelessWidget {
             child: Row(
               children: [
                 const SizedBox(
-                  width: 22.0,
+                  width: 24.0,
                 ),
                 Container(
-                  height: 70,
+                  height: 75,
                   width: 80.0,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(18.0),
                   ),
                   padding: const EdgeInsets.all(8.0),
-                  child: PictureCacheWidget(coin: airdrop.coin),
+                  child: PictureCacheWidget(coin: airdrop.coin!),
                 ),
                 const SizedBox(
                   width: 60.0,

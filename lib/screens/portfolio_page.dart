@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -33,6 +33,7 @@ import 'package:rocketbot/support/globals.dart' as globals;
 import 'package:rocketbot/support/life_cycle_watcher.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 import 'package:rocketbot/support/utils.dart';
+import 'package:rocketbot/widgets/animted_list_item_wrapper.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:walletconnect_dart/walletconnect_dart.dart';
 
@@ -53,6 +54,7 @@ class PortfolioScreen extends StatefulWidget {
 class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with AutomaticKeepAliveClientMixin<PortfolioScreen> {
   final NetInterface _interface = NetInterface();
   final ScrollController _scrollController = ScrollController();
+  final ValueNotifier<ScrollDirection> scrollDirectionNotifier = ValueNotifier<ScrollDirection>(ScrollDirection.forward);
   BalancesBloc? _bloc;
   PosCoinsList? pl;
   List<CoinBalance>? _listCoins;
@@ -425,370 +427,397 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
             RefreshIndicator(
               color: const Color(0xFFCB1668),
               onRefresh: _refreshData,
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 0.0),
-                      child: AnimatedOpacity(
-                        opacity: _me != null ? 1.0 : 0.0,
-                        duration: const Duration(milliseconds: 800),
-                        child: Row(
-                          children: [
-                            if (_me != null) Text("${_me!.data!.name} ${_me!.data!.surname}", style: Theme.of(context).textTheme.headline3),
-                            const SizedBox(
-                              width: 50,
-                            ),
-                            Expanded(
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 15.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Visibility(
-                                        visible: auth,
-                                        child: SizedBox(
-                                          height: 30,
-                                          width: 25,
-                                          child: NeuButton(
-                                            onTap: () async {
-                                              setState(() {
-                                                if (popMenu) {
-                                                  popMenu = false;
-                                                } else {
-                                                  popMenu = true;
-                                                }
-                                              });
-                                            },
-                                            imageIcon: Image.asset(
-                                              "images/candle.png",
-                                              color: Colors.white,
+              child: NotificationListener<UserScrollNotification>(
+                onNotification: (UserScrollNotification notification) {
+                  if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
+                    scrollDirectionNotifier.value = notification.direction;
+                  }
+
+                  return true;
+                },
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 0.0),
+                        child: AnimatedOpacity(
+                          opacity: _me != null ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 800),
+                          child: Row(
+                            children: [
+                              if (_me != null) Text("${_me!.data!.name} ${_me!.data!.surname}", style: Theme.of(context).textTheme.headline3),
+                              const SizedBox(
+                                width: 50,
+                              ),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 15.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Visibility(
+                                          visible: auth,
+                                          child: SizedBox(
+                                            height: 30,
+                                            width: 25,
+                                            child: NeuButton(
+                                              onTap: () async {
+                                                setState(() {
+                                                  if (popMenu) {
+                                                    popMenu = false;
+                                                  } else {
+                                                    popMenu = true;
+                                                  }
+                                                });
+                                              },
+                                              imageIcon: Image.asset(
+                                                "images/candle.png",
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        width: 20.0,
-                                      ),
-                                      SizedBox(
-                                        height: 30,
-                                        width: 25,
-                                        child: NeuButton(
-                                          onTap: () {
-                                            Navigator.of(context)
-                                                .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-                                                  return const NotificationScreen();
-                                                }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                                                  return FadeTransition(opacity: animation, child: child);
-                                                }))
-                                                .then((value) => _getUnread());
-                                          },
-                                          imageIcon: Image.asset(
-                                            _unreadNot > 0 ? "images/notification_on.png" : "images/notification_off.png",
-                                            color: _unreadNot > 0 ? Colors.amber : Colors.white,
+                                        const SizedBox(
+                                          width: 20.0,
+                                        ),
+                                        SizedBox(
+                                          height: 30,
+                                          width: 25,
+                                          child: NeuButton(
+                                            onTap: () {
+                                              Navigator.of(context)
+                                                  .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+                                                    return const NotificationScreen();
+                                                  }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                                                    return FadeTransition(opacity: animation, child: child);
+                                                  }))
+                                                  .then((value) => _getUnread());
+                                            },
+                                            imageIcon: Image.asset(
+                                              _unreadNot > 0 ? "images/notification_on.png" : "images/notification_off.png",
+                                              color: _unreadNot > 0 ? Colors.amber : Colors.white,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 115,
-                      child: portCalc
-                          ? Container(
-                              margin: const EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.0),
-                                image: const DecorationImage(
-                                    opacity: 0.5,
-                                    scale: 0.5,
-                                    filterQuality: FilterQuality.high,
-                                    alignment: Alignment(0.0, 1.0),
-                                    fit: BoxFit.cover,
-                                    image: AssetImage("images/bal.png")),
-                                gradient: const RadialGradient(center: Alignment(1.5, -3.0), radius: 5.0, colors: [
-                                  Color(0xFF7388FF),
-                                  Color(0xFFCA73FF),
-                                  Color(0xFFFF739D),
-                                ]),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                // alignment: AlignmentDirectional.center,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(
-                                        width: 20.0,
-                                      ),
-                                      Text(
-                                        AppLocalizations.of(context)!.balance,
-                                        style: Theme.of(context).textTheme.headline2,
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(
-                                        width: 18.0,
-                                      ),
-                                      Expanded(
-                                        child: AutoSizeText(
-                                          "\$${totalUSD.toStringAsFixed(2)}",
-                                          style: Theme.of(context).textTheme.headline1,
-                                          minFontSize: 8.0,
-                                          maxLines: 1,
-                                          textAlign: TextAlign.left,
+                      SizedBox(
+                        width: double.infinity,
+                        height: 115,
+                        child: portCalc
+                            ? Container(
+                                margin: const EdgeInsets.all(10.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  image: const DecorationImage(
+                                      opacity: 0.5,
+                                      scale: 0.5,
+                                      filterQuality: FilterQuality.high,
+                                      alignment: Alignment(0.0, 1.0),
+                                      fit: BoxFit.cover,
+                                      image: AssetImage("images/bal.png")),
+                                  gradient: const RadialGradient(center: Alignment(1.5, -3.0), radius: 5.0, colors: [
+                                    Color(0xFF7388FF),
+                                    Color(0xFFCA73FF),
+                                    Color(0xFFFF739D),
+                                  ]),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  // alignment: AlignmentDirectional.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        const SizedBox(
+                                          width: 20.0,
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 3.0,
-                                      ),
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(top: 3.0),
+                                        Text(
+                                          AppLocalizations.of(context)!.balance,
+                                          style: Theme.of(context).textTheme.headline2,
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        const SizedBox(
+                                          width: 18.0,
+                                        ),
+                                        Expanded(
                                           child: AutoSizeText(
-                                            "${_formatPrice(totalBTC)} BTC",
-                                            style: Theme.of(context).textTheme.headline2,
+                                            "\$${totalUSD.toStringAsFixed(2)}",
+                                            style: Theme.of(context).textTheme.headline1,
                                             minFontSize: 8.0,
                                             maxLines: 1,
-                                            textAlign: TextAlign.right,
+                                            textAlign: TextAlign.left,
                                           ),
                                         ),
+                                        const SizedBox(
+                                          height: 3.0,
+                                        ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(top: 3.0),
+                                            child: AutoSizeText(
+                                              "${_formatPrice(totalBTC)} BTC",
+                                              style: Theme.of(context).textTheme.headline2,
+                                              minFontSize: 8.0,
+                                              maxLines: 1,
+                                              textAlign: TextAlign.right,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 12.0,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Container(),
+                      ),
+                      if (!_emailOK)
+                        GestureDetector(
+                          onTap: () {
+                            Utils.openLink("https://app.rocketbot.pro/Account/General");
+                          },
+                          child: Container(
+                              height: 30,
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 3.0),
+                              decoration: BoxDecoration(
+                                  gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
+                                    Color(0xFFF05523),
+                                    Color(0xFF812D88),
+                                  ]),
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              child: Center(
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text(
+                                    "Please confirm your email",
+                                    style: TextStyle(fontSize: 12.0, color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                    width: 5.0,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 1.0),
+                                    child: Icon(
+                                      Icons.open_in_new,
+                                      color: Colors.white,
+                                      size: 12.0,
+                                    ),
+                                  ),
+                                ],
+                              ))),
+                        ),
+                      const SizedBox(
+                        height: 2.0,
+                      ),
+                      SizedBox(
+                        height: 25.0,
+                        width: double.infinity,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0, right: 3.0),
+                            child: Opacity(
+                              opacity: 0.6,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.only(bottom: 0.0),
+                                    child: Icon(
+                                      Icons.sort,
+                                      color: Colors.white30,
+                                      size: 10.0,
+                                    ),
+                                  ),
+                                  // Text('sort by:', style: Theme.of(context).textTheme.headline2!.copyWith( fontSize: 14.0, color: Colors.white30)),
+                                  const SizedBox(
+                                    width: 5.0,
+                                  ),
+                                  DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: _dropValue,
+                                      isDense: true,
+                                      onChanged: (String? val) async {
+                                        _bloc!.showWait();
+                                        setState(() {
+                                          _dropValue = val!;
+                                          _listCoins = null;
+                                        });
+                                        await Future.delayed(const Duration(milliseconds: 100), () {});
+                                        int sort = _dropValues.indexWhere((element) => element == _dropValue);
+                                        await SecureStorage.writeStorage(key: globals.SORT_TYPE, value: sort.toString());
+                                        await _bloc!.fetchBalancesList(sort: sort);
+                                        await _checkZero();
+                                      },
+                                      items: _dropValues
+                                          .map((e) => DropdownMenuItem(
+                                              value: e,
+                                              child: SizedBox(
+                                                  width: 130,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(bottom: 2.0),
+                                                    child: Text(e,
+                                                        style:
+                                                            Theme.of(context).textTheme.headline2!.copyWith(fontSize: 11.0, color: Colors.white70)),
+                                                  ))))
+                                          .toList(),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 5.0, right: 8.0, top: 1.0),
+                                      child: SizedBox(
+                                        height: 0.5,
+                                        child: Container(
+                                          color: portCalc ? Colors.white12 : Colors.transparent,
+                                        ),
                                       ),
-                                      const SizedBox(
-                                        width: 12.0,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5.0,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 1.0),
+                                    child: FlatCustomButton(
+                                      onTap: () async {
+                                        _bloc!.showWait();
+                                        await Future.delayed(const Duration(milliseconds: 100), () {});
+                                        setState(() {
+                                          _listCoins = null;
+                                          if (_hideZero) {
+                                            _hideZero = false;
+                                            _bloc!.fetchBalancesList();
+                                            // _bloc!.filterCoinsList(zero: _hideZero);
+                                          } else {
+                                            _hideZero = true;
+                                            _bloc!.filterCoinsList(zero: _hideZero);
+                                            // _bloc!.filterCoinsList(zero: _hideZero);
+                                          }
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 0.0, right: 1.0),
+                                        child: FittedBox(
+                                            child: AutoSizeText(
+                                          AppLocalizations.of(context)!.hide_zeros,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline2!
+                                              .copyWith(fontSize: 11.0, color: _hideZero ? Colors.white : Colors.white30),
+                                        )),
                                       ),
-                                    ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 8.0,
                                   ),
                                 ],
                               ),
-                            )
-                          : Container(),
-                    ),
-                    if(!_emailOK)
-                    GestureDetector(
-                      onTap: () {
-                        Utils.openLink("https://app.rocketbot.pro/Account/General");
-                      },
-                      child: Container(
-                          height: 30,
-                          width: double.infinity,
-                          margin: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 3.0),
-                          decoration: BoxDecoration(
-                              gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
-                                Color(0xFFF05523),
-                                Color(0xFF812D88),
-                              ]),
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: Center(
-                              child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children:const [
-                               Text(
-                                "Please confirm your email",
-                                style: TextStyle(fontSize: 12.0, color: Colors.white),
-                              ),
-                               SizedBox(
-                                width: 5.0,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 1.0),
-                                child: Icon(
-                                  Icons.open_in_new,
-                                  color: Colors.white,
-                                  size: 12.0,
-                                ),
-                              ),
-                            ],
-                          ))),
-                    ),
-                    const SizedBox(
-                      height: 2.0,
-                    ),
-                    SizedBox(
-                      height: 25.0,
-                      width: double.infinity,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 3.0),
-                          child: Opacity(
-                            opacity: 0.6,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(bottom: 0.0),
-                                  child: Icon(
-                                    Icons.sort,
-                                    color: Colors.white30,
-                                    size: 10.0,
-                                  ),
-                                ),
-                                // Text('sort by:', style: Theme.of(context).textTheme.headline2!.copyWith( fontSize: 14.0, color: Colors.white30)),
-                                const SizedBox(
-                                  width: 5.0,
-                                ),
-                                DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: _dropValue,
-                                    isDense: true,
-                                    onChanged: (String? val) async {
-                                      _bloc!.showWait();
-                                      setState(() {
-                                        _dropValue = val!;
-                                        _listCoins = null;
-                                      });
-                                      await Future.delayed(const Duration(milliseconds: 100), () {});
-                                      int sort = _dropValues.indexWhere((element) => element == _dropValue);
-                                      await SecureStorage.writeStorage(key: globals.SORT_TYPE, value: sort.toString());
-                                      await _bloc!.fetchBalancesList(sort: sort);
-                                      await _checkZero();
-                                    },
-                                    items: _dropValues
-                                        .map((e) => DropdownMenuItem(
-                                            value: e,
-                                            child: SizedBox(
-                                                width: 130,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(bottom: 2.0),
-                                                  child: Text(e,
-                                                      style: Theme.of(context).textTheme.headline2!.copyWith(fontSize: 11.0, color: Colors.white70)),
-                                                ))))
-                                        .toList(),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 5.0, right: 8.0, top: 1.0),
-                                    child: SizedBox(
-                                      height: 0.5,
-                                      child: Container(
-                                        color: portCalc ? Colors.white12 : Colors.transparent,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 5.0,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 1.0),
-                                  child: FlatCustomButton(
-                                    onTap: () async {
-                                      _bloc!.showWait();
-                                      await Future.delayed(const Duration(milliseconds: 100), () {});
-                                      setState(() {
-                                        _listCoins = null;
-                                        if (_hideZero) {
-                                          _hideZero = false;
-                                          _bloc!.fetchBalancesList();
-                                          // _bloc!.filterCoinsList(zero: _hideZero);
-                                        } else {
-                                          _hideZero = true;
-                                          _bloc!.filterCoinsList(zero: _hideZero);
-                                          // _bloc!.filterCoinsList(zero: _hideZero);
-                                        }
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 0.0, right: 1.0),
-                                      child: FittedBox(
-                                          child: AutoSizeText(
-                                        AppLocalizations.of(context)!.hide_zeros,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline2!
-                                            .copyWith(fontSize: 11.0, color: _hideZero ? Colors.white : Colors.white30),
-                                      )),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 8.0,
-                                ),
-                              ],
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 3.0, left: 5.0, right: 5.0),
-                        child: StreamBuilder<ApiResponse<List<CoinBalance>>>(
-                          stream: _bloc!.coinsListStream,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              switch (snapshot.data!.status) {
-                                case Status.loading:
-                                  _listCoins = null;
-                                  return Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 40.0),
-                                      child: HeartbeatProgressIndicator(
-                                        startScale: 0.01,
-                                        endScale: 0.2,
-                                        child: const Image(
-                                          image: AssetImage('images/rocketbot_logo.png'),
-                                          color: Colors.white30,
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 3.0, left: 5.0, right: 5.0),
+                          child: StreamBuilder<ApiResponse<List<CoinBalance>>>(
+                            stream: _bloc!.coinsListStream,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                switch (snapshot.data!.status) {
+                                  case Status.loading:
+                                    _listCoins = null;
+                                    return Align(
+                                      alignment: Alignment.topCenter,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 40.0),
+                                        child: HeartbeatProgressIndicator(
+                                          startScale: 0.01,
+                                          endScale: 0.2,
+                                          child: const Image(
+                                            image: AssetImage('images/rocketbot_logo.png'),
+                                            color: Colors.white30,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                case Status.completed:
-                                  PriceGraphCache.refreshAllRecords();
-                                  if (_listCoins == null) {
-                                    _listCoins = snapshot.data!.data!;
-                                    _calculatePortfolio();
-                                  }
-                                  return ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                                      itemCount: snapshot.data!.data!.length,
-                                      itemBuilder: (ctx, index) {
-                                        return CoinListView(
-                                          key: ValueKey(snapshot.data!.data![index].coin!.id!),
-                                          coin: snapshot.data!.data![index],
-                                          free: Decimal.parse(snapshot.data!.data![index].free.toString()),
-                                          coinSwitch: _changeCoin,
-                                        );
-                                      });
-                                case Status.error:
-                                  debugPrint("error");
-                                  break;
+                                    );
+                                  case Status.completed:
+                                    PriceGraphCache.refreshAllRecords();
+                                    if (_listCoins == null) {
+                                      _listCoins = snapshot.data!.data!;
+                                      _calculatePortfolio();
+                                    }
+                                    return ListView.builder(
+                                        cacheExtent: 0,
+                                        addAutomaticKeepAlives: false,
+                                        shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                                        itemCount: snapshot.data!.data!.length,
+                                        itemBuilder: (ctx, index) {
+                                          return CoinListView(
+                                            key: ValueKey(snapshot.data!.data![index].coin!.id!),
+                                            coin: snapshot.data!.data![index],
+                                            free: Decimal.parse(snapshot.data!.data![index].free.toString()),
+                                            coinSwitch: _changeCoin,
+                                          );
+                                          // return ValueListenableBuilder(
+                                          //    valueListenable: scrollDirectionNotifier,
+                                          //    child: CoinListView(
+                                          //       key: ValueKey(snapshot.data!.data![index].coin!.id!),
+                                          //       coin: snapshot.data!.data![index],
+                                          //       free: Decimal.parse(snapshot.data!.data![index].free.toString()),
+                                          //       coinSwitch: _changeCoin,
+                                          //     ),
+                                          //    builder: (context, ScrollDirection scrollDirection, child) {
+                                          //      return AnimatedListItemWrapper(
+                                          //        scrollDirection: scrollDirection,
+                                          //        child: child!,
+                                          //      );
+                                          //    },
+                                          //  );
+                                        });
+                                  case Status.error:
+                                    debugPrint("error");
+                                    break;
+                                }
                               }
-                            }
-                            return Container();
-                          },
+                              return Container();
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

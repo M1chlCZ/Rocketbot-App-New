@@ -46,7 +46,8 @@ class _EarningsChartState extends State<EarningsChart> {
             sectionsSpace: 0,
             centerSpaceRadius: 55,
             centerSpaceColor: Colors.transparent,
-            sections: showingSections(widget.sectors)),
+            sections: showingSections(widget.sectors)
+        ),
       ),
     );
   }
@@ -62,35 +63,35 @@ class _EarningsChartState extends State<EarningsChart> {
         color: sector.color,
         value: sector.value,
         radius: radius,
-        badgeWidget: Container(
-          height: 55,
-            width: 100,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-              color: sector.color!,
-            ),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Column(
-                  children: [
-                    AutoSizeText(
-                        sector.nam,
-                      maxLines: 1,
-                      minFontSize: 4.0,
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
-                    AutoSizeText(
-                      sector.value.toString(),
-                      maxLines: 1,
-                      minFontSize: 4.0,
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-            )
-        ),
+        // badgeWidget: Container(
+        //   height: 55,
+        //     width: 100,
+        //     decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(5.0),
+        //       color: sector.color!,
+        //     ),
+        //     child: Center(
+        //       child: Padding(
+        //         padding: const EdgeInsets.all(4.0),
+        //         child: Column(
+        //           children: [
+        //             AutoSizeText(
+        //                 sector.nam,
+        //               maxLines: 1,
+        //               minFontSize: 4.0,
+        //               style: Theme.of(context).textTheme.bodyText2,
+        //             ),
+        //             AutoSizeText(
+        //               sector.value.toString(),
+        //               maxLines: 1,
+        //               minFontSize: 4.0,
+        //               style: const TextStyle(color: Colors.white),
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     )
+        // ),
         title: '',
       );
       list.add(data);

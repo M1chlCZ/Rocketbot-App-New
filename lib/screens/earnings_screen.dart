@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -157,7 +158,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: SizedBox(
-                                  width: 85,
+                                  width: 40,
                                   child: Image.asset("images/equity.png", color: Colors.white54, fit: BoxFit.fitWidth)),
                             ),
                           ),
@@ -195,12 +196,51 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                                       padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 5.0),
                                       child: Divider(height: 2.0, color: Colors.white70,),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 80.0),
-                                      child: SizedBox(
-                                          height: 200,
-                                          width: 100,
-                                          child: EarningsChart(list)),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        const SizedBox(
+                                          width: 10.0,
+                                        ),
+                                        Expanded(
+                                          child: SizedBox(
+                                              height: 200,
+                                            child:Center(
+                                              child: ListView.builder(
+                                                shrinkWrap: true,
+                                                itemBuilder: (context, index){
+                                                return Column(
+                                                  children: [
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(8.0),
+                                                        color: list[index].col,
+                                                      ),
+                                                      height: 30,
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            AutoSizeText(list[index].nam, maxLines: 1, minFontSize: 4.0, style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 12.0, color: Colors.white70),),
+                                                            AutoSizeText(list[index].val.toString(), maxLines: 1, minFontSize: 4.0, style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 14.0, color: Colors.white70),),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const Divider(height: 5.0,),
+                                                  ],
+                                                );
+                                              }, itemCount: list.length,),
+                                            ),
+                                            ),
+                                          ),
+                                        SizedBox(
+                                            height: 200,
+                                            width: 200,
+                                            child: EarningsChart(list)),
+                                      ],
                                     ),
                                   ],
                                 )

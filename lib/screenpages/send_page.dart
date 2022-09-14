@@ -178,8 +178,8 @@ class SendPageState extends State<SendPage> {
       Dialogs.openAlertBox(context,AppLocalizations.of(context)!.error, err['error']);
     }catch(e){
       _keyStake.currentState!.reset();
-      var err = InvalidReq.fromJson(e.toString());
-      Dialogs.openAlertBox(context,AppLocalizations.of(context)!.error, err.message ?? "Invalid Request");
+      // var err = InvalidReq.fromJson(e.toString());
+      Dialogs.openAlertBox(context,AppLocalizations.of(context)!.error, e.toString() ?? "Invalid Request");
     }
   }
 
