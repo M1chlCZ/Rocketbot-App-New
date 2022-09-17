@@ -152,7 +152,7 @@
   "ref_hint" : "Oscanujte podobně vypdající QR kód a vaše pozvánka bude přijate. \nKaždý uživatel může využít tuto promo akci jenom jednou!",
   "balance": "Zůstatek",
   "mn_your_mns" : "Vaše masternody",
-  "mn_total" : "Celkový počet aktivních {1} masternodů",
+  "mn_total" : "Celkový počet aktivních {1} MN",
   "mn_day_reward" : "Denní odměna 1 aktivní {1} MN",
   "mn_average_payrate" : "Průměrný čas odměny",
   "mn_average_start" : "Průměrný čas odstartování MN",

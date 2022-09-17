@@ -33,7 +33,6 @@ import 'package:rocketbot/support/globals.dart' as globals;
 import 'package:rocketbot/support/life_cycle_watcher.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 import 'package:rocketbot/support/utils.dart';
-import 'package:rocketbot/widgets/animted_list_item_wrapper.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:walletconnect_dart/walletconnect_dart.dart';
 

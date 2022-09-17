@@ -9,7 +9,6 @@ import 'package:rocketbot/screens/earnings_screen.dart';
 import 'package:rocketbot/screens/giveaway_screen.dart';
 import 'package:rocketbot/screens/portfolio_page.dart';
 import 'package:rocketbot/screens/settings_screen.dart';
-import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/notification_helper.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 
@@ -257,11 +256,11 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   }
 
   void _onDidReceiveLocalNotification(int id, String? title, String? body, String? payload) {
-    Dialogs.openAlertBox(context, "Alert", payload!);
+    // Dialogs.openAlertBox(context, "Alert", payload!);
   }
 
   void _onSelectNotification(String? payload) {
-    Dialogs.openAlertBox(context, "Alert", payload!);
+    // Dialogs.openAlertBox(context, "Alert", payload!);
   }
 
   void _onTappedBar(int value) {

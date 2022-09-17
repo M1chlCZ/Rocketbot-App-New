@@ -43,7 +43,7 @@ class _EarningsChartState extends State<EarningsChart> {
             borderData: FlBorderData(
               show: false,
             ),
-            sectionsSpace: 0,
+            sectionsSpace: 1,
             centerSpaceRadius: 55,
             centerSpaceColor: Colors.transparent,
             sections: showingSections(widget.sectors)

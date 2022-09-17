@@ -61,8 +61,6 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
   if (message.data.containsKey('notification')) {
     final notification = message.data['notification'];
   }
-  print("shit");
-  // Or do other work.
 }
 
 class MyApp extends StatefulWidget {

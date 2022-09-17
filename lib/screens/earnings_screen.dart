@@ -213,9 +213,23 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                                                 return Column(
                                                   children: [
                                                     Container(
-                                                      decoration: BoxDecoration(
+                                                      decoration: BoxDecoration(boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors.black.withOpacity(0.1),
+                                                            blurRadius: 2.0,
+                                                            spreadRadius: 0.5,
+                                                            offset: const Offset(0.0, 0.0),
+                                                          ),
+                                                        ],
                                                         borderRadius: BorderRadius.circular(8.0),
-                                                        color: list[index].col,
+                                                        gradient: LinearGradient(
+                                                          begin: Alignment.topLeft,
+                                                          end: Alignment.bottomRight,
+                                                          colors: [
+                                                            list[index].col.withOpacity(1.0),
+                                                            list[index].col.withOpacity(0.8),
+                                                          ],
+                                                        ),
                                                       ),
                                                       height: 30,
                                                       child: Padding(
@@ -229,7 +243,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                                                         ),
                                                       ),
                                                     ),
-                                                    const Divider(height: 5.0,),
+                                                    const Divider(height: 5.0, color: Colors.transparent,),
                                                   ],
                                                 );
                                               }, itemCount: list.length,),
@@ -368,5 +382,5 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }

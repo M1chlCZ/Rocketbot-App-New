@@ -62,7 +62,7 @@ class MembersTile extends StatelessWidget {
                   SizedBox(
                     width: 200,
                     child: AutoSizeText(
-                      member.socialMediaAccount!.name!,
+                      member.socialMediaAccount?.name ?? "",
                       maxLines: 1,
                       minFontSize: 8.0,
                       textAlign: TextAlign.start,
@@ -75,7 +75,7 @@ class MembersTile extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(right: 5.0),
                         child: AutoSizeText(
-                          parseDate(member.participateAt!),
+                          parseDate(member.participateAt ?? "0000:00:01"),
                           maxLines: 1,
                           minFontSize: 8.0,
                           style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 14.0, color: Colors.white54),

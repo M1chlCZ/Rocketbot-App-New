@@ -24,7 +24,7 @@ class _AnimatedListItemWrapperState extends State<AnimatedListItemWrapper>
   late final Animation<double> perspectiveAnimation;
   late final Animation<AlignmentGeometry> alignmentAnimation;
 
-  static const double perspectiveValue = 0.001;
+  static const double perspectiveValue = 0.005;
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _AnimatedListItemWrapperState extends State<AnimatedListItemWrapper>
 
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 400),
     )..forward();
 
     scaleAnimation = Tween<double>(begin: 0.7, end: 1).animate(
@@ -55,7 +55,7 @@ class _AnimatedListItemWrapperState extends State<AnimatedListItemWrapper>
     ).animate(
       CurvedAnimation(
         parent: animationController,
-        curve: const Interval(0, 1, curve: Curves.easeOut),
+        curve: const Interval(0, 1, curve: Curves.bounceInOut),
       ),
     );
 

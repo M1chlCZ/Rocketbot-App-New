@@ -38,8 +38,33 @@ class FCM {
       provisional: false,
       sound: true,
     );
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    var initializationSettingsAndroid = const AndroidInitializationSettings('@drawable/ic_notification');
+    var initializationSettingsIOs = const IOSInitializationSettings();
+    var initSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
+    flutterLocalNotificationsPlugin.initialize(initSettings, onSelectNotification: (payload) {
+      print(payload);
+      switch (payload) {
+        case "A":
+          //route  to some where
+          break;
+      }
+    });
     FirebaseMessaging.onMessage.listen(
       (message) async {
+        if (message.notification?.title != null) {
+          flutterLocalNotificationsPlugin.show(
+              message.hashCode,
+              message.notification!.title,
+              message.notification!.body,
+              const NotificationDetails(
+                  android: AndroidNotificationDetails("rocket1", "Rocketbot Deposit/Withdrawal Info",
+                      importance: Importance.max, priority: Priority.high, playSound: true, enableVibration: true, icon: "@mipmap/ic_notification"),
+                  iOS: IOSNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true, sound: "default")),
+            payload: message.data["dataLink"],
+          );
+        }
+
         if (message.data.containsKey('data')) {
           streamCtlr.sink.add(message.data['data']);
         }
