@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:rocketbot/cache/balances_cache.dart';
+import 'package:rocketbot/models/Holdings_res.dart';
 import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/models/pos_coins_list.dart';
 import 'package:rocketbot/netinterface/interface.dart';
@@ -28,6 +29,7 @@ class StakeBalances {
     // print("|SECOND STAKING DONE| " + DateTime.now().toString());
     List<CoinBalance> list = await BalanceCache.getAllRecords(forceRefresh: false);
     // print("|THIRD COIN BALANCEs START| " + DateTime.now().toString());
+    var hl = await _getAmountCoins();
     for (var i = 0; i < list.length; i++) {
       var coin = list[i].coin!;
       int index = -1;
@@ -37,6 +39,12 @@ class StakeBalances {
       if (index != -1) {
         list[i].setStaking(true);
         list[i].setPosCoin(pl!.coins![index]);
+        if (hl != null) {
+          var index2 = hl.holdings!.indexWhere((element) => element.idCoin == coin.id);
+          if (index2 != -1) {
+            list[i].posCoin!.setAmount(hl.holdings![index2].amount!);
+          }
+        }
         finalList.add(list[i]);
       }
     }
@@ -49,6 +57,17 @@ class StakeBalances {
     try {
       var response = await _interface.get("coin/get", pos: true);
       var p = PosCoinsList.fromJson(response);
+      return p;
+    } catch (e) {
+      return null;
+    }
+  }
+
+
+  Future<HoldingsRes?> _getAmountCoins() async {
+    try {
+      var response = await _interface.get("/holdings", pos: true);
+      var p = HoldingsRes.fromJson(response);
       return p;
     } catch (e) {
       return null;

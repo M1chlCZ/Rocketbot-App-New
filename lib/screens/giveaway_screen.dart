@@ -158,282 +158,281 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
     widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: PageView(
-                physics: const BouncingScrollPhysics(),
-                onPageChanged: (index) {
-                  setState(() {
-                    activeSection = index;
-                    _switchKey.currentState?.currentPage(index);
-                  });
-                },
-                controller: _pageController,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: StreamBuilder<ApiResponse<List<Giveaway>>>(
-                        stream: gwBlock!.coinsListStream,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            switch (snapshot.data!.status) {
-                              case Status.loading:
-                                return Align(
-                                  alignment: Alignment.center,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 0.0),
-                                    child: HeartbeatProgressIndicator(
-                                      startScale: 0.01,
-                                      endScale: 0.2,
-                                      child: const Image(
-                                        image: AssetImage('images/rocketbot_logo.png'),
-                                        color: Colors.white30,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              case Status.completed:
-                                if (snapshot.data!.data!.isNotEmpty) {
-                                  return NotificationListener<UserScrollNotification>(
-                                    onNotification: (UserScrollNotification notification) {
-                                      if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
-                                        scrollDirectionNotifier.value = notification.direction;
-                                      }
-
-                                      return true;
-                                    },
-                                    child: ListView.builder(
-                                        key: const PageStorageKey(0),
-                                        controller: gwScroll,
-                                        shrinkWrap: true,
-                                        itemCount: snapshot.data!.data!.length,
-                                        itemBuilder: (ctx, index) {
-                                          return ValueListenableBuilder(
-                                              valueListenable: scrollDirectionNotifier,
-                                              child: GiveawayTile(
-                                                  key: ValueKey<int>(snapshot.data!.data![index].id!),
-                                                  giveaway: snapshot.data!.data![index],
-                                                  callBack: giveawayCallback),
-                                              builder: (BuildContext context, scrollDirection, Widget? child) {
-                                                return AnimatedListItemWrapper(
-                                                  scrollDirection: scrollDirection,
-                                                  child: child!,
-                                                );
-                                              });
-                                        }),
-                                  );
-                                } else {
-                                  return Container(
-                                    width: double.infinity,
-                                    height: 60.0,
-                                    margin: const EdgeInsets.only(left: 12.0, right: 12.0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white12,
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Center(
-                                        child: Text(
-                                      "No giveaway available at this moment",
-                                      style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
-                                    )),
-                                  );
-                                }
-                              case Status.error:
-                                debugPrint("error");
-                                break;
-                            }
-                          }
-                          return Container();
-                        },
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: StreamBuilder<ApiResponse<List<Airdrop>>>(
-                        stream: adBlock!.coinsListStream,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            switch (snapshot.data!.status) {
-                              case Status.loading:
-                                return Align(
-                                  alignment: Alignment.center,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 0.0),
-                                    child: HeartbeatProgressIndicator(
-                                      startScale: 0.01,
-                                      endScale: 0.2,
-                                      child: const Image(
-                                        image: AssetImage('images/rocketbot_logo.png'),
-                                        color: Colors.white30,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              case Status.completed:
-                                if (snapshot.data!.data!.isNotEmpty) {
-                                  return NotificationListener<UserScrollNotification>(
-                                    onNotification: (UserScrollNotification notification) {
-                                      if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
-                                        scrollDirectionNotifier.value = notification.direction;
-                                      }
-
-                                      return true;
-                                    },
-                                    child: ListView.builder(
-                                        key: const PageStorageKey(1),
-                                        controller: adScroll,
-                                        shrinkWrap: true,
-                                        itemCount: snapshot.data!.data!.length,
-                                        itemBuilder: (ctx, index) {
-                                          return ValueListenableBuilder(
-                                              valueListenable: scrollDirectionNotifier,
-                                              child: AirdropTile(
-                                                key: ValueKey<int>(snapshot.data!.data![index].id!),
-                                                airdrop: snapshot.data!.data![index],
-                                                callBack: aidropCallBack,
-                                              ),
-                                              builder: (BuildContext context, scrollDirection, Widget? child) {
-                                                return AnimatedListItemWrapper(
-                                                  scrollDirection: scrollDirection,
-                                                  child: child!,
-                                                );
-                                              });
-                                        }),
-                                  );
-                                } else {
-                                  return Container(
-                                    width: double.infinity,
-                                    height: 60.0,
-                                    margin: const EdgeInsets.only(left: 12.0, right: 12.0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white12,
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Center(
-                                        child: Text(
-                                      "No airdrop available at this moment",
-                                      style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
-                                    )),
-                                  );
-                                }
-                              case Status.error:
-                                debugPrint("error");
-                                break;
-                            }
-                          }
-                          return Container();
-                        },
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: StreamBuilder<ApiResponse<List<Lottery>>>(
-                        stream: ltBlock!.coinsListStream,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            switch (snapshot.data!.status) {
-                              case Status.loading:
-                                return Align(
-                                  alignment: Alignment.center,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 0.0),
-                                    child: HeartbeatProgressIndicator(
-                                      startScale: 0.01,
-                                      endScale: 0.2,
-                                      child: const Image(
-                                        image: AssetImage('images/rocketbot_logo.png'),
-                                        color: Colors.white30,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              case Status.completed:
-                                if (snapshot.data!.data!.isNotEmpty) {
-                                  return NotificationListener<UserScrollNotification>(
-                                    onNotification: (UserScrollNotification notification) {
-                                      if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
-                                        scrollDirectionNotifier.value = notification.direction;
-                                      }
-
-                                      return true;
-                                    },
-                                    child: ListView.builder(
-                                        key: const PageStorageKey(2),
-                                        controller: ltScroll,
-                                        shrinkWrap: true,
-                                        itemCount: snapshot.data!.data!.length,
-                                        itemBuilder: (ctx, index) {
-                                          return ValueListenableBuilder(
-                                              valueListenable: scrollDirectionNotifier,
-                                              child: LotteryTile(
-                                                key: ValueKey<int>(snapshot.data!.data![index].id!),
-                                                lottery: snapshot.data!.data![index],
-                                                callBack: lotteryCallback,
-                                              ),
-                                              builder: (BuildContext context, scrollDirection, Widget? child) {
-                                                return AnimatedListItemWrapper(
-                                                  scrollDirection: scrollDirection,
-                                                  child: child!,
-                                                );
-                                              });
-                                        }),
-                                  );
-                                } else {
-                                  return Container(
-                                    width: double.infinity,
-                                    height: 60.0,
-                                    margin: const EdgeInsets.only(left: 12.0, right: 12.0),
-                                    padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white12,
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Center(
-                                        child: AutoSizeText(
-                                      "No Spin Lotteries available at this moment",
-                                      maxLines: 1,
-                                      minFontSize: 8.0,
-                                      style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
-                                    )),
-                                  );
-                                }
-                              case Status.error:
-                                debugPrint("error");
-                                break;
-                            }
-                          }
-                          return Container();
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GameSwitcher(
-                  key: _switchKey,
-                  changeType: (page) {
+        child: ExcludeSemantics(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: PageView(
+                  physics: const BouncingScrollPhysics(),
+                  onPageChanged: (index) {
                     setState(() {
-                      activeSection = page;
+                      activeSection = index;
+                      _switchKey.currentState?.currentPage(index);
                     });
-                    _pageController.animateToPage(page, duration: const Duration(milliseconds: 300), curve: Curves.decelerate);
-                  }),
-            ),
-          ],
+                  },
+                  controller: _pageController,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: StreamBuilder<ApiResponse<List<Giveaway>>>(
+                          stream: gwBlock!.coinsListStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              switch (snapshot.data!.status) {
+                                case Status.loading:
+                                  return Align(
+                                    alignment: Alignment.center,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 0.0),
+                                      child: HeartbeatProgressIndicator(
+                                        startScale: 0.01,
+                                        endScale: 0.2,
+                                        child: const Image(
+                                          image: AssetImage('images/rocketbot_logo.png'),
+                                          color: Colors.white30,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                case Status.completed:
+                                  if (snapshot.data!.data!.isNotEmpty) {
+                                    return NotificationListener<UserScrollNotification>(
+                                      onNotification: (UserScrollNotification notification) {
+                                        if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
+                                          scrollDirectionNotifier.value = notification.direction;
+                                        }
+
+                                        return true;
+                                      },
+                                      child: ListView.builder(
+                                          key: const PageStorageKey(0),
+                                          controller: gwScroll,
+                                          shrinkWrap: true,
+                                          itemCount: snapshot.data!.data!.length,
+                                          itemBuilder: (ctx, index) {
+                                            return ValueListenableBuilder(
+                                                valueListenable: scrollDirectionNotifier,
+                                                child: GiveawayTile(
+                                                    key: ValueKey<int>(snapshot.data!.data![index].id!),
+                                                    giveaway: snapshot.data!.data![index],
+                                                    callBack: giveawayCallback),
+                                                builder: (BuildContext context, scrollDirection, Widget? child) {
+                                                  return AnimatedListItemWrapper(
+                                                    scrollDirection: scrollDirection,
+                                                    child: child!,
+                                                  );
+                                                });
+                                          }),
+                                    );
+                                  } else {
+                                    return Container(
+                                      width: double.infinity,
+                                      height: 60.0,
+                                      margin: const EdgeInsets.only(left: 12.0, right: 12.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white12,
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Center(
+                                          child: Text(
+                                        "No giveaway available at this moment",
+                                        style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
+                                      )),
+                                    );
+                                  }
+                                case Status.error:
+                                  debugPrint("error");
+                                  break;
+                              }
+                            }
+                            return Container();
+                          },
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: StreamBuilder<ApiResponse<List<Airdrop>>>(
+                          stream: adBlock!.coinsListStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              switch (snapshot.data!.status) {
+                                case Status.loading:
+                                  return Align(
+                                    alignment: Alignment.center,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 0.0),
+                                      child: HeartbeatProgressIndicator(
+                                        startScale: 0.01,
+                                        endScale: 0.2,
+                                        child: const Image(
+                                          image: AssetImage('images/rocketbot_logo.png'),
+                                          color: Colors.white30,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                case Status.completed:
+                                  if (snapshot.data!.data!.isNotEmpty) {
+                                    return NotificationListener<UserScrollNotification>(
+                                      onNotification: (UserScrollNotification notification) {
+                                        if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
+                                          scrollDirectionNotifier.value = notification.direction;
+                                        }
+
+                                        return true;
+                                      },
+                                      child: ListView.builder(
+                                          key: const PageStorageKey(1),
+                                          controller: adScroll,
+                                          shrinkWrap: true,
+                                          itemCount: snapshot.data!.data!.length,
+                                          itemBuilder: (ctx, index) {
+                                            return ValueListenableBuilder(
+                                                valueListenable: scrollDirectionNotifier,
+                                                child: AirdropTile(
+                                                  key: ValueKey<int>(snapshot.data!.data![index].id!),
+                                                  airdrop: snapshot.data!.data![index],
+                                                  callBack: aidropCallBack,
+                                                ),
+                                                builder: (BuildContext context, scrollDirection, Widget? child) {
+                                                  return AnimatedListItemWrapper(
+                                                    scrollDirection: scrollDirection,
+                                                    child: child!,
+                                                  );
+                                                });
+                                          }),
+                                    );
+                                  } else {
+                                    return Container(
+                                      width: double.infinity,
+                                      height: 60.0,
+                                      margin: const EdgeInsets.only(left: 12.0, right: 12.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white12,
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Center(
+                                          child: Text(
+                                        "No airdrop available at this moment",
+                                        style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
+                                      )),
+                                    );
+                                  }
+                                case Status.error:
+                                  debugPrint("error");
+                                  break;
+                              }
+                            }
+                            return Container();
+                          },
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 0.0, top: 10.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: StreamBuilder<ApiResponse<List<Lottery>>>(
+                          stream: ltBlock!.coinsListStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              switch (snapshot.data!.status) {
+                                case Status.loading:
+                                  return Align(
+                                    alignment: Alignment.center,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 0.0),
+                                      child: HeartbeatProgressIndicator(
+                                        startScale: 0.01,
+                                        endScale: 0.2,
+                                        child: const Image(
+                                          image: AssetImage('images/rocketbot_logo.png'),
+                                          color: Colors.white30,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                case Status.completed:
+                                  if (snapshot.data!.data!.isNotEmpty) {
+                                    return NotificationListener<UserScrollNotification>(
+                                      onNotification: (UserScrollNotification notification) {
+                                        if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
+                                          scrollDirectionNotifier.value = notification.direction;
+                                        }
+
+                                        return true;
+                                      },
+                                      child: ListView.builder(
+                                          key: const PageStorageKey(2),
+                                          controller: ltScroll,
+                                          shrinkWrap: true,
+                                          itemCount: snapshot.data!.data!.length,
+                                          itemBuilder: (ctx, index) {
+                                            return ValueListenableBuilder(
+                                                valueListenable: scrollDirectionNotifier,
+                                                child: LotteryTile(
+                                                  key: ValueKey<int>(snapshot.data!.data![index].id!),
+                                                  lottery: snapshot.data!.data![index],
+                                                  callBack: lotteryCallback,
+                                                ),
+                                                builder: (BuildContext context, scrollDirection, Widget? child) {
+                                                  return AnimatedListItemWrapper(
+                                                    scrollDirection: scrollDirection,
+                                                    child: child!,
+                                                  );
+                                                });
+                                          }),
+                                    );
+                                  } else {
+                                    return Container(
+                                      width: double.infinity,
+                                      height: 60.0,
+                                      margin: const EdgeInsets.only(left: 12.0, right: 12.0),
+                                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+
+                                      child: Center(
+                                          child: AutoSizeText(
+                                        "No Spin Lotteries available at this moment",
+                                        maxLines: 1,
+                                        minFontSize: 8.0,
+                                        style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
+                                      )),
+                                    );
+                                  }
+                                case Status.error:
+                                  debugPrint("error");
+                                  break;
+                              }
+                            }
+                            return Container();
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GameSwitcher(
+                    key: _switchKey,
+                    changeType: (page) {
+                      setState(() {
+                        activeSection = page;
+                      });
+                      _pageController.animateToPage(page, duration: const Duration(milliseconds: 300), curve: Curves.decelerate);
+                    }),
+              ),
+            ],
+          ),
         ),
       ),
     );

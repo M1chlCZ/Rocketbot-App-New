@@ -101,6 +101,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -382,5 +383,5 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
   }
 
   @override
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
 }

@@ -93,4 +93,9 @@ class Coins {
     return map;
   }
 
+  void setAmount(double amount) {
+    _amount = amount;
+  }
+
+
 }

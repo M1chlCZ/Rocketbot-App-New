@@ -55,7 +55,7 @@ class _AnimatedListItemWrapperState extends State<AnimatedListItemWrapper>
     ).animate(
       CurvedAnimation(
         parent: animationController,
-        curve: const Interval(0, 1, curve: Curves.bounceInOut),
+        curve: const Interval(0, 1, curve: Curves.easeOut),
       ),
     );
 
@@ -79,16 +79,20 @@ class _AnimatedListItemWrapperState extends State<AnimatedListItemWrapper>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return AnimatedBuilder(
-      animation: animationController,
-      child: widget.child,
-      builder: (context, child) => Transform(
-        transform: Matrix4.identity()
-          ..setEntry(3, 1, perspectiveAnimation.value),
-        alignment: alignmentAnimation.value,
-        child: Transform.scale(
-          scale: scaleAnimation.value,
-          child: child,
+    return SizedBox(
+      height: 100,
+      width: MediaQuery.of(context).size.width,
+      child: AnimatedBuilder(
+        animation: animationController,
+        child: widget.child,
+        builder: (context, child) => Transform(
+          transform: Matrix4.identity()
+            ..setEntry(3, 1, perspectiveAnimation.value),
+          alignment: alignmentAnimation.value,
+          child: Transform.scale(
+            scale: scaleAnimation.value,
+            child: child,
+          ),
         ),
       ),
     );

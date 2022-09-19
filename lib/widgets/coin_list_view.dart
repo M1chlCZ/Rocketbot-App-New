@@ -4,6 +4,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:intl/intl.dart';
 import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/widgets/picture_cache.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -180,7 +181,7 @@ class _CoinListViewState extends State<CoinListView> {
                                             ),
                                             crossFadeState: _crossfade ? CrossFadeState.showFirst : CrossFadeState.showSecond,
                                             secondChild: AutoSizeText(
-                                              "${AppLocalizations.of(context)!.stake_label}: ${_formatFree(Decimal.parse(widget.coin.posCoin!.amount!.toStringAsFixed(4)))}",
+                                              "PoS/MN: ${_formatFree(Decimal.parse(widget.coin.posCoin!.amount!.toStringAsFixed(4)))}",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodyText1!
@@ -238,7 +239,7 @@ class _CoinListViewState extends State<CoinListView> {
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodyText1!
-                                                      .copyWith(fontStyle: FontStyle.normal, color: Colors.white70, fontWeight: FontWeight.w500, fontSize: 16.0),
+                                                      .copyWith(fontStyle: FontStyle.normal, color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16.0),
                                                   maxLines: 1,
                                                   textAlign: TextAlign.start,
                                                   overflow: TextOverflow.ellipsis,
@@ -317,7 +318,10 @@ class _CoinListViewState extends State<CoinListView> {
                                               alignment: Alignment.centerRight,
                                               child: AutoSizeText(
                                                 "\$${_formatPrice(widget.coin.free! * widget.coin.priceData!.prices!.usd!.toDouble())}",
-                                                style: Theme.of(context).textTheme.headline3,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1!
+                                                    .copyWith(fontStyle: FontStyle.normal, color: Colors.white70, fontWeight: FontWeight.w500, fontSize: 16.0),
                                                 minFontSize: 8,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
@@ -353,15 +357,18 @@ class _CoinListViewState extends State<CoinListView> {
   }
 
   String _formatPrice(double d) {
-    var split = d.toString().split('.');
-    var decimal = split[1];
-    if (decimal.length >= 2) {
-      var sub = decimal.substring(0, 2);
-      return "${split[0]}.$sub";
-    } else {
-      return d.toString();
-    }
+    return NumberFormat("#,##0.00", "en_US").format(d);
+    // var split = d.toString().split('.');
+    // var decimal = split[1];
+    // if (decimal.length >= 2) {
+    //   var sub = decimal.substring(0, 2);
+    //   return "${split[0]}.$sub";
+    // } else {
+    //   return NumberFormat("#,##0.00", "en_US").format(d);
+    //   // return d.toString();
+    // }
   }
+
 
   String _formatValue(Decimal decimal) {
     if (decimal < Decimal.parse("0.01")) {

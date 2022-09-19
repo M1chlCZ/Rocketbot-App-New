@@ -83,6 +83,7 @@ class CoinBalance {
   bool? get staking => _staking;
   Coins? get posCoin => _posCoin;
 
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['userId'] = _userId;

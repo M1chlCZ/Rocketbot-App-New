@@ -1,7 +1,5 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rocketbot/netinterface/interface.dart';
@@ -33,7 +31,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   @override
   void initState() {
-    _initializeLocalNotifications();
     _firebaseMessaging.setNotifications();
     super.initState();
     _getUserInfo();
@@ -215,53 +212,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     );
   }
 
-  void _initializeLocalNotifications() async {
-    if (Platform.isAndroid) {
-      AndroidNotificationChannel channel = const AndroidNotificationChannel(
-        'rocket1', // id
-        'Rocketbot Deposit/Withdrawal Info', // title
-        description: 'This channel is used for transaction notifications.',
-        // description
-        importance: Importance.max,
-        enableVibration: true,
-        enableLights: true,
-        ledColor: Colors.red,
-      );
-
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!
-          .createNotificationChannel(channel);
-
-      AndroidNotificationChannel channel2 = const AndroidNotificationChannel(
-        'rocket2', // id
-        'Rocketbot Promotion', // title
-        description: 'This channel is used for promotion.',
-        // description
-        importance: Importance.max,
-        enableVibration: true,
-        enableLights: true,
-        ledColor: Colors.red,
-      );
-
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!
-          .createNotificationChannel(channel2);
-    }
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');
-    final IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
-    final InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: _onSelectNotification);
-  }
-
-  void _onDidReceiveLocalNotification(int id, String? title, String? body, String? payload) {
-    // Dialogs.openAlertBox(context, "Alert", payload!);
-  }
-
-  void _onSelectNotification(String? payload) {
-    // Dialogs.openAlertBox(context, "Alert", payload!);
-  }
 
   void _onTappedBar(int value) {
     // if (value == 2) {

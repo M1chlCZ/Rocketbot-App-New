@@ -17,7 +17,7 @@ class BalanceCache extends BalanceList {
     final priceData = await helper.get(
         "Coin/GetPriceData?IncludeHistoryPrices=false&IncludeVolume=false&IncludeMarketcap=false&IncludeChange=true");
     Map<String, dynamic> m = {"response": response, "priceData": priceData};
-    List<CoinBalance> finalList = await compute(doJob, m);
+    List<CoinBalance> finalList = doJob( m);
 
     _allRecords = finalList;
     _lastFetchTime = DateTime.now();
@@ -37,7 +37,7 @@ class BalanceCache extends BalanceList {
     return _allRecords;
   }
 
-  static List<CoinBalance> doJob(Map<String, dynamic> m) {
+static List<CoinBalance> doJob(Map<String, dynamic> m) {
     dynamic response = m['response'];
     dynamic priceData = m['priceData'];
 

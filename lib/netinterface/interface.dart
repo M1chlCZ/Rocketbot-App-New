@@ -56,9 +56,9 @@ class NetInterface {
           'User-Agent': userAgent.toLowerCase(),
           "Authorization": " ${pos ? "JWT" : "Bearer"} $tk",
         });
-        responseJson = await compute(_returnResponse, res);
+        responseJson = await _returnResponse(res);
       } else {
-        responseJson = await compute(_returnResponse, response);
+        responseJson = await _returnResponse(response);
       }
       // print(responseJson.toString());
     } on SocketException {
@@ -106,9 +106,9 @@ class NetInterface {
               "Authorization": "${pos ? "JWT" : "Bearer"} $tk",
             },
             body: query);
-        responseJson = await compute(_returnResponse, res);
+        responseJson = await _returnResponse(res);
       } else {
-        responseJson = await compute(_returnResponse, response);
+        responseJson = await _returnResponse(response);
       }
       // print(responseJson.toString());
     } on SocketException {
@@ -117,7 +117,7 @@ class NetInterface {
     return responseJson;
   }
 
-  static dynamic _returnResponse(http.Response response) async {
+  dynamic _returnResponse(http.Response response) async {
     switch (response.statusCode) {
       case 200:
         var responseJson = json.decode(response.body.toString());

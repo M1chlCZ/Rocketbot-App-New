@@ -11,6 +11,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_version/get_version.dart';
+import 'package:intl/intl.dart' as intr;
 import 'package:path_provider/path_provider.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/balance_bloc.dart';
@@ -67,7 +68,9 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   bool _emailOK = false;
 
   double totalUSD = 0.0;
+  double totalUSDYIELD = 0.0;
   double totalBTC = 0.0;
+  double totalBTCYIELD = 0.0;
 
   bool portCalc = false;
   bool popMenu = false;
@@ -418,6 +421,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       extendBody: true,
       body: SafeArea(
@@ -534,63 +538,76 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                     Color(0xFFFF739D),
                                   ]),
                                 ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  // alignment: AlignmentDirectional.center,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        const SizedBox(
-                                          width: 20.0,
-                                        ),
-                                        Text(
-                                          AppLocalizations.of(context)!.balance,
-                                          style: Theme.of(context).textTheme.headline2,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        const SizedBox(
-                                          width: 18.0,
-                                        ),
-                                        Expanded(
-                                          child: AutoSizeText(
-                                            "\$${totalUSD.toStringAsFixed(2)}",
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        // alignment: AlignmentDirectional.center,
+                                        children: [
+                                          Text(
+                                            AppLocalizations.of(context)!.balance,
+                                            style: Theme.of(context).textTheme.headline2,
+                                          ),
+                                          const SizedBox(
+                                            height: 7.0,
+                                          ),
+                                          AutoSizeText(
+                                            "\$${intr.NumberFormat("#,##0.00", "en_US").format(totalUSD)}",
                                             style: Theme.of(context).textTheme.headline1,
                                             minFontSize: 8.0,
                                             maxLines: 1,
                                             textAlign: TextAlign.left,
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          height: 3.0,
-                                        ),
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(top: 3.0),
-                                            child: AutoSizeText(
-                                              "${_formatPrice(totalBTC)} BTC",
-                                              style: Theme.of(context).textTheme.headline2,
-                                              minFontSize: 8.0,
-                                              maxLines: 1,
-                                              textAlign: TextAlign.right,
-                                            ),
+                                          const SizedBox(
+                                            height: 7.0,
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          width: 12.0,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                                  AutoSizeText(
+                                                    "BTC ${_formatPrice(totalBTC)}",
+                                                    style: Theme.of(context).textTheme.headline2,
+                                                    minFontSize: 8.0,
+                                                    maxLines: 1,
+                                                    textAlign: TextAlign.left,
+                                                  ),
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        // alignment: AlignmentDirectional.center,
+                                        children: [
+                                          Text(
+                                            "PoS/MN",
+                                            style: Theme.of(context).textTheme.headline2,
+                                          ),
+                                          const SizedBox(
+                                            height: 7.0,
+                                          ),
+                                          AutoSizeText(
+                                            "\$${intr.NumberFormat("#,##0.00", "en_US").format(totalUSDYIELD)}",
+                                            style: Theme.of(context).textTheme.headline1,
+                                            minFontSize: 8.0,
+                                            maxLines: 1,
+                                            textAlign: TextAlign.left,
+                                          ),
+                                          const SizedBox(
+                                            height: 7.0,
+                                          ),
+                                          AutoSizeText(
+                                            "BTC ${_formatPrice(totalBTCYIELD)}",
+                                            style: Theme.of(context).textTheme.headline2,
+                                            minFontSize: 8.0,
+                                            maxLines: 1,
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               )
                             : Container(),
@@ -1074,13 +1091,14 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   }
 
   String _formatPrice(double d) {
-    var split = d.toString().split('.');
+    var s = Decimal.parse(d.toString());
+    var split = s.toString().split('.');
     var decimal = split[1];
     if (decimal.length >= 8) {
       var sub = decimal.substring(0, 7);
       return "${split[0]}.$sub";
     } else {
-      return d.toString();
+      return s.toString();
     }
   }
 
@@ -1088,8 +1106,11 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     try {
       totalUSD = 0;
       totalBTC = 0;
+      totalUSDYIELD = 0;
+      totalBTCYIELD = 0;
       for (var element in _listCoins!) {
         double? freeCoins = element.free;
+        double? freeMNCoins = element.posCoin?.amount ?? 0;
         double? priceUSD = element.priceData?.prices?.usd!.toDouble();
         double? priceBTC = element.priceData?.prices?.btc!.toDouble();
         if (priceUSD != null && priceBTC != null) {
@@ -1097,6 +1118,10 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
           totalUSD += usd;
           double btc = freeCoins * priceBTC;
           totalBTC += btc;
+          double usdMN = freeMNCoins * priceUSD;
+          totalUSDYIELD += usdMN;
+          double btcMN = freeMNCoins * priceBTC;
+          totalBTCYIELD += btcMN;
         }
       }
 

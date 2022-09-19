@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/secure_storage.dart';
@@ -32,24 +33,52 @@ class FCM {
   setNotifications() async {
     // print("///////////");
     FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+    if (Platform.isAndroid) {
+      AndroidNotificationChannel channel = const AndroidNotificationChannel(
+        'rocket1', // id
+        'Rocketbot Deposit/Withdrawal Info', // title
+        description: 'This channel is used for transaction notifications.',
+        // description
+        importance: Importance.max,
+        enableVibration: true,
+        enableLights: true,
+        ledColor: Colors.red,
+      );
+
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!
+          .createNotificationChannel(channel);
+
+      AndroidNotificationChannel channel2 = const AndroidNotificationChannel(
+        'rocket2', // id
+        'Rocketbot Promotion', // title
+        description: 'This channel is used for promotion.',
+        // description
+        importance: Importance.max,
+        enableVibration: true,
+        enableLights: true,
+        ledColor: Colors.red,
+      );
+
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!
+          .createNotificationChannel(channel2);
+    }
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');
+    final DarwinInitializationSettings initializationSettingsIOS =
+    DarwinInitializationSettings(onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
+    final InitializationSettings initializationSettings =
+    InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings, onDidReceiveNotificationResponse: (payload) {
+      print(payload.toString());
+    });
     FirebaseMessaging.instance.requestPermission(
       alert: true,
       badge: true,
       provisional: false,
       sound: true,
     );
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    var initializationSettingsAndroid = const AndroidInitializationSettings('@drawable/ic_notification');
-    var initializationSettingsIOs = const IOSInitializationSettings();
-    var initSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
-    flutterLocalNotificationsPlugin.initialize(initSettings, onSelectNotification: (payload) {
-      print(payload);
-      switch (payload) {
-        case "A":
-          //route  to some where
-          break;
-      }
-    });
+
     FirebaseMessaging.onMessage.listen(
       (message) async {
         if (message.notification?.title != null) {
@@ -60,7 +89,7 @@ class FCM {
               const NotificationDetails(
                   android: AndroidNotificationDetails("rocket1", "Rocketbot Deposit/Withdrawal Info",
                       importance: Importance.max, priority: Priority.high, playSound: true, enableVibration: true, icon: "@mipmap/ic_notification"),
-                  iOS: IOSNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true, sound: "default")),
+                  iOS: DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true, sound: "default")),
             payload: message.data["dataLink"],
           );
         }
@@ -86,6 +115,10 @@ class FCM {
       _tokenUpload(token);
       SecureStorage.writeStorage(key: 'firebase_token', value: token);
     }
+  }
+
+  void _onDidReceiveLocalNotification(int id, String? title, String? body, String? payload) {
+    // Dialogs.openAlertBox(context, "Alert", payload!);
   }
 
   onNotificationRegister() {
