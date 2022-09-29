@@ -169,6 +169,17 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                   physics: const BouncingScrollPhysics(),
                   onPageChanged: (index) {
                     setState(() {
+                      switch (index) {
+                        case 0:
+                          gwBlock!.fetchGiveaways(page: giveawayPage);
+                          break;
+                        case 1:
+                          adBlock!.fetchGiveaways(page: airdropPage);
+                          break;
+                        case 2:
+                          ltBlock!.fetchGiveaways(page: airdropPage);
+                          break;
+                      }
                       activeSection = index;
                       _switchKey.currentState?.currentPage(index);
                     });
@@ -439,5 +450,5 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
   }
 
   @override
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
 }

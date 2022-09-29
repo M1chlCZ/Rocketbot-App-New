@@ -32,6 +32,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
   double totalUSD = 0.0;
   StakeBalanceBloc? _bloc;
   PosCoinsList? posCoin;
+  bool empty = false;
 
   @override
   void initState() {
@@ -87,14 +88,18 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
         CoinBalance bal = balList.firstWhere((element) => element.coin!.id! == ee.idCoin);
         Coin c = bal.coin!;
         totalUSD += bal.priceData!.prices!.usd!.toDouble() * ee.amount!.toDouble();
-        Sector s = Sector(val: val, col: colors[i], nam: c.cryptoId!, rad: 15);
+        Sector s = Sector(val: val, col: colors[i], nam: c.ticker!, rad: 15);
         list.add(s);
         i++;
       }
     }
     if (list.isNotEmpty) {
       setState(() {
-
+        empty = false;
+      });
+    }else{
+      setState(() {
+        empty = true;
       });
     }
   }
@@ -260,10 +265,17 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                                   ],
                                 )
                               else
+                                if (empty)
+                                  SizedBox(
+                                    height: 230,
+                                    child:
+                                    Center(child: Text("No data for earnings available", style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 18.0, color: Colors.white70),),),
+                                  )
+                                else
                                 const SizedBox(
-                                  height: 200,
+                                  height: 230,
                                   child:
-                                   Center(child: CircularProgressIndicator(color: Colors.black54,),),
+                                   Center(child: CircularProgressIndicator(color: Colors.white54,),),
                                 ),
                             ],
                           ),

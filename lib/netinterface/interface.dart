@@ -355,7 +355,6 @@ class NetInterface {
 
   static Future<int> checkToken() async {
     try {
-      print("check token////");
       await refreshToken();
       return 0;
     } catch (e) {

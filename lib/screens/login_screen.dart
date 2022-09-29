@@ -6,9 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_version/get_version.dart';
 import 'package:package_info/package_info.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/component_widgets/container_neu.dart';
@@ -102,24 +100,28 @@ class LoginScreenState extends State<LoginScreen> {
 
   _goodCredentials() async {
     // _nextPage();
-    int i = await NetInterface.checkToken();
-    if (i == 0) {
-      _nextPage();
-    } else {
-      setState(() {
-        _curtain = false;
-      });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-            "Invalid credentials",
-            textAlign: TextAlign.center,
-          ),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.fixed,
-          elevation: 5.0,
-        ));
-      }
+    try {
+      int i = await NetInterface.checkToken();
+      if (i == 0) {
+            _nextPage();
+          } else {
+            setState(() {
+              _curtain = false;
+            });
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text(
+                  "Invalid credentials",
+                  textAlign: TextAlign.center,
+                ),
+                backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.fixed,
+                elevation: 5.0,
+              ));
+            }
+          }
+    } catch (e) {
+      print(e);
     }
   }
 

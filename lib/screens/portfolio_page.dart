@@ -1093,11 +1093,15 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   String _formatPrice(double d) {
     var s = Decimal.parse(d.toString());
     var split = s.toString().split('.');
-    var decimal = split[1];
-    if (decimal.length >= 8) {
-      var sub = decimal.substring(0, 7);
-      return "${split[0]}.$sub";
-    } else {
+    if (split.length > 1) {
+      var decimal = split[1];
+      if (decimal.length >= 8) {
+        var sub = decimal.substring(0, 7);
+        return "${split[0]}.$sub";
+      } else {
+        return s.toString();
+      }
+    }else{
       return s.toString();
     }
   }

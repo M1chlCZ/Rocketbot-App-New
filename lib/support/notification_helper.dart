@@ -136,11 +136,15 @@ class FCM {
     );
   }
 
-  void _tokenUpload(String? token) {
-    Map<String, dynamic> req = {
-      "token": token,
-    };
-    _interface.post('Security/UpdateFirebaseToken', req);
+  void _tokenUpload(String? token) async{
+    try {
+      Map<String, dynamic> req = {
+            "token": token,
+          };
+     await _interface.post('Security/UpdateFirebaseToken', req);
+    } catch (e) {
+      print(e);
+    }
   }
 
   dispose() {
