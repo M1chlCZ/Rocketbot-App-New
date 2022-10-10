@@ -48,8 +48,9 @@ class AirdropMembersTile extends StatelessWidget {
                                 value: progress.progress,
                               ),
                             ),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
                             imageUrl:
-                            "https://app.rocketbot.pro/Image?imageId=${member.socialMediaAccount!.imageId!}",
+                            "https://app.rocketbot.pro/Image?imageId=${member.socialMediaAccount?.imageId ?? ""}",
                           ),
                         ),
                       ),

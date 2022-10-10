@@ -435,7 +435,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                   if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
                     scrollDirectionNotifier.value = notification.direction;
                   }
-
                   return true;
                 },
                 child: SingleChildScrollView(
@@ -1113,12 +1112,12 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
       totalUSDYIELD = 0;
       totalBTCYIELD = 0;
       for (var element in _listCoins!) {
-        double? freeCoins = element.free;
+        double? freeCoins = element.free ?? 0;
         double? freeMNCoins = element.posCoin?.amount ?? 0;
         double? priceUSD = element.priceData?.prices?.usd!.toDouble();
         double? priceBTC = element.priceData?.prices?.btc!.toDouble();
         if (priceUSD != null && priceBTC != null) {
-          double usd = freeCoins! * priceUSD;
+          double usd = freeCoins * priceUSD;
           totalUSD += usd;
           double btc = freeCoins * priceBTC;
           totalBTC += btc;

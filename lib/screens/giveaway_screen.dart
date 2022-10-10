@@ -116,7 +116,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
       );
     }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
       return FadeTransition(opacity: animation, child: child);
-    }));
+    })).then((value) => adBlock!.fetchGiveaways(page: airdropPage));
   }
 
   void giveawayCallback(Giveaway g) async {
@@ -127,7 +127,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
         );
       }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
         return FadeTransition(opacity: animation, child: child);
-      }));
+      })).then((value) =>  gwBlock!.fetchGiveaways(page: giveawayPage));
     } else {
       Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
         return GiveawayDetailScreen(
@@ -135,10 +135,8 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
         );
       }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
         return FadeTransition(opacity: animation, child: child);
-      }));
+      })).then((value) =>  gwBlock!.fetchGiveaways(page: giveawayPage));
     }
-
-    // var res = interface.get('')
   }
 
   void lotteryCallback(Lottery l) {
@@ -149,12 +147,13 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
         );
       }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
         return FadeTransition(opacity: animation, child: child);
-      }));
+      })).then((value) => ltBlock!.fetchGiveaways(page: airdropPage));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
@@ -217,13 +216,12 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                         if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
                                           scrollDirectionNotifier.value = notification.direction;
                                         }
-
                                         return true;
                                       },
                                       child: ListView.builder(
                                           key: const PageStorageKey(0),
                                           controller: gwScroll,
-                                          shrinkWrap: true,
+                                          shrinkWrap: false,
                                           itemCount: snapshot.data!.data!.length,
                                           itemBuilder: (ctx, index) {
                                             return ValueListenableBuilder(
@@ -408,7 +406,6 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                       height: 60.0,
                                       margin: const EdgeInsets.only(left: 12.0, right: 12.0),
                                       padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-
                                       child: Center(
                                           child: AutoSizeText(
                                         "No Spin Lotteries available at this moment",
