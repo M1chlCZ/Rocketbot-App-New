@@ -27,23 +27,24 @@ dependencies:
   decimal: ^2.3.0
   flutter_snake_navigationbar: any
   cached_network_image: ^3.2.2
-  permission_handler: ^10.1.0
+  permission_handler: ^10.2.0
   local_auth: ^2.1.2
   flutter_phoenix: ^1.1.0
   package_info: any
   path_provider: any
   google_sign_in: ^5.4.2
-  sign_in_with_apple: ^4.1.0
-  flutter_displaymode: ^0.4.0
-  flutter_local_notifications: ^12.0.1+1
+  sign_in_with_apple: ^4.2.0
+  flutter_displaymode: ^0.4.1
+  flutter_local_notifications: ^12.0.3
   flutter_udid: ^2.0.0
-  sqflite: ^2.1.0+1
+  sqflite: ^2.2.0+3
   jiffy: ^5.0.0
   sprintf: any
   slide_to_act: any
   mobile_scanner: ^2.0.0
-  share_plus: ^4.5.3
+  share_plus: ^6.3.0
   walletconnect_dart: ^0.0.11
+  device_info_plus: any
   get_it: any
   get_version:
     git:
@@ -58,7 +59,8 @@ dependencies:
       url: https://github.com/M1chlCZ/flutter_biometrics.git
       ref: main
   cupertino_icons: ^1.0.5
-  rxdart: ^0.27.5
+  rxdart: ^0.27.6
+  logger: any
 linter:
   rules:
     -use_super_parameters
@@ -66,8 +68,7 @@ linter:
 
 dev_dependencies:
   flutter_lints: ^2.0.1
-  logger: ^1.1.0
-  flutter_native_splash: ^2.2.11
+  flutter_native_splash: ^2.2.14
   flutter_test:
     sdk: flutter
 

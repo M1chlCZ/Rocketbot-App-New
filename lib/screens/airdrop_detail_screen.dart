@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:rocketbot/bloc/airdrop_bloc.dart';
 import 'package:rocketbot/models/active_giveaways.dart';
 import 'package:rocketbot/models/aidrop_details.dart';

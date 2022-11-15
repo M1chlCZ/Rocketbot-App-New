@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:rocketbot/storage/app_database.dart';
 import 'package:rocketbot/support/notification_helper.dart';
 

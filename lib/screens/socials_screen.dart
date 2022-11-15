@@ -10,7 +10,6 @@ import 'package:rocketbot/support/life_cycle_watcher.dart';
 import 'package:rocketbot/support/utils.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/social_card.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../models/user.dart';
 

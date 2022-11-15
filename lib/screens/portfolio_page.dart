@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -35,7 +37,6 @@ import 'package:rocketbot/support/life_cycle_watcher.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 import 'package:rocketbot/support/utils.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
-import 'package:walletconnect_dart/walletconnect_dart.dart';
 
 import '../models/user.dart';
 import '../widgets/coin_list_view.dart';
@@ -104,12 +105,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     Future.delayed(Duration.zero, () async {
       _dropValue = AppLocalizations.of(context)!.deflt;
       _dropValues.clear();
-      _dropValues = [
-        AppLocalizations.of(context)!.deflt,
-        AppLocalizations.of(context)!.alphabeticall,
-        AppLocalizations.of(context)!.by_amount,
-        AppLocalizations.of(context)!.by_value
-      ];
+      _dropValues = [AppLocalizations.of(context)!.deflt, AppLocalizations.of(context)!.alphabeticall, AppLocalizations.of(context)!.by_amount, AppLocalizations.of(context)!.by_value];
       var i = await SecureStorage.readStorage(key: globals.SORT_TYPE);
       if (i == null) {
         _dropValue = _dropValues[0];
@@ -121,6 +117,10 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   }
 
   Future<bool> _initPlatform() async {
+    var di = await getDeviceInfo();
+    if (di == false) {
+      return false;
+    }
     if (Platform.isAndroid) {
       try {
         Directory tempDir = await getTemporaryDirectory();
@@ -141,6 +141,28 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     } else {
       return true;
     }
+  }
+
+  Future<bool> getDeviceInfo() async {
+    if (kDebugMode) return true;
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) {
+      var iosInfo = await deviceInfo.iosInfo;
+      if (iosInfo.isPhysicalDevice) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (Platform.isAndroid) {
+      var androidInfo = await deviceInfo.androidInfo;
+      bool andr = androidInfo.isPhysicalDevice;
+      if (andr) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
   }
 
   _getUserInfo() async {
@@ -390,35 +412,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     }
   }
 
-  Future<void> connectWallet() async {
-    // Create a connector
-    final connector = WalletConnect(
-      bridge: 'https://bridge.walletconnect.org',
-      clientMeta: const PeerMeta(
-        name: 'WalletConnect',
-        description: 'WalletConnect Developer App',
-        url: 'https://walletconnect.org',
-        icons: ['https://gblobscdn.gitbook.com/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'],
-      ),
-    );
-
-// Subscribe to events
-    connector.on('connect', (session) => print(session));
-    connector.on('session_update', (payload) => print(payload));
-    connector.on('disconnect', (session) => print(session));
-
-// Create a new session
-    if (!connector.connected) {
-      final session = await connector.createSession(
-        chainId: 1,
-        onDisplayUri: (uri) => Utils.openLink(uri),
-      );
-      var s = await connector.approveSession(chainId: 1, accounts: ['0x4292...931B3']);
-      print(s);
-    }
-    connector.killSession();
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -525,12 +518,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.0),
                                   image: const DecorationImage(
-                                      opacity: 0.5,
-                                      scale: 0.5,
-                                      filterQuality: FilterQuality.high,
-                                      alignment: Alignment(0.0, 1.0),
-                                      fit: BoxFit.cover,
-                                      image: AssetImage("images/bal.png")),
+                                      opacity: 0.5, scale: 0.5, filterQuality: FilterQuality.high, alignment: Alignment(0.0, 1.0), fit: BoxFit.cover, image: AssetImage("images/bal.png")),
                                   gradient: const RadialGradient(center: Alignment(1.5, -3.0), radius: 5.0, colors: [
                                     Color(0xFF7388FF),
                                     Color(0xFFCA73FF),
@@ -564,13 +552,13 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                           const SizedBox(
                                             height: 7.0,
                                           ),
-                                                  AutoSizeText(
-                                                    "BTC ${_formatPrice(totalBTC)}",
-                                                    style: Theme.of(context).textTheme.headline2,
-                                                    minFontSize: 8.0,
-                                                    maxLines: 1,
-                                                    textAlign: TextAlign.left,
-                                                  ),
+                                          AutoSizeText(
+                                            "BTC ${_formatPrice(totalBTC)}",
+                                            style: Theme.of(context).textTheme.headline2,
+                                            minFontSize: 8.0,
+                                            maxLines: 1,
+                                            textAlign: TextAlign.left,
+                                          ),
                                         ],
                                       ),
                                       const Spacer(),
@@ -699,9 +687,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                                   width: 130,
                                                   child: Padding(
                                                     padding: const EdgeInsets.only(bottom: 2.0),
-                                                    child: Text(e,
-                                                        style:
-                                                            Theme.of(context).textTheme.headline2!.copyWith(fontSize: 11.0, color: Colors.white70)),
+                                                    child: Text(e, style: Theme.of(context).textTheme.headline2!.copyWith(fontSize: 11.0, color: Colors.white70)),
                                                   ))))
                                           .toList(),
                                     ),
@@ -744,10 +730,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                         child: FittedBox(
                                             child: AutoSizeText(
                                           AppLocalizations.of(context)!.hide_zeros,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline2!
-                                              .copyWith(fontSize: 11.0, color: _hideZero ? Colors.white : Colors.white30),
+                                          style: Theme.of(context).textTheme.headline2!.copyWith(fontSize: 11.0, color: _hideZero ? Colors.white : Colors.white30),
                                         )),
                                       ),
                                     ),
@@ -967,8 +950,8 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                       child: TextButton(
                                         style: ButtonStyle(
                                             backgroundColor: MaterialStateProperty.resolveWith((states) => qrColors(states)),
-                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
+                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
                                         onPressed: () {
                                           setState(() {
                                             popMenu = false;
@@ -1100,7 +1083,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
       } else {
         return s.toString();
       }
-    }else{
+    } else {
       return s.toString();
     }
   }
