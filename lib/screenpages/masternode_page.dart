@@ -498,7 +498,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                             child: Row(
                               children: [
                                 GradientText(
-                                  "${AppLocalizations.of(context)!.mn_total.replaceAll("{1}", _coinActive.ticker!)}:",
+                                  "${AppLocalizations.of(context)!.mn_total(_coinActive.ticker!)}:",
                                   gradient: const LinearGradient(colors: [
                                     Colors.white70,
                                     Colors.white54,
@@ -624,7 +624,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               child: Row(
                                 children: [
                                   GradientText(
-                                    "${AppLocalizations.of(context)!.mn_day_reward.replaceAll("{1}", _coinActive.ticker!)}:",
+                                    "${AppLocalizations.of(context)!.mn_day_reward(_coinActive.ticker!)}:",
                                     gradient: const LinearGradient(colors: [
                                       Colors.white70,
                                       Colors.white54,
@@ -751,14 +751,6 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                           const SizedBox(
                             height: 8.0,
                           ),
-                          // RotatedBox(
-                          //   quarterTurns: _detailsExtended ? 2 : 0,
-                          //   child: const Icon(
-                          //     Icons.arrow_drop_down,
-                          //     color: Colors.white54,
-                          //     size: 18.0,
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),
@@ -1067,8 +1059,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
 
     if (minAmount) {
       Navigator.of(context).pop();
-      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error,
-          AppLocalizations.of(context)!.staking_not_min.replaceAll("{1}", _min!.toString()).replaceAll("{2}", _coinActive.ticker!));
+      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, AppLocalizations.of(context)!.staking_not_min(_min!.toString(), _coinActive.ticker!));
       _keyStake.currentState?.reset();
       return;
     }
@@ -1215,7 +1206,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       if (mounted) {
         Navigator.of(context).pop();
         await Dialogs.openAlertBox(
-            context, AppLocalizations.of(context)!.alert, AppLocalizations.of(context)!.staking_with_info.replaceAll("{1}", conf.toString()));
+            context, AppLocalizations.of(context)!.alert, AppLocalizations.of(context)!.staking_with_info(conf.toString()));
         await _getMasternodeDetails();
         _getMN();
       }

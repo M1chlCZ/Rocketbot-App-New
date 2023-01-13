@@ -181,7 +181,7 @@ class Dialogs {
                     color: Colors.black38,
                     padding: const EdgeInsets.all(15.0),
                     child: AutoSizeText(
-                      AppLocalizations.of(context)!.mn_withdraw_box.replaceAll("{1}", id.toString()),
+                      AppLocalizations.of(context)!.mn_withdraw_box(id.toString()),
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 8,
@@ -207,7 +207,7 @@ class Dialogs {
         builder: (BuildContext context) {
           return DialogBody(
             header:
-                AppLocalizations.of(context)!.unlink.replaceAll("{1}", name),
+                AppLocalizations.of(context)!.unlink(name),
             buttonLabel: 'OK',
             oneButton: false,
             onTap: () async {
@@ -227,7 +227,7 @@ class Dialogs {
                     child: AutoSizeText(
                       AppLocalizations.of(context)!
                           .dl_soc_log_out
-                          .replaceAll("{1}", name),
+                        ( name),
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 8,

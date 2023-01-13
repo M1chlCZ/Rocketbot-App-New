@@ -993,7 +993,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     if (minAmount) {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error,
-          AppLocalizations.of(context)!.staking_not_min.replaceAll("{1}", _min!.toString()).replaceAll("{2}", _coinActive.ticker!));
+          AppLocalizations.of(context)!.staking_not_min(_min!.toString(), _coinActive.ticker!));
       _keyStake.currentState!.reset();
       return;
     }
@@ -1128,7 +1128,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       if (mounted) {
         Navigator.of(context).pop();
         Dialogs.openAlertBox(
-            context, AppLocalizations.of(context)!.alert, AppLocalizations.of(context)!.staking_with_info.replaceAll("{1}", conf.toString()));
+            context, AppLocalizations.of(context)!.alert, AppLocalizations.of(context)!.staking_with_info(conf.toString()));
       }
     } on ConflictDataException catch (e) {
       if (rewardParam == 2) {

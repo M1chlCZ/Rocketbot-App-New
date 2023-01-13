@@ -179,7 +179,7 @@ class SocialMediaCardState extends State<SocialMediaCard>with TickerProviderStat
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(AppLocalizations.of(context)!.unlink.replaceAll("{1}", ""), style: Theme.of(context)
+                            Text(AppLocalizations.of(context)!.unlink(""), style: Theme.of(context)
                                 .textTheme
                                 .headline4!
                                 .copyWith(fontSize: 18.0, color: Colors.white)),

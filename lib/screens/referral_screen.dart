@@ -177,7 +177,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                 child: Column(
                                   children: [
                                     GradientText(
-                                      AppLocalizations.of(context)!.ref_invite.replaceAll("{1}", reward.toString()),
+                                      AppLocalizations.of(context)!.ref_invite(reward.toString()),
                                       align: TextAlign.left,
                                       gradient: const LinearGradient(colors: [
                                         Colors.white,
