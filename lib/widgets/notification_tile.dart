@@ -65,8 +65,12 @@ class NotificationTile extends StatelessWidget {
   }
 
   String utf8convert(String text) {
-    List<int> bytes = text.toString().codeUnits;
-    return utf8.decode(bytes);
+    try {
+      List<int> bytes = text.toString().codeUnits;
+      return utf8.decode(bytes);
+    } catch (e) {
+      return text;
+    }
   }
 
   Color _getColor(String? link) {

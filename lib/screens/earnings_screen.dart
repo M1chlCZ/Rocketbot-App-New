@@ -79,7 +79,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
     List<CoinBalance> balList = await BalanceCache.getAllRecords(forceRefresh: true);
 
     int i = 0;
-    var res = await interface.get("/earnings", pos: true, debug: true);
+    var res = await interface.get("earnings", pos: true, debug: true);
     EarnRes ea = EarnRes.fromJson(res);
 
     if (ea.earnings != null) {

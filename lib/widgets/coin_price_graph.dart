@@ -57,7 +57,15 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
     _preparePriceData(time);
   }
 
-  void changeCoin(HistoryPrices h) {
+  void changeCoin(HistoryPrices? h) {
+    if (h == null) {
+      setState(() {
+        _values.clear();
+        _price = null;
+      });
+      return;
+    }
+
     setState(() {
       _values.clear();
     });

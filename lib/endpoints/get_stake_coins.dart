@@ -66,7 +66,7 @@ class StakeBalances {
 
   Future<HoldingsRes?> _getAmountCoins() async {
     try {
-      var response = await _interface.get("/holdings", pos: true);
+      var response = await _interface.get("holdings", pos: true);
       var p = HoldingsRes.fromJson(response);
       return p;
     } catch (e) {

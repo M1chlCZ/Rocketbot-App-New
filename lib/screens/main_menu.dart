@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rocketbot/netinterface/interface.dart';
@@ -34,6 +35,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     _firebaseMessaging.setNotifications();
     super.initState();
     _getUserInfo();
+    FlutterAppBadger.removeBadge();
   }
 
   gotoPreviousScreen() {
@@ -88,8 +90,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               borderRadius: BorderRadius.circular(10.0),
             )),
         unselectedLabelStyle: const TextStyle(
-          color: Colors.white,
+          color: Colors.red,
           fontSize: 12.0,
+
         ),
         selectedLabelStyle: const TextStyle(
           color: Colors.white,
@@ -99,6 +102,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         showSelectedLabels: true,
         currentIndex: _selectedPageIndex,
         selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white30,
         backgroundColor: const Color(0xff394359),
         snakeViewColor: _getNavBarColor(),
         shape: const RoundedRectangleBorder(

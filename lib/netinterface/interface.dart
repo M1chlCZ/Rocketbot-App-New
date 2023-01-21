@@ -14,8 +14,8 @@ import 'package:rocketbot/support/secure_storage.dart';
 import 'app_exception.dart';
 
 class NetInterface {
-  final String _baseUrl = "https://app.rocketbot.pro/api/mobile/";
-  final String _posUrl = "http://51.195.168.17:7465/";
+  static const String baseUrl = "https://app.rocketbot.pro/api/mobile/";
+  static String posUrl = "http://51.195.168.17:7100/";
   static const String token = "token";
   static const String posToken = "posToken";
   static const String tokenRefresh = "refreshToken";
@@ -25,17 +25,14 @@ class NetInterface {
   Future<dynamic> get(String url, {String? request, bool pos = false, bool debug = false}) async {
     String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
     var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
-    // print(_token);
-// // print(_baseUrl + url);
     dynamic responseJson;
     try {
       var curl = "";
-      pos ? curl = _posUrl + url : curl = _baseUrl + url;
+      pos ? curl = posUrl + url : curl = baseUrl + url;
       if (request != null) {
         curl += "/?$request";
       }
-      // print(_curl);
-      // print(_token);
+      // print(curl);
       final response = await http.get(Uri.parse(curl), headers: {
         'User-Agent': userAgent.toLowerCase(),
         "Authorization": " ${pos ? "JWT" : "Bearer"} $tk",
@@ -62,7 +59,7 @@ class NetInterface {
       }
       // print(responseJson.toString());
     } on SocketException {
-      // print("shit");
+      print("shit");
       throw FetchDataException('No Internet connection');
     }
     return responseJson;
@@ -76,7 +73,7 @@ class NetInterface {
     // print(_query);
     try {
       var curl = "";
-      pos ? curl = _posUrl + url : curl = _baseUrl + url;
+      pos ? curl = posUrl + url : curl = baseUrl + url;
       // print(_curl);
       final response = await http
           .post(Uri.parse(curl),
@@ -132,8 +129,10 @@ class NetInterface {
       // throw UnauthorisedException(response.body.toString());
       case 500:
       case 409:
-        throw ConflictDataException(response.body.toString() ?? '');
+        throw ConflictDataException(response.body.toString());
       default:
+        print(response.statusCode.toString());
+        print(response.body.toString());
         throw FetchDataException('Error occurred while communication with server: ${response.body}');
     }
   }
@@ -377,7 +376,7 @@ class NetInterface {
         "token": enc,
       };
       final resp = await http.post(
-          pos ? Uri.parse("http://51.195.168.17:7465/auth/refreshToken") : Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/RefreshToken"),
+          pos ? Uri.parse("$posUrl/auth/refreshToken") : Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/RefreshToken"),
           body: json.encode(request),
           headers: {
             'User-Agent': userAgent.toLowerCase(),
@@ -419,7 +418,7 @@ class NetInterface {
         "token": token,
       };
       var query = json.encoder.convert(request);
-      final response = await http.post(Uri.parse("http://51.195.168.17:7465/auth"), body: query, headers: {
+      final response = await http.post(Uri.parse("$posUrl/auth"), body: query, headers: {
         "Content-Type": "application/json",
         "accept": "application/json",
         'User-Agent': userAgent.toLowerCase(),

@@ -3,7 +3,7 @@ description: Rocketbot
 
 publish_to: 'none'
 
-version: 1.2.35+182
+version: 1.2.40+187
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
@@ -19,10 +19,10 @@ dependencies:
   firebase_auth: 4.1.2
   http: ^0.13.5
   auto_size_text: 3.0.0
-  intl: ^0.17.0
+  intl: any
   fl_chart: ^0.55.2
   progress_indicators: ^1.0.0
-  url_launcher: ^6.1.7
+  url_launcher: ^6.1.8
   qr_flutter: ^4.0.0
   decimal: ^2.3.2
   flutter_snake_navigationbar: any
@@ -32,12 +32,12 @@ dependencies:
   flutter_phoenix: ^1.1.0
   package_info: any
   path_provider: any
-  google_sign_in: ^5.4.2
+  google_sign_in: ^5.4.3
   sign_in_with_apple: ^4.3.0
   flutter_displaymode: ^0.5.0
   flutter_local_notifications: ^13.0.0
   flutter_udid: ^2.0.1
-  sqflite: ^2.2.2
+  sqflite: ^2.2.3
   jiffy: ^5.0.0
   sprintf: any
   slide_to_act: any
@@ -45,6 +45,10 @@ dependencies:
   share_plus: ^6.3.0
   walletconnect_dart: ^0.0.11
   device_info_plus: any
+  flutter_app_badger: ^1.5.0
+  flutter_html: ^3.0.0-alpha.6
+  flutter_html_iframe: ^3.0.0-alpha.3
+  universal_io: any
   get_it: any
   get_version:
     git:
@@ -68,7 +72,6 @@ linter:
 
 dev_dependencies:
   flutter_lints: ^2.0.1
-  flutter_native_splash: ^2.2.16
   flutter_test:
     sdk: flutter
 

@@ -147,7 +147,7 @@
   "st_more" : "Zobrazit více",
   "referral" : "Referral",
   "ref_code" : "Váš pozvánkový kód",
-  "ref_invite" : "Zatím jste nebyl(a) nikým pozván(a), zadejte Rocketbot referral kód pro získání 50 Merge! Referral bonus will bude přidělen potom co zašlete alespoň 10 Merge tokens na staking.",
+  "ref_invite" : "Zatím jste nebyl nikým pozván, zadejte Rocketbot referral kód pro získání {number1} Merge! Referral bonus will bude přidělen potom co zašlete alespoň 10 Merge tokens na staking.",
   "ref_unvite" : "Vaše pozvání bylo úspěšné, prozatím žádnou další promo akci nemáme",
   "ref_hint" : "Oscanujte podobně vypdající QR kód a vaše pozvánka bude přijate. \nKaždý uživatel může využít tuto promo akci jenom jednou!",
   "balance": "Zůstatek",

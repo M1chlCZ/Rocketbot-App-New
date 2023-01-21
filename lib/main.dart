@@ -176,8 +176,9 @@ class MyAppState extends State<MyApp> {
         }
         return const Locale('en', '');
       },
-      supportedLocales: const [Locale('en', ''), Locale('cs', 'CZ'), Locale('fi', 'FI')],
+      supportedLocales: const [Locale('en', ''), Locale('fi', 'FI'),Locale('cs', 'CZ')],
       theme: ThemeData(
+        scaffoldBackgroundColor:const Color(0xFF252F45),
         fontFamily: "Poppins",
         useMaterial3: true,
         canvasColor: const Color(0xFF252F45),

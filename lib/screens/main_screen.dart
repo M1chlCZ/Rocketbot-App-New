@@ -183,6 +183,7 @@ class MainScreenState extends State<MainScreen> {
                   goToStaking: _gotoStaking,
                   posDepositAddr: _posDepositAddr,
                   blockTouch: _blockTouch,
+                  depositAddr: _depositAddr,
                   free: _free),
               SendPage(
                 key: _sendKey,
@@ -215,6 +216,7 @@ class MainScreenState extends State<MainScreen> {
         showUnselectedLabels: true,
         showSelectedLabels: true,
         backgroundColor: const Color(0xff394359),
+        unselectedItemColor: Colors.white30,
         snakeViewColor: _getNavBarColor(),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -338,14 +340,14 @@ class MainScreenState extends State<MainScreen> {
 
   Color _getNavBarColor() {
     return const Color(0xFF9D9BFD);
-    // switch (_selectedPageIndex) {
-    //   case 0:
-    //     return const Color(0xFF15D37A);
-    //   case 1:
-    //     return Colors.blue;
-    //   case 2:
-    //     return const Color(0xFFEB3A13);
-    // }
-    // return Colors.blue;
+    switch (_selectedPageIndex) {
+      case 0:
+        return const Color(0xFF15D37A);
+      case 1:
+        return Colors.blue;
+      case 2:
+        return const Color(0xFFEB3A13);
+    }
+    return Colors.blue;
   }
 }

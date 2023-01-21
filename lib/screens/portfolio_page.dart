@@ -268,7 +268,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
 
   Future<void> _getNotifications() async {
     try {
-      final response = await _interface.post("notification/list", {}, pos: true);
+      final response = await _interface.post("notification/list", {}, pos: true, debug: true);
       Notifications not = Notifications.fromJson(response);
       await db.addNot(not);
       var i = await db.getNotUnread();

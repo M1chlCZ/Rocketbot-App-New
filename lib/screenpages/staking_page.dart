@@ -99,7 +99,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
   @override
   void initState() {
     super.initState();
-    _price = widget.coinBalance.priceData!.prices!.usd!.toDouble();
+    _price = widget.coinBalance.priceData?.prices?.usd?.toDouble() ?? 0.0;
     _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
     _animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _animationController!, curve: Curves.fastLinearToSlowEaseIn));
     _coinActive = widget.activeCoin;

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
@@ -93,5 +94,10 @@ class Utils {
     final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
     pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
+
+  static String chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  static final Random _rnd = Random();
+  static String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+      length, (_) => chars.codeUnitAt(_rnd.nextInt(chars.length))));
 }
 

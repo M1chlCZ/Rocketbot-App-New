@@ -8,13 +8,17 @@ import 'package:rocketbot/bloc/get_transaction_bloc.dart';
 import 'package:rocketbot/cache/price_graph_cache.dart';
 import 'package:rocketbot/models/balance_portfolio.dart';
 import 'package:rocketbot/models/coin_graph.dart';
+import 'package:rocketbot/models/exchanges.dart';
 import 'package:rocketbot/models/transaction_data.dart';
 import 'package:rocketbot/netinterface/interface.dart';
+import 'package:rocketbot/screens/exchange_list_screen.dart';
+import 'package:rocketbot/screens/ramper_screen.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/coin_deposit_view.dart';
 import 'package:rocketbot/widgets/coin_withdrawal_view.dart';
 import 'package:rocketbot/widgets/horizontal_list_tile.dart';
 import 'package:rocketbot/widgets/price_range_switch.dart';
+import 'package:rocketbot/widgets/switching_button.dart';
 
 import '../bloc/coins_price_bloc.dart';
 import '../models/balance_list.dart';
@@ -33,6 +37,7 @@ class CoinScreen extends StatefulWidget {
   final double? free;
   final Function goToStaking;
   final String? posDepositAddr;
+  final String? depositAddr;
   final bool masternode;
 
   const CoinScreen(
@@ -46,7 +51,8 @@ class CoinScreen extends StatefulWidget {
       required this.free,
       required this.goToStaking,
       this.posDepositAddr,
-      required this.masternode})
+      required this.masternode,
+        this.depositAddr})
       : super(key: key);
 
   @override
@@ -156,7 +162,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
 
   @override
   Widget build(BuildContext context) {
-    pr = MediaQuery.of(context).size.width * 0.25;
+    pr = MediaQuery.of(context).size.width * 0.195;
     return Material(
       child: RefreshIndicator(
         notificationPredicate: (not) {
@@ -297,7 +303,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                           child: Center(
                               child: NotificationListener<ScrollNotification>(
                             onNotification: (scrollNotification) {
-                              var pp = (scrollNotification.metrics.pixels + 30.0) / pr;
+                              var pp = (scrollNotification.metrics.pixels + 20.0) / pr;
                               var px = pp.toInt();
 
                               if (px != _currentIndex) {
@@ -325,7 +331,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                                 itemBuilder: (context, index) {
                                   if (index > _listCoins.length - 1) {
                                     return SizedBox(
-                                      width: MediaQuery.of(context).size.width * 0.25,
+                                      width: MediaQuery.of(context).size.width * 0.2,
                                     );
                                   }
                                   return HorizontalListView(
@@ -422,7 +428,25 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                                   ),
                                   const SizedBox(width: 5.0),
                                 ],
-                              )
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              SwitchingButton(
+                                onPressed: () {
+                                  _getExchange(_coinActive.id!);
+                                },
+                              ),
+                              // FlatCustomButton(
+                              //   height: 30,
+                              //   width: 120,
+                              //   radius: 8.0,
+                              //   onTap: (){
+                              //
+                              // },
+                              //   color: const Color(0xFF9BD41E),
+                              //   child: Text("Buy ${_coinActive.ticker!}", style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: const Color(0xFF252F45),fontWeight: FontWeight.w600),),
+                              // )
                             ],
                           ),
                         )),
@@ -613,7 +637,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
       _priceData = p;
     });
     if (_graphKey.currentState != null) {
-      _graphKey.currentState!.changeCoin(_priceData!.historyPrices!);
+      _graphKey.currentState?.changeCoin(_priceData?.historyPrices);
     }
     // print(p.toJson());
   }
@@ -646,10 +670,10 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
     try {
       for (var element in _listCoins) {
         if (element.coin == _coinActive) {
-          Decimal? priceUSD = element.priceData!.prices!.usd!;
+          Decimal? priceUSD = element.priceData?.prices?.usd ?? Decimal.zero;
           // Decimal? priceBTC = element.priceData!.prices!.btc!;
-          _percentage = element.priceData!.priceChange24HPercent!.usd!;
-          usdCost = element.priceData!.prices!.usd!;
+          _percentage = element.priceData?.priceChange24HPercent?.usd ?? Decimal.zero;
+          usdCost = element.priceData?.prices?.usd ?? Decimal.zero;
 
           totalCoins = freeCoins;
           totalUSD = freeCoins * priceUSD;
@@ -665,5 +689,33 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
         _coinNameOpacity = 1.0;
       });
     });
+  }
+
+  void _getExchange(int idCoin) async {
+    print("get addr ${widget.depositAddr}");
+    try {
+      List<Exchange> l = [];
+      List<dynamic> res = await _interface.post("exchanges", {"idCoin": idCoin}, pos: true, debug: true);
+      res.map((e) => Exchange.fromJson(e)).forEach((element) {
+        l.add(element);
+      });
+      if (mounted) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ExchangeListScreen(idCoin: _coinActive.ticker ?? "", exchanges: l),
+          ),
+        );
+      }
+    } catch (e) {
+      if (e.toString().contains("This coin is not an exchange")) {
+        if (mounted) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => RamperScreen(idCoin: _coinActive.ticker ?? "", depositAddr: widget.depositAddr ?? "",),
+            ),
+          );
+        }
+      }
+    }
   }
 }
