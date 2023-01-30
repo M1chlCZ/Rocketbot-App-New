@@ -141,10 +141,10 @@ class ReferralWidgetState extends State<ReferralWidget> {
                         maxLines: 1,
                         minFontSize: 4.0,
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white70),
+                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white70),
                         decoration: InputDecoration(
                           hintText: "Referral code",
-                          hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
+                          hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white54, fontSize: 14.0),
                           enabledBorder: const UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.transparent),
                           ),
@@ -189,7 +189,7 @@ class ReferralWidgetState extends State<ReferralWidget> {
                   Color(0xFFF05523),
                   Color(0xFF812D88),
                 ]),
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0),
               ),
             ),
           ],

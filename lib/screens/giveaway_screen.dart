@@ -250,7 +250,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                       child: Center(
                                           child: Text(
                                         "No giveaway available at this moment",
-                                        style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
+                                        style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.amber),
                                       )),
                                     );
                                   }
@@ -331,7 +331,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                       child: Center(
                                           child: Text(
                                         "No airdrop available at this moment",
-                                        style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
+                                        style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.amber),
                                       )),
                                     );
                                   }
@@ -411,7 +411,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                         "No Spin Lotteries available at this moment",
                                         maxLines: 1,
                                         minFontSize: 8.0,
-                                        style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.amber),
+                                        style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.amber),
                                       )),
                                     );
                                   }

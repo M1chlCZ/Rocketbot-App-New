@@ -37,7 +37,7 @@ class BalancesBloc {
     coinsListSink.add(ApiResponse.loading('Fetching All Coins'));
     try {
       if (sort == null) {
-        var i = await SecureStorage.readStorage(key: globals.SORT_TYPE);
+        var i = await SecureStorage.readStorage(key: globals.sortType);
         if (i != null) {
           _sort = int.parse(i);
         } else {

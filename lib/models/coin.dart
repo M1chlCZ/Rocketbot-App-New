@@ -66,7 +66,6 @@ class Coin {
     _fullName = fullName;
     _tokenStandart = tokenStandart;
     _allowWithdraws = allowWithdraws;
-    _priceData = priceData;
     _allowDeposits = allowDeposits;
 }
 
@@ -112,7 +111,6 @@ class Coin {
   int? _requiredConfirmations;
   String? _fullName;
   String? _tokenStandart;
-  PriceData? _priceData;
   bool? _allowWithdraws;
   bool? _allowDeposits;
 
@@ -165,7 +163,6 @@ class Coin {
   }
 
   void setPriceData(PriceData p) {
-    _priceData = p;
   }
 
 }

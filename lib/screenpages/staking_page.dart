@@ -220,7 +220,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                     AppLocalizations.of(context)!.graph_no_data,
-                                    style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Colors.red),
+                                    style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.red),
                                   ),
                                 ),
                               ),
@@ -299,7 +299,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                             ),
                           ),
                         ),
@@ -335,7 +335,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                             ),
                           ),
                         ),
@@ -379,7 +379,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                     maxLines: 1,
                                     minFontSize: 8.0,
                                     textAlign: TextAlign.end,
-                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                                   ),
                                 ),
                                 Text(
@@ -418,7 +418,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                             ),
                           ),
                         ),
@@ -458,7 +458,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -468,7 +468,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -489,7 +489,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -499,7 +499,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -520,7 +520,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -530,7 +530,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -551,7 +551,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -561,7 +561,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -604,7 +604,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                           Text(
                             _detailsExtended ? AppLocalizations.of(context)!.st_less : AppLocalizations.of(context)!.st_more,
                             // textAlign: TextAlign.end,
-                            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontFamily: 'JosefinSans', fontSize: 14.0, color: Colors.white70),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontFamily: 'JosefinSans', fontSize: 14.0, color: Colors.white70),
                           ),
                           const SizedBox(
                             height: 8.0,
@@ -656,7 +656,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                       ],
                       maxLines: 1,
                       minFontSize: 12.0,
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 18.0),
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 18.0),
                       autocorrect: false,
                       focusNode: numberFocusNode,
                       controller: _amountController,
@@ -672,7 +672,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                         filled: true,
                         fillColor: amountEmpty ? Colors.red.shade600.withOpacity(0.2) : Colors.black12,
                         contentPadding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                        hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white70, fontSize: 14.0),
+                        hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white70, fontSize: 14.0),
                         hintText: AppLocalizations.of(context)!.stake_amount,
                         // enabledBorder: const UnderlineInputBorder(
                         //   borderSide: BorderSide(color: Colors.transparent),
@@ -702,7 +702,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                       child: Text(
                     "${AppLocalizations.of(context)!.min_withdraw} $_min | ${AppLocalizations.of(context)!.fees} $_fee ${_coinActive.ticker} \n${AppLocalizations.of(context)!.staking_lock_coins}",
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white30),
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white30),
                   )),
                 ),
                 const SizedBox(
@@ -749,7 +749,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                   child: Center(
                       child: Text(
                     AppLocalizations.of(context)!.stake_wait,
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white30),
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white30),
                   )),
                 ),
                 const SizedBox(

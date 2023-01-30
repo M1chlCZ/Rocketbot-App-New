@@ -39,7 +39,6 @@ class AirdropsBloc {
         coinsListSink.add(ApiResponse.completed(coins));
       }
     } catch (e) {
-      print(e);
       if (!_coinListController!.isClosed) {
         coinsListSink.add(ApiResponse.error(e.toString()));
       }

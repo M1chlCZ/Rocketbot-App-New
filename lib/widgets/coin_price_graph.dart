@@ -180,7 +180,7 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
                   final flSpot = barSpot;
                   return LineTooltipItem(
                     '',
-                    Theme.of(context).textTheme.subtitle1!,
+                    Theme.of(context).textTheme.titleMedium!,
                     children: [
                       TextSpan(
                         text: "${_formatTooltip(flSpot.y)} USD",
@@ -274,12 +274,12 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
         if (_time == 24 * 7 || _time == 0) {
           return Text(DateFormat.yMd().format(date), style: Theme.of(context)
               .textTheme
-              .subtitle2!
+              .titleSmall!
               .copyWith(color: Colors.white.withOpacity(0.2)),);
         } else {
           return Text(DateFormat.Hm().format(date), style: Theme.of(context)
               .textTheme
-              .subtitle2!
+              .titleSmall!
               .copyWith(color: Colors.white.withOpacity(0.2)),);
         }
       },
@@ -312,7 +312,7 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
       child: _values.isEmpty
           ? Container( color: Colors.transparent, child: Center(child: Padding(
             padding: const EdgeInsets.only(top: 130.0),
-            child: Text(AppLocalizations.of(context)!.graph_no_data, style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Colors.white24), ),
+            child: Text(AppLocalizations.of(context)!.graph_no_data, style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.white24), ),
           )),)
           : LineChart(
               _mainData(),

@@ -228,7 +228,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                     AppLocalizations.of(context)!.graph_no_data,
-                                    style: Theme.of(context).textTheme.subtitle2!.copyWith(color: Colors.red),
+                                    style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.red),
                                   ),
                                 ),
                               ),
@@ -308,7 +308,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                             ),
                           ),
                         ),
@@ -344,7 +344,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                             ),
                           ),
                         ),
@@ -383,7 +383,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                             ),
                           ),
                         ),
@@ -424,7 +424,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -464,7 +464,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                             ),
                           ),
                         ),
@@ -504,7 +504,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -514,7 +514,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -535,7 +535,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -545,7 +545,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -567,7 +567,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -577,7 +577,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -598,7 +598,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -608,7 +608,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -630,7 +630,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       Colors.white54,
                                     ]),
                                     // textAlign: TextAlign.end,
-                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
                                   ),
                                   Expanded(
                                     child: Padding(
@@ -640,7 +640,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                         maxLines: 1,
                                         minFontSize: 8.0,
                                         textAlign: TextAlign.end,
-                                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                                       ),
                                     ),
                                   ),
@@ -662,7 +662,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -672,7 +672,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -693,7 +693,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -703,7 +703,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -746,7 +746,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                           Text(
                             _detailsExtended ? AppLocalizations.of(context)!.st_less : AppLocalizations.of(context)!.st_more,
                             // textAlign: TextAlign.end,
-                            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontFamily: 'JosefinSans', fontSize: 14.0, color: Colors.white70),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontFamily: 'JosefinSans', fontSize: 14.0, color: Colors.white70),
                           ),
                           const SizedBox(
                             height: 8.0,
@@ -811,7 +811,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                               padding: const EdgeInsets.all(10.0),
                                               child: Text(
                                                 "${formatter.format(item.value).replaceAll(",", " ")} ${_coinActive.ticker!}",
-                                                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.0, color: Colors.white),
+                                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 16.0, color: Colors.white),
                                                 textAlign: TextAlign.start,
                                               ),
                                             ),
@@ -867,7 +867,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     "No ${widget.activeCoin.name} masternode available!",
                                     maxLines: 1,
                                     minFontSize: 8.0,
-                                    style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white70),
+                                    style: Theme.of(context).textTheme.displaySmall!.copyWith(color: Colors.white70),
                                   ),
                                 )),
                               )
@@ -886,7 +886,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                       child: Text(
                     "${AppLocalizations.of(context)!.fees} $_fee ${_coinActive.ticker} \n ${AppLocalizations.of(context)!.mn_time_to_start}: $_averateTimeStart \n${AppLocalizations.of(context)!.mn_lock}",
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white30),
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white30),
                   )),
                 ),
                 const SizedBox(
@@ -1075,8 +1075,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       final responseLock = await _interface.post("masternode/lock", queryLock, pos: true, debug: true);
       mnLock = MasternodeLock.fromJson(responseLock);
       if (mnLock.node?.address == null) {
-        Navigator.of(context).pop();
-        Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Data err");
+        if(mounted) {Navigator.of(context).pop();
+        Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Data err");}
         _keyStake.currentState?.reset();
         return;
       }

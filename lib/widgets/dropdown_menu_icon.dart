@@ -78,11 +78,10 @@ class DropDownIconState<T> extends State<DropDownIcon<T>>
         height: style.height,
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
-            side: const BorderSide(width: 0, color: Colors.transparent),
+            foregroundColor: style.primaryColor, side: const BorderSide(width: 0, color: Colors.transparent),
             padding: style.padding,
             backgroundColor: style.backgroundColor,
             elevation: style.elevation,
-            primary: style.primaryColor,
             shape: style.shape,
           ),
           onPressed: _toggleDropdown,
@@ -191,7 +190,7 @@ class DropDownIconState<T> extends State<DropDownIcon<T>>
       });
     } else {
       _overlayEntry = _createOverlayEntry();
-      Overlay.of(context)!.insert(_overlayEntry!);
+      Overlay.of(context).insert(_overlayEntry!);
       setState(() => _isOpen = true);
       _animationController!.forward();
     }

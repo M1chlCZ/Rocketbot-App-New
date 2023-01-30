@@ -52,7 +52,7 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                     const SizedBox(
                       width: 5,
                     ),
-                    Text("Masternode Management", style: Theme.of(context).textTheme.headline3),
+                    Text("Masternode Management", style: Theme.of(context).textTheme.displaySmall),
                   ]),
                 )),
             const SizedBox(

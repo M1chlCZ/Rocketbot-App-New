@@ -111,7 +111,7 @@ class SocialMediaCardState extends State<SocialMediaCard>with TickerProviderStat
                                   : widget.socials!.username!,
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline4!
+                                  .headlineMedium!
                                   .copyWith(fontSize: 18.0, color: Colors.white)),
                         ),
                         const Expanded(
@@ -181,7 +181,7 @@ class SocialMediaCardState extends State<SocialMediaCard>with TickerProviderStat
                           children: [
                             Text(AppLocalizations.of(context)!.unlink(""), style: Theme.of(context)
                                 .textTheme
-                                .headline4!
+                                .headlineMedium!
                                 .copyWith(fontSize: 18.0, color: Colors.white)),
                             const SizedBox(width: 0.0,),
                             const Icon(Icons.link_off, color: Colors.redAccent,),

@@ -76,7 +76,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
         final directory = await getTemporaryDirectory();
         final imagePath = await File('${directory.path}/qr_code.png').create();
         await imagePath.writeAsBytes(imageBytes);
-        Share.shareFiles(['${directory.path}/qr_code.png'],
+        Share.shareXFiles([XFile('${directory.path}/qr_code.png')],
             text:
                 "Earn $reward free coins now! \nDownload RocketBot wallet app, and get paid to engage on social media with giveaways & airdrops.\n\nUse my referral code: $refCode \n\niOS - https://apple.co/38lAzWO \nAndroid - https://bit.ly/33NZlfS\n#Merge @rocketbotpro");
       }
@@ -94,7 +94,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
         _checkStatus();
         if (mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way!");
       } on ConflictDataException catch (e) {
-       if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
+        if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
       } catch (e) {
         if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
         debugPrint(e.toString());
@@ -139,7 +139,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                     const SizedBox(
                       width: 20.0,
                     ),
-                    Text(AppLocalizations.of(context)!.referral, style: Theme.of(context).textTheme.headline4),
+                    Text(AppLocalizations.of(context)!.referral, style: Theme.of(context).textTheme.headlineMedium),
                     const SizedBox(
                       width: 50,
                     ),
@@ -183,7 +183,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                         Colors.white,
                                         Colors.white70,
                                       ]),
-                                      style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18.0, color: Colors.white),
+                                      style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 18.0, color: Colors.white),
                                     ),
                                     const SizedBox(
                                       height: 10.0,
@@ -201,7 +201,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                     //       _openQRScanner();
                                     //     },
                                     //     child: Text('Get the Reward',
-                                    //         style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18.0, color: const Color(0xFFFFFFFF))),
+                                    //         style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.0, color: const Color(0xFFFFFFFF))),
                                     //   ),
                                     // ),
                                     const SizedBox(
@@ -214,7 +214,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                         Colors.white,
                                         Colors.white70,
                                       ]),
-                                      style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 10.0, color: Colors.white),
+                                      style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 10.0, color: Colors.white),
                                     ),
                                   ],
                                 ),
@@ -252,22 +252,16 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                         ),
                                         Visibility(
                                           visible: deviceID,
-                                          child: const Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text('Device id missing or unobtainable', style: TextStyle(color: Colors.white70))),
+                                          child: const Align(alignment: Alignment.centerLeft, child: Text('Device id missing or unobtainable', style: TextStyle(color: Colors.white70))),
                                         ),
                                         Visibility(
                                           visible: firebaseToken,
-                                          child: const Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text('Firebase token unobtainable', style: TextStyle(color: Colors.white70))),
+                                          child: const Align(alignment: Alignment.centerLeft, child: Text('Firebase token unobtainable', style: TextStyle(color: Colors.white70))),
                                         ),
                                         Visibility(
                                           visible: mergeAddress,
                                           child: const Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text('Merge Address missing (Check your email for verification)',
-                                                  style: TextStyle(color: Colors.white70))),
+                                              alignment: Alignment.centerLeft, child: Text('Merge Address missing (Check your email for verification)', style: TextStyle(color: Colors.white70))),
                                         ),
                                       ],
                                     )),
@@ -294,7 +288,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                     Colors.white,
                                     Colors.white70,
                                   ]),
-                                  style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18.0, color: Colors.white),
+                                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 18.0, color: Colors.white),
                                 ),
                               ],
                             ),
@@ -319,7 +313,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                               AppLocalizations.of(context)!.ref_code,
                               minFontSize: 8.0,
                               maxLines: 1,
-                              style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.white),
+                              style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
                             ),
                             const SizedBox(
                               height: 10.0,
@@ -355,7 +349,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                           )
                                     : Text(
                                         "There has been issues with getting the code",
-                                        style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18.0, color: Colors.black87),
+                                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 18.0, color: Colors.black87),
                                         textAlign: TextAlign.center,
                                       ),
                               ),
@@ -378,7 +372,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                           children: [
                             Text(
                               'Share',
-                              style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.white),
+                              style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
                             ),
                             const SizedBox(
                               width: 10.0,
@@ -437,10 +431,9 @@ class _ReferralScreenState extends State<ReferralScreen> {
     // String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
     String? depAddr = await _getMergeDepositAddr();
 
-    if (udid == null) {
-      deviceID = true;
-      issues = true;
-    }
+    deviceID = true;
+    issues = true;
+
     // if (firebase == null) {
     //   firebaseToken = true;
     //   issues = true;

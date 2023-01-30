@@ -64,7 +64,7 @@ class _LotteryDetailScreenState extends State<LotteryDetailScreen> {
                                         const SizedBox(
                                           width: 5,
                                         ),
-                                        Text("Spin detail", style: Theme.of(context).textTheme.headline3),
+                                        Text("Spin detail", style: Theme.of(context).textTheme.displaySmall),
                                       ]),
                                     )),
                                 const SizedBox(

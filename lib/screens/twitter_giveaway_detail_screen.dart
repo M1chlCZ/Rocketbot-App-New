@@ -61,7 +61,7 @@ class _TwitterGiveawayDetailScreenState extends State<TwitterGiveawayDetailScree
                                         const SizedBox(
                                           width: 5,
                                         ),
-                                        Text("Giveaway details", style: Theme.of(context).textTheme.headline3),
+                                        Text("Giveaway details", style: Theme.of(context).textTheme.displaySmall),
                                       ]),
                                     )),
                                 const SizedBox(

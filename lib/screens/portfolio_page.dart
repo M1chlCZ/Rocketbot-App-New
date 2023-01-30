@@ -106,7 +106,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
       _dropValue = AppLocalizations.of(context)!.deflt;
       _dropValues.clear();
       _dropValues = [AppLocalizations.of(context)!.deflt, AppLocalizations.of(context)!.alphabeticall, AppLocalizations.of(context)!.by_amount, AppLocalizations.of(context)!.by_value];
-      var i = await SecureStorage.readStorage(key: globals.SORT_TYPE);
+      var i = await SecureStorage.readStorage(key: globals.sortType);
       if (i == null) {
         _dropValue = _dropValues[0];
       } else {
@@ -443,7 +443,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                           duration: const Duration(milliseconds: 800),
                           child: Row(
                             children: [
-                              if (_me != null) Text("${_me!.data!.name} ${_me!.data!.surname}", style: Theme.of(context).textTheme.headline3),
+                              if (_me != null) Text("${_me!.data!.name} ${_me!.data!.surname}", style: Theme.of(context).textTheme.displaySmall),
                               const SizedBox(
                                 width: 50,
                               ),
@@ -537,14 +537,14 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                         children: [
                                           Text(
                                             AppLocalizations.of(context)!.balance,
-                                            style: Theme.of(context).textTheme.headline2,
+                                            style: Theme.of(context).textTheme.displayMedium,
                                           ),
                                           const SizedBox(
                                             height: 7.0,
                                           ),
                                           AutoSizeText(
                                             "\$${intr.NumberFormat("#,##0.00", "en_US").format(totalUSD)}",
-                                            style: Theme.of(context).textTheme.headline1,
+                                            style: Theme.of(context).textTheme.displayLarge,
                                             minFontSize: 8.0,
                                             maxLines: 1,
                                             textAlign: TextAlign.left,
@@ -554,7 +554,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                           ),
                                           AutoSizeText(
                                             "BTC ${_formatPrice(totalBTC)}",
-                                            style: Theme.of(context).textTheme.headline2,
+                                            style: Theme.of(context).textTheme.displayMedium,
                                             minFontSize: 8.0,
                                             maxLines: 1,
                                             textAlign: TextAlign.left,
@@ -569,14 +569,14 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                         children: [
                                           Text(
                                             "PoS/MN",
-                                            style: Theme.of(context).textTheme.headline2,
+                                            style: Theme.of(context).textTheme.displayMedium,
                                           ),
                                           const SizedBox(
                                             height: 7.0,
                                           ),
                                           AutoSizeText(
                                             "\$${intr.NumberFormat("#,##0.00", "en_US").format(totalUSDYIELD)}",
-                                            style: Theme.of(context).textTheme.headline1,
+                                            style: Theme.of(context).textTheme.displayLarge,
                                             minFontSize: 8.0,
                                             maxLines: 1,
                                             textAlign: TextAlign.left,
@@ -586,7 +586,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                           ),
                                           AutoSizeText(
                                             "BTC ${_formatPrice(totalBTCYIELD)}",
-                                            style: Theme.of(context).textTheme.headline2,
+                                            style: Theme.of(context).textTheme.displayMedium,
                                             minFontSize: 8.0,
                                             maxLines: 1,
                                             textAlign: TextAlign.left,
@@ -660,7 +660,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                       size: 10.0,
                                     ),
                                   ),
-                                  // Text('sort by:', style: Theme.of(context).textTheme.headline2!.copyWith( fontSize: 14.0, color: Colors.white30)),
+                                  // Text('sort by:', style: Theme.of(context).textTheme.displayMedium!.copyWith( fontSize: 14.0, color: Colors.white30)),
                                   const SizedBox(
                                     width: 5.0,
                                   ),
@@ -676,7 +676,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                         });
                                         await Future.delayed(const Duration(milliseconds: 100), () {});
                                         int sort = _dropValues.indexWhere((element) => element == _dropValue);
-                                        await SecureStorage.writeStorage(key: globals.SORT_TYPE, value: sort.toString());
+                                        await SecureStorage.writeStorage(key: globals.sortType, value: sort.toString());
                                         await _bloc!.fetchBalancesList(sort: sort);
                                         await _checkZero();
                                       },
@@ -687,7 +687,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                                   width: 130,
                                                   child: Padding(
                                                     padding: const EdgeInsets.only(bottom: 2.0),
-                                                    child: Text(e, style: Theme.of(context).textTheme.headline2!.copyWith(fontSize: 11.0, color: Colors.white70)),
+                                                    child: Text(e, style: Theme.of(context).textTheme.displayMedium!.copyWith(fontSize: 11.0, color: Colors.white70)),
                                                   ))))
                                           .toList(),
                                     ),
@@ -730,7 +730,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                         child: FittedBox(
                                             child: AutoSizeText(
                                           AppLocalizations.of(context)!.hide_zeros,
-                                          style: Theme.of(context).textTheme.headline2!.copyWith(fontSize: 11.0, color: _hideZero ? Colors.white : Colors.white30),
+                                          style: Theme.of(context).textTheme.displayMedium!.copyWith(fontSize: 11.0, color: _hideZero ? Colors.white : Colors.white30),
                                         )),
                                       ),
                                     ),
@@ -885,7 +885,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                             //               AppLocalizations.of(context)!.socials_popup + (_socialsOK ? '' : ' (!)'),
                             //               style: Theme.of(context)
                             //                   .textTheme
-                            //                   .headline1!
+                            //                   .displayLarge!
                             //                   .copyWith(fontSize: 14.0, color: _socialsOK ? Colors.white : Colors.red),
                             //             ),
                             //           ),
@@ -926,7 +926,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                             //             },
                             //             child: Text(
                             //               AppLocalizations.of(context)!.settings_popup,
-                            //               style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 14.0),
+                            //               style: Theme.of(context).textTheme.displayLarge!.copyWith(fontSize: 14.0),
                             //             ),
                             //           ),
                             //         ),
@@ -964,7 +964,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                         },
                                         child: Text(
                                           AppLocalizations.of(context)!.referral.toUpperCase(),
-                                          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 14.0),
+                                          style: Theme.of(context).textTheme.displayLarge!.copyWith(fontSize: 14.0),
                                         ),
                                       ),
                                     ),
@@ -1002,7 +1002,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                             //             },
                             //             child: Text(
                             //               AppLocalizations.of(context)!.about_popup,
-                            //               style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 14.0),
+                            //               style: Theme.of(context).textTheme.displayLarge!.copyWith(fontSize: 14.0),
                             //             ),
                             //           ),
                             //         ),
@@ -1164,7 +1164,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   void onPaused() async {
     if (!_paused) {
       var endTime = DateTime.now().millisecondsSinceEpoch + (1000 * 60);
-      await SecureStorage.writeStorage(key: globals.COUNTDOWN, value: endTime.toString());
+      await SecureStorage.writeStorage(key: globals.countdown, value: endTime.toString());
       _paused = true;
     }
   }
@@ -1183,7 +1183,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   }
 
   Future<bool> _checkCountdown() async {
-    var countDown = await SecureStorage.readStorage(key: globals.COUNTDOWN);
+    var countDown = await SecureStorage.readStorage(key: globals.countdown);
     if (countDown != null) {
       int nowDate = DateTime.now().millisecondsSinceEpoch;
       int countTime = int.parse(countDown);

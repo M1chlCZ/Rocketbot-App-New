@@ -126,7 +126,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                       padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 0.0),
                       child: Row(
                         children: [
-                          Text("Earnings", style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white)),
+                          Text("Earnings", style: Theme.of(context).textTheme.displaySmall!.copyWith(color: Colors.white)),
                           const SizedBox(
                             width: 50,
                           ),
@@ -186,14 +186,14 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                                       children: [
                                         Text(
                                           "${_getMonth()} ${AppLocalizations.of(context)!.income}: ",
-                                          style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 18.0, color: Colors.white70),
+                                          style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 18.0, color: Colors.white70),
                                         ),
                                         const SizedBox(
                                           width: 2.0,
                                         ),
                                         Text(
                                           "${totalUSD.toStringAsFixed(2)} \$",
-                                          style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w800, fontSize: 18.0, color: const Color(
+                                          style: Theme.of(context).textTheme.displaySmall!.copyWith(fontWeight: FontWeight.w800, fontSize: 18.0, color: const Color(
                                               0xFFC3F649)),
                                         ),
                                       ],
@@ -243,8 +243,8 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                                                         child: Row(
                                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                           children: [
-                                                            AutoSizeText(list[index].nam, maxLines: 1, minFontSize: 4.0, style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 12.0, color: Colors.white70),),
-                                                            AutoSizeText(list[index].val.toString(), maxLines: 1, minFontSize: 4.0, style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 14.0, color: Colors.white70),),
+                                                            AutoSizeText(list[index].nam, maxLines: 1, minFontSize: 4.0, style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 12.0, color: Colors.white70),),
+                                                            AutoSizeText(list[index].val.toString(), maxLines: 1, minFontSize: 4.0, style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 14.0, color: Colors.white70),),
                                                           ],
                                                         ),
                                                       ),
@@ -269,7 +269,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                                   SizedBox(
                                     height: 230,
                                     child:
-                                    Center(child: Text("No data for earnings available", style: Theme.of(context).textTheme.headline3!.copyWith(fontSize: 18.0, color: Colors.white70),),),
+                                    Center(child: Text("No data for earnings available", style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 18.0, color: Colors.white70),),),
                                   )
                                 else
                                 const SizedBox(

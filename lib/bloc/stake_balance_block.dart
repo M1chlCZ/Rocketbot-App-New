@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:rocketbot/endpoints/get_all_balances.dart';
 import 'package:rocketbot/endpoints/get_stake_coins.dart';
 import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
@@ -15,14 +14,11 @@ class StakeBalanceBloc {
   List<CoinBalance>? _sortedCoins;
   int _sort = 0;
 
-
   StreamController<ApiResponse<List<CoinBalance>>>? _coinListController;
 
-  StreamSink<ApiResponse<List<CoinBalance>>> get coinsListSink =>
-      _coinListController!.sink;
+  StreamSink<ApiResponse<List<CoinBalance>>> get coinsListSink => _coinListController!.sink;
 
-  Stream<ApiResponse<List<CoinBalance>>> get coinsListStream =>
-      _coinListController!.stream;
+  Stream<ApiResponse<List<CoinBalance>>> get coinsListStream => _coinListController!.stream;
 
   StakeBalanceBloc() {
     _coinListController = BehaviorSubject<ApiResponse<List<CoinBalance>>>();
@@ -37,7 +33,7 @@ class StakeBalanceBloc {
     coinsListSink.add(ApiResponse.loading('Fetching All Coins'));
     try {
       if (sort == null) {
-        var i = await SecureStorage.readStorage(key: globals.SORT_TYPE);
+        var i = await SecureStorage.readStorage(key: globals.sortType);
         if (i != null) {
           _sort = int.parse(i);
         } else {

@@ -80,7 +80,7 @@ class _CoinDepositViewState extends State<CoinDepositView> {
                                   width: 130,
                                   child: AutoSizeText(
                                     "${AppLocalizations.of(context)!.txid} ${_formatTx(widget.data.transactionId!)}",
-                                    style: Theme.of(context).textTheme.headline3!.copyWith(fontFamily: 'JosefinSans', fontSize: 15.0),
+                                    style: Theme.of(context).textTheme.displaySmall!.copyWith(fontFamily: 'JosefinSans', fontSize: 15.0),
                                     maxLines: 1,
                                     minFontSize: 8,
                                     textAlign: TextAlign.start,
@@ -90,7 +90,7 @@ class _CoinDepositViewState extends State<CoinDepositView> {
                                   width: 130,
                                   child: AutoSizeText(
                                     '${widget.data.confirmations!} ${AppLocalizations.of(context)!.confirmations}',
-                                    style: Theme.of(context).textTheme.headline4,
+                                    style: Theme.of(context).textTheme.headlineMedium,
                                     maxLines: 1,
                                     minFontSize: 8,
                                     textAlign: TextAlign.start,
@@ -107,7 +107,7 @@ class _CoinDepositViewState extends State<CoinDepositView> {
                               //     width: 70,
                               //     child: AutoSizeText(
                               //       'dsf',
-                              //       style: Theme.of(context).textTheme.subtitle2,
+                              //       style: Theme.of(context).textTheme.titleSmall,
                               //       minFontSize: 8,
                               //       maxLines: 1,
                               //       textAlign: TextAlign.start,
@@ -123,7 +123,7 @@ class _CoinDepositViewState extends State<CoinDepositView> {
                               padding: const EdgeInsets.only(top: 10.0),
                               child: Text(
                                 _getMeDate(widget.data.receivedAt),
-                                style: Theme.of(context).textTheme.headline3!.copyWith(fontFamily: 'JosefinSans', fontSize: 14.0, color: const Color(0xFF707581)),
+                                style: Theme.of(context).textTheme.displaySmall!.copyWith(fontFamily: 'JosefinSans', fontSize: 14.0, color: const Color(0xFF707581)),
                                 maxLines: 1,
                                 textAlign: TextAlign.start,
                                 overflow: TextOverflow.ellipsis,
@@ -153,7 +153,7 @@ class _CoinDepositViewState extends State<CoinDepositView> {
                                     child: AutoSizeText(
                                         widget.price != null ?
                                       "+${(widget.price!.prices!.usd! * Decimal.parse(widget.data.amount!.toString())).toStringAsFixed(3)} USD" : "No Price Data",
-                                      style: Theme.of(context).textTheme.headline3!.copyWith(fontFamily: 'JosefinSans', fontSize: 15.0, color: const Color(0xFF9BD41E)),
+                                      style: Theme.of(context).textTheme.displaySmall!.copyWith(fontFamily: 'JosefinSans', fontSize: 15.0, color: const Color(0xFF9BD41E)),
                                       minFontSize: 8,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -173,7 +173,7 @@ class _CoinDepositViewState extends State<CoinDepositView> {
                                     width: 150,
                                     child: AutoSizeText(
                                       "${widget.data.amount} ${widget.data.coin!.name!}",
-                                      style:  Theme.of(context).textTheme.headline3!.copyWith(fontFamily: 'JosefinSans', fontSize: 15.0),
+                                      style:  Theme.of(context).textTheme.displaySmall!.copyWith(fontFamily: 'JosefinSans', fontSize: 15.0),
                                       maxLines: 1,
                                       minFontSize: 8,
                                       textAlign: TextAlign.end,
@@ -256,7 +256,7 @@ class _CoinDepositViewState extends State<CoinDepositView> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.only(top: 5.0),
-                                          child: Text(AppLocalizations.of(context)!.txdet, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 16.0),),
+                                          child: Text(AppLocalizations.of(context)!.txdet, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 16.0),),
                                         ),
                                         Row(
                                           children: [
@@ -278,7 +278,7 @@ class _CoinDepositViewState extends State<CoinDepositView> {
                                   SizedBox(
                                     width: double.infinity,
                                     child: Text(AppLocalizations.of(context)!.txid,
-                                      style: Theme.of(context).textTheme.headline4,
+                                      style: Theme.of(context).textTheme.headlineMedium,
                                       textAlign: TextAlign.start,
                                     ),
                                   ),
@@ -301,7 +301,7 @@ class _CoinDepositViewState extends State<CoinDepositView> {
                                               color: Colors.black38,
                                               padding: const EdgeInsets.all(5.0),
                                               child: Text(td.transactionId!,
-                                                style: Theme.of(context).textTheme.subtitle2!.copyWith(fontSize: 12.0),
+                                                style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 12.0),
                                               ),
                                             ),
                                           ),
@@ -321,7 +321,7 @@ class _CoinDepositViewState extends State<CoinDepositView> {
                                                 padding: const EdgeInsets.all(5.0),
                                                 child: Text("${AppLocalizations.of(context)!.txcopy}\n",
                                                   textAlign: TextAlign.center,
-                                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12.0),
+                                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0),
                                                 ),
                                               ),
                                             ),
@@ -348,7 +348,7 @@ class _CoinDepositViewState extends State<CoinDepositView> {
                                               child: Padding(
                                                 padding: const EdgeInsets.all(8.0),
                                                 child: Text(AppLocalizations.of(context)!.copy,
-                                                  style: Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white),
+                                                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white),
                                                   textAlign: TextAlign.start,
                                                 ),
                                               ),
@@ -365,7 +365,7 @@ class _CoinDepositViewState extends State<CoinDepositView> {
                                               child: Padding(
                                                 padding: const EdgeInsets.all(8.0),
                                                 child: Text(AppLocalizations.of(context)!.explorer,
-                                                  style: Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white),
+                                                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white),
                                                   textAlign: TextAlign.start,
                                                 ),
                                               ),

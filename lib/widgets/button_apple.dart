@@ -43,7 +43,7 @@ class AppleSignInButton extends StatelessWidget {
                   .sign_in_apple,
               style: Theme.of(context)
                   .textTheme
-                  .subtitle1!
+                  .titleMedium!
                   .copyWith(
                   fontSize: 14.0,
                   color: Colors.white),

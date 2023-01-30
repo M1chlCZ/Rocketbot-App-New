@@ -54,13 +54,13 @@ void main() async {
 Future<void> onBackgroundMessage(RemoteMessage message) async {
   await Firebase.initializeApp();
 
-  if (message.data.containsKey('data')) {
-    final data = message.data['data'];
-  }
-
-  if (message.data.containsKey('notification')) {
-    final notification = message.data['notification'];
-  }
+  // if (message.data.containsKey('data')) {
+  //   final data = message.data['data'];
+  // }
+  //
+  // if (message.data.containsKey('notification')) {
+  //   final notification = message.data['notification'];
+  // }
 }
 
 class MyApp extends StatefulWidget {
@@ -123,7 +123,7 @@ class MyAppState extends State<MyApp> {
   }
 
   void _getSetLang() async {
-    String? ll = await SecureStorage.readStorage(key: globals.LOCALE_APP);
+    String? ll = await SecureStorage.readStorage(key: globals.localeApp);
     if (ll != null) {
       Locale l;
       List<String> ls = ll.split('_');
@@ -183,38 +183,38 @@ class MyAppState extends State<MyApp> {
         useMaterial3: true,
         canvasColor: const Color(0xFF252F45),
         textTheme: TextTheme(
-            headline1: const TextStyle(
+            displayLarge: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
               fontSize: 24.0,
             ),
-            headline2: TextStyle(
+            displayMedium: TextStyle(
               color: Colors.white.withOpacity(0.65),
               fontWeight: FontWeight.w500,
               fontSize: 16.0,
             ),
-            headline3: const TextStyle(
+            displaySmall: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w800,
               fontSize: 18.0,
             ),
-            headline4: const TextStyle(
+            headlineMedium: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w400,
               fontSize: 14.0,
             ),
-            subtitle1: const TextStyle(
+            titleMedium: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w400,
               fontSize: 10.0,
             ),
-            subtitle2: TextStyle(color: Colors.white.withOpacity(0.65), fontWeight: FontWeight.w400, fontSize: 10.0, fontStyle: FontStyle.italic),
-            bodyText1: const TextStyle(
+            titleSmall: TextStyle(color: Colors.white.withOpacity(0.65), fontWeight: FontWeight.w400, fontSize: 10.0, fontStyle: FontStyle.italic),
+            bodyLarge: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 18.0,
             ),
-            bodyText2: const TextStyle(
+            bodyMedium: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 16.0,

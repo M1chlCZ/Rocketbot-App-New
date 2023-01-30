@@ -64,7 +64,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           Text("Notifications", style: Theme
                               .of(context)
                               .textTheme
-                              .headline3),
+                              .displaySmall),
                         ],
                       ),
                     ),

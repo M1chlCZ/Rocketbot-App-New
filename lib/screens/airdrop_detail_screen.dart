@@ -1,7 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
 import 'package:rocketbot/bloc/airdrop_bloc.dart';
 import 'package:rocketbot/models/active_giveaways.dart';
 import 'package:rocketbot/models/aidrop_details.dart';
@@ -66,7 +64,7 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
                                         const SizedBox(
                                           width: 5,
                                         ),
-                                        Text("Airdrop details", style: Theme.of(context).textTheme.headline3),
+                                        Text("Airdrop details", style: Theme.of(context).textTheme.displaySmall),
                                       ]),
                                     )),
                                 const SizedBox(
@@ -85,7 +83,9 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 20.0,),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                                   child: SizedBox(
@@ -166,7 +166,9 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
                                         itemBuilder: (ctx, index) {
                                           return AirdropMembersTile(member: memba[index], callBack: (AirdropMembers a) {});
                                         })),
-                                const SizedBox(height: 100.0,),
+                                const SizedBox(
+                                  height: 100.0,
+                                ),
                               ]),
                             ),
                             Align(
@@ -196,7 +198,6 @@ class _AirdropDetailScreenState extends State<AirdropDetailScreen> {
                           ),
                         );
                       case Status.error:
-
                         return Container();
                     }
                   } else {

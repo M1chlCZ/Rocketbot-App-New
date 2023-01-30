@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
-typedef void DeleteCode();
-typedef Future<bool> PassCodeVerify(List<int> passcode);
+typedef DeleteCode = void Function();
+typedef PassCodeVerify = Future<bool> Function(List<int> passcode);
 
 class LockScreen extends StatefulWidget {
   /// Password on success method
@@ -80,10 +80,10 @@ class LockScreen extends StatefulWidget {
   super(key: key);
 
   @override
-  _LockScreenState createState() => _LockScreenState();
+  LockScreenState createState() => LockScreenState();
 }
 
-class _LockScreenState extends State<LockScreen> {
+class LockScreenState extends State<LockScreen> {
   var _currentCodeLength = 0;
   var _inputCodes = <int>[];
   var _currentState = 0;
@@ -323,7 +323,7 @@ class _LockScreenState extends State<LockScreen> {
                 child: Center(
                   child: Text(
                     number.toString(),
-                    style: Theme.of(context).textTheme.headline4!.copyWith(
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         color: widget.numColor,
                         fontSize: 22.0,
                         fontWeight: FontWeight.bold),

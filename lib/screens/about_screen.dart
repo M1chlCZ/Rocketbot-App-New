@@ -49,7 +49,7 @@ class AboutScreenState extends State<AboutScreen> {
                         width: 20.0,
                       ),
                       Text(AppLocalizations.of(context)!.about,
-                          style: Theme.of(context).textTheme.headline4),
+                          style: Theme.of(context).textTheme.headlineMedium),
                     ],
                   ),
                 ),
@@ -71,7 +71,7 @@ class AboutScreenState extends State<AboutScreen> {
                         align: TextAlign.start,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1!
+                            .bodyLarge!
                             .copyWith(
                             fontSize: 14.0, color: Colors.white),
                       ),
@@ -85,11 +85,11 @@ class AboutScreenState extends State<AboutScreen> {
                       RichText(
                         text: TextSpan(
                           text: AppLocalizations.of(context)!.about_rocket,
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                           children: <TextSpan>[
                             TextSpan(
                                 text: '',
-                                style: Theme.of(context).textTheme.headline4,
+                                style: Theme.of(context).textTheme.headlineMedium,
                             ),
                           ],
                         ),
@@ -139,7 +139,7 @@ class AboutScreenState extends State<AboutScreen> {
                                               .about_terms,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .headline4!
+                                              .headlineMedium!
                                               .copyWith(
                                               fontSize: 14.0,
                                               color: Colors.white)),
@@ -212,7 +212,7 @@ class AboutScreenState extends State<AboutScreen> {
                                               .about_policy,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .headline4!
+                                              .headlineMedium!
                                               .copyWith(
                                               fontSize: 14.0,
                                               color: Colors.white)),
@@ -285,7 +285,7 @@ class AboutScreenState extends State<AboutScreen> {
                                               .about_visit,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .headline4!
+                                              .headlineMedium!
                                               .copyWith(
                                               fontSize: 14.0,
                                               color: Colors.white)),
@@ -358,7 +358,7 @@ class AboutScreenState extends State<AboutScreen> {
                                               .about_merge,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .headline4!
+                                              .headlineMedium!
                                               .copyWith(
                                               fontSize: 14.0,
                                               color: Colors.white)),
@@ -407,7 +407,7 @@ class AboutScreenState extends State<AboutScreen> {
                         align: TextAlign.start,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1!
+                            .bodyLarge!
                             .copyWith(
                             fontSize: 14.0, color: Colors.white),
                       ),
@@ -421,12 +421,12 @@ class AboutScreenState extends State<AboutScreen> {
                       RichText(
                         text: TextSpan(
                           text: "Project lead: \n",
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                       ),
                       Row(children: [
                         const SizedBox(width: 20.0,),
-                        Text("Jon DFWplay", style: Theme.of(context).textTheme.headline4,),
+                        Text("Jon DFWplay", style: Theme.of(context).textTheme.headlineMedium,),
                         const Expanded(child: SizedBox()),
                         NeuButton(
                           width: 25,
@@ -474,12 +474,12 @@ class AboutScreenState extends State<AboutScreen> {
                       RichText(
                         text: TextSpan(
                           text: "APP + Staking/MN API dev: \n",
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                       ),
                       Row(children: [
                         const SizedBox(width: 20.0,),
-                        Text("Michal Žídek", style: Theme.of(context).textTheme.headline4,),
+                        Text("Michal Žídek", style: Theme.of(context).textTheme.headlineMedium,),
                         const Expanded(child: SizedBox()),
                         NeuButton(
                           width: 25,
@@ -528,11 +528,11 @@ class AboutScreenState extends State<AboutScreen> {
                       RichText(
                         text: TextSpan(
                           text: "Rocketbot API + WEB dev: \n\n",
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                           children: <TextSpan>[
                             TextSpan(
                               text: '      Bohdan Shamro',
-                              style: Theme.of(context).textTheme.headline4,
+                              style: Theme.of(context).textTheme.headlineMedium,
                             ),
                           ],
                         ),
@@ -582,7 +582,7 @@ class AboutScreenState extends State<AboutScreen> {
                                               .about_develop,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .headline4!
+                                              .headlineMedium!
                                               .copyWith(
                                               fontSize: 14.0,
                                               color: Colors.white)),
@@ -655,7 +655,7 @@ class AboutScreenState extends State<AboutScreen> {
                                               .about_licences,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .headline4!
+                                              .headlineMedium!
                                               .copyWith(
                                               fontSize: 14.0,
                                               color: Colors.white)),
@@ -704,43 +704,43 @@ class AboutScreenState extends State<AboutScreen> {
             primaryColor: Theme.of(context).canvasColor,
             cardColor: Theme.of(context).canvasColor,
             textTheme: TextTheme(
-                headline1: const TextStyle(
+                displayLarge: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w500,
                   fontSize: 28.0,
                 ),
-                headline2: TextStyle(
+                displayMedium: TextStyle(
                   color: Colors.white.withOpacity(0.65),
                   fontWeight: FontWeight.w500,
                   fontSize: 14.0,
                 ),
-                headline3: const TextStyle(
+                displaySmall: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w500,
                   fontSize: 14.0,
                 ),
-                headline4: const TextStyle(
+                headlineMedium: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w400,
                   fontSize: 14.0,
                 ),
-                subtitle1: const TextStyle(
+                titleMedium: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w400,
                   fontSize: 10.0,
                 ),
-                subtitle2: TextStyle(
+                titleSmall: TextStyle(
                     color: Colors.white.withOpacity(0.65),
                     fontWeight: FontWeight.w400,
                     fontSize: 10.0,
                     fontStyle: FontStyle.italic
                 ),
-                bodyText1: const TextStyle(
+                bodyLarge: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 18.0,
                 ),
-                bodyText2: const TextStyle(
+                bodyMedium: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 18.0,

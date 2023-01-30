@@ -17,7 +17,7 @@ class MenuSection extends StatelessWidget {
           textAlign: TextAlign.start,
           style: Theme.of(context)
               .textTheme
-              .subtitle1!
+              .titleMedium!
               .copyWith(fontSize: 14.0, color: Colors.white24),
         ),
         const SizedBox(

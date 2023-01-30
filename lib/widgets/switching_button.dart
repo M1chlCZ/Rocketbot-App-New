@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:rocketbot/support/utils.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 
 class SwitchingButton extends StatefulWidget {
@@ -23,7 +22,6 @@ class MyButtonState extends State<SwitchingButton> {
   void initState() {
     super.initState();
     t = Timer.periodic(const Duration(seconds: 3), (Timer t) {
-
       setState(() {
         if (currentString == strings.length - 1) {
           currentString = 0;
@@ -71,7 +69,7 @@ class MyButtonState extends State<SwitchingButton> {
               key: ValueKey<String>(strings[currentString]),
               child: Text(
                 strings[currentString].toUpperCase(),
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18),
               ),
             ),
           ),

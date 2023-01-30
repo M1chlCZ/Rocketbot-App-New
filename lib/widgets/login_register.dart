@@ -42,12 +42,12 @@ class LoginRegisterSwitcherState extends State<LoginRegisterSwitcher> {
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
-                          .headline4!
+                          .headlineMedium!
                           .copyWith(fontWeight: FontWeight.bold)),
                 )),
           ),
         ),
-        Text('|', style: Theme.of(context).textTheme.headline4!),
+        Text('|', style: Theme.of(context).textTheme.headlineMedium!),
         SizedBox(
           width: 120,
           child: AnimatedOpacity(
@@ -68,7 +68,7 @@ class LoginRegisterSwitcherState extends State<LoginRegisterSwitcher> {
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
-                          .headline4!
+                          .headlineMedium!
                           .copyWith(fontWeight: FontWeight.bold)),
                 )),
           ),

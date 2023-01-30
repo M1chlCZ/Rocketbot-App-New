@@ -23,7 +23,7 @@ class TransactionCache extends TransactionData {
     List<TransactionData> finalList = [];
     await Future.forEach(dep!, (item) async {
       try {
-        var it = (item as DataDeposits);
+        var it = item;
         // if(priceValue == null) {
         //   CoinGraph cg = CoinGraph.fromJson(price, item.coin!.id!.toString());
         //   priceValue = cg.data!.prices!.usd!.toDouble();
@@ -47,7 +47,7 @@ class TransactionCache extends TransactionData {
 
     await Future.forEach(withRld!, (item) {
       try {
-        var it = (item as DataWithdrawals);
+        var it = item;
         // if(priceValue == null) {
         //   CoinGraph cg = CoinGraph.fromJson(price, item.coin!.cryptoId!);
         //   priceValue = cg.data!.prices!.usd!.toDouble();

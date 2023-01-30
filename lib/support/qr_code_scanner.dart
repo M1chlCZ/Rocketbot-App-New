@@ -1,15 +1,11 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:path_provider/path_provider.dart';
-
 import 'package:rocketbot/support/barcode_overlay.dart';
 
 class QScanWidget extends StatefulWidget {
   final Function(String) scanResult;
   final String? header;
+
   const QScanWidget({Key? key, required this.scanResult, this.header}) : super(key: key);
 
   @override
@@ -18,6 +14,7 @@ class QScanWidget extends StatefulWidget {
 
 class QScanWidgetState extends State<QScanWidget> {
   Barcode? result;
+
   // QRViewController? controller;controller
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   MobileScannerController? cameraController;
@@ -36,22 +33,23 @@ class QScanWidgetState extends State<QScanWidget> {
     cameraController?.start();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.white70),
+        iconTheme: const IconThemeData(color: Colors.white70),
         backgroundColor: Theme.of(context).canvasColor,
-        title: Text( widget.header ?? 'Scan QR code', style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white70),),
+        title: Text(
+          widget.header ?? 'Scan QR code',
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white70),
+        ),
         actions: [
           IconButton(
             color: Colors.white,
             icon: ValueListenableBuilder(
               valueListenable: cameraController!.torchState,
               builder: (context, state, child) {
-                switch (state as TorchState) {
+                switch (state) {
                   case TorchState.off:
                     return const Icon(Icons.flash_off, color: Colors.white54);
                   case TorchState.on:
@@ -67,9 +65,12 @@ class QScanWidgetState extends State<QScanWidget> {
             icon: ValueListenableBuilder(
               valueListenable: cameraController!.cameraFacingState,
               builder: (context, state, child) {
-                switch (state as CameraFacing) {
+                switch (state) {
                   case CameraFacing.front:
-                    return Icon(Icons.flip_camera_android_sharp, color: Colors.white.withOpacity(0.9),);
+                    return Icon(
+                      Icons.flip_camera_android_sharp,
+                      color: Colors.white.withOpacity(0.9),
+                    );
                   case CameraFacing.back:
                     return Icon(Icons.flip_camera_android_sharp, color: Colors.white.withOpacity(0.9));
                 }
@@ -101,11 +102,11 @@ class QScanWidgetState extends State<QScanWidget> {
             Container(
               decoration: ShapeDecoration(
                   shape: BarcodeOverlay(
-                    borderColor: Colors.red,
-                    borderRadius: 10,
-                    borderLength: 30,
-                    borderWidth: 5,
-                  )),
+                borderColor: Colors.red,
+                borderRadius: 10,
+                borderLength: 30,
+                borderWidth: 5,
+              )),
             ),
             // Column(
             //   children: <Widget>[
@@ -176,4 +177,3 @@ class QScanWidgetState extends State<QScanWidget> {
     super.dispose();
   }
 }
-

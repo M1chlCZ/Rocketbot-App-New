@@ -100,7 +100,7 @@ class SecurityScreenState extends State<SecurityScreen> {
                         width: 20.0,
                       ),
                       Text(AppLocalizations.of(context)!.sc_security,
-                          style: Theme.of(context).textTheme.headline4),
+                          style: Theme.of(context).textTheme.headlineMedium),
                     ],
                   ),
                 ),
@@ -118,7 +118,7 @@ class SecurityScreenState extends State<SecurityScreen> {
                           textAlign: TextAlign.start,
                           style: Theme.of(context)
                               .textTheme
-                              .subtitle1!
+                              .titleMedium!
                               .copyWith(fontSize: 14.0, color: Colors.white24),
                         ),
                         const SizedBox(
@@ -138,7 +138,7 @@ class SecurityScreenState extends State<SecurityScreen> {
                             Text(AppLocalizations.of(context)!.sc_auth_type,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline4!
+                                    .headlineMedium!
                                     .copyWith(
                                         fontSize: 14.0, color: Colors.white)),
                             // SizedBox(
@@ -200,7 +200,7 @@ class SecurityScreenState extends State<SecurityScreen> {
                           textAlign: TextAlign.start,
                           style: Theme.of(context)
                               .textTheme
-                              .subtitle1!
+                              .titleMedium!
                               .copyWith(fontSize: 14.0, color: Colors.white24),
                         ),
                         const SizedBox(
@@ -242,7 +242,7 @@ class SecurityScreenState extends State<SecurityScreen> {
                                             .sc_change_pin,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline4!
+                                            .headlineMedium!
                                             .copyWith(
                                                 fontSize: 14.0,
                                                 color: Colors.white)),
@@ -300,7 +300,7 @@ class SecurityScreenState extends State<SecurityScreen> {
                                             .sc_remove_pin,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline4!
+                                            .headlineMedium!
                                             .copyWith(
                                                 fontSize: 14.0,
                                                 color: Colors.white)),

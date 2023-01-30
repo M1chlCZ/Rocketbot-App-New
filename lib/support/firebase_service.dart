@@ -28,7 +28,7 @@ class FirebaseService {
       return ggAuth.idToken!;
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) {
-        print("/////" + e.message.toString());
+        print("/////${e.message}");
       }
       // throw e;
     }

@@ -31,7 +31,6 @@ class GiveawayDetailBloc {
         coinsListSink.add(ApiResponse.completed(mp));
       }
     } catch (e) {
-      print(e);
       if (!_coinListController!.isClosed) {
         coinsListSink.add(ApiResponse.error(e.toString()));
       }

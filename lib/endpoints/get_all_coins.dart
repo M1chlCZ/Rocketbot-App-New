@@ -14,7 +14,7 @@ class CoinsList {
       List<Coin> finalList = [];
 
       await Future.forEach(r!, (item) async {
-            var coin = (item as Coin);
+            var coin = item;
             String? coinID = coin.cryptoId;
             var res = await _helper.get("Coin/GetPriceData?coin=$coinID");
             PriceData? p = CoinGraph.fromJson(res, coinID!).data;

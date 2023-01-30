@@ -70,7 +70,7 @@ class DialogBodyState extends State<DialogBody> {
                           maxLines: 1,
                           style: Theme.of(context)
                               .textTheme
-                              .headline6!
+                              .titleLarge!
                               .copyWith(fontSize: 22.0, color: Colors.white70),
                         ),
                       ),
@@ -101,7 +101,7 @@ class DialogBodyState extends State<DialogBody> {
                                 'OK',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline4!
+                                    .headlineMedium!
                                     .copyWith(color: Colors.white),
                                 textAlign: TextAlign.start,
                               ),
@@ -127,7 +127,7 @@ class DialogBodyState extends State<DialogBody> {
                                 'OK',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline4!
+                                    .headlineMedium!
                                     .copyWith(color: Colors.white),
                                 textAlign: TextAlign.start,
                               ),
@@ -145,7 +145,7 @@ class DialogBodyState extends State<DialogBody> {
                                 AppLocalizations.of(context)!.cancel,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline4!
+                                    .headlineMedium!
                                     .copyWith(color: Colors.white),
                                 textAlign: TextAlign.start,
                               ),

@@ -1,31 +1,31 @@
 library konjungate.globals;
 
 bool isLoggedIn = false;
-const String SERVER_URL = 'http://51.195.102.171:3000';
-const String USERNAME = "username";
-const String ID = "idUser";
-const String ADR = "adr";
-const String NICKNAME = "nickname";
-const String LOCALE = "locale";
-const String LEVEL = "level";
-const String UDID = "udid";
-const String TOKEN = "jwt";
-const String PIN = "PIN";
-const String ADMINPRIV = "admin";
-const String FIRETOKEN = "firetoken";
-const String LOGIN = "login";
-const String PASS = "pass";
-const String AUTH_TYPE = "AUTH_TYPE";
-const String COUNTDOWN = "countdownTime";
-const String LOCALE_APP = 'locale_app';
-const String SORT_TYPE = 'sortby';
+const String serverUrl = 'http://51.195.102.171:3000';
+const String username = "username";
+const String id = "idUser";
+const String adr = "adr";
+const String nickname = "nickname";
+const String locale = "locale";
+const String level = "level";
+const String udid = "udid";
+const String token = "jwt";
+const String pin = "PIN";
+const String adminpriv = "admin";
+const String fireToken = "firetoken";
+const String login = "login";
+const String pass = "pass";
+const String authType = "AUTH_TYPE";
+const String countdown = "countdownTime";
+const String localeApp = 'locale_app';
+const String sortType = 'sortby';
 
-const String DB_NAME = "databazia";
+const String dbName = "databazia";
 
-const String APP_NOT = 'showMessages';
+const String appNot = 'showMessages';
 
-const List<String> LANGUAGES = ['English','Finnish','Czech'];
-const List<String> LANGUAGES_CODES = ['en', 'fi_FI', 'cs_CZ'];
+const List<String> languages = ['English','Finnish','Czech'];
+const List<String> languageCodes = ['en', 'fi_FI', 'cs_CZ'];
 
 const String TABLE_STAKE = "tableStake";
 const String TS_ID = "id";

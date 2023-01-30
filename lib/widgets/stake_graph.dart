@@ -270,7 +270,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
   //     showTitles: true,
   //     getTextStyles: (value, margin) => Theme.of(context)
   //         .textTheme
-  //         .headline5!
+  //         .headlineSmall!
   //         .copyWith(color: Colors.white70, fontSize: 10.0),
   //     getTitles: (value) {
   //       return _formatTitles(value.toInt());
@@ -298,7 +298,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
   //     showTitles: true,
   //     getTextStyles: (value, margin) => Theme.of(context)
   //         .textTheme
-  //         .headline5!
+  //         .headlineSmall!
   //         .copyWith(color: Colors.white54, fontSize: 10.0),
   //     getTitles: (value) {
   //       if (_dropdownValue == 0) {
@@ -422,7 +422,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
       ),
     ];
 
-    LineChartData _mainData() {
+    LineChartData mainData() {
       return LineChartData(
         gridData: _gridData(),
 
@@ -507,7 +507,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
                       Theme
                           .of(context)
                           .textTheme
-                          .subtitle1!,
+                          .titleMedium!,
                       children: [
                         TextSpan(
                           text: "${_formatTooltip(flSpot.y)} ${widget.activeCoin!.cryptoId!}",
@@ -533,11 +533,11 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
         child: Text(AppLocalizations.of(context)!.graph_no_data, style: Theme
             .of(context)
             .textTheme
-            .subtitle2!
+            .titleSmall!
             .copyWith(color: Colors.white24),),
       )),)
           : LineChart(
-        _mainData(),
+        mainData(),
         swapAnimationDuration: const Duration(milliseconds: 300),
         swapAnimationCurve: Curves.linearToEaseOut,
       ),

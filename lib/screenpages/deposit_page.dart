@@ -169,7 +169,7 @@ class DepositPageState extends State<DepositPage> {
                                         : activeCoin!.ticker!,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .headline3!
+                                        .displaySmall!
                                         .copyWith(fontSize: 18.0),
                                     maxLines: 1,
                                     textAlign: TextAlign.start,
@@ -189,7 +189,7 @@ class DepositPageState extends State<DepositPage> {
                                           : activeCoin!.name!,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .subtitle2!
+                                          .titleSmall!
                                           .copyWith(
                                               fontStyle: FontStyle.normal,
                                               fontSize: 12.0),
@@ -213,7 +213,7 @@ class DepositPageState extends State<DepositPage> {
                                         : widget.free!.toString(),
                                     style: Theme.of(context)
                                         .textTheme
-                                        .headline3!
+                                        .displaySmall!
                                         .copyWith(fontSize: 18.0),
                                     maxLines: 1,
                                     textAlign: TextAlign.start,
@@ -246,7 +246,7 @@ class DepositPageState extends State<DepositPage> {
                           minFontSize: 4.0,
                           style: Theme.of(context)
                           .textTheme
-                          .bodyText1!
+                          .bodyLarge!
                           .copyWith(color: Colors.white, fontSize: 14.0),
                           autocorrect: false,
                           readOnly: true,
@@ -257,7 +257,7 @@ class DepositPageState extends State<DepositPage> {
                         isDense: true,
                         hintStyle: Theme.of(context)
                             .textTheme
-                            .subtitle2!
+                            .titleSmall!
                             .copyWith(color: Colors.white54, fontSize: 14.0),
                         hintText: AppLocalizations.of(context)!.address,
                         enabledBorder: const UnderlineInputBorder(
@@ -284,7 +284,7 @@ class DepositPageState extends State<DepositPage> {
                                   child: Center(
                                       child: Text(
                                         "${AppLocalizations.of(context)!.copy} ${AppLocalizations.of(context)!.address.toLowerCase()}",
-                                        style: Theme.of(context).textTheme.headline4,
+                                        style: Theme.of(context).textTheme.headlineMedium,
                                       ))),
                               duration: const Duration(seconds: 3),
                               backgroundColor: Colors.green,
@@ -385,7 +385,7 @@ class DepositPageState extends State<DepositPage> {
           //                                 'Telegram',
           //                                 style: Theme.of(context)
           //                                     .textTheme
-          //                                     .headline1!
+          //                                     .displayLarge!
           //                                     .copyWith(fontSize: 14.0),
           //                               ),
           //                               style: ButtonStyle(
@@ -430,7 +430,7 @@ class DepositPageState extends State<DepositPage> {
           //                               'Discord   ',
           //                               style: Theme.of(context)
           //                                   .textTheme
-          //                                   .headline1!
+          //                                   .displayLarge!
           //                                   .copyWith(fontSize: 14.0),
           //                             ),
           //                             style: ButtonStyle(
@@ -474,7 +474,7 @@ class DepositPageState extends State<DepositPage> {
           //                                 'SMS         ',
           //                                 style: Theme.of(context)
           //                                     .textTheme
-          //                                     .headline1!
+          //                                     .displayLarge!
           //                                     .copyWith(fontSize: 14.0),
           //                               ),
           //                               style: ButtonStyle(
@@ -520,7 +520,7 @@ class DepositPageState extends State<DepositPage> {
           //                                 'E-mail     ',
           //                                 style: Theme.of(context)
           //                                     .textTheme
-          //                                     .headline1!
+          //                                     .displayLarge!
           //                                     .copyWith(fontSize: 14.0),
           //                               ),
           //                               style: ButtonStyle(
@@ -599,7 +599,7 @@ class DepositPageState extends State<DepositPage> {
                               minFontSize: 8.0,
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline5!
+                                  .headlineSmall!
                                   .copyWith(
                                       fontSize: 22.0, color: Colors.black87),
                             ),
@@ -611,7 +611,7 @@ class DepositPageState extends State<DepositPage> {
                         '(tap to copy, long press to share)',
                         style: Theme.of(context)
                             .textTheme
-                            .headline5!
+                            .headlineSmall!
                             .copyWith(fontSize: 14.0, color: Colors.black54),
                       )),
                       const SizedBox(

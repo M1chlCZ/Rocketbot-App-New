@@ -38,7 +38,7 @@ class MenuNode extends StatelessWidget {
                       menuText,
                       style: Theme.of(context)
                           .textTheme
-                          .headline4!
+                          .headlineMedium!
                           .copyWith(
                           fontSize: 14.0,
                           color: Colors.white)),

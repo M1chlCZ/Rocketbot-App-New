@@ -18,7 +18,7 @@ class KeyboardOverlay {
           child: const InputDoneView());
     });
 
-    overlayState!.insert(_overlayEntry!);
+    overlayState.insert(_overlayEntry!);
   }
 
   static removeOverlay() {

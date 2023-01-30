@@ -48,7 +48,7 @@ class _ExchangeListScreenState extends State<ExchangeListScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: Text(
-                  "${widget.idCoin}",
+                  widget.idCoin,
                   style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 20.0, color: Colors.white),
                 ),
               ),

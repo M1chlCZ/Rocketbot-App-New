@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:rocketbot/models/coin_graph.dart';
 
 import '../NetInterface/interface.dart';
@@ -14,21 +13,16 @@ class BalanceCache extends BalanceList {
   static Future<void> _refreshAllRecords() async {
     final NetInterface helper = NetInterface();
     final response = await helper.get("User/GetBalances");
-    final priceData = await helper.get(
-        "Coin/GetPriceData?IncludeHistoryPrices=false&IncludeVolume=false&IncludeMarketcap=false&IncludeChange=true");
+    final priceData = await helper.get("Coin/GetPriceData?IncludeHistoryPrices=false&IncludeVolume=false&IncludeMarketcap=false&IncludeChange=true");
     Map<String, dynamic> m = {"response": response, "priceData": priceData};
-    List<CoinBalance> finalList = doJob( m);
+    List<CoinBalance> finalList = doJob(m);
 
     _allRecords = finalList;
     _lastFetchTime = DateTime.now();
   }
 
   static Future<List<CoinBalance>> getAllRecords({bool forceRefresh = false}) async {
-    bool shouldRefreshFromApi = (null == _allRecords ||
-        null == _lastFetchTime ||
-        _lastFetchTime!
-            .isAfter(DateTime.now().subtract(_cacheValidDuration!)) ||
-        forceRefresh);
+    bool shouldRefreshFromApi = (null == _allRecords || null == _lastFetchTime || _lastFetchTime!.isAfter(DateTime.now().subtract(_cacheValidDuration!)) || forceRefresh);
     if (shouldRefreshFromApi) {
       await _refreshAllRecords();
       _cacheValidDuration = const Duration(minutes: 10);
@@ -37,7 +31,7 @@ class BalanceCache extends BalanceList {
     return _allRecords;
   }
 
-static List<CoinBalance> doJob(Map<String, dynamic> m) {
+  static List<CoinBalance> doJob(Map<String, dynamic> m) {
     dynamic response = m['response'];
     dynamic priceData = m['priceData'];
 

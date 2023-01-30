@@ -268,12 +268,12 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                                         children: [
                                           Text(
                                             "Token${_posAddr == null ? " not" : ""} available for",
-                                            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, fontWeight: FontWeight.w500),
+                                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, fontWeight: FontWeight.w500),
                                             textAlign: TextAlign.start,
                                           ),
                                           Text(
                                             "Staking${widget.masternode ? " & MN hosting" : ""}",
-                                            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18.0, fontWeight: FontWeight.bold),
+                                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.0, fontWeight: FontWeight.bold),
                                             textAlign: TextAlign.start,
                                           ),
                                         ],
@@ -381,7 +381,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                             children: [
                               Text(
                                 _coinActive.name!,
-                                style: Theme.of(context).textTheme.headline2,
+                                style: Theme.of(context).textTheme.displayMedium,
                               ),
                               const SizedBox(
                                 height: 6,
@@ -393,7 +393,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                                     padding: const EdgeInsets.only(bottom: 1.5),
                                     child: Text(
                                       "\$${_formatDecimal(usdCost)}",
-                                      style: Theme.of(context).textTheme.headline2,
+                                      style: Theme.of(context).textTheme.displayMedium,
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -413,7 +413,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                                 width: 320,
                                 child: AutoSizeText(
                                   '${_formatPrice(totalCoins)} ${_coinActive.cryptoId!}',
-                                  style: Theme.of(context).textTheme.headline1,
+                                  style: Theme.of(context).textTheme.displayLarge,
                                   maxLines: 1,
                                   minFontSize: 8,
                                   textAlign: TextAlign.center,
@@ -424,7 +424,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                                 children: [
                                   Text(
                                     "\$${_formatPrice(totalUSD)}",
-                                    style: Theme.of(context).textTheme.headline2,
+                                    style: Theme.of(context).textTheme.displayMedium,
                                   ),
                                   const SizedBox(width: 5.0),
                                 ],
@@ -445,7 +445,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                               //
                               // },
                               //   color: const Color(0xFF9BD41E),
-                              //   child: Text("Buy ${_coinActive.ticker!}", style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0, color: const Color(0xFF252F45),fontWeight: FontWeight.w600),),
+                              //   child: Text("Buy ${_coinActive.ticker!}", style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: const Color(0xFF252F45),fontWeight: FontWeight.w600),),
                               // )
                             ],
                           ),
@@ -490,7 +490,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                               return Center(
                                   child: Text(
                                 AppLocalizations.of(context)!.no_tx,
-                                style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.white12),
+                                style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.white12),
                               ));
                             } else {
                               dataLength = snapshot.data!.data!.length;
@@ -519,7 +519,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                                 child: Text(
                               AppLocalizations.of(context)!.tx_problem,
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.headline2!.copyWith(color: Colors.white12),
+                              style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.white12),
                             ));
                           // print(snapshot.error);
                           // break;

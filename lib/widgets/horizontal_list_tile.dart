@@ -18,7 +18,7 @@ class HorizontalListView extends StatelessWidget {
           callBack(index);
         },
         child: Container(
-          padding: EdgeInsets.only(left: 10, right: 10.0),
+          padding: const EdgeInsets.only(left: 10, right: 10.0),
           color: Colors.transparent,
           child: AutoSizeText( coin.ticker!,
               maxLines: 1,

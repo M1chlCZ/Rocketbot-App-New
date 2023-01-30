@@ -5,10 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info/package_info.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/component_widgets/container_neu.dart';
 import 'package:rocketbot/models/registration_errors.dart';
 import 'package:rocketbot/netinterface/interface.dart';
@@ -71,7 +70,7 @@ class LoginScreenState extends State<LoginScreen> {
         });
       }
     });
-    setState(() { });
+    setState(() {});
   }
 
   void _initPackageInfo() async {
@@ -80,7 +79,6 @@ class LoginScreenState extends State<LoginScreen> {
       _appVersion = _packageInfo!.version;
     });
   }
-
 
   @override
   void setState(fn) {
@@ -103,23 +101,23 @@ class LoginScreenState extends State<LoginScreen> {
     try {
       int i = await NetInterface.checkToken();
       if (i == 0) {
-            _nextPage();
-          } else {
-            setState(() {
-              _curtain = false;
-            });
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text(
-                  "Invalid credentials",
-                  textAlign: TextAlign.center,
-                ),
-                backgroundColor: Colors.red,
-                behavior: SnackBarBehavior.fixed,
-                elevation: 5.0,
-              ));
-            }
-          }
+        _nextPage();
+      } else {
+        setState(() {
+          _curtain = false;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              "Invalid credentials",
+              textAlign: TextAlign.center,
+            ),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.fixed,
+            elevation: 5.0,
+          ));
+        }
+      }
     } catch (e) {
       print(e);
     }
@@ -329,7 +327,7 @@ class LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.only(right: 15.0, top: 17.0),
               child: Text(
                 'v $_appVersion',
-                style: Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white70, fontSize: 12.0),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white70, fontSize: 12.0),
               ),
             )),
           ),
@@ -359,14 +357,14 @@ class LoginScreenState extends State<LoginScreen> {
                                   width: 280,
                                   child: NeuContainer(
                                       child: TextField(
-                                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 18.0),
+                                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 18.0),
                                           autocorrect: false,
                                           controller: loginController,
                                           textAlign: TextAlign.center,
                                           decoration: InputDecoration(
                                             isDense: false,
                                             contentPadding: const EdgeInsets.only(left: 10.0, bottom: 5.0),
-                                            hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
+                                            hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white54, fontSize: 14.0),
                                             hintText: AppLocalizations.of(context)!.e_mail,
                                             enabledBorder: const UnderlineInputBorder(
                                               borderSide: BorderSide(color: Colors.transparent),
@@ -383,7 +381,7 @@ class LoginScreenState extends State<LoginScreen> {
                                   width: 280,
                                   child: NeuContainer(
                                       child: TextField(
-                                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 18.0),
+                                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 18.0),
                                           obscureText: true,
                                           enableSuggestions: false,
                                           autocorrect: false,
@@ -392,7 +390,7 @@ class LoginScreenState extends State<LoginScreen> {
                                           decoration: InputDecoration(
                                             isDense: false,
                                             contentPadding: const EdgeInsets.only(left: 10.0, bottom: 5.0),
-                                            hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
+                                            hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white54, fontSize: 14.0),
                                             hintText: AppLocalizations.of(context)!.password,
                                             enabledBorder: const UnderlineInputBorder(
                                               borderSide: BorderSide(color: Colors.transparent),
@@ -412,7 +410,7 @@ class LoginScreenState extends State<LoginScreen> {
                                     children: [
                                       Text(
                                         AppLocalizations.of(context)!.forgot_pass,
-                                        style: Theme.of(context).textTheme.subtitle1,
+                                        style: Theme.of(context).textTheme.titleMedium,
                                       ),
                                       const SizedBox(
                                         width: 20.0,
@@ -455,7 +453,7 @@ class LoginScreenState extends State<LoginScreen> {
                               child: Center(
                                   child: Text(
                                 AppLocalizations.of(context)!.sign_in,
-                                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 22.0, color: Colors.white),
+                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 22.0, color: Colors.white),
                               )),
                             ),
                           ),
@@ -465,7 +463,7 @@ class LoginScreenState extends State<LoginScreen> {
                         ),
                         Text(
                           AppLocalizations.of(context)!.or,
-                          style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 16.0, color: Colors.white),
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 16.0, color: Colors.white),
                         ),
                         const SizedBox(
                           height: 20.0,
@@ -516,7 +514,7 @@ class LoginScreenState extends State<LoginScreen> {
                                   ),
                                   Text(
                                     AppLocalizations.of(context)!.sign_in_google,
-                                    style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 14.0, color: Colors.white),
+                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14.0, color: Colors.white),
                                   ),
                                 ],
                               )),
@@ -575,14 +573,14 @@ class LoginScreenState extends State<LoginScreen> {
                           width: 280,
                           child: NeuContainer(
                               child: TextField(
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 18.0),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 18.0),
                                   autocorrect: false,
                                   controller: emailRegController,
                                   textAlign: TextAlign.center,
                                   decoration: InputDecoration(
                                     isDense: false,
                                     contentPadding: const EdgeInsets.only(left: 10.0, bottom: 5.0),
-                                    hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
+                                    hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white54, fontSize: 14.0),
                                     hintText: AppLocalizations.of(context)!.e_mail,
                                     enabledBorder: const UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.transparent),
@@ -599,14 +597,14 @@ class LoginScreenState extends State<LoginScreen> {
                           width: 280,
                           child: NeuContainer(
                               child: TextField(
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 18.0),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 18.0),
                                   autocorrect: false,
                                   controller: firstNameController,
                                   textAlign: TextAlign.center,
                                   decoration: InputDecoration(
                                     isDense: false,
                                     contentPadding: const EdgeInsets.only(left: 10.0, bottom: 5.0),
-                                    hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
+                                    hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white54, fontSize: 14.0),
                                     hintText: AppLocalizations.of(context)!.name,
                                     enabledBorder: const UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.transparent),
@@ -623,14 +621,14 @@ class LoginScreenState extends State<LoginScreen> {
                           width: 280,
                           child: NeuContainer(
                               child: TextField(
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 18.0),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 18.0),
                                   autocorrect: false,
                                   controller: secondNameController,
                                   textAlign: TextAlign.center,
                                   decoration: InputDecoration(
                                     isDense: false,
                                     contentPadding: const EdgeInsets.only(left: 10.0, bottom: 5.0),
-                                    hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
+                                    hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white54, fontSize: 14.0),
                                     hintText: AppLocalizations.of(context)!.surname,
                                     enabledBorder: const UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.transparent),
@@ -647,7 +645,7 @@ class LoginScreenState extends State<LoginScreen> {
                           width: 280,
                           child: NeuContainer(
                               child: TextField(
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 18.0),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 18.0),
                                   obscureText: true,
                                   enableSuggestions: false,
                                   autocorrect: false,
@@ -656,7 +654,7 @@ class LoginScreenState extends State<LoginScreen> {
                                   decoration: InputDecoration(
                                     isDense: false,
                                     contentPadding: const EdgeInsets.only(left: 10.0, bottom: 5.0),
-                                    hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
+                                    hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white54, fontSize: 14.0),
                                     hintText: AppLocalizations.of(context)!.password,
                                     enabledBorder: const UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.transparent),
@@ -673,7 +671,7 @@ class LoginScreenState extends State<LoginScreen> {
                           width: 280,
                           child: NeuContainer(
                               child: TextField(
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 18.0),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 18.0),
                                   obscureText: true,
                                   enableSuggestions: false,
                                   autocorrect: false,
@@ -682,7 +680,7 @@ class LoginScreenState extends State<LoginScreen> {
                                   decoration: InputDecoration(
                                     isDense: false,
                                     contentPadding: const EdgeInsets.only(left: 10.0, bottom: 5.0),
-                                    hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
+                                    hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white54, fontSize: 14.0),
                                     hintText: AppLocalizations.of(context)!.conf_password,
                                     enabledBorder: const UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.transparent),
@@ -713,11 +711,11 @@ class LoginScreenState extends State<LoginScreen> {
                                 children: [
                                   TextSpan(
                                     text: '${AppLocalizations.of(context)!.agreed_to} ',
-                                    style: Theme.of(context).textTheme.subtitle1,
+                                    style: Theme.of(context).textTheme.titleMedium,
                                   ),
                                   TextSpan(
                                     text: AppLocalizations.of(context)!.terms,
-                                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.blue),
+                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.blue),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         _launchURL('https://rocketbot.pro/terms');
@@ -736,8 +734,7 @@ class LoginScreenState extends State<LoginScreen> {
                                 color: Colors.white.withOpacity(0.05),
                                 borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                               ),
-                              child: Checkbox(
-                                  checkColor: Colors.lightGreen, activeColor: Colors.white12, value: _termsAgreed, onChanged: _onTermsChanged),
+                              child: Checkbox(checkColor: Colors.lightGreen, activeColor: Colors.white12, value: _termsAgreed, onChanged: _onTermsChanged),
                             ),
                           ],
                         ),
@@ -759,7 +756,7 @@ class LoginScreenState extends State<LoginScreen> {
                                         Color(0xFFF05523),
                                         Color(0xFF812D88),
                                       ]),
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 22.0, color: Colors.white),
+                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 22.0, color: Colors.white),
                                     ))
                                 : const Center(
                                     child: CircularProgressIndicator(
@@ -844,7 +841,7 @@ class LoginScreenState extends State<LoginScreen> {
                                 width: double.infinity,
                                 child: Text(
                                   AppLocalizations.of(context)!.forgot_email,
-                                  style: Theme.of(context).textTheme.headline4,
+                                  style: Theme.of(context).textTheme.headlineMedium,
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -862,13 +859,13 @@ class LoginScreenState extends State<LoginScreen> {
                                         padding: const EdgeInsets.all(5.0),
                                         child: TextField(
                                             controller: forgotPassControl,
-                                            style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 18.0),
+                                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 18.0),
                                             autocorrect: false,
                                             textAlign: TextAlign.center,
                                             decoration: InputDecoration(
                                               isDense: false,
                                               contentPadding: const EdgeInsets.only(left: 10.0, bottom: 5.0),
-                                              hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white54, fontSize: 14.0),
+                                              hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white54, fontSize: 14.0),
                                               hintText: AppLocalizations.of(context)!.e_mail,
                                               enabledBorder: const UnderlineInputBorder(
                                                 borderSide: BorderSide(color: Colors.transparent),
@@ -897,7 +894,7 @@ class LoginScreenState extends State<LoginScreen> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
                                             'OK',
-                                            style: Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white),
+                                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white),
                                             textAlign: TextAlign.start,
                                           ),
                                         ),

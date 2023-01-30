@@ -63,7 +63,7 @@ final String depositAddr;
                       child: Html(
                         data: """
   <iframe
-  src="https://widget.onramper.com?color=266677&darkmode=true&apiKey=pk_prod_B7UiJhtLIMs_c6f1JhZOj6rjG0RcwyjxOmV3RZa7D7Y0&defaultCrypto=$idCoin&wallets=$idCoin:$depositAddr&excludeCryptos=BTC,ETH&supportSell=false&supportSwap=false"
+  src="https://widget.onramper.com?color=266677&darkmode=true&apiKey=pk_prod_B7UiJhtLIMs_c6f1JhZOj6rjG0RcwyjxOmV3RZa7D7Y0&defaultCrypto=${idCoin.toUpperCase()}&wallets=${idCoin.toUpperCase()}:$depositAddr&supportSell=false&supportSwap=false"
   height="${constraints.maxHeight}"
   width="$width"
   title="Onramper widget"

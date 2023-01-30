@@ -1,13 +1,11 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
-
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:intl/intl.dart';
 import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/widgets/picture_cache.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'price_badge.dart';
 
@@ -117,14 +115,13 @@ class _CoinListViewState extends State<CoinListView> {
                         flex: 10,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 5.0, top: 5.0),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
                                   widget.coin.coin!.ticker!,
-                                  style: Theme.of(context).textTheme.bodyText2,
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                   maxLines: 1,
                                   textAlign: TextAlign.start,
                                   overflow: TextOverflow.ellipsis,
@@ -138,7 +135,7 @@ class _CoinListViewState extends State<CoinListView> {
                                     width: 70,
                                     child: AutoSizeText(
                                       widget.coin.coin!.name!,
-                                      style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.normal, fontSize: 10.0),
+                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontStyle: FontStyle.normal, fontSize: 10.0),
                                       minFontSize: 8,
                                       maxLines: 1,
                                       textAlign: TextAlign.start,
@@ -170,10 +167,7 @@ class _CoinListViewState extends State<CoinListView> {
                                             duration: const Duration(milliseconds: 1000),
                                             firstChild: AutoSizeText(
                                               _formatFree(widget.free!),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1!
-                                                  .copyWith(fontStyle: FontStyle.normal, fontWeight: FontWeight.w500, fontSize: 16.0),
+                                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontStyle: FontStyle.normal, fontWeight: FontWeight.w500, fontSize: 16.0),
                                               minFontSize: 8,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -182,10 +176,7 @@ class _CoinListViewState extends State<CoinListView> {
                                             crossFadeState: _crossfade ? CrossFadeState.showFirst : CrossFadeState.showSecond,
                                             secondChild: AutoSizeText(
                                               "PoS/MN: ${_formatFree(Decimal.parse(widget.coin.posCoin!.amount!.toStringAsFixed(4)))}",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1!
-                                                  .copyWith(fontStyle: FontStyle.normal, fontWeight: FontWeight.w500, fontSize: 16.0),
+                                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontStyle: FontStyle.normal, fontWeight: FontWeight.w500, fontSize: 16.0),
                                               minFontSize: 8,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -194,10 +185,7 @@ class _CoinListViewState extends State<CoinListView> {
                                           )
                                         : AutoSizeText(
                                             _formatFree(widget.free!),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .copyWith(fontStyle: FontStyle.normal, fontWeight: FontWeight.w500, fontSize: 16.0),
+                                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontStyle: FontStyle.normal, fontWeight: FontWeight.w500, fontSize: 16.0),
                                             minFontSize: 8,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
@@ -236,10 +224,7 @@ class _CoinListViewState extends State<CoinListView> {
                                                 alignment: Alignment.centerLeft,
                                                 child: Text(
                                                   _formatValue(widget.coin.priceData!.prices!.usd!),
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1!
-                                                      .copyWith(fontStyle: FontStyle.normal, color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16.0),
+                                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontStyle: FontStyle.normal, color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16.0),
                                                   maxLines: 1,
                                                   textAlign: TextAlign.start,
                                                   overflow: TextOverflow.ellipsis,
@@ -249,10 +234,8 @@ class _CoinListViewState extends State<CoinListView> {
                                                 alignment: Alignment.centerRight,
                                                 child: AutoSizeText(
                                                   "\$${_formatPrice(widget.coin.free! * widget.coin.priceData!.prices!.usd!.toDouble())}",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1!
-                                                      .copyWith(fontStyle: FontStyle.normal, color: Colors.white70, fontWeight: FontWeight.w500, fontSize: 16.0),
+                                                  style:
+                                                      Theme.of(context).textTheme.bodyLarge!.copyWith(fontStyle: FontStyle.normal, color: Colors.white70, fontWeight: FontWeight.w500, fontSize: 16.0),
                                                   minFontSize: 8,
                                                   maxLines: 1,
                                                   overflow: TextOverflow.ellipsis,
@@ -272,10 +255,7 @@ class _CoinListViewState extends State<CoinListView> {
                                                 alignment: Alignment.centerLeft,
                                                 child: Text(
                                                   _formatValue(widget.coin.priceData!.prices!.usd!),
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1!
-                                                      .copyWith(fontStyle: FontStyle.normal, fontWeight: FontWeight.w500, fontSize: 16.0),
+                                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontStyle: FontStyle.normal, fontWeight: FontWeight.w500, fontSize: 16.0),
                                                   maxLines: 1,
                                                   textAlign: TextAlign.start,
                                                   overflow: TextOverflow.ellipsis,
@@ -285,10 +265,8 @@ class _CoinListViewState extends State<CoinListView> {
                                                 alignment: Alignment.centerRight,
                                                 child: AutoSizeText(
                                                   "\$${_formatPrice(widget.coin.posCoin!.amount! * widget.coin.priceData!.prices!.usd!.toDouble())}",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1!
-                                                      .copyWith(fontStyle: FontStyle.normal, color: Colors.white70, fontWeight: FontWeight.w500, fontSize: 16.0),
+                                                  style:
+                                                      Theme.of(context).textTheme.bodyLarge!.copyWith(fontStyle: FontStyle.normal, color: Colors.white70, fontWeight: FontWeight.w500, fontSize: 16.0),
                                                   minFontSize: 8,
                                                   maxLines: 1,
                                                   overflow: TextOverflow.ellipsis,
@@ -308,7 +286,7 @@ class _CoinListViewState extends State<CoinListView> {
                                               alignment: Alignment.centerLeft,
                                               child: Text(
                                                 _formatValue(widget.coin.priceData!.prices!.usd!),
-                                                style: Theme.of(context).textTheme.headline3,
+                                                style: Theme.of(context).textTheme.displaySmall,
                                                 maxLines: 1,
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.ellipsis,
@@ -318,10 +296,7 @@ class _CoinListViewState extends State<CoinListView> {
                                               alignment: Alignment.centerRight,
                                               child: AutoSizeText(
                                                 "\$${_formatPrice(widget.coin.free! * widget.coin.priceData!.prices!.usd!.toDouble())}",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText1!
-                                                    .copyWith(fontStyle: FontStyle.normal, color: Colors.white70, fontWeight: FontWeight.w500, fontSize: 16.0),
+                                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontStyle: FontStyle.normal, color: Colors.white70, fontWeight: FontWeight.w500, fontSize: 16.0),
                                                 minFontSize: 8,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
@@ -369,7 +344,6 @@ class _CoinListViewState extends State<CoinListView> {
     // }
   }
 
-
   String _formatValue(Decimal decimal) {
     if (decimal < Decimal.parse("0.01")) {
       return "Less than 1¢";
@@ -387,12 +361,12 @@ class _CoinListViewState extends State<CoinListView> {
   }
 
   List<Color> _getColor(dynamic pos) {
-    if(pos != null) {
+    if (pos != null) {
       return [
         const Color(0xFF9D9BFD),
         const Color(0x009D9BFD),
       ];
-    }else{
+    } else {
       return [
         const Color(0xFF394359),
         const Color(0x00394359),

@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:rocketbot/endpoints/get_detail_airdrop.dart';
-import 'package:rocketbot/endpoints/get_detail_giveaway.dart';
 import 'package:rocketbot/endpoints/get_detail_lottery.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rxdart/rxdart.dart';
@@ -11,19 +9,16 @@ class LotteryDetailBloc {
 
   BehaviorSubject<ApiResponse<Map<String, dynamic>>>? _coinListController;
 
-  StreamSink<ApiResponse<Map<String, dynamic>>> get coinsListSink =>
-      _coinListController!.sink;
+  StreamSink<ApiResponse<Map<String, dynamic>>> get coinsListSink => _coinListController!.sink;
 
-  Stream<ApiResponse<Map<String, dynamic>>> get coinsListStream =>
-      _coinListController!.stream;
+  Stream<ApiResponse<Map<String, dynamic>>> get coinsListStream => _coinListController!.stream;
 
   LotteryDetailBloc(int id) {
     _coinListController = BehaviorSubject<ApiResponse<Map<String, dynamic>>>();
     fetchDetail(id);
   }
 
-
-  Future <void> fetchDetail(int id, {bool force = false}) async {
+  Future<void> fetchDetail(int id, {bool force = false}) async {
     if (!_coinListController!.isClosed) {
       coinsListSink.add(ApiResponse.loading('Fetching Giveaway'));
     }

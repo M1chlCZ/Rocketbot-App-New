@@ -1,8 +1,6 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:rocketbot/models/sector.dart';
-import 'package:rocketbot/widgets/indicator.dart';
 
 class EarningsChart extends StatefulWidget {
   final List<Sector> sectors;
@@ -27,17 +25,13 @@ class _EarningsChartState extends State<EarningsChart> {
       aspectRatio: 1,
       child: PieChart(
         PieChartData(
-            pieTouchData: PieTouchData(touchCallback:
-                (FlTouchEvent event, pieTouchResponse) {
+            pieTouchData: PieTouchData(touchCallback: (FlTouchEvent event, pieTouchResponse) {
               setState(() {
-                if (!event.isInterestedForInteractions ||
-                    pieTouchResponse == null ||
-                    pieTouchResponse.touchedSection == null) {
+                if (!event.isInterestedForInteractions || pieTouchResponse == null || pieTouchResponse.touchedSection == null) {
                   touchedIndex = -1;
                   return;
                 }
-                touchedIndex = pieTouchResponse
-                    .touchedSection!.touchedSectionIndex;
+                touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
               });
             }),
             borderData: FlBorderData(
@@ -46,8 +40,7 @@ class _EarningsChartState extends State<EarningsChart> {
             sectionsSpace: 1,
             centerSpaceRadius: 55,
             centerSpaceColor: Colors.transparent,
-            sections: showingSections(widget.sectors)
-        ),
+            sections: showingSections(widget.sectors)),
       ),
     );
   }
@@ -57,8 +50,7 @@ class _EarningsChartState extends State<EarningsChart> {
     int i = 0;
     for (var sector in sectors) {
       final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 25.0 : 16.0;
-      final radius = isTouched ? sector.radius!  * 1.2 : sector.radius!;
+      final radius = isTouched ? sector.radius! * 1.2 : sector.radius!;
       final data = PieChartSectionData(
         color: sector.color,
         value: sector.value,
@@ -79,7 +71,7 @@ class _EarningsChartState extends State<EarningsChart> {
         //                 sector.nam,
         //               maxLines: 1,
         //               minFontSize: 4.0,
-        //               style: Theme.of(context).textTheme.bodyText2,
+        //               style: Theme.of(context).textTheme.bodyMedium,
         //             ),
         //             AutoSizeText(
         //               sector.value.toString(),

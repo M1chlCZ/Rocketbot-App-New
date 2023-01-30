@@ -1,6 +1,7 @@
 import "dart:io" as io;
 
 import 'package:flutter/foundation.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rocketbot/models/coin.dart';

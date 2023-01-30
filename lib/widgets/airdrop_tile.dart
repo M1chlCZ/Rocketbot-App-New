@@ -63,7 +63,7 @@ class AirdropTile extends StatelessWidget {
                         maxLines: 1,
                         minFontSize: 8.0,
                         textAlign: TextAlign.start,
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
                       ),
                       AutoSizeText(
                         airdrop.channel!.name!,

@@ -2,22 +2,19 @@ import 'dart:io';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:rocketbot/models/coin.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/models/graph_stake_data.dart';
 import 'package:rocketbot/models/masternode_data.dart';
 import 'package:rocketbot/support/duration_extension.dart';
-
-import '../models/stake_data.dart';
-
 
 class CoinMasternodeGraph extends StatefulWidget {
   final MasternodeData? rewards;
   final Coin? activeCoin;
   final int type;
-  final Function (bool touch) blockTouch;
+  final Function(bool touch) blockTouch;
 
   const CoinMasternodeGraph({Key? key, this.rewards, required this.type, this.activeCoin, required this.blockTouch}) : super(key: key);
 
@@ -51,7 +48,6 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
     _stakes = widget.rewards;
     _getDate();
     _prepareStakeData();
-
   }
 
   void _getDate() {
@@ -59,7 +55,6 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     _date = formatter.format(now);
   }
-
 
   @override
   void dispose() {
@@ -74,10 +69,7 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
       List<String> dt = day!.split("-");
       return DateTime(int.parse(dt[0]), int.parse(dt[1]));
     }
-    var timeDifference = DateTime
-        .now()
-        .timeZoneOffset
-        .inHours;
+    var timeDifference = DateTime.now().timeZoneOffset.inHours;
     var datetime = DateTime.parse(day!);
     DateTime newTime = DateTime.now();
     if (timeDifference >= 0) {
@@ -129,12 +121,13 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
         if (_dropdownValue == 0) {
           valuesData = data
               .map((stakeData) {
-            var d = Duration(minutes: 0, hours: stakeData.date.hour);
-            return FlSpot(
-              d.inMinutes.toDouble(),
-              stakeData.amount,
-            );
-          }).cast<FlSpot>()
+                var d = Duration(minutes: 0, hours: stakeData.date.hour);
+                return FlSpot(
+                  d.inMinutes.toDouble(),
+                  stakeData.amount,
+                );
+              })
+              .cast<FlSpot>()
               .toList();
           _values.addAll(valuesData);
         } else if (_dropdownValue == 1) {
@@ -149,50 +142,49 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
               }
               if (add) {
                 var k = element.amount - subst;
-                dt.add(
-                    StakeData(date: element.date, amount: k)
-                );
+                dt.add(StakeData(date: element.date, amount: k));
               } else {
                 subst = element.amount;
               }
             }
           } else {
-            dt.add(
-                StakeData(date: data.last.date, amount: data.last.amount)
-            );
+            dt.add(StakeData(date: data.last.date, amount: data.last.amount));
           }
           var i = 1;
           List<FlSpot> valuesData = dt
               .map((stakeData) {
-            var d = Duration(days: i);
-            i++;
-            return FlSpot(
-              d.inDays.toDouble(),
-              stakeData.amount,
-            );
-          }).cast<FlSpot>()
+                var d = Duration(days: i);
+                i++;
+                return FlSpot(
+                  d.inDays.toDouble(),
+                  stakeData.amount,
+                );
+              })
+              .cast<FlSpot>()
               .toList();
           _values.addAll(valuesData);
         } else if (_dropdownValue == 2) {
           valuesData = data
               .map((stakeData) {
-            var d = Duration(days: stakeData.date.day);
-            return FlSpot(
-              d.inDays.toDouble(),
-              stakeData.amount,
-            );
-          }).cast<FlSpot>()
+                var d = Duration(days: stakeData.date.day);
+                return FlSpot(
+                  d.inDays.toDouble(),
+                  stakeData.amount,
+                );
+              })
+              .cast<FlSpot>()
               .toList();
           _values.addAll(valuesData);
         } else if (_dropdownValue == 3) {
           valuesData = data
               .map((stakeData) {
-            // var d = Duration(days: stakeData.date.month);
-            return FlSpot(
-              stakeData.date.month.toDouble(),
-              stakeData.amount,
-            );
-          }).cast<FlSpot>()
+                // var d = Duration(days: stakeData.date.month);
+                return FlSpot(
+                  stakeData.date.month.toDouble(),
+                  stakeData.amount,
+                );
+              })
+              .cast<FlSpot>()
               .toList();
           _values.addAll(valuesData);
         }
@@ -271,7 +263,7 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
   //     showTitles: true,
   //     getTextStyles: (value, margin) => Theme.of(context)
   //         .textTheme
-  //         .headline5!
+  //         .headlineSmall!
   //         .copyWith(color: Colors.white70, fontSize: 10.0),
   //     getTitles: (value) {
   //       return _formatTitles(value.toInt());
@@ -299,7 +291,7 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
   //     showTitles: true,
   //     getTextStyles: (value, margin) => Theme.of(context)
   //         .textTheme
-  //         .headline5!
+  //         .headlineSmall!
   //         .copyWith(color: Colors.white54, fontSize: 10.0),
   //     getTitles: (value) {
   //       if (_dropdownValue == 0) {
@@ -328,9 +320,7 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
 
   String _getMeTime(String? d, String format) {
     if (d == null) return "";
-    String languageCode = Localizations
-        .localeOf(context)
-        .languageCode;
+    String languageCode = Localizations.localeOf(context).languageCode;
     var date = DateTime.parse(d);
     String dateTime = DateFormat(format, languageCode).format(date);
     return dateTime;
@@ -374,9 +364,7 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
       return '${_getMeTime("0000-00-00 ${Duration(minutes: time).toHoursMinutes()}", "HH:mm")}\n';
     } else if (_dropdownValue == 1) {
       DateTime date = DateTime.parse("1970-00-00");
-      DateTime d = Jiffy(date)
-          .add(duration: Duration(days: time))
-          .dateTime;
+      DateTime d = Jiffy(date).add(duration: Duration(days: time)).dateTime;
       return '${DateFormat.EEEE(_locale).format(d)}\n';
     } else if (_dropdownValue == 2) {
       List<String> dateParts = _date.toString().split("-");
@@ -393,7 +381,6 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
       return '${Duration(days: time * 31).inDays.toString()} \n';
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -414,20 +401,14 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(
           show: true,
-          gradient: LinearGradient(
-              colors: _gradientColors,
-              stops: const [0.0, 0.2, 1.0],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter
-          ),
+          gradient: LinearGradient(colors: _gradientColors, stops: const [0.0, 0.2, 1.0], begin: Alignment.topCenter, end: Alignment.bottomCenter),
         ),
       ),
     ];
 
-    LineChartData _mainData() {
+    LineChartData mainData() {
       return LineChartData(
         gridData: _gridData(),
-
         titlesData: FlTitlesData(
             bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -435,9 +416,7 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false))),
         borderData: FlBorderData(
           show: false,
-          border: const Border(
-              bottom: BorderSide(color: Colors.white10, width: 0.5),
-              left: BorderSide(color: Colors.white10, width: 0.5)),
+          border: const Border(bottom: BorderSide(color: Colors.white10, width: 0.5), left: BorderSide(color: Colors.white10, width: 0.5)),
         ),
         minX: _minX,
         maxX: _maxX,
@@ -449,11 +428,8 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
           ]);
         }).toList(),
         lineTouchData: LineTouchData(
-            touchCallback:
-                (FlTouchEvent? event, LineTouchResponse? touchResponse) {
-              if (event is FlTapDownEvent ||
-                  event is FlPointerHoverEvent ||
-                  event is FlPanDownEvent) {
+            touchCallback: (FlTouchEvent? event, LineTouchResponse? touchResponse) {
+              if (event is FlTapDownEvent || event is FlPointerHoverEvent || event is FlPanDownEvent) {
                 setState(() {
                   _touch = true;
                 });
@@ -465,32 +441,24 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
                 setState(() {
                   _touch = false;
                 });
-              } else if (event is FlPanStartEvent ||
-                  event is FlLongPressMoveUpdate) {
+              } else if (event is FlPanStartEvent || event is FlLongPressMoveUpdate) {
                 setState(() {
                   _touch = true;
                 });
-              } else if (event is FlPanEndEvent ||
-                  event is FlPanCancelEvent) {
+              } else if (event is FlPanEndEvent || event is FlPanCancelEvent) {
                 setState(() {
                   _touch = false;
                 });
               }
             },
-            getTouchedSpotIndicator:
-                (LineChartBarData barData, List<int> spotIndexes) {
+            getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
               return spotIndexes.map((spotIndex) {
                 return TouchedSpotIndicatorData(
                   FlLine(color: Colors.white, strokeWidth: 2.0),
                   FlDotData(
                       show: true,
-                      getDotPainter: (FlSpot spot, double radius,
-                          LineChartBarData lc, int i) {
-                        return FlDotCirclePainter(
-                            color: const Color(0xFF312d53).withOpacity(0.5),
-                            strokeColor: Colors.white,
-                            strokeWidth: 5.0,
-                            radius: 3.0);
+                      getDotPainter: (FlSpot spot, double radius, LineChartBarData lc, int i) {
+                        return FlDotCirclePainter(color: const Color(0xFF312d53).withOpacity(0.5), strokeColor: Colors.white, strokeWidth: 5.0, radius: 3.0);
                       }),
                 );
               }).toList();
@@ -506,17 +474,11 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
                     final flSpot = barSpot;
                     return LineTooltipItem(
                       _getToolTip(flSpot.x.toInt()),
-                      Theme
-                          .of(context)
-                          .textTheme
-                          .subtitle1!,
+                      Theme.of(context).textTheme.titleMedium!,
                       children: [
                         TextSpan(
                           text: "${_formatTooltip(flSpot.y)} ${widget.activeCoin!.cryptoId!}",
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14),
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
                         ),
                       ],
                     );
@@ -526,26 +488,30 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
         lineBarsData: lineBarData,
       );
     }
+
     return Padding(
-      padding:
-      const EdgeInsets.only(right: 0.0, left: 0.0, top: 15, bottom: 0),
+      padding: const EdgeInsets.only(right: 0.0, left: 0.0, top: 15, bottom: 0),
       child: _values.isEmpty
-          ? Container(color: Colors.transparent, child: Center(child: Padding(
-        padding: const EdgeInsets.only(top: 200.0),
-        child: Text(AppLocalizations.of(context)!.graph_no_data, style: Theme
-            .of(context)
-            .textTheme
-            .subtitle2!
-            .copyWith(color: Colors.white24),),
-      )),)
+          ? Container(
+              color: Colors.transparent,
+              child: Center(
+                  child: Padding(
+                padding: const EdgeInsets.only(top: 200.0),
+                child: Text(
+                  AppLocalizations.of(context)!.graph_no_data,
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.white24),
+                ),
+              )),
+            )
           : LineChart(
-        _mainData(),
-        swapAnimationDuration: const Duration(milliseconds: 300),
-        swapAnimationCurve: Curves.linearToEaseOut,
-      ),
+              mainData(),
+              swapAnimationDuration: const Duration(milliseconds: 300),
+              swapAnimationCurve: Curves.linearToEaseOut,
+            ),
     );
   }
 }
+
 List<Color> _gradientColors = [
   const Color.fromRGBO(246, 141, 178, 1.0),
   const Color.fromRGBO(246, 141, 178, 0.25),

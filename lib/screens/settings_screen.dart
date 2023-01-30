@@ -27,7 +27,7 @@ class SettingsScreen extends StatefulWidget {
 
 class SettingsScreenState extends State<SettingsScreen> {
   NetInterface interface = NetInterface();
-  var dropLanguageValue = globals.LANGUAGES[0];
+  var dropLanguageValue = globals.languages[0];
   final List<int> _socials = [];
   var firstValue = false;
   var secondValue = true;
@@ -41,15 +41,15 @@ class SettingsScreenState extends State<SettingsScreen> {
     Future.delayed(Duration.zero).then((_) async {
       if (mounted) {
         final Locale appLocale = Localizations.localeOf(context);
-        var i = globals.LANGUAGES_CODES
+        var i = globals.languageCodes
             .indexWhere((element) => element.contains(appLocale.toString()));
         if (i != -1) {
           setState(() {
-            dropLanguageValue = globals.LANGUAGES[i];
+            dropLanguageValue = globals.languages[i];
           });
         } else {
           setState(() {
-            dropLanguageValue = globals.LANGUAGES[0];
+            dropLanguageValue = globals.languages[0];
           });
         }
       }
@@ -68,7 +68,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                   padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 0.0),
                   child: Row(
                     children: [
-                      Text("Settings", style: Theme.of(context).textTheme.headline3!.copyWith(color: Colors.white)),
+                      Text("Settings", style: Theme.of(context).textTheme.displaySmall!.copyWith(color: Colors.white)),
                       const SizedBox(
                         width: 50,
                       ),
@@ -89,7 +89,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                         textAlign: TextAlign.start,
                         style: Theme.of(context)
                             .textTheme
-                            .subtitle1!
+                            .titleMedium!
                             .copyWith(fontSize: 14.0, color: Colors.white24),
                       ),
                       const SizedBox(
@@ -112,7 +112,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                       //     Text('Lorem Ipsum',
                       //         style: Theme.of(context)
                       //             .textTheme
-                      //             .headline4!
+                      //             .headlineMedium!
                       //             .copyWith(
                       //                 fontSize: 14.0, color: Colors.white)),
                       //     const Expanded(
@@ -168,7 +168,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                           Text(AppLocalizations.of(context)!.language,
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline4!
+                                  .headlineMedium!
                                   .copyWith(
                                   fontSize: 14.0, color: Colors.white)),
                           // SizedBox(
@@ -194,9 +194,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                                         dropLanguageValue = val!;
                                         setState(() {
                                           Locale l;
-                                          int index =  globals.LANGUAGES.indexWhere((values) => values.contains(val));
+                                          int index =  globals.languages.indexWhere((values) => values.contains(val));
                                           // print(index);
-                                          var ls = globals.LANGUAGES_CODES[index].split('_');
+                                          var ls = globals.languageCodes[index].split('_');
                                           if(ls.length == 1) {
                                             l = Locale(ls[0], '');
                                           }else if(ls.length == 2) {
@@ -205,10 +205,10 @@ class SettingsScreenState extends State<SettingsScreen> {
                                             l = Locale.fromSubtags(countryCode: ls[2], scriptCode: ls[1], languageCode: ls[0]);
                                           }
                                           MyApp.of(context)?.setLocale(l);
-                                          SecureStorage.writeStorage(key: globals.LOCALE_APP, value: globals.LANGUAGES_CODES[index]);
+                                          SecureStorage.writeStorage(key: globals.localeApp, value: globals.languageCodes[index]);
                                         });
                                       },
-                                      items: globals.LANGUAGES
+                                      items: globals.languages
                                           .map((e) => DropdownMenuItem(
                                           value: e,
                                           child: SizedBox(
@@ -235,7 +235,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                         textAlign: TextAlign.start,
                         style: Theme.of(context)
                             .textTheme
-                            .subtitle1!
+                            .titleMedium!
                             .copyWith(fontSize: 14.0, color: Colors.white24),
                       ),
                       const SizedBox(
@@ -278,7 +278,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                                         AppLocalizations.of(context)!.socials_popup.toLowerCase().capitalize(),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline4!
+                                            .headlineMedium!
                                             .copyWith(
                                             fontSize: 14.0,
                                             color: _socialsOK ? Colors.white : const Color(0xFFF35656))),
@@ -309,7 +309,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                         textAlign: TextAlign.start,
                         style: Theme.of(context)
                             .textTheme
-                            .subtitle1!
+                            .titleMedium!
                             .copyWith(fontSize: 14.0, color: Colors.white24),
                       ),
                       const SizedBox(
@@ -353,7 +353,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                                             .sc_security,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline4!
+                                            .headlineMedium!
                                             .copyWith(
                                                 fontSize: 14.0,
                                                 color: Colors.white)),

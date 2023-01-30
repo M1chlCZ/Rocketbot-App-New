@@ -97,7 +97,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                     child: Center(
                         child: Text(
                       'SEND',
-                      style: Theme.of(context).textTheme.headline2!.copyWith(
+                      style: Theme.of(context).textTheme.displayMedium!.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 11.0,
                           color: Colors.white),
@@ -112,7 +112,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                     child: Center(
                         child: Text(
                       'RECEIVE',
-                      style: Theme.of(context).textTheme.headline2!.copyWith(
+                      style: Theme.of(context).textTheme.displayMedium!.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 11.0,
                           color: Colors.white),
@@ -181,7 +181,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                             _getMeText(widget.transactionData),
                             style: Theme.of(context)
                                 .textTheme
-                                .headline2!
+                                .displayMedium!
                                 .copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
@@ -243,7 +243,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                                       child: Text(
                                         widget.transactionData.toAddress != null ? "Sent to: ${_formatTx(widget.transactionData.toAddress!)}" : "Tx id: ${_formatTx(widget.transactionData.transactionId!)}",
                                         // "Sent to: " + _formatTx(widget.data.toAddress!),
-                                        style: Theme.of(context).textTheme.headline3,
+                                        style: Theme.of(context).textTheme.displaySmall,
                                         maxLines: 1,
                                         textAlign: TextAlign.start,
                                         overflow: TextOverflow.ellipsis,
@@ -258,7 +258,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                                     //     width: 70,
                                     //     child: AutoSizeText(
                                     //       'dsf',
-                                    //       style: Theme.of(context).textTheme.subtitle2,
+                                    //       style: Theme.of(context).textTheme.titleSmall,
                                     //       minFontSize: 8,
                                     //       maxLines: 1,
                                     //       textAlign: TextAlign.start,
@@ -274,13 +274,13 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                                     padding: const EdgeInsets.only(top: 10.0),
                                     child: _confirmed ? Text(
                                         _getMeDate(widget.transactionData.receivedAt),
-                                      style: Theme.of(context).textTheme.headline4!.copyWith(color: const Color(0xff656565), fontSize: 12.0),
+                                      style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: const Color(0xff656565), fontSize: 12.0),
                                       maxLines: 1,
                                       textAlign: TextAlign.start,
                                       overflow: TextOverflow.ellipsis,
                                     ) : Text(
                                       "${widget.transactionData.confirmations}confirmations",
-                                      style: Theme.of(context).textTheme.headline4,
+                                      style: Theme.of(context).textTheme.headlineMedium,
                                       maxLines: 1,
                                       textAlign: TextAlign.start,
                                       overflow: TextOverflow.ellipsis,
@@ -310,7 +310,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                                       child: AutoSizeText(
                                         // widget.free!.toString(),
                                         "-${(widget.transactionData.usdPrice! * widget.transactionData.amount!).toStringAsFixed(3)}  USD",
-                                        style: Theme.of(context).textTheme.headline4!.copyWith(color: _receive ? const Color(0xff1AD37A) : const Color(0xffEA3913)),
+                                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: _receive ? const Color(0xff1AD37A) : const Color(0xffEA3913)),
                                         minFontSize: 8,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -331,7 +331,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
                                       // widget.coin.free!.toStringAsFixed(3),
                                       '',
                                       // widget.data.amount.toString() + " " + widget.data.coin!.name!,
-                                      style: Theme.of(context).textTheme.headline3,
+                                      style: Theme.of(context).textTheme.displaySmall,
                                       maxLines: 1,
                                       textAlign: TextAlign.start,
                                       overflow: TextOverflow.ellipsis,

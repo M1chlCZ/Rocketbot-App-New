@@ -212,7 +212,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
               const SizedBox(
                 width: 20.0,
               ),
-              Text(AppLocalizations.of(context)!.socials_popup.toLowerCase().capitalize(), style: Theme.of(context).textTheme.headline4),
+              Text(AppLocalizations.of(context)!.socials_popup.toLowerCase().capitalize(), style: Theme.of(context).textTheme.headlineMedium),
             ],
           ),
         ),
@@ -225,7 +225,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
               Text(
                 AppLocalizations.of(context)!.social_accounts,
                 textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 14.0, color: Colors.white24),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14.0, color: Colors.white24),
               ),
               const SizedBox(
                 height: 5.0,
@@ -316,7 +316,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
                           children: [
                             Text(
                               '- ${AppLocalizations.of(context)!.join_discord}',
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0),
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0),
                             ),
                             const SizedBox(
                               width: 5.0,
@@ -339,7 +339,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
                         children: [
                           Text(
                             '- ${AppLocalizations.of(context)!.send_discord}',
-                            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.0),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0),
                           ),
                         ],
                       ),
@@ -364,7 +364,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
                               child: AutoSizeTextField(
                                 maxLines: 1,
                                 minFontSize: 8.0,
-                                style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white, fontSize: 14.0),
+                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 14.0),
                                 autocorrect: false,
                                 readOnly: true,
                                 controller: _discordTextController,
@@ -372,7 +372,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.only(left: 4.0, right: 4.0),
                                   isDense: true,
-                                  hintStyle: Theme.of(context).textTheme.subtitle2!.copyWith(color: Colors.white54, fontSize: 14.0),
+                                  hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.white54, fontSize: 14.0),
                                   hintText: '',
                                   enabledBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide(color: Colors.transparent),

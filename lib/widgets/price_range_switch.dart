@@ -37,7 +37,7 @@ class PriceRangeSwitcherState extends State<PriceRangeSwitcher> {
                   child: AutoSizeText(AppLocalizations.of(context)!.all,
                       minFontSize: 6,
                       maxLines: 1,
-                      style:  Theme.of(context).textTheme.bodyText1!.copyWith(color: _active == 4 ? widget.color ?? const Color(0xFF9BD41E) : Colors.white, fontSize: 16.0)
+                      style:  Theme.of(context).textTheme.bodyLarge!.copyWith(color: _active == 4 ? widget.color ?? const Color(0xFF9BD41E) : Colors.white, fontSize: 16.0)
                   )),),
           ),
           SizedBox(
@@ -56,7 +56,7 @@ class PriceRangeSwitcherState extends State<PriceRangeSwitcher> {
                       AppLocalizations.of(context)!.onew,
                       minFontSize: 6,
                       maxLines: 1,
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: _active == 3 ? widget.color ?? const Color(0xFF9BD41E) : Colors.white, fontSize: 16.0)
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: _active == 3 ? widget.color ?? const Color(0xFF9BD41E) : Colors.white, fontSize: 16.0)
                   )),),
           ),
           SizedBox(
@@ -74,7 +74,7 @@ class PriceRangeSwitcherState extends State<PriceRangeSwitcher> {
                   child: AutoSizeText(AppLocalizations.of(context)!.oned,
                       minFontSize: 6,
                       maxLines: 1,
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: _active == 2 ? widget.color ?? const Color(0xFF9BD41E) : Colors.white, fontSize: 16.0))
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: _active == 2 ? widget.color ?? const Color(0xFF9BD41E) : Colors.white, fontSize: 16.0))
               ),
             ),
           ),
@@ -94,7 +94,7 @@ class PriceRangeSwitcherState extends State<PriceRangeSwitcher> {
                     AppLocalizations.of(context)!.twelveh,
                     minFontSize: 6,
                     maxLines: 1,
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: _active == 1 ? widget.color ?? const Color(0xFF9BD41E) : Colors.white, fontSize: 16.0),
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: _active == 1 ? widget.color ?? const Color(0xFF9BD41E) : Colors.white, fontSize: 16.0),
                   )),
             ),
           )

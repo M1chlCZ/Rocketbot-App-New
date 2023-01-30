@@ -15,7 +15,7 @@ import 'app_exception.dart';
 
 class NetInterface {
   static const String baseUrl = "https://app.rocketbot.pro/api/mobile/";
-  static String posUrl = "http://51.195.168.17:7100/";
+  static String posUrl = "http://51.195.168.17:7100/"; //TODO REFRESH TOKEN are separate!!!
   static const String token = "token";
   static const String posToken = "posToken";
   static const String tokenRefresh = "refreshToken";
@@ -48,7 +48,7 @@ class NetInterface {
       }
       if (response.statusCode == 401 || response.statusCode == 403) {
         await refreshToken(pos: pos);
-        var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
+        var tk = await SecureStorage.readStorage(key: pos ? posToken : token);
         final res = await http.get(Uri.parse(curl), headers: {
           'User-Agent': userAgent.toLowerCase(),
           "Authorization": " ${pos ? "JWT" : "Bearer"} $tk",
@@ -376,7 +376,7 @@ class NetInterface {
         "token": enc,
       };
       final resp = await http.post(
-          pos ? Uri.parse("$posUrl/auth/refreshToken") : Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/RefreshToken"),
+          pos ? Uri.parse("http://51.195.168.17:7100/auth/refreshToken") : Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/RefreshToken"),
           body: json.encode(request),
           headers: {
             'User-Agent': userAgent.toLowerCase(),
@@ -418,7 +418,7 @@ class NetInterface {
         "token": token,
       };
       var query = json.encoder.convert(request);
-      final response = await http.post(Uri.parse("$posUrl/auth"), body: query, headers: {
+      final response = await http.post(Uri.parse("http://51.195.168.17:7100/auth"), body: query, headers: {
         "Content-Type": "application/json",
         "accept": "application/json",
         'User-Agent': userAgent.toLowerCase(),
