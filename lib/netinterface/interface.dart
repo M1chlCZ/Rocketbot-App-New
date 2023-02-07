@@ -10,6 +10,7 @@ import 'package:rocketbot/models/refresh_token.dart';
 import 'package:rocketbot/models/signin_code.dart';
 import 'package:rocketbot/models/signin_key.dart';
 import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/globals.dart' as globals;
 
 import 'app_exception.dart';
 
@@ -209,6 +210,7 @@ class NetInterface {
         SignCode? res = SignCode.fromJson(json.decode(response.body));
         await SecureStorage.writeStorage(key: NetInterface.token, value: res.data!.token!);
         await SecureStorage.writeStorage(key: NetInterface.tokenRefresh, value: res.data!.refreshToken!);
+        await SecureStorage.writeStorage(key: globals.id, value: res.data!.user!.id!.toString());
         return res.data!.token!;
       } else {
         // await const FlutterSecureStorage().delete(key: NetInterface.token);
@@ -239,6 +241,7 @@ class NetInterface {
         if (res.data!.token != null) {
           await SecureStorage.writeStorage(key: NetInterface.token, value: res.data!.token!);
           await SecureStorage.writeStorage(key: NetInterface.tokenRefresh, value: res.data!.refreshToken!);
+          await SecureStorage.writeStorage(key: globals.id, value: res.data!.user!.id!.toString());
           return res.data!.token!;
         } else {
           return null;
@@ -272,6 +275,7 @@ class NetInterface {
         if (res.data!.token != null) {
           await SecureStorage.writeStorage(key: NetInterface.token, value: res.data!.token!);
           await SecureStorage.writeStorage(key: NetInterface.tokenRefresh, value: res.data!.refreshToken!);
+          await SecureStorage.writeStorage(key: globals.id, value: res.data!.user!.id!.toString());
           return res.data!.token!;
         } else {
           return null;
@@ -314,6 +318,7 @@ class NetInterface {
         if (res.data!.token != null) {
           await SecureStorage.writeStorage(key: NetInterface.token, value: res.data!.token!);
           await SecureStorage.writeStorage(key: NetInterface.tokenRefresh, value: res.data!.refreshToken!);
+          await SecureStorage.writeStorage(key: globals.id, value: res.data!.user!.id!.toString());
         }
       }
       return response.body;

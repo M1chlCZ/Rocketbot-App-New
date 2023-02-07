@@ -76,6 +76,18 @@ android {
             shrinkResources true
         }
 
+        profile {
+            applicationIdSuffix ".profile"
+            signingConfig signingConfigs.debug
+        }
+
+        staging {
+            initWith profile
+            manifestPlaceholders = [hostName:"com.m1chl.rocketbot"]
+            applicationIdSuffix ".profile"
+        }
+
+
         debug {
             signingConfig signingConfigs.debug
         }

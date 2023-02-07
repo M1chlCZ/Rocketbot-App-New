@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rocketbot/firebase_options.dart';
 import 'package:rocketbot/screens/login_screen.dart';
@@ -46,7 +47,7 @@ void main() async {
 
   runApp(
     Phoenix(
-      child: const MyApp(),
+      child: const ProviderScope(child: MyApp()),
     ),
   );
 }

@@ -56,6 +56,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:307873550141:android:86cf7313b79847b13a3f54",
+        "android_client_info": {
+          "package_name": "com.m1chl.rocketbot.profile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "307873550141-aoq2n0uvgmesv1u96jeqcrh50srl715b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBax2G-uSrjquMJ5uQXNz-7IorW5uLZfCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "307873550141-aoq2n0uvgmesv1u96jeqcrh50srl715b.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "307873550141-fc0qml0m8k895iess2t6l10tnuaok8q4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.m1chl.rocketbot"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

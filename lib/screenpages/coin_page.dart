@@ -631,6 +631,16 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
     _calculatePortfolio();
   }
 
+  Future<int> getUserID() async {
+    try {
+      var resB = await _interface.get("auth/id", pos: true);
+      return resB['id'];
+    } catch (e) {
+      print(e);
+      return 0;
+    }
+  }
+
   _getGraphData() async {
     var p = await PriceGraphCache.getAllRecords(_coinActive.id!);
     setState(() {
@@ -692,7 +702,8 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
   }
 
   void _getExchange(int idCoin) async {
-    print("get addr ${widget.depositAddr}");
+    int userID = await getUserID();
+    print("get addr ${widget.depositAddr} userID: $userID");
     try {
       List<Exchange> l = [];
       List<dynamic> res = await _interface.post("exchanges", {"idCoin": idCoin}, pos: true, debug: true);
@@ -711,7 +722,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
         if (mounted) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => RamperScreen(idCoin: _coinActive.ticker ?? "", depositAddr: widget.depositAddr ?? "",),
+              builder: (context) => RamperScreen(userID: userID, idCoin: _coinActive.ticker ?? "", depositAddr: widget.depositAddr!,),
             ),
           );
         }
