@@ -1,25 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rocketbot/models/coin.dart';
+import 'package:rocketbot/providers/dep_addr_provider.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:webviewx/webviewx.dart';
 
-class RamperScreen extends StatefulWidget {
-  final String idCoin;
-  final String depositAddr;
+class RamperScreen extends ConsumerStatefulWidget {
+  final Coin coin;
   final int userID;
 
-  const RamperScreen({Key? key, required this.idCoin, required this.depositAddr, required this.userID}) : super(key: key);
+  const RamperScreen({Key? key, required this.coin, required this.userID}) : super(key: key);
 
   @override
-  State<RamperScreen> createState() => _RamperScreenState();
+  ConsumerState<RamperScreen> createState() => _RamperScreenState();
 }
 
-class _RamperScreenState extends State<RamperScreen> {
+class _RamperScreenState extends ConsumerState<RamperScreen> {
   late WebViewXController webviewController;
+  String? depositAddr;
 
   @override
   void initState() {
     super.initState();
-    print("https://buy.onramper.com?darkmode=true&apiKey=pk_prod_01GRC4A70MRHE8RZM8E7TE46YE&defaultCrypto=${widget.idCoin.toUpperCase()}&wallets=${widget.idCoin.toUpperCase()}:${widget.depositAddr}&supportSell=false&supportSwap=false&partnerContext=${widget.userID}");
+    Future.delayed(Duration.zero, () {
+      setState(() {
+         ref.read(depAddressProvider(widget.coin.id!)).whenData((value) {
+           setState(() {
+             depositAddr = value;
+           });
+           webviewController.reload();
+        });
+      });
+    });
+
   }
 
   @override
@@ -30,7 +43,6 @@ class _RamperScreenState extends State<RamperScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
     return Scaffold(
         resizeToAvoidBottomInset: true,
         body: SafeArea(
@@ -60,7 +72,7 @@ class _RamperScreenState extends State<RamperScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 4.0),
-                      child: Text("Buy ${widget.idCoin}",
+                      child: Text("Buy ${widget.coin.ticker}",
                         style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 20.0, color: Colors.white),
 
                       ),
@@ -89,7 +101,7 @@ class _RamperScreenState extends State<RamperScreen> {
                       child: SafeArea(
                         child: WebViewX(
                           initialContent: """
-  <iframe   src="https://buy.onramper.com?darkmode=true&apiKey=pk_prod_01GRC4A70MRHE8RZM8E7TE46YE&defaultCrypto=${widget.idCoin.toUpperCase()}&wallets=${widget.idCoin.toUpperCase()}:${widget.depositAddr}&supportSell=false&supportSwap=false&partnerContext=${widget.userID}"
+  <iframe   src="https://buy.onramper.com?darkmode=true&apiKey=pk_prod_01GRC4A70MRHE8RZM8E7TE46YE&defaultCrypto=${widget.coin.ticker!.toUpperCase()}&wallets=${widget.coin.ticker!.toUpperCase()}:$depositAddr&supportSell=false&supportSwap=false&partnerContext=${widget.userID}"
   height="${constraints.maxHeight}"
   width="${constraints.maxWidth}"
   title="Onramper widget"

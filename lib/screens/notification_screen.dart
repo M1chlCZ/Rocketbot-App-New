@@ -1,37 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rocketbot/models/notifications.dart';
+import 'package:rocketbot/providers/not_provider.dart';
 import 'package:rocketbot/storage/app_database.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/notification_tile.dart';
 
-class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({Key? key}) : super(key: key);
+class NotificationScreen extends ConsumerWidget {
+   NotificationScreen({Key? key}) : super(key: key);
 
-  @override
-  State<NotificationScreen> createState() => _NotificationScreenState();
-}
-
-class _NotificationScreenState extends State<NotificationScreen> {
   AppDatabase db = GetIt.I.get<AppDatabase>();
   List<NotNode> _list = [];
 
-  @override
-  void initState() {
-    super.initState();
-    _getNot();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _getNot();
+  // }
+  //
+  // void _getNot() async {
+  //   Future.delayed(Duration.zero, () async {
+  //     _list = await db.getNotifications();
+  //     setState(() {});
+  //     db.setRead();
+  //   });
+  // }
 
-  void _getNot() async {
-    Future.delayed(Duration.zero, () async {
-      _list = await db.getNotifications();
-      setState(() {});
-      db.setRead();
-    });
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
+    final not = ref.watch(notificationProvider);
     return Scaffold(
         body: SafeArea(
             child: SingleChildScrollView(
@@ -72,13 +70,27 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       height: 15,
                     ),
                     Flexible(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                          itemCount: _list.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return NotificationTile(node: _list[index],);
-                          }),
+                      child: not.when(
+                        data: (data) {
+                          _list = data;
+                          return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: _list.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return NotificationTile(node: _list[index],);
+                              });
+                        },
+                        loading: () => const Center(child: CircularProgressIndicator()),
+                        error: (e, s) => const Center(child: Text("Error")),
+                        // child: ListView.builder(
+                        //   shrinkWrap: true,
+                        //     itemCount: _list.length,
+                        //     physics: const NeverScrollableScrollPhysics(),
+                        //     itemBuilder: (context, index) {
+                        //       return NotificationTile(node: _list[index],);
+                        //     }),
+                      ),
                     ),
                   ]),
             )

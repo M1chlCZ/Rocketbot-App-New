@@ -485,7 +485,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                           backgroundColor: Colors.white,
                           foregroundColor: Colors.white,
                           visible: true,
-                          onTap: () => Dialogs.openAlertBox(context, "Error", "Not implemented yet"),
+                          onTap: () => Navigator.push(context, pushRoute(const BotScreen("spin"))),
                           labelWidget: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                             margin: const EdgeInsets.only(right: 10.0),

@@ -34,6 +34,7 @@ import 'package:rocketbot/storage/app_database.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/globals.dart' as globals;
 import 'package:rocketbot/support/life_cycle_watcher.dart';
+import 'package:rocketbot/support/route.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 import 'package:rocketbot/support/utils.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
@@ -487,11 +488,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                           child: NeuButton(
                                             onTap: () {
                                               Navigator.of(context)
-                                                  .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-                                                    return const NotificationScreen();
-                                                  }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                                                    return FadeTransition(opacity: animation, child: child);
-                                                  }))
+                                                  .push(pushRoute(NotificationScreen()))
                                                   .then((value) => _getUnread());
                                             },
                                             imageIcon: Image.asset(

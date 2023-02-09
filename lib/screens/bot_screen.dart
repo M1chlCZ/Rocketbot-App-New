@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:appinio_social_share/appinio_social_share.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +29,7 @@ class BotScreen extends ConsumerStatefulWidget {
 
 class _BotScreenState extends ConsumerState<BotScreen> {
   final TextEditingController _amountController = TextEditingController();
+  AppinioSocialShare appinioSocialShare = AppinioSocialShare();
   final key = GlobalKey<PercentSwitchWidgetState>();
   CoinBalance? selectedCoin;
   int indexCoin = 0;
@@ -46,10 +48,15 @@ class _BotScreenState extends ConsumerState<BotScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.type == "spin") {
+      _valueUsers = 25;
+      socials = ["Twitter", "Telegram"];
+    }
     Future.delayed(Duration.zero, () {
       final p = ref.read(dropdownProvider.notifier);
       p.getData();
     });
+
   }
 
   @override
@@ -91,11 +98,11 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                     const SizedBox(
                       width: 20.0,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 4.0),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
                       child: Text(
-                        "Tip Bot",
-                        style: TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 20.0, color: Colors.white),
+                        "Create ${widget.type == "gw" ? "Giveaway" : widget.type.capitalize()}",
+                        style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 20.0, color: Colors.white),
                       ),
                     ),
                     const SizedBox(
@@ -207,120 +214,125 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                           const SizedBox(
                             height: 10.0,
                           ),
-                          Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black12,
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 12.0),
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  const Text("Duration", style: TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)),
-                                  SizedBox(
-                                    width: 100.0,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                          if (widget.type == "gw")
+                            Column(
+                              children: [
+                                Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black12,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                                    child: Center(
+                                        child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        SlidingNumber(
-                                          number: _value.toInt(),
-                                          style: const TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w800),
-                                          duration: const Duration(milliseconds: 500),
-                                          curve: Curves.easeInOutCubicEmphasized,
+                                        const Text("Duration", style: TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)),
+                                        SizedBox(
+                                          width: 100.0,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              SlidingNumber(
+                                                number: _value.toInt(),
+                                                style: const TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w800),
+                                                duration: const Duration(milliseconds: 500),
+                                                curve: Curves.easeInOutCubicEmphasized,
+                                              ),
+                                              const SizedBox(
+                                                width: 5.0,
+                                              ),
+                                              Text(_value == 1 ? switchValue.replaceAll("s", "").capitalize() : switchValue.capitalize(),
+                                                  style: const TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)),
+                                            ],
+                                          ),
                                         ),
-                                        const SizedBox(
-                                          width: 5.0,
-                                        ),
-                                        Text(_value == 1 ? switchValue.replaceAll("s", "").capitalize() : switchValue.capitalize(),
-                                            style: const TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)),
                                       ],
+                                    ))),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                AnimatedToggleSwitch<String>.custom(
+                                  current: switchValue,
+                                  iconOpacity: 0.2,
+                                  indicatorSize: const Size.fromWidth(120),
+                                  animatedIconBuilder: (i, a, c) => Center(child: Text(a.value, style: const TextStyle(color: Colors.white))),
+                                  foregroundIndicatorIconBuilder: (i, a) => Center(child: Text(a.current, style: const TextStyle(color: Colors.black87))),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  borderWidth: 0,
+                                  height: 40.0,
+                                  colorBuilder: (i) {
+                                    switch (i) {
+                                      case "minutes":
+                                        return Colors.lightBlue;
+                                      case "hours":
+                                        return Colors.lightGreen;
+                                      case "days":
+                                        return Colors.amberAccent;
+                                      default:
+                                        return Colors.white;
+                                    }
+                                  },
+                                  onChanged: (i) {
+                                    setState(() {
+                                      switchValue = i;
+                                      _value = 1;
+                                    });
+                                  },
+                                  values: const ["minutes", "hours", "days"],
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF252F45),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(color: const Color(0xFF37394F), width: 1.0),
+                                  ),
+                                  child: SliderTheme(
+                                    data: SliderTheme.of(context).copyWith(
+                                      trackHeight: 10.0,
+                                      trackShape: const RoundedRectSliderTrackShape(),
+                                      activeTrackColor: thumbColor(switchValue).withOpacity(0.8),
+                                      inactiveTrackColor: Colors.black38,
+                                      thumbShape: const RoundSliderThumbShape(
+                                        enabledThumbRadius: 14.0,
+                                        pressedElevation: 20.0,
+                                        elevation: 5.0,
+                                      ),
+                                      thumbColor: thumbColor(switchValue),
+                                      overlayColor: thumbColor(switchValue).withOpacity(0.2),
+                                      overlayShape: const RoundSliderOverlayShape(overlayRadius: 32.0),
+                                      tickMarkShape: const RoundSliderTickMarkShape(),
+                                      activeTickMarkColor: thumbColor(switchValue).withOpacity(0.5),
+                                      inactiveTickMarkColor: Colors.white30,
+                                      valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
+                                      valueIndicatorColor: Colors.black,
+                                      valueIndicatorTextStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20.0,
+                                      ),
+                                    ),
+                                    child: Slider(
+                                      min: getSliderValues(switchValue)['min'] ?? 0.0,
+                                      max: getSliderValues(switchValue)['max'] ?? 0.0,
+                                      value: _value,
+                                      divisions: getSliderValues(switchValue)['divisions']!.toInt(),
+                                      label: '${_value.round()}',
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _value = value;
+                                        });
+                                      },
                                     ),
                                   ),
-                                ],
-                              ))),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          AnimatedToggleSwitch<String>.custom(
-                            current: switchValue,
-                            iconOpacity: 0.2,
-                            indicatorSize: const Size.fromWidth(120),
-                            animatedIconBuilder: (i, a, c) => Center(child: Text(a.value, style: const TextStyle(color: Colors.white))),
-                            foregroundIndicatorIconBuilder: (i, a) => Center(child: Text(a.current, style: const TextStyle(color: Colors.black87))),
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderWidth: 0,
-                            height: 40.0,
-                            colorBuilder: (i) {
-                              switch (i) {
-                                case "minutes":
-                                  return Colors.lightBlue;
-                                case "hours":
-                                  return Colors.lightGreen;
-                                case "days":
-                                  return Colors.amberAccent;
-                                default:
-                                  return Colors.white;
-                              }
-                            },
-                            onChanged: (i) {
-                              setState(() {
-                                switchValue = i;
-                                _value = 1;
-                              });
-                            },
-                            values: const ["minutes", "hours", "days"],
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF252F45),
-                              borderRadius: BorderRadius.circular(8.0),
-                              border: Border.all(color: const Color(0xFF37394F), width: 1.0),
-                            ),
-                            child: SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                trackHeight: 10.0,
-                                trackShape: const RoundedRectSliderTrackShape(),
-                                activeTrackColor: thumbColor(switchValue).withOpacity(0.8),
-                                inactiveTrackColor: Colors.black38,
-                                thumbShape: const RoundSliderThumbShape(
-                                  enabledThumbRadius: 14.0,
-                                  pressedElevation: 20.0,
-                                  elevation: 5.0,
                                 ),
-                                thumbColor: thumbColor(switchValue),
-                                overlayColor: thumbColor(switchValue).withOpacity(0.2),
-                                overlayShape: const RoundSliderOverlayShape(overlayRadius: 32.0),
-                                tickMarkShape: const RoundSliderTickMarkShape(),
-                                activeTickMarkColor: thumbColor(switchValue).withOpacity(0.5),
-                                inactiveTickMarkColor: Colors.white30,
-                                valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
-                                valueIndicatorColor: Colors.black,
-                                valueIndicatorTextStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
+                                const SizedBox(
+                                  height: 10.0,
                                 ),
-                              ),
-                              child: Slider(
-                                min: getSliderValues(switchValue)['min'] ?? 0.0,
-                                max: getSliderValues(switchValue)['max'] ?? 0.0,
-                                value: _value,
-                                divisions: getSliderValues(switchValue)['divisions']!.toInt(),
-                                label: '${_value.round()}',
-                                onChanged: (value) {
-                                  setState(() {
-                                    _value = value;
-                                  });
-                                },
-                              ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
                           Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
@@ -341,15 +353,15 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                       FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,8}')),
                                     ],
                                     style: const TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w800),
-                                    decoration: const InputDecoration(
+                                    decoration: InputDecoration(
                                       filled: true,
                                       fillColor: Colors.black38,
-                                      border: OutlineInputBorder(
+                                      border: const OutlineInputBorder(
                                         borderSide: BorderSide.none,
                                         borderRadius: BorderRadius.all(Radius.circular(8.0)),
                                       ),
-                                      hintText: "Enter Amount",
-                                      hintStyle: TextStyle(color: Colors.white30, fontSize: 16.0, fontWeight: FontWeight.w400),
+                                      hintText: widget.type == "spin" ? "Ticket Cost": "Enter Amount",
+                                      hintStyle: const TextStyle(color: Colors.white30, fontSize: 16.0, fontWeight: FontWeight.w400),
                                     ),
                                   ),
                                   PercentSwitchWidget(
@@ -379,7 +391,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                   child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  const Text("Number of winners", style: TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)),
+                                  Text(widget.type == "spin" ? "Number of Tickets":"Number of winners", style: const TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)),
                                   SizedBox(
                                     width: 100.0,
                                     child: Row(
@@ -403,6 +415,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                           const SizedBox(
                             height: 10.0,
                           ),
+                          if (widget.type != "spin")
                           AnimatedToggleSwitch<String>.custom(
                             current: switchNums,
                             iconOpacity: 0.2,
@@ -565,20 +578,36 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                             height: 15.0,
                           ),
                           Container(
+                            width: double.infinity,
+                            height: 48.0,
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
                             decoration: BoxDecoration(
                               color: const Color(0xFF252F45),
                               borderRadius: BorderRadius.circular(8.0),
                               border: Border.all(color: const Color(0xFF37394F), width: 1.0),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (_amountController.text.isNotEmpty)
-                                  Text("${_valueUsers.toInt()} winners rewarded ${getAmountWinner(_amountController.text, _valueUsers, selectedCoin!.coin!.name!)}"),
-                                if (_amountController.text.isEmpty)
-                                  const Text("Please enter an amount", style: TextStyle(color: Colors.red, fontWeight: FontWeight.w200),),
-                              ],
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (_amountController.text.isNotEmpty)
+                                    if(widget.type == "spin")
+                                      Expanded(
+                                        child: AutoSizeText("Jackpot ${_valueUsers.toInt() * double.parse(getAmountWinner(_amountController.text, _valueUsers))} ${selectedCoin?.coin?.ticker ?? ""}", maxLines: 1, minFontSize: 8.0, textAlign: TextAlign.center,)
+                                      ),
+                                  if (_amountController.text.isNotEmpty)
+                                  if(widget.type != "spin")
+                                    Expanded(
+                                      child: AutoSizeText("${_valueUsers.toInt()} winners will rewarded ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin?.coin?.ticker ?? ""}", maxLines: 1, minFontSize: 8.0, textAlign: TextAlign.center,)
+                                    ),
+                                  if (_amountController.text.isEmpty)
+                                    Text(
+                                      widget.type == "spin" ? "Please enter ticket cost": "Please enter an amount",
+                                      style: const TextStyle(color: Colors.pinkAccent, fontWeight: FontWeight.w800),
+                                    ),
+                                ],
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -596,23 +625,42 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                   switch (currentSocial) {
                                     case "Twitter":
                                       {
-                                        String s = "@rocketbotpro ${widget.type} ${_amountController.text} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} ${_value.toInt()}$dateShort";
-                                        Share.share(
-                                            s);
+                                        String s = "";
+                                        if (widget.type == "gw") {
+                                          s = "${_amountController.text} ${selectedCoin?.coin?.ticker ?? ""} Giveaway in ${_value.toInt()} ${dateShort.toUpperCase()}\nRT ❤️ and comment #MERGE to enter \n\n @rocketbotpro ${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} ${_value.toInt()}$dateShort";
+                                        } else if (widget.type == "airdrop") {
+                                          s = "${_amountController.text} ${selectedCoin?.coin?.ticker ?? ""} Airdrop 🪂\nRT ❤️ and comment #MERGE to enter \n\n@rocketbotpro ${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
+                                        } else if (widget.type == "spin") {
+                                          s = "${_amountController.text} ${selectedCoin?.coin?.ticker ?? ""} Spin 🧧\nTicket cost ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin?.coin?.ticker ?? ""}\nComment #MERGE to enter\n\n @rocketbotpro ${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} #${selectedCoin!.coin!.ticker?.toUpperCase()}";
+                                        }
+                                        shareToTwitter(s);
                                       }
                                       break;
                                     case "Telegram":
                                       {
-                                        String s = "!${widget.type} ${_amountController.text} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} ${_value.toInt()}$dateShort";
-                                        Share.share(
-                                            s);
+                                        String s = "";
+                                        if (widget.type == "gw") {
+                                          s = "!${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} ${_value.toInt()}$dateShort";
+                                        } else if (widget.type == "airdrop") {
+                                          s = "!${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
+                                        } else if (widget.type == "spin") {
+                                          s = "!${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
+                                        }
+                                        shareToTelegram(s);
                                       }
+
                                       break;
                                     case "Discord":
                                       {
-                                        String s = "/${widget.type} ${_amountController.text} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} ${_value.toInt()}$dateShort";
-                                        Share.share(
-                                            s);
+                                        String s = "";
+                                        if (widget.type == "gw") {
+                                          s = "/${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} ${_value.toInt()}$dateShort";
+                                        } else if (widget.type == "airdrop") {
+                                          s = "/${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
+                                        }
+                                        if (s.isNotEmpty) {
+                                          Share.share(s);
+                                        }
                                       }
                                       break;
                                   }
@@ -679,10 +727,14 @@ class _BotScreenState extends ConsumerState<BotScreen> {
     }
   }
 
-  String getAmountWinner(String amnt,  double valueUser, String coinID) {
-    var amount = double.parse(amnt);
-    var amountWinner = amount / valueUser;
-    return NumberFormat("###.######").format(amountWinner);
+  String getAmountWinner(String amnt, double valueUser) {
+    try {
+      var amount = double.parse(amnt);
+      var amountWinner = amount / valueUser;
+      return NumberFormat("###.######").format(amountWinner);
+    } catch (e) {
+      return "0.0";
+    }
   }
 
   Map<String, double> getSliderValues(String index) {
@@ -708,12 +760,39 @@ class _BotScreenState extends ConsumerState<BotScreen> {
         return const {"min": 0.0, "max": 100.0, "divisions": 10.0};
       case "airdrop100+":
         return const {"min": 100.0, "max": 500.0, "divisions": 100.0, "default": 200.0};
-      case "spin":
-        return const {"min": 0.0, "max": 30.0, "divisions": 30.0};
+      case "spin0-100":
+        return const {"min": 0.0, "max": 50.0, "divisions": 50.0};
       default:
         return const {"min": 1, "max": 30};
     }
   }
+
+  Future<void> shareToTwitter(String message) async {
+    String response = await appinioSocialShare.shareToTwitter(message);
+    if (response == "ERROR_APP_NOT_AVAILABLE") {
+      if (context.mounted) Dialogs.openAlertBox(context, "Error", "Twitter app isn't present on your device");
+    } else {
+      print("error");
+    }
+  }
+
+  Future<void> shareToTelegram(String message) async {
+    String response = await appinioSocialShare.shareToTelegram(message);
+    if (response == "ERROR_APP_NOT_AVAILABLE") {
+      if (context.mounted) Dialogs.openAlertBox(context, "Error", "Twitter app isn't present on your device");
+    } else {
+      print("error");
+    }
+  }
+
+  // Future<void> shareToTelegram(String message) async{
+  //   String response = await appinioSocialShare.shareToTelegram(message);
+  //   if (response == "ERROR_APP_NOT_AVAILABLE") {
+  //     if(context.mounted) Dialogs.openAlertBox(context, "Error", "Twitter app isn't present on your device");
+  //   } else {
+  //     print("error");
+  //   }
+  // }
 
   // Map<String, double> getCommandValues(String index) {
   //   switch (index) {

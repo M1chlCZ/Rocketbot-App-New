@@ -430,7 +430,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                                 ],
                               ),
                               const SizedBox(
-                                height: 20.0,
+                                height: 10.0,
                               ),
                               SwitchingButton(
                                 onPressed: () {
@@ -703,7 +703,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
 
   void _getExchange(int idCoin) async {
     int userID = await getUserID();
-    print("get addr ${widget.depositAddr} userID: $userID");
+    print("get addr ${widget.activeCoin.ticker} userID: $userID");
     try {
       List<Exchange> l = [];
       List<dynamic> res = await _interface.post("exchanges", {"idCoin": idCoin}, pos: true, debug: true);
@@ -722,7 +722,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
         if (mounted) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => RamperScreen(userID: userID, idCoin: _coinActive.ticker ?? "", depositAddr: widget.depositAddr!,),
+              builder: (context) => RamperScreen(userID: userID, coin: widget.activeCoin,),
             ),
           );
         }
