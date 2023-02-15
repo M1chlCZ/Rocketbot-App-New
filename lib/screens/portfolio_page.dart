@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_version/get_version.dart';
@@ -27,6 +28,7 @@ import 'package:rocketbot/models/pgwid.dart';
 import 'package:rocketbot/models/pos_coins_list.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/netinterface/interface.dart';
+import 'package:rocketbot/providers/holdings_provider.dart';
 import 'package:rocketbot/screens/main_screen.dart';
 import 'package:rocketbot/screens/notification_screen.dart';
 import 'package:rocketbot/screens/referral_screen.dart';
@@ -44,7 +46,7 @@ import '../widgets/coin_list_view.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-class PortfolioScreen extends StatefulWidget {
+class PortfolioScreen extends ConsumerStatefulWidget {
   const PortfolioScreen({
     Key? key,
   }) : super(key: key);
@@ -204,7 +206,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
 
   void _authPing() async {
     try {
-      await _interface.get('auth/ping', pos: true);
+      await _interface.get('status', pos: true);
       debugPrint('ok');
     } catch (e) {
       debugPrint('register');
@@ -415,6 +417,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
 
   @override
   Widget build(BuildContext context) {
+    final m = ref.watch(holdingAmountProvider);
     super.build(context);
     return Scaffold(
       extendBody: true,
@@ -509,8 +512,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                       SizedBox(
                         width: double.infinity,
                         height: 115,
-                        child: portCalc
-                            ? Container(
+                        child: Container(
                                 margin: const EdgeInsets.all(10.0),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.0),
@@ -522,7 +524,8 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                     Color(0xFFFF739D),
                                   ]),
                                 ),
-                                child: Padding(
+                                child: m.when(data: (data) {
+                                  return Padding(
                                   padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 8.0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -540,7 +543,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                             height: 7.0,
                                           ),
                                           AutoSizeText(
-                                            "\$${intr.NumberFormat("#,##0.00", "en_US").format(totalUSD)}",
+                                            "\$${intr.NumberFormat("#,##0.00", "en_US").format(data['totalUSD'])}",
                                             style: Theme.of(context).textTheme.displayLarge,
                                             minFontSize: 8.0,
                                             maxLines: 1,
@@ -550,7 +553,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                             height: 7.0,
                                           ),
                                           AutoSizeText(
-                                            "BTC ${_formatPrice(totalBTC)}",
+                                            "BTC ${_formatPrice(data['totalBTC']!)}",
                                             style: Theme.of(context).textTheme.displayMedium,
                                             minFontSize: 8.0,
                                             maxLines: 1,
@@ -572,7 +575,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                             height: 7.0,
                                           ),
                                           AutoSizeText(
-                                            "\$${intr.NumberFormat("#,##0.00", "en_US").format(totalUSDYIELD)}",
+                                            "\$${intr.NumberFormat("#,##0.00", "en_US").format(data['totalUSDYIELD'])}",
                                             style: Theme.of(context).textTheme.displayLarge,
                                             minFontSize: 8.0,
                                             maxLines: 1,
@@ -582,7 +585,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                             height: 7.0,
                                           ),
                                           AutoSizeText(
-                                            "BTC ${_formatPrice(totalBTCYIELD)}",
+                                            "BTC ${_formatPrice(data['totalBTCYIELD']!)}",
                                             style: Theme.of(context).textTheme.displayMedium,
                                             minFontSize: 8.0,
                                             maxLines: 1,
@@ -591,10 +594,14 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                         ],
                                       ),
                                     ],
-                                  ),
+                                  ), );
+                                }, error: (error, st) => Center(child: Text(error.toString(), style: Theme.of(context).textTheme.titleMedium,)), loading: () => Center(child: JumpingDotsProgressIndicator(
+                                  numberOfDots: 3,
+                                  color: Colors.white70,
+                                  fontSize: 20.0,
+                                ),),
                                 ),
                               )
-                            : Container(),
                       ),
                       if (!_emailOK)
                         GestureDetector(
@@ -768,8 +775,12 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                   case Status.completed:
                                     PriceGraphCache.refreshAllRecords();
                                     if (_listCoins == null) {
-                                      _listCoins = snapshot.data!.data!;
-                                      _calculatePortfolio();
+                                      _listCoins ??= snapshot.data!.data!;
+                                      Future.delayed(Duration.zero, () {
+                                        setState(() {
+                                          portCalc = true;
+                                        });
+                                      });
                                     }
                                     return ListView.builder(
                                         cacheExtent: 0,
@@ -1085,43 +1096,43 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     }
   }
 
-  _calculatePortfolio() {
-    try {
-      totalUSD = 0;
-      totalBTC = 0;
-      totalUSDYIELD = 0;
-      totalBTCYIELD = 0;
-      for (var element in _listCoins!) {
-        double? freeCoins = element.free ?? 0;
-        double? freeMNCoins = element.posCoin?.amount ?? 0;
-        double? priceUSD = element.priceData?.prices?.usd!.toDouble();
-        double? priceBTC = element.priceData?.prices?.btc!.toDouble();
-        if (priceUSD != null && priceBTC != null) {
-          double usd = freeCoins * priceUSD;
-          totalUSD += usd;
-          double btc = freeCoins * priceBTC;
-          totalBTC += btc;
-          double usdMN = freeMNCoins * priceUSD;
-          totalUSDYIELD += usdMN;
-          double btcMN = freeMNCoins * priceBTC;
-          totalBTCYIELD += btcMN;
-        }
-      }
-
-      Future.delayed(const Duration(milliseconds: 100), () {
-        setState(() {
-          portCalc = true;
-        });
-      });
-    } catch (e) {
-      debugPrint(e.toString());
-      Future.delayed(const Duration(milliseconds: 200), () {
-        setState(() {
-          portCalc = true;
-        });
-      });
-    }
-  }
+  // _calculatePortfolio() {
+  //   try {
+  //     totalUSD = 0;
+  //     totalBTC = 0;
+  //     totalUSDYIELD = 0;
+  //     totalBTCYIELD = 0;
+  //     for (var element in _listCoins!) {
+  //       double? freeCoins = element.free ?? 0;
+  //       double? freeMNCoins = element.posCoin?.amount ?? 0;
+  //       double? priceUSD = element.priceData?.prices?.usd!.toDouble();
+  //       double? priceBTC = element.priceData?.prices?.btc!.toDouble();
+  //       if (priceUSD != null && priceBTC != null) {
+  //         double usd = freeCoins * priceUSD;
+  //         totalUSD += usd;
+  //         double btc = freeCoins * priceBTC;
+  //         totalBTC += btc;
+  //         double usdMN = freeMNCoins * priceUSD;
+  //         totalUSDYIELD += usdMN;
+  //         double btcMN = freeMNCoins * priceBTC;
+  //         totalBTCYIELD += btcMN;
+  //       }
+  //     }
+  //
+  //     Future.delayed(const Duration(milliseconds: 100), () {
+  //       setState(() {
+  //         portCalc = true;
+  //       });
+  //     });
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     Future.delayed(const Duration(milliseconds: 200), () {
+  //       setState(() {
+  //         portCalc = true;
+  //       });
+  //     });
+  //   }
+  // }
 
   Color qrColors(Set<MaterialState> states) {
     const Set<MaterialState> interactiveStates = <MaterialState>{

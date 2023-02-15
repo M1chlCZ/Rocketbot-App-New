@@ -16,7 +16,6 @@ import 'package:rocketbot/screens/games_switch.dart';
 import 'package:rocketbot/screens/giveaway_detail_screen.dart';
 import 'package:rocketbot/screens/lottery_detail_screen.dart';
 import 'package:rocketbot/screens/twitter_giveaway_detail_screen.dart';
-import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/route.dart';
 import 'package:rocketbot/widgets/airdrop_tile.dart';
 import 'package:rocketbot/widgets/giveaway_tile.dart';

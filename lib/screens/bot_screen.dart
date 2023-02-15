@@ -594,7 +594,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                   if (_amountController.text.isNotEmpty)
                                     if(widget.type == "spin")
                                       Expanded(
-                                        child: AutoSizeText("Jackpot ${_valueUsers.toInt() * double.parse(getAmountWinner(_amountController.text, _valueUsers))} ${selectedCoin?.coin?.ticker ?? ""}", maxLines: 1, minFontSize: 8.0, textAlign: TextAlign.center,)
+                                        child: AutoSizeText("Jackpot ${_valueUsers.toInt() * double.parse(_amountController.text)} ${selectedCoin?.coin?.ticker ?? ""}", maxLines: 1, minFontSize: 8.0, textAlign: TextAlign.center,)
                                       ),
                                   if (_amountController.text.isNotEmpty)
                                   if(widget.type != "spin")
@@ -631,7 +631,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                         } else if (widget.type == "airdrop") {
                                           s = "${_amountController.text} ${selectedCoin?.coin?.ticker ?? ""} Airdrop 🪂\nRT ❤️ and comment #MERGE to enter \n\n@rocketbotpro ${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
                                         } else if (widget.type == "spin") {
-                                          s = "${_amountController.text} ${selectedCoin?.coin?.ticker ?? ""} Spin 🧧\nTicket cost ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin?.coin?.ticker ?? ""}\nComment #MERGE to enter\n\n @rocketbotpro ${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} #${selectedCoin!.coin!.ticker?.toUpperCase()}";
+                                          s = "${_amountController.text} ${selectedCoin?.coin?.ticker ?? ""} Spin 🧧\nTicket cost ${double.parse(_amountController.text)} ${selectedCoin?.coin?.ticker ?? ""}\nComment #MERGE to enter\n\n @rocketbotpro ${widget.type} ${double.parse(_amountController.text)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} #${selectedCoin!.coin!.ticker?.toUpperCase()}";
                                         }
                                         shareToTwitter(s);
                                       }
@@ -644,7 +644,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                         } else if (widget.type == "airdrop") {
                                           s = "!${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
                                         } else if (widget.type == "spin") {
-                                          s = "!${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
+                                          s = "!${widget.type} ${double.parse(_amountController.text)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
                                         }
                                         shareToTelegram(s);
                                       }
@@ -753,15 +753,15 @@ class _BotScreenState extends ConsumerState<BotScreen> {
   Map<String, double> getUserValues(String typeDrop) {
     switch (typeDrop) {
       case "gw0-100":
-        return const {"min": 0.0, "max": 100.0, "divisions": 100.0, "default": 10.0};
+        return const {"min": 1.0, "max": 100.0, "divisions": 99.0, "default": 10.0};
       case "gw100+":
         return const {"min": 100.0, "max": 1000.0, "divisions": 100.0, "default": 200.0};
       case "airdrop0-100":
-        return const {"min": 0.0, "max": 100.0, "divisions": 10.0};
+        return const {"min": 1.0, "max": 100.0, "divisions": 99.0};
       case "airdrop100+":
         return const {"min": 100.0, "max": 500.0, "divisions": 100.0, "default": 200.0};
       case "spin0-100":
-        return const {"min": 0.0, "max": 50.0, "divisions": 50.0};
+        return const {"min": 1.0, "max": 50.0, "divisions": 49.0};
       default:
         return const {"min": 1, "max": 30};
     }

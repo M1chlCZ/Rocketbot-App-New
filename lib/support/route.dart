@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 Route pushRoute(Widget page) {
   return PageRouteBuilder(
     pageBuilder: (_, __, ___) => page,
-      transitionDuration: const Duration(milliseconds: 800),
+      transitionDuration: const Duration(milliseconds: 500),
     transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
       return SlideTransition(
         position: Tween<Offset>(

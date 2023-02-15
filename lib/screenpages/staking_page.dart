@@ -6,6 +6,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/stake_graph_bloc.dart';
@@ -37,7 +38,7 @@ import '../support/auto_size_text_field.dart';
 import '../widgets/coin_price_graph.dart';
 import '../widgets/time_stake_range_switch.dart';
 
-class StakingPage extends StatefulWidget {
+class StakingPage extends ConsumerStatefulWidget {
   final Coin activeCoin;
   final CoinBalance coinBalance;
   final String? depositAddress;
@@ -1051,8 +1052,8 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     _keyStake.currentState!.reset();
     await _getStakingDetails();
     _stakeBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
-    setState(() {});
     if (mounted) Navigator.of(context).pop();
+    setState(() {});
   }
 
   _lostPosTX() async {
