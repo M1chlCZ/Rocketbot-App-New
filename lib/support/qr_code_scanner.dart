@@ -87,11 +87,11 @@ class QScanWidgetState extends State<QScanWidget> {
           children: [
             MobileScanner(
                 controller: cameraController,
-                onDetect: (barcode) {
-                  if (barcode.barcodes.first.displayValue == null) {
+                onDetect: (barcode, args) {
+                  if (barcode.rawValue == null) {
                     debugPrint('Failed to scan Barcode');
                   } else {
-                    final String code = barcode.barcodes.first.displayValue!;
+                    final String code = barcode.rawValue!;
                     widget.scanResult(code);
                     cameraController!.stop();
                     Navigator.maybePop(context);

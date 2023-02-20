@@ -3,14 +3,15 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:progress_indicators/progress_indicators.dart';
-import 'package:rocketbot/bloc/get_transaction_bloc.dart';
 import 'package:rocketbot/cache/price_graph_cache.dart';
 import 'package:rocketbot/models/balance_portfolio.dart';
 import 'package:rocketbot/models/coin_graph.dart';
 import 'package:rocketbot/models/exchanges.dart';
-import 'package:rocketbot/models/transaction_data.dart';
 import 'package:rocketbot/netinterface/interface.dart';
+import 'package:rocketbot/providers/coins_provider.dart';
+import 'package:rocketbot/providers/tx_provider.dart';
 import 'package:rocketbot/screens/exchange_list_screen.dart';
 import 'package:rocketbot/screens/ramper_screen.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
@@ -20,14 +21,12 @@ import 'package:rocketbot/widgets/horizontal_list_tile.dart';
 import 'package:rocketbot/widgets/price_range_switch.dart';
 import 'package:rocketbot/widgets/switching_button.dart';
 
-import '../bloc/coins_price_bloc.dart';
 import '../models/balance_list.dart';
 import '../models/coin.dart';
-import '../netInterface/api_response.dart';
 import '../widgets/coin_price_graph.dart';
 import '../widgets/price_badge.dart';
 
-class CoinScreen extends StatefulWidget {
+class CoinScreen extends ConsumerStatefulWidget {
   final Coin activeCoin;
   final VoidCallback goBack;
   final List<CoinBalance>? allCoins;
@@ -59,7 +58,7 @@ class CoinScreen extends StatefulWidget {
   CoinScreenState createState() => CoinScreenState();
 }
 
-class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMixin {
+class CoinScreenState extends ConsumerState<CoinScreen> with SingleTickerProviderStateMixin {
   final _graphKey = GlobalKey<CoinPriceGraphState>();
   final NetInterface _interface = NetInterface();
   late List<CoinBalance> _listCoins;
@@ -74,8 +73,8 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
   int loadedItems = 8;
   int dataLength = 0;
 
-  CoinPriceBloc? _priceBlock;
-  TransactionBloc? _txBloc;
+  // CoinPriceBloc? _priceBlock;
+  // TransactionBloc? _txBloc;
 
   Decimal totalCoins = Decimal.zero;
   Decimal totalUSD = Decimal.zero;
@@ -102,8 +101,8 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
     _listCoins = widget.allCoins!;
     _balanceData = _listCoins.singleWhere((element) => element.coin!.id! == _coinActive.id!);
     _calculatePortfolio();
-    _priceBlock = CoinPriceBloc(widget.activeCoin.cryptoId!, widget.activeCoin.id!);
-    _txBloc = TransactionBloc(widget.activeCoin);
+    ref.read(coinsProvider.notifier).getData(widget.activeCoin.id!);
+    ref.read(transactionProvider.notifier).fetchTransactionData(widget.activeCoin, force: true);
     _getGraphData();
     sc.addListener(_scrollListener);
     _getActiveCoinPosition();
@@ -111,14 +110,12 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
 
   @override
   void dispose() {
-    // _listCoins.clear();
-    _priceBlock!.dispose();
-    _txBloc!.dispose();
+    sc.dispose();
     super.dispose();
   }
 
   Future<void> refresh() async {
-    _txBloc!.fetchTransactionData(_coinActive, force: true);
+    ref.read(transactionProvider.notifier).fetchTransactionData(_coinActive, force: true);
     await getFree();
   }
 
@@ -143,19 +140,20 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
   }
 
   void _scrollListener() {
-    if (sc.position.pixels >= (sc.position.maxScrollExtent - 250)) {
-      if (loadedItems < dataLength) {
-        var rem = dataLength - loadedItems;
-        if (rem < 10) {
-          setState(() {
-            loadedItems += rem;
-          });
-        } else {
-          setState(() {
-            loadedItems += 10;
-          });
-        }
-      }
+    if (sc.position.pixels >= (sc.position.maxScrollExtent - 400)) {
+      ///TODO ENDLESS SCROLL
+      // if (loadedItems < dataLength) {
+      //   var rem = dataLength - loadedItems;
+      //   if (rem < 10) {
+      //     setState(() {
+      //       loadedItems += rem;
+      //     });
+      //   } else {
+      //     setState(() {
+      //       loadedItems += 10;
+      //     });
+      //   }
+      // }
       // _suggestionBloc.fetchSuggestions();
     }
   }
@@ -163,6 +161,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
   @override
   Widget build(BuildContext context) {
     pr = MediaQuery.of(context).size.width * 0.195;
+    final txProv = ref.watch(transactionProvider);
     return Material(
       child: RefreshIndicator(
         notificationPredicate: (not) {
@@ -466,71 +465,42 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
                 child: RefreshIndicator(
                   onRefresh: () {
                     getFree();
-                    return _txBloc!.fetchTransactionData(widget.activeCoin, force: true);
+                    ref.read(transactionProvider.notifier).fetchTransactionData(widget.activeCoin, force: true);
+                    return Future.value();
                   },
-                  child: StreamBuilder<ApiResponse<List<TransactionData>>>(
-                    stream: _txBloc!.coinsListStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        switch (snapshot.data!.status) {
-                          case Status.loading:
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 30.0),
-                              child: SizedBox(
-                                child: portCalc
-                                    ? Container()
-                                    : const Center(
-                                        child: CircularProgressIndicator(
-                                        strokeWidth: 2.0,
-                                      )),
-                              ),
-                            );
-                          case Status.completed:
-                            if (snapshot.data!.data!.isEmpty) {
+                  child:txProv.when(data: (data) {
+                            if (data!.isEmpty) {
                               return Center(
                                   child: Text(
                                 AppLocalizations.of(context)!.no_tx,
                                 style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.white12),
                               ));
                             } else {
-                              dataLength = snapshot.data!.data!.length;
-                              if (dataLength < loadedItems) {
-                                loadedItems = dataLength;
-                              }
+                              // dataLength = data.length;
+                              // if (dataLength <  loadedItems) {
+                              //   loadedItems = dataLength;
+                              // }
+                              ///TODO ENDLESS SCROLL
+                              loadedItems = dataLength;
                               return ListView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: loadedItems,
+                                  itemCount: data.length,
                                   itemBuilder: (ctx, index) {
                                     // print(snapshot.data!.data![index].transactionId);
-                                    if (snapshot.data!.data![index].toAddress == null) {
+                                    if (data[index].toAddress == null) {
                                       return CoinDepositView(
                                         price: _balanceData?.priceData,
-                                        data: snapshot.data!.data![index],
+                                        data: data![index],
                                       );
                                     } else {
-                                      return CoinWithdrawalView(price: _balanceData?.priceData, data: snapshot.data!.data![index]);
+                                      return CoinWithdrawalView(price: _balanceData?.priceData, data: data[index]);
                                     }
                                   });
                             }
-                          // break;
-                          case Status.error:
-                            return Center(
-                                child: Text(
-                              AppLocalizations.of(context)!.tx_problem,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.white12),
-                            ));
-                          // print(snapshot.error);
-                          // break;
-                        }
-                      } else {
-                        return Container();
-                      }
-                    },
+                    }, error: (error, st) => Text(error.toString()), loading: () => const Center(child: CircularProgressIndicator())),
                   ),
                 ),
-              ),
             ],
           ),
         ),
@@ -557,7 +527,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
       _currentIndex == 0;
     }
     _setActiveCoin(_listCoins[_currentIndex].coin);
-    _txBloc!.changeCoin(_listCoins[_currentIndex].coin!);
+    ref.read(transactionProvider.notifier).changeCoin(_listCoins[_currentIndex].coin!);
     Future.delayed(const Duration(milliseconds: 50), () async {
       var scrollPosition = pr * _currentIndex;
       await scrollCtrl.animateTo(scrollPosition, duration: const Duration(milliseconds: 800), curve: Curves.elasticOut);
@@ -627,7 +597,7 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
       _free = preFree;
     });
     widget.changeFree(_free);
-    _txBloc!.fetchTransactionData(_coinActive, force: true);
+    ref.read(transactionProvider.notifier).fetchTransactionData(_coinActive, force: true);
     _calculatePortfolio();
   }
 
@@ -664,9 +634,9 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
       _coinActive = coin!;
       _balanceData = _listCoins.singleWhere((element) => element.coin!.id! == _coinActive.id!);
       _graphKey.currentState?.updatePrices(_balanceData!.priceData?.historyPrices);
-      _priceBlock!.changeCoin(coin.cryptoId!, coin.id!);
+      ref.read(coinsProvider.notifier).getData(widget.activeCoin.id!);
       _coinNameOpacity = 0.0;
-      _txBloc!.changeCoin(coin);
+      ref.read(transactionProvider.notifier).changeCoin(coin);
     });
     _calculatePortfolio();
   }
@@ -703,7 +673,6 @@ class CoinScreenState extends State<CoinScreen> with SingleTickerProviderStateMi
 
   void _getExchange(int idCoin) async {
     int userID = await getUserID();
-    print("get addr ${widget.activeCoin.ticker} userID: $userID");
     try {
       List<Exchange> l = [];
       List<dynamic> res = await _interface.post("exchanges", {"idCoin": idCoin}, pos: true, debug: true);

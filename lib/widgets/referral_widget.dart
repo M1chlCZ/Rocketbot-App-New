@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_version/get_version.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
@@ -55,7 +55,7 @@ class ReferralWidgetState extends State<ReferralWidget> {
         var numDots = tempPath.length - dots.length;
         var bundleOK = numDots < 3 ? true : false;
         var st = tempPath.split("/data/user");
-        var projectAppID = await GetVersion.appID;
+        var projectAppID = await PackageInfo.fromPlatform().then((value) => value.packageName);
         if (projectAppID == "com.m1chl.rocketbot" && st.length == 2 && bundleOK && !tempPath.contains("virtual")) {
           return true;
         } else {

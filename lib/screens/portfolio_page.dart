@@ -13,8 +13,8 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:get_it/get_it.dart';
-import 'package:get_version/get_version.dart';
 import 'package:intl/intl.dart' as intr;
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/balance_bloc.dart';
@@ -132,7 +132,8 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
         var numDots = tempPath.length - dots.length;
         var bundleOK = numDots < 3 ? true : false;
         var st = tempPath.split("/data/user");
-        var projectAppID = await GetVersion.appID;
+        var projectAppID = await PackageInfo.fromPlatform().then((value) => value.packageName);
+        print(projectAppID);
         if (projectAppID == "com.m1chl.rocketbot" && st.length == 2 && bundleOK && !tempPath.contains("virtual")) {
           return true;
         } else {
@@ -491,7 +492,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                           child: NeuButton(
                                             onTap: () {
                                               Navigator.of(context)
-                                                  .push(pushRoute(NotificationScreen()))
+                                                  .push(pushRoute(const NotificationScreen()))
                                                   .then((value) => _getUnread());
                                             },
                                             imageIcon: Image.asset(

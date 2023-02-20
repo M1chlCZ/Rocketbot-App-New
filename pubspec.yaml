@@ -3,7 +3,7 @@ description: Rocketbot
 
 publish_to: 'none'
 
-version: 1.2.52+199
+version: 1.2.55+202
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
@@ -16,7 +16,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   firebase_messaging: any
   firebase_core: any
-  firebase_auth: ^4.2.6
+  firebase_auth: ^4.2.8
   http: ^0.13.5
   auto_size_text: 3.0.0
   intl: any
@@ -31,18 +31,21 @@ dependencies:
   permission_handler: ^10.2.0
   local_auth: ^2.1.3
   flutter_phoenix: ^1.1.0
-  package_info: any
+  package_info_plus: ^3.0.3
   path_provider: any
-  google_sign_in: ^5.4.4
+  google_sign_in: ^6.0.0
   sign_in_with_apple: ^4.3.0
   flutter_displaymode: ^0.5.0
   flutter_local_notifications: ^13.0.0
   flutter_udid: ^2.0.1
   sqflite: ^2.2.4+1
-  jiffy: ^5.0.0
+  jiffy:
+    git:
+      url: https://github.com/nguyenxdat/jiffy.git
+      ref: master
   sprintf: any
   slide_to_act: any
-  mobile_scanner: ^3.0.0
+  mobile_scanner: ^2.1.0
   share_plus: ^6.3.1
   walletconnect_dart: ^0.0.11
   device_info_plus: any
@@ -55,10 +58,6 @@ dependencies:
   sliding_number: ^0.0.4
   animated_text_kit: ^4.2.2
   get_it: any
-  get_version:
-    git:
-      url: https://github.com/Creky/get_version
-      ref: master
   flutter_user_agent:
     git:
       url: https://github.com/M1chlCZ/flutter_user_agent.git
@@ -70,6 +69,9 @@ dependencies:
   cupertino_icons: ^1.0.5
   rxdart: ^0.27.7
   logger: any
+dependency_overrides:
+  intl: ^0.17.0-nullsafety.2
+
 linter:
   rules:
     -use_super_parameters

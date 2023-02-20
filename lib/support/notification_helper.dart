@@ -64,7 +64,7 @@ class FCM {
           .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!
           .createNotificationChannel(channel2);
     }
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@drawable/ic_notification');
     final DarwinInitializationSettings initializationSettingsIOS =
     DarwinInitializationSettings(onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
     final InitializationSettings initializationSettings =
@@ -88,7 +88,7 @@ class FCM {
               message.notification!.body,
               const NotificationDetails(
                   android: AndroidNotificationDetails("rocket1", "Rocketbot Deposit/Withdrawal Info",
-                      importance: Importance.max, priority: Priority.high, playSound: true, enableVibration: true, icon: "@mipmap/ic_notification"),
+                      importance: Importance.max, priority: Priority.high, playSound: true, enableVibration: true, icon: "@drawable/ic_notification"),
                   iOS: DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true, sound: "default")),
             payload: message.data["dataLink"],
           );

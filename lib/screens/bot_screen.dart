@@ -599,7 +599,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                   if (_amountController.text.isNotEmpty)
                                   if(widget.type != "spin")
                                     Expanded(
-                                      child: AutoSizeText("${_valueUsers.toInt()} winners will rewarded ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin?.coin?.ticker ?? ""}", maxLines: 1, minFontSize: 8.0, textAlign: TextAlign.center,)
+                                      child: AutoSizeText("${_valueUsers.toInt()} winners will be rewarded ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin?.coin?.ticker ?? ""}", maxLines: 1, minFontSize: 8.0, textAlign: TextAlign.center,)
                                     ),
                                   if (_amountController.text.isEmpty)
                                     Text(
@@ -631,7 +631,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                         } else if (widget.type == "airdrop") {
                                           s = "${_amountController.text} ${selectedCoin?.coin?.ticker ?? ""} Airdrop 🪂\nRT ❤️ and comment #MERGE to enter \n\n@rocketbotpro ${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
                                         } else if (widget.type == "spin") {
-                                          s = "${_amountController.text} ${selectedCoin?.coin?.ticker ?? ""} Spin 🧧\nTicket cost ${double.parse(_amountController.text)} ${selectedCoin?.coin?.ticker ?? ""}\nComment #MERGE to enter\n\n @rocketbotpro ${widget.type} ${double.parse(_amountController.text)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} #${selectedCoin!.coin!.ticker?.toUpperCase()}";
+                                          s = "${_valueUsers.toInt() * double.parse(_amountController.text)} ${selectedCoin?.coin?.ticker ?? ""} Spin 🧧\nTicket cost ${double.parse(_amountController.text)} ${selectedCoin?.coin?.ticker ?? ""}\nComment #MERGE to enter\n\n @rocketbotpro ${widget.type} ${_valueUsers.toInt() * double.parse(_amountController.text)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} #${selectedCoin!.coin!.ticker?.toUpperCase()}";
                                         }
                                         shareToTwitter(s);
                                       }
@@ -644,7 +644,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                         } else if (widget.type == "airdrop") {
                                           s = "!${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
                                         } else if (widget.type == "spin") {
-                                          s = "!${widget.type} ${double.parse(_amountController.text)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
+                                          s = "!${widget.type} ${_valueUsers.toInt() * double.parse(_amountController.text)} ${_valueUsers.toInt()}";
                                         }
                                         shareToTelegram(s);
                                       }

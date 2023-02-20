@@ -33,25 +33,6 @@ final balancesProvider = FutureProvider<List<CoinBalance>>((ref) async {
   }
 });
 
-// class MyDropdownButtonController extends StateNotifier<List<CoinBalance>> {
-//   final _entries = <CoinBalance>[];
-//
-//   MyDropdownButtonController() : super([]);
-//
-//   void onInit() async {
-//     List<CoinBalance> list = await BalanceCache.getAllRecords(forceRefresh: false);
-//     if (list.isNotEmpty) {
-//       List<CoinBalance> l = [];
-//       for (var bl in list) {
-//         if (bl.free != 0) {
-//           _entries.add(bl);
-//         }
-//       }
-//     }
-//     state = _entries;
-//   }
-// }
-
 final dropdownProvider = StateNotifierProvider<DropDownController, AsyncValue<List<CoinBalance>>>((ref) {;
   return DropDownController();
 });
