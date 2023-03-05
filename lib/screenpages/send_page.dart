@@ -98,7 +98,7 @@ class SendPageState extends State<SendPage> {
       _authCallback(true);
       return;
     }
-    if (mounted) {
+    if (context.mounted) {
       Navigator.of(context)
           .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
             return const AuthScreen(
@@ -151,7 +151,7 @@ class SendPageState extends State<SendPage> {
       preFree = rs.data!.free!;
       widget.changeFree(preFree);
       _keyStake.currentState!.reset();
-      if (mounted) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: SizedBox(
               height: 30,
@@ -187,7 +187,7 @@ class SendPageState extends State<SendPage> {
 
   @override
   void setState(fn) {
-    if (mounted) {
+    if (context.mounted) {
       super.setState(fn);
     }
   }
@@ -553,7 +553,7 @@ class SendPageState extends State<SendPage> {
       } else if (status.isDenied) {
         var r = await Permission.camera.request();
         if (r.isGranted) {
-          if (mounted) {
+          if (context.mounted) {
             Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
               return QScanWidget(
                 scanResult: (String s) {
@@ -566,7 +566,7 @@ class SendPageState extends State<SendPage> {
           }
         }
       } else {
-        if (mounted) {
+        if (context.mounted) {
           Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
             return QScanWidget(
               scanResult: (String s) {

@@ -92,11 +92,11 @@ class _ReferralScreenState extends State<ReferralScreen> {
         await interface.post('code/submit', {"referral": code, "uuid": udid, "ver": 3}, pos: true);
         await SecureStorage.writeStorage(key: "refCode", value: code);
         _checkStatus();
-        if (mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way!");
+        if (context.mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way!");
       } on ConflictDataException catch (e) {
-        if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
+        if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
       } catch (e) {
-        if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
+        if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
         debugPrint(e.toString());
       }
     }

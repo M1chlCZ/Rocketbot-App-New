@@ -128,7 +128,7 @@ class CoinScreenState extends ConsumerState<CoinScreen> with SingleTickerProvide
 
   @override
   void setState(fn) {
-    if (mounted) {
+    if (context.mounted) {
       super.setState(fn);
     }
   }
@@ -601,13 +601,17 @@ class CoinScreenState extends ConsumerState<CoinScreen> with SingleTickerProvide
     _calculatePortfolio();
   }
 
-  Future<int> getUserID() async {
+  Future<Map<String, dynamic>> getUserID() async {
     try {
       var resB = await _interface.get("auth/id", pos: true);
-      return resB['id'];
+      var m = <String, dynamic>{
+        "id": resB['id'],
+        "email": resB['email'],
+      };
+      return m;
     } catch (e) {
       print(e);
-      return 0;
+      return {};
     }
   }
 
@@ -672,14 +676,16 @@ class CoinScreenState extends ConsumerState<CoinScreen> with SingleTickerProvide
   }
 
   void _getExchange(int idCoin) async {
-    int userID = await getUserID();
+    Map mp = await getUserID();
+    var userID = mp['id'];
+    var userMail = mp['email'];
     try {
       List<Exchange> l = [];
       List<dynamic> res = await _interface.post("exchanges", {"idCoin": idCoin}, pos: true, debug: true);
       res.map((e) => Exchange.fromJson(e)).forEach((element) {
         l.add(element);
       });
-      if (mounted) {
+      if (context.mounted) {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => ExchangeListScreen(idCoin: _coinActive.ticker ?? "", exchanges: l),
@@ -688,10 +694,10 @@ class CoinScreenState extends ConsumerState<CoinScreen> with SingleTickerProvide
       }
     } catch (e) {
       if (e.toString().contains("This coin is not an exchange")) {
-        if (mounted) {
+        if (context.mounted) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => RamperScreen(userID: userID, coin: widget.activeCoin,),
+              builder: (context) => RamperScreen(userID: userID, email: userMail, coin: widget.activeCoin,),
             ),
           );
         }

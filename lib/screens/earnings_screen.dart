@@ -351,7 +351,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
 
   _changeCoin(CoinBalance h) async {
     var depAddr = await _getDepositAddr(h.coin!.id!);
-    if (mounted) {
+    if (context.mounted) {
       Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
             return FarmMainScreen(
               changeFree: _changeFree,

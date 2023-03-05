@@ -86,7 +86,7 @@ class ReferralWidgetState extends State<ReferralWidget> {
       } else if (status.isDenied) {
         var r = await Permission.camera.request();
         if (r.isGranted) {
-          if (mounted) {
+          if (context.mounted) {
             Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
               return QScanWidget(
                 header: 'Scan referral QR code',
@@ -100,7 +100,7 @@ class ReferralWidgetState extends State<ReferralWidget> {
           }
         }
       } else {
-        if (mounted) {
+        if (context.mounted) {
           Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
             return QScanWidget(
               header: 'Scan referral QR code',

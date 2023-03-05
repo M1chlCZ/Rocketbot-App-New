@@ -277,7 +277,7 @@ class DepositPageState extends State<DepositPage> {
                         onTap: () {
                           // _getClipBoardData();
                           Clipboard.setData(ClipboardData(text: _addressController.text));
-                          if (mounted) {
+                          if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: SizedBox(
                                   height: 30,

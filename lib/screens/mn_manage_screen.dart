@@ -244,7 +244,7 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
     try {
       Map<String, dynamic> m = {"idNode": id};
       await interface.post("masternode/withdraw", m, pos: true);
-      if (mounted) Dialogs.openAlertBox(context, "Info", "Tokens are on the way!");
+      if (context.mounted) Dialogs.openAlertBox(context, "Info", "Tokens are on the way!");
     } catch (ee) {
       try {
         var err = ee as ConflictDataException;

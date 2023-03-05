@@ -169,5 +169,7 @@
   "mn_withdraw_box" : "Opravdu chcete zrušit MN #{number1}?",
   "income" : "příjem",
   "st_adjust" : "Změnit množství mincí na stakingu",
-  "st_amount": "Odebrat množství"
+  "st_amount": "Odebrat množství",
+  "qr_scan" : "QR scanner",
+  "qr_scan_error" : "QR scanner není platný"
 }

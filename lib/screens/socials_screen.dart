@@ -52,7 +52,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
 
   @override
   void setState(fn) {
-    if (mounted) {
+    if (context.mounted) {
       super.setState(fn);
     }
   }
@@ -178,7 +178,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
       } else {
         await _loadDirectives();
         setState(() {});
-        if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, d.error);
+        if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, d.error);
       }
     } catch (e) {
       debugPrint(e.toString());

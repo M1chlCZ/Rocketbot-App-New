@@ -39,7 +39,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     super.initState();
     _getUserInfo();
     Future.delayed(Duration.zero).then((_) async {
-      if (mounted) {
+      if (context.mounted) {
         final Locale appLocale = Localizations.localeOf(context);
         var i = globals.languageCodes
             .indexWhere((element) => element.contains(appLocale.toString()));
@@ -401,7 +401,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     if (p == null) {
       bl = true;
     }
-    if (mounted) {
+    if (context.mounted) {
       Navigator.of(context)
         .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
           return AuthScreen(
@@ -477,7 +477,7 @@ class SettingsScreenState extends State<SettingsScreen> {
   _logOut() {
     Dialogs.openLogOutBox(context, () async {
       await SecureStorage.deleteAll();
-      if (mounted) {
+      if (context.mounted) {
         Navigator.of(context)
             .pushReplacement(
             PageRouteBuilder(

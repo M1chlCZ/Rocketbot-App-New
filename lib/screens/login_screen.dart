@@ -56,6 +56,10 @@ class LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _handleStuff();
+    if (kDebugMode) {
+      loginController.text = "m1chlcz18@gmail.com";
+      passwordController.text = "MvQ.u:3kML_WjGX";
+    }
   }
 
   void _handleStuff() async {
@@ -82,7 +86,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   void setState(fn) {
-    if (mounted) {
+    if (context.mounted) {
       super.setState(fn);
     }
   }
@@ -106,7 +110,7 @@ class LoginScreenState extends State<LoginScreen> {
         setState(() {
           _curtain = false;
         });
-        if (mounted) {
+        if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text(
               "Invalid credentials",
@@ -140,9 +144,9 @@ class LoginScreenState extends State<LoginScreen> {
     if (res != null) {
       bool code = await NetInterface.getEmailCode(res);
       if (code) {
-        if (mounted) Dialogs.open2FAbox(context, res, _getToken);
+        if (context.mounted) Dialogs.open2FAbox(context, res, _getToken);
       } else {
-        if (mounted) {
+        if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text(
               "Problem getting your email code, try again later",
@@ -159,7 +163,7 @@ class LoginScreenState extends State<LoginScreen> {
       }
       // _codeDialog(res);
     } else {
-      if (mounted) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
             "Credentials doesn't match any user!",
@@ -182,12 +186,12 @@ class LoginScreenState extends State<LoginScreen> {
       await SecureStorage.writeStorage(key: NetInterface.token, value: res);
       String? wer = await SecureStorage.readStorage(key: NetInterface.token);
       if (wer != null) {
-        if (mounted) {
+        if (context.mounted) {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MainMenuScreen()));
         }
       }
     } else {
-      if (mounted) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
             "Bad code entered!",
@@ -211,7 +215,7 @@ class LoginScreenState extends State<LoginScreen> {
     }
     // String? res;
     if (res == null) {
-      if (mounted) {
+      if (context.mounted) {
         Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
           return const MainMenuScreen();
         }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
@@ -219,7 +223,7 @@ class LoginScreenState extends State<LoginScreen> {
         }));
       }
     } else {
-      if (mounted) {
+      if (context.mounted) {
         Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
           return const AuthScreen();
         }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
@@ -303,7 +307,7 @@ class LoginScreenState extends State<LoginScreen> {
     } else {
       var m = RegistrationErrors.fromJson(error);
       // print(m.status);
-      if (mounted) Dialogs.openAlertBox(context, m.title!, m.errors.toString());
+      if (context.mounted) Dialogs.openAlertBox(context, m.title!, m.errors.toString());
       setState(() {
         _curtain = false;
         _registerButton = true;
@@ -484,7 +488,7 @@ class LoginScreenState extends State<LoginScreen> {
                                     if (asdf != null) {
                                       _nextPage();
                                     } else {
-                                      if (mounted) Dialogs.openAlertBox(context, "Error", "Error Sign in with Google");
+                                      if (context.mounted) Dialogs.openAlertBox(context, "Error", "Error Sign in with Google");
                                       setState(() {
                                         _curtain = false;
                                       });
@@ -531,7 +535,7 @@ class LoginScreenState extends State<LoginScreen> {
                                       if (asdf != null) {
                                         _nextPage();
                                       } else {
-                                        if (mounted) Dialogs.openAlertBox(context, "Error", "Error Sign in with Apple");
+                                        if (context.mounted) Dialogs.openAlertBox(context, "Error", "Error Sign in with Apple");
                                         setState(() {
                                           _curtain = false;
                                         });

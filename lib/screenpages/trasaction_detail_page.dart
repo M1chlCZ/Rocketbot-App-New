@@ -37,7 +37,7 @@ class TransactionDetailPageState extends State<TransactionDetailPage> {
 
   @override
   void setState(fn) {
-    if (mounted) {
+    if (context.mounted) {
       super.setState(fn);
     }
   }

@@ -107,63 +107,6 @@ class QScanWidgetState extends State<QScanWidget> {
                 borderWidth: 5,
               )),
             ),
-            // Column(
-            //   children: <Widget>[
-            //     Expanded(flex: 7, child: _buildQrView(context)),
-            //     Expanded(
-            //       flex: 1,
-            //       child: FittedBox(
-            //         fit: BoxFit.contain,
-            //         child: Column(
-            //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //           children: <Widget>[
-            //             Row(
-            //               mainAxisAlignment: MainAxisAlignment.center,
-            //               crossAxisAlignment: CrossAxisAlignment.center,
-            //               children: <Widget>[
-            //                 Container(
-            //                   margin: const EdgeInsets.all(8),
-            //                   child: ElevatedButton(
-            //                       onPressed: () async {
-            //                         await controller?.toggleFlash();
-            //                         setState(() {});
-            //                       },
-            //                       child: FutureBuilder(
-            //                         future: controller?.getFlashStatus(),
-            //                         builder: (context, snapshot) {
-            //                           return Text('Flash: ${snapshot.data == true ? 'ON' : 'OFF'}');
-            //                         },
-            //                       )),
-            //                 ),
-            //                 Container(
-            //                   margin: const EdgeInsets.all(8),
-            //                   child: ElevatedButton(
-            //                       onPressed: () async {
-            //                         await controller?.flipCamera();
-            //                         setState(() {});
-            //                       },
-            //                       child: FutureBuilder(
-            //                         future: controller?.getCameraInfo(),
-            //                         builder: (context, snapshot) {
-            //                           if (snapshot.data != null) {
-            //                             return Text(
-            //                               describeEnum(snapshot.data!) == 'front' ? 'Back Camera' : 'Front Camera'
-            //                             );
-            //                           } else {
-            //                             return const Text('loading');
-            //                           }
-            //                         },
-            //                       )),
-            //                 )
-            //               ],
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //     )
-            //   ],
-            // ),
-            // const CardHeader(title: '', backArrow: true,),
           ],
         ),
       ),

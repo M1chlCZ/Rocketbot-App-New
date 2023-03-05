@@ -133,7 +133,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
 
   @override
   void setState(fn) {
-    if (mounted) {
+    if (context.mounted) {
       super.setState(fn);
     }
   }
@@ -1027,24 +1027,24 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
       _getPos();
       _lostPosTX();
     } on BadRequestException catch (r) {
-      if (mounted) Navigator.of(context).pop();
+      if (context.mounted) Navigator.of(context).pop();
       _keyStake.currentState!.reset();
-      if (mounted) Dialogs.openAlertBox(context,AppLocalizations.of(context)!.error, r.toString());
+      if (context.mounted) Dialogs.openAlertBox(context,AppLocalizations.of(context)!.error, r.toString());
     } on ConflictDataException catch (r) {
-      if (mounted) Navigator.of(context).pop();
+      if (context.mounted) Navigator.of(context).pop();
       _keyStake.currentState!.reset();
       var err = json.decode(r.toString());
-      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage']);
+      if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage']);
     } catch (e) {
-      if (mounted) Navigator.of(context).pop();
+      if (context.mounted) Navigator.of(context).pop();
       _keyStake.currentState!.reset();
-      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "$e\n\n$problem");
+      if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "$e\n\n$problem");
     }
 
     if (rw == null) {
       _keyStake.currentState!.reset();
-      if (mounted) Navigator.of(context).pop();
-      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Couldn't send coins for Staking \n\n$serverTypeRckt");
+      if (context.mounted) Navigator.of(context).pop();
+      if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Couldn't send coins for Staking \n\n$serverTypeRckt");
     }
 
     _amountController.clear();
@@ -1052,7 +1052,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
     _keyStake.currentState!.reset();
     await _getStakingDetails();
     _stakeBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
-    if (mounted) Navigator.of(context).pop();
+    if (context.mounted) Navigator.of(context).pop();
     setState(() {});
   }
 
@@ -1126,7 +1126,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
         _loadingCoins = false;
       }
       setState(() {});
-      if (mounted) {
+      if (context.mounted) {
         Navigator.of(context).pop();
         Dialogs.openAlertBox(
             context, AppLocalizations.of(context)!.alert, AppLocalizations.of(context)!.staking_with_info(conf.toString()));

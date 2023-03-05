@@ -82,7 +82,7 @@ class AuthScreenState extends State<AuthScreen> {
         print(e);
       }
     }
-    if (!mounted) return;
+    if (!context.mounted) return;
     if (authenticated) {
       setState(() {
         _isFingerprint = true;
@@ -289,6 +289,6 @@ class AuthScreenState extends State<AuthScreen> {
     }else{
       await SecureStorage.deleteStorage(key: "PIN");
     }
-    if (mounted) Navigator.of(context).pop(succ);
+    if (context.mounted) Navigator.of(context).pop(succ);
   }
 }

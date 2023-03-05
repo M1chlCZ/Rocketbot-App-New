@@ -788,7 +788,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
   // Future<void> shareToTelegram(String message) async{
   //   String response = await appinioSocialShare.shareToTelegram(message);
   //   if (response == "ERROR_APP_NOT_AVAILABLE") {
-  //     if(context.mounted) Dialogs.openAlertBox(context, "Error", "Twitter app isn't present on your device");
+  //     if(context.context.mounted) Dialogs.openAlertBox(context, "Error", "Twitter app isn't present on your device");
   //   } else {
   //     print("error");
   //   }

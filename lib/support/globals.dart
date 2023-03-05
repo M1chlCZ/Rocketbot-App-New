@@ -1,7 +1,7 @@
 library konjungate.globals;
 
 bool isLoggedIn = false;
-const String serverUrl = 'http://51.195.102.171:3000';
+// const String serverUrl = 'http://51.195.102.171:3000';
 const String username = "username";
 const String id = "idUser";
 const String adr = "adr";

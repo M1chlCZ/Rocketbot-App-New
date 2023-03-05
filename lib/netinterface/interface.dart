@@ -17,26 +17,34 @@ import 'app_exception.dart';
 class NetInterface {
   static const String baseUrl = "https://app.rocketbot.pro/api/mobile/";
   static String posUrl = "https://mobileapp.rocketbot.pro/api/"; //TODO REFRESH TOKEN are separate!!!
+  static String webURL = "https://mobileapp.rocketbot.pro/web/v1";
   static const String token = "token";
   static const String posToken = "posToken";
   static const String tokenRefresh = "refreshToken";
   static const String posTokenRefresh = "posRefreshToken";
   static bool _refreshingToken = false;
 
-  Future<dynamic> get(String url, {String? request, bool pos = false, bool debug = false}) async {
+  Future<dynamic> get(String url, {String? request, bool pos = false, bool web = false, bool debug = false}) async {
     String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
-    var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
+    var tk = await SecureStorage.readStorage(key: pos || web ? posToken : token); //TODO
     dynamic responseJson;
     try {
       var curl = "";
-      pos ? curl = posUrl + url : curl = baseUrl + url;
+      if (pos) {
+        curl = posUrl + url;
+      } else if (web) {
+        curl = webURL + url;
+      } else {
+        curl = baseUrl + url;
+      }
+      // pos ? curl = posUrl + url : curl = baseUrl + url;
       if (request != null) {
         curl += "/?$request";
       }
       // print(curl);
       final response = await http.get(Uri.parse(curl), headers: {
         'User-Agent': userAgent.toLowerCase(),
-        "Authorization": " ${pos ? "JWT" : "Bearer"} $tk",
+        "Authorization": " ${pos || web  ? "JWT" : "Bearer"} $tk",
       }).timeout(
         const Duration(seconds: 30),
         onTimeout: () {
@@ -66,22 +74,28 @@ class NetInterface {
     return responseJson;
   }
 
-  Future<dynamic> post(String url, Map<String, dynamic> request, {bool pos = false, bool debug = false}) async {
+  Future<dynamic> post(String url, Map<String, dynamic> request, {bool pos = false, bool web = false, bool debug = false}) async {
     String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
-    var tk = await SecureStorage.readStorage(key: pos ? posToken : token);
+    var tk = await SecureStorage.readStorage(key: pos || web ? posToken : token);
     dynamic responseJson;
     var query = json.encoder.convert(request);
     // print(_query);
     try {
       var curl = "";
-      pos ? curl = posUrl + url : curl = baseUrl + url;
+      if (pos) {
+        curl = posUrl + url;
+      } else if (web) {
+        curl = webURL + url;
+      } else {
+        curl = baseUrl + url;
+      }
       // print(_curl);
       final response = await http
           .post(Uri.parse(curl),
               headers: {
                 "content-type": "application/json",
                 'User-Agent': userAgent.toLowerCase(),
-                "Authorization": "${pos ? "JWT" : "Bearer"} $tk",
+                "Authorization": "${pos || web ? "JWT" : "Bearer"} $tk",
               },
               body: query)
           .timeout(

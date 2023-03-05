@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:rocketbot/support/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
@@ -10,11 +11,9 @@ class Utils {
     var dateTime = DateTime.now();
     var date = DateFormat('yyyy-MM-dd').format(dateTime);
     var dateZero = "$date 00:00:00";
-    var val = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-        .format(DateTime.parse(dateZero));
+    var val = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(DateTime.parse(dateZero));
     var offset = dateTime.timeZoneOffset;
-    var hours =
-    offset.inHours > 0 ? offset.inHours : 1; // For fixing divide by 0
+    var hours = offset.inHours > 0 ? offset.inHours : 1; // For fixing divide by 0
     if (!offset.isNegative) {
       val = "$val+${offset.inHours.toString().padLeft(2, '0')}:${(offset.inMinutes % (hours * 60)).toString().padLeft(2, '0')}";
     } else {
@@ -43,18 +42,18 @@ class Utils {
 
   static String formatDuration(Duration d) {
     var seconds = d.inSeconds;
-    final days = seconds~/Duration.secondsPerDay;
-    seconds -= days*Duration.secondsPerDay;
-    final hours = seconds~/Duration.secondsPerHour;
-    seconds -= hours*Duration.secondsPerHour;
-    final minutes = seconds~/Duration.secondsPerMinute;
-    seconds -= minutes*Duration.secondsPerMinute;
+    final days = seconds ~/ Duration.secondsPerDay;
+    seconds -= days * Duration.secondsPerDay;
+    final hours = seconds ~/ Duration.secondsPerHour;
+    seconds -= hours * Duration.secondsPerHour;
+    final minutes = seconds ~/ Duration.secondsPerMinute;
+    seconds -= minutes * Duration.secondsPerMinute;
 
     final List<String> tokens = [];
     if (days != 0) {
       tokens.add('${days}d');
     }
-    if (tokens.isNotEmpty || hours != 0){
+    if (tokens.isNotEmpty || hours != 0) {
       tokens.add('${hours}h');
     }
     if (tokens.isNotEmpty || minutes != 0) {
@@ -97,7 +96,25 @@ class Utils {
 
   static String chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
   static final Random _rnd = Random();
-  static String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
-      length, (_) => chars.codeUnitAt(_rnd.nextInt(chars.length))));
-}
 
+  static String getRandomString(int length) => String.fromCharCodes(Iterable.generate(length, (_) => chars.codeUnitAt(_rnd.nextInt(chars.length))));
+
+  static Future<String?> scanQR(BuildContext context) async {
+    String? data;
+    FocusScope.of(context).unfocus();
+    await Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+      return QScanWidget(
+        scanResult: (String s) {
+          data = s;
+        },
+      );
+    }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+      return FadeTransition(opacity: animation, child: child);
+    }));
+      if (data != null) {
+        return data;
+      } else {
+        return null;
+      }
+  }
+}

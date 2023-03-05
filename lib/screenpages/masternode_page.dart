@@ -127,7 +127,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
 
   @override
   void setState(fn) {
-    if (mounted) {
+    if (context.mounted) {
       super.setState(fn);
     }
   }
@@ -1076,7 +1076,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       final responseLock = await _interface.post("masternode/lock", queryLock, pos: true, debug: true);
       mnLock = MasternodeLock.fromJson(responseLock);
       if (mnLock.node?.address == null) {
-        if(mounted) {Navigator.of(context).pop();
+        if(context.mounted) {Navigator.of(context).pop();
         Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Data err");}
         _keyStake.currentState?.reset();
         return;
@@ -1107,29 +1107,29 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     } on ConflictDataException catch (e) {
       Map<String, dynamic> queryLock = {"idNode": mnLock?.node?.id};
       await _interface.post("masternode/unlock", queryLock, pos: true, debug: true);
-      if (mounted) Navigator.of(context).pop();
+      if (context.mounted) Navigator.of(context).pop();
       _keyStake.currentState?.reset();
       var err = json.decode(e.toString());
-      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage']);
+      if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage']);
     } catch (e) {
       Map<String, dynamic> queryLock = {"idNode": mnLock?.node?.id};
       await _interface.post("masternode/unlock", queryLock, pos: true, debug: true);
-      if (mounted) Navigator.of(context).pop();
+      if (context.mounted) Navigator.of(context).pop();
       _keyStake.currentState?.reset();
-      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
+      if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
     }
 
     if (rw == null) {
       _keyStake.currentState?.reset();
-      if (mounted) Navigator.of(context).pop();
-      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Couldn't send coins for Staking \n\n$serverTypeRckt");
+      if (context.mounted) Navigator.of(context).pop();
+      if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Couldn't send coins for Staking \n\n$serverTypeRckt");
     }
     _changeFree();
     _keyStake.currentState?.reset();
     await _getMasternodeDetails();
     _mnBloc!.fetchStakeData(_coinActive.id!, _typeGraph);
     setState(() {});
-    if (mounted) Navigator.of(context).pop();
+    if (context.mounted) Navigator.of(context).pop();
   }
 
   _lostMNTX() async {
@@ -1204,7 +1204,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       await _getMasternodeDetails();
       _getMN();
       setState(() {});
-      if (mounted) {
+      if (context.mounted) {
         Navigator.of(context).pop();
         await Dialogs.openAlertBox(
             context, AppLocalizations.of(context)!.alert, AppLocalizations.of(context)!.staking_with_info(conf.toString()));
@@ -1213,7 +1213,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       }
     } on ConflictDataException catch (e) {
       var err = json.decode(e.toString());
-      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage'].toString());
+      if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage'].toString());
     } catch (e) {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());

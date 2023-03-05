@@ -168,5 +168,7 @@
   "mn_withdraw_box" : "Do you really want to withdraw MN #{number1}?",
   "income" : "income",
   "st_adjust" : "Adjust staking balance",
-  "st_amount": "Subtract amount"
+  "st_amount": "Subtract amount",
+  "qr_scan" : "QR scanner",
+  "qr_scan_error" : "QR code is not valid for this app"
 }

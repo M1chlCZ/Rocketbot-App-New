@@ -299,9 +299,9 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
       try {
         await _interface.post('code/submit', {"referral": code, "uuid": udid, "ver": 3}, pos: true);
         await SecureStorage.writeStorage(key: "refCode", value: code);
-        if (mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way|");
+        if (context.mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way|");
       } catch (e) {
-        if (mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.error.toLowerCase()}", e.toString());
+        if (context.mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.error.toLowerCase()}", e.toString());
       }
       await SecureStorage.deleteStorage(key: 'r_code');
     }
@@ -323,7 +323,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
 
   @override
   void setState(fn) {
-    if (mounted) {
+    if (context.mounted) {
       super.setState(fn);
     }
   }
@@ -948,8 +948,39 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                             //     color: Colors.white12,
                             //   ),
                             // ),
+                            // SizedBox(
+                            //     // SizedBox(
+                            //     height: 40,
+                            //     child: Center(
+                            //       child: Directionality(
+                            //         textDirection: TextDirection.ltr,
+                            //         child: SizedBox(
+                            //           width: 140,
+                            //           child: TextButton(
+                            //             style: ButtonStyle(
+                            //                 backgroundColor: MaterialStateProperty.resolveWith((states) => qrColors(states)),
+                            //                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            //                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
+                            //             onPressed: () {
+                            //               setState(() {
+                            //                 popMenu = false;
+                            //               });
+                            //               Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+                            //                 return const ReferralScreen();
+                            //               }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                            //                 return FadeTransition(opacity: animation, child: child);
+                            //               }));
+                            //             },
+                            //             child: Text(
+                            //               AppLocalizations.of(context)!.referral.toUpperCase(),
+                            //               style: Theme.of(context).textTheme.displayLarge!.copyWith(fontSize: 14.0),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     )),
                             SizedBox(
-                                // SizedBox(
+                              // SizedBox(
                                 height: 40,
                                 child: Center(
                                   child: Directionality(
@@ -961,18 +992,15 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                             backgroundColor: MaterialStateProperty.resolveWith((states) => qrColors(states)),
                                             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
-                                        onPressed: () {
+                                        onPressed: () async {
                                           setState(() {
                                             popMenu = false;
                                           });
-                                          Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-                                            return const ReferralScreen();
-                                          }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-                                            return FadeTransition(opacity: animation, child: child);
-                                          }));
+                                          String? s = await Utils.scanQR(context);
+                                          processScan(s);
                                         },
                                         child: Text(
-                                          AppLocalizations.of(context)!.referral.toUpperCase(),
+                                          AppLocalizations.of(context)!.qr_scan.toUpperCase(),
                                           style: Theme.of(context).textTheme.displayLarge!.copyWith(fontSize: 14.0),
                                         ),
                                       ),
@@ -1047,6 +1075,37 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
       ),
     );
   }
+ var ps = false;
+   processScan(String? s) async{
+    if(ps) return;
+    ps = true;
+    try {
+      if(s != null){
+            if (s.contains('loginqr')) {
+              var ss = s.split(";")[1];
+                try {
+                  NetInterface interface = NetInterface();
+                  var tok = ss;
+                  await interface.post("/login/qr/auth", {"token": tok}, web: true, debug: true);
+                  if(context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login successful")));
+                } catch (e) {
+                  debugPrint(e.toString());
+                  if(context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login failed")));
+                }
+
+            }else{
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.qr_scan_error)));
+            }
+          }else{
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.qr_scan_error)));
+          }
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+    } finally {
+      ps = false;
+    }
+  }
 
   Future _refreshData() async {
     await _bloc!.fetchBalancesList(refresh: true);
@@ -1056,7 +1115,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
 
   _changeCoin(CoinBalance c) async {
     pl ??= await _getPosCoins();
-    if (mounted) {
+    if (context.mounted) {
       Navigator.of(context)
           .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
             return MainScreen(

@@ -24,7 +24,7 @@ class MyButtonState extends State<SwitchingButton> {
 
   @override
   void setState(VoidCallback fn) {
-    if (mounted) {
+    if (context.mounted) {
       super.setState(fn);
     }
   }
