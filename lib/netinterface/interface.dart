@@ -46,7 +46,7 @@ class NetInterface {
         'User-Agent': userAgent.toLowerCase(),
         "Authorization": " ${pos || web  ? "JWT" : "Bearer"} $tk",
       }).timeout(
-        const Duration(seconds: 30),
+        const Duration(seconds: 120),
         onTimeout: () {
           return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
         },
@@ -62,7 +62,6 @@ class NetInterface {
           'User-Agent': userAgent.toLowerCase(),
           "Authorization": " ${pos ? "JWT" : "Bearer"} $tk",
         });
-        responseJson = await _returnResponse(res);
       } else {
         responseJson = await _returnResponse(response);
       }
@@ -99,7 +98,7 @@ class NetInterface {
               },
               body: query)
           .timeout(
-        const Duration(seconds: 30),
+        const Duration(seconds: 120),
         onTimeout: () {
           return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
         },

@@ -15,6 +15,7 @@ class GiveawayTile extends StatelessWidget {
       height: 100,
       width: double.infinity,
       child: Stack(
+        alignment: Alignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 10.0),
@@ -60,18 +61,23 @@ class GiveawayTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      AutoSizeText(
-                        "[${giveaway.coin!.ticker!}] ${giveaway.coin!.tokenStandart!}",
-                        maxLines: 1,
-                        minFontSize: 8.0,
-                        textAlign: TextAlign.start,
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                      const SizedBox(height: 25,),
+                      Expanded(
+                        child: AutoSizeText(
+                          "[${giveaway.coin!.ticker!}] ${giveaway.coin!.tokenStandart!}",
+                          maxLines: 1,
+                          minFontSize: 8.0,
+                          textAlign: TextAlign.start,
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 15.0, fontWeight: FontWeight.w500),
+                        ),
                       ),
-                      AutoSizeText(
-                        giveaway.channel!.name!,
-                        maxLines: 1,
-                        minFontSize: 8.0,
-                        style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 14.0, color: Colors.white),
+                      Expanded(
+                        child: AutoSizeText(
+                          giveaway.channel!.name!,
+                          maxLines: 1,
+                          minFontSize: 8.0,
+                          style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 14.0, color: Colors.white),
+                        ),
                       ),
                     ],
                   ),

@@ -4,7 +4,6 @@ import 'package:rocketbot/models/coin.dart';
 import 'package:rocketbot/providers/dep_addr_provider.dart';
 import 'package:rocketbot/providers/websocket_test_provider.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:webviewx/webviewx.dart';
 
 class RamperScreen extends ConsumerStatefulWidget {
@@ -127,28 +126,24 @@ class _RamperScreenState extends ConsumerState<RamperScreen> {
                     width: constraints.maxWidth,
                     child: SafeArea(
                       child: WebViewX(
-//                           initialContent: """
-//   <iframe   src="https://buy.onramper.com?darkmode=true&apiKey=pk_prod_01GRC4A70MRHE8RZM8E7TE46YE&defaultCrypto=${widget.coin.ticker!.toUpperCase()}&wallets=${widget.coin.ticker!.toUpperCase()}:$depositAddr&supportSell=false&supportSwap=false&partnerContext=${widget.userID}"
-//   height="${constraints.maxHeight}"
-//   width="${constraints.maxWidth}"
-//   title="Onramper widget"
-//   frameborder="0"
-//   allow="accelerometer;
-//   autoplay; camera; gyroscope; payment; keyboard;"
-//   style="box-shadow: 1px 1px 1px 1px
-//   rgba(0,0,0,0.2);"
-// >
-//   </iframe>
-//                                           """,
-                        initialContent: """
-                          <iframe height="625" title="Transak On/Off Ramp Widget"
-src="https://global.transak.com?apiKey=f6abbd7d-e047-4d85-990b-b79edb0a83a1&defaultCryptoCurrency=${widget.coin.ticker!.toUpperCase()}&environment=STAGING&defaultCryptoCurrency=${widget.coin.ticker!.toUpperCase()}&cryptoCurrencyList=BTC,ETH,LTC,DOGE,BNB&partnerCustomerId=${widget.userID}&email=${widget.email}&disableWalletAddressForm=true&productsAvailed=BUY&walletAddress=$depositAddr"
-frameborder="no" allowtransparency="true" allowfullscreen=""
-style="display: block; width: 100%; max-height: 625px; max-width: 500px;">
-</iframe>
-                          """,
+                          initialContent: """
+  <iframe   src="https://buy.onramper.com?darkmode=true&apiKey=pk_prod_01GRC4A70MRHE8RZM8E7TE46YE&defaultCrypto=${widget.coin.ticker!.toUpperCase()}&wallets=${widget.coin.ticker!.toUpperCase()}:$depositAddr&supportSell=false&supportSwap=false&partnerContext=${widget.userID}"
+  height="${constraints.maxHeight}"
+  width="${constraints.maxWidth}"
+  title="Onramper widget"
+  frameborder="0"
+  allow="accelerometer;
+  autoplay; camera; gyroscope; payment; keyboard;"
+  style="box-shadow: 1px 1px 1px 1px
+  rgba(0,0,0,0.2);"
+>
+  </iframe>
+                                          """,
                         initialSourceType: SourceType.html,
                         onWebViewCreated: (controller) => webviewController = controller,
+                        mobileSpecificParams: const MobileSpecificParams(
+                          androidEnableHybridComposition: true,
+                        ),
                         width: constraints.maxHeight,
                         height: constraints.maxWidth,
                       ),

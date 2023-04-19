@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:rocketbot/support/barcode_overlay.dart';
@@ -29,7 +31,7 @@ class QScanWidgetState extends State<QScanWidget> {
   @override
   void initState() {
     super.initState();
-    cameraController = MobileScannerController();
+    cameraController = MobileScannerController(detectionSpeed: DetectionSpeed.noDuplicates, formats: [BarcodeFormat.qrCode]);
     cameraController?.start();
   }
 
@@ -87,11 +89,12 @@ class QScanWidgetState extends State<QScanWidget> {
           children: [
             MobileScanner(
                 controller: cameraController,
-                onDetect: (barcode, args) {
-                  if (barcode.rawValue == null) {
+                onDetect: (capture) {
+                  if (capture.barcodes.isEmpty) {
                     debugPrint('Failed to scan Barcode');
                   } else {
-                    final String code = barcode.rawValue!;
+                    final List<Barcode> barcodes = capture.barcodes;
+                    final String code = barcodes[0].rawValue!;
                     widget.scanResult(code);
                     cameraController!.stop();
                     Navigator.maybePop(context);

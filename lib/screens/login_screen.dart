@@ -56,7 +56,7 @@ class LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _handleStuff();
-    if (kDebugMode) {
+    if (kDebugMode || kProfileMode) {
       loginController.text = "m1chlcz18@gmail.com";
       passwordController.text = "MvQ.u:3kML_WjGX";
     }

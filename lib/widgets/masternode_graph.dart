@@ -106,7 +106,7 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
           _maxX = const Duration(days: 7).inDays.toDouble();
           _minX = 1.0;
         } else if (_dropdownValue == 2) {
-          _maxX = Duration(days: Jiffy().daysInMonth).inDays.toDouble();
+          _maxX = Duration(days: Jiffy.now().daysInMonth).inDays.toDouble();
           _minX = 0.0;
         } else if (_dropdownValue == 3) {
           _maxX = 12.0;
@@ -364,7 +364,7 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
       return '${_getMeTime("0000-00-00 ${Duration(minutes: time).toHoursMinutes()}", "HH:mm")}\n';
     } else if (_dropdownValue == 1) {
       DateTime date = DateTime.parse("1970-00-00");
-      DateTime d = Jiffy(date).add(duration: Duration(days: time)).dateTime;
+      DateTime d = Jiffy.parseFromDateTime(date).add(days: time).dateTime;
       return '${DateFormat.EEEE(_locale).format(d)}\n';
     } else if (_dropdownValue == 2) {
       List<String> dateParts = _date.toString().split("-");
