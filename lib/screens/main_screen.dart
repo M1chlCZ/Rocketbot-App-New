@@ -137,20 +137,22 @@ class MainScreenState extends State<MainScreen> {
   }
 
   _gotoStaking() {
-    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-      return FarmMainScreen(
-        changeFree: _changeFree,
-        depositAddress: _depositAddr!,
-        depositPosAddress: _posDepositAddr,
-        activeCoin: _coinActive,
-        coinBalance: _lc!.singleWhere((element) => element.coin!.id! == _coinActive.id!),
-        free: _free,
-        blockTouch: _blockTouch,
-        masternode: isMN,
-      );
-    }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-      return FadeTransition(opacity: animation, child: child);
-    })).then((value) => _coinKey.currentState?.getFree());
+    Navigator.of(context)
+        .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+          return FarmMainScreen(
+            changeFree: _changeFree,
+            depositAddress: _depositAddr!,
+            depositPosAddress: _posDepositAddr,
+            activeCoin: _coinActive,
+            coinBalance: _lc!.singleWhere((element) => element.coin!.id! == _coinActive.id!),
+            free: _free,
+            blockTouch: _blockTouch,
+            masternode: isMN,
+          );
+        }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+          return FadeTransition(opacity: animation, child: child);
+        }))
+        .then((value) => _coinKey.currentState?.getFree());
   }
 
   @override
@@ -193,13 +195,13 @@ class MainScreenState extends State<MainScreen> {
               ),
             ]),
       ),
-      bottomNavigationBar:SnakeNavigationBar.color(
+      bottomNavigationBar: SnakeNavigationBar.color(
         elevation: 0.0,
         height: 60.0,
         onTap: _onTappedBar,
         behaviour: SnakeBarBehaviour.floating,
         snakeShape: SnakeShape(
-          centered: false,
+            centered: false,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             )),
@@ -225,18 +227,17 @@ class MainScreenState extends State<MainScreen> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: FlatCustomButton(
-              width: 40,
-              height: 30,
-              radius: 10.0,
-              color: Colors.transparent,
-              child: Image.asset(
-                "images/linear-recieve.png",
-                width: 30,
-                height: 30.0,
-                fit: BoxFit.fitWidth,
-                color: Colors.white,
-              )
-            ),
+                width: 40,
+                height: 30,
+                radius: 10.0,
+                color: Colors.transparent,
+                child: Image.asset(
+                  "images/linear-recieve.png",
+                  width: 30,
+                  height: 30.0,
+                  fit: BoxFit.fitWidth,
+                  color: Colors.white,
+                )),
             backgroundColor: Colors.amber,
             label: 'Receive',
             activeIcon: FlatCustomButton(
@@ -247,7 +248,7 @@ class MainScreenState extends State<MainScreen> {
               onTap: () {
                 _onTappedBar(0);
               },
-              child:  Image.asset(
+              child: Image.asset(
                 "images/bold-recieve.png",
                 color: Colors.white,
                 width: 30,
@@ -258,18 +259,17 @@ class MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: FlatCustomButton(
-              width: 40,
-              height: 30,
-              radius: 10.0,
-              color: Colors.transparent,
-              child: Image.asset(
-                "images/linear-transaction.png",
-                width: 30,
-                height: 30.0,
-                fit: BoxFit.fitWidth,
-                color: Colors.white,
-              )
-            ),
+                width: 40,
+                height: 30,
+                radius: 10.0,
+                color: Colors.transparent,
+                child: Image.asset(
+                  "images/linear-transaction.png",
+                  width: 30,
+                  height: 30.0,
+                  fit: BoxFit.fitWidth,
+                  color: Colors.white,
+                )),
             label: 'Transactions',
             activeIcon: FlatCustomButton(
               width: 40,
@@ -279,7 +279,7 @@ class MainScreenState extends State<MainScreen> {
               onTap: () {
                 _onTappedBar(0);
               },
-              child:  Image.asset(
+              child: Image.asset(
                 "images/bold-transaction.png",
                 color: Colors.white,
                 width: 30,
@@ -290,18 +290,17 @@ class MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: FlatCustomButton(
-              width: 40,
-              height: 30,
-              radius: 10.0,
-              color: Colors.transparent,
-              child: Image.asset(
-                "images/linear-send.png",
-                width: 30,
-                height: 30.0,
-                fit: BoxFit.fitWidth,
-                color: Colors.white,
-              )
-            ),
+                width: 40,
+                height: 30,
+                radius: 10.0,
+                color: Colors.transparent,
+                child: Image.asset(
+                  "images/linear-send.png",
+                  width: 30,
+                  height: 30.0,
+                  fit: BoxFit.fitWidth,
+                  color: Colors.white,
+                )),
             label: 'Send',
             activeIcon: FlatCustomButton(
               width: 40,
@@ -311,7 +310,7 @@ class MainScreenState extends State<MainScreen> {
               onTap: () {
                 _onTappedBar(0);
               },
-              child:  Image.asset(
+              child: Image.asset(
                 "images/bold-send.png",
                 color: Colors.white,
                 width: 30,

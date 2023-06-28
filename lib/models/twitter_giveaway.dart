@@ -1,3 +1,5 @@
+import 'ordinals.dart';
+
 /// message : "string"
 /// hasError : true
 /// error : "string"
@@ -83,7 +85,8 @@ class TwitterGiveaway {
       int? winnersLimit, 
       int? membersCount, 
       int? winnersCount, 
-      Coin? coin, 
+      Coin? coin,
+    Ordinal? ordinal,
       Channel? channel, 
       Creator? creator, 
       List<Winners>? winners, 
@@ -103,6 +106,7 @@ class TwitterGiveaway {
     _membersCount = membersCount;
     _winnersCount = winnersCount;
     _coin = coin;
+    _ordinal = ordinal;
     _channel = channel;
     _creator = creator;
     _winners = winners;
@@ -125,6 +129,7 @@ class TwitterGiveaway {
     _membersCount = json['membersCount'];
     _winnersCount = json['winnersCount'];
     _coin = json['coin'] != null ? Coin.fromJson(json['coin']) : null;
+    _ordinal = json['ordinal'] != null ? Ordinal.fromJson(json['ordinal']) : null;
     _channel = json['channel'] != null ? Channel.fromJson(json['channel']) : null;
     _creator = json['creator'] != null ? Creator.fromJson(json['creator']) : null;
     if (json['winners'] != null) {
@@ -155,6 +160,7 @@ class TwitterGiveaway {
   int? _membersCount;
   int? _winnersCount;
   Coin? _coin;
+  Ordinal? _ordinal;
   Channel? _channel;
   Creator? _creator;
   List<Winners>? _winners;
@@ -174,6 +180,7 @@ TwitterGiveaway copyWith({  int? id,
   int? membersCount,
   int? winnersCount,
   Coin? coin,
+  Ordinal? ordinal,
   Channel? channel,
   Creator? creator,
   List<Winners>? winners,
@@ -193,6 +200,7 @@ TwitterGiveaway copyWith({  int? id,
   membersCount: membersCount ?? _membersCount,
   winnersCount: winnersCount ?? _winnersCount,
   coin: coin ?? _coin,
+  ordinal: ordinal ?? _ordinal,
   channel: channel ?? _channel,
   creator: creator ?? _creator,
   winners: winners ?? _winners,
@@ -213,6 +221,7 @@ TwitterGiveaway copyWith({  int? id,
   int? get membersCount => _membersCount;
   int? get winnersCount => _winnersCount;
   Coin? get coin => _coin;
+  Ordinal? get ordinal => _ordinal;
   Channel? get channel => _channel;
   Creator? get creator => _creator;
   List<Winners>? get winners => _winners;
@@ -236,6 +245,9 @@ TwitterGiveaway copyWith({  int? id,
     map['winnersCount'] = _winnersCount;
     if (_coin != null) {
       map['coin'] = _coin?.toJson();
+    }
+    if (_ordinal != null) {
+      map['ordinal'] = _ordinal?.toJson();
     }
     if (_channel != null) {
       map['channel'] = _channel?.toJson();

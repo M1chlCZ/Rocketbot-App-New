@@ -157,6 +157,7 @@ class AirdropDetailScreen extends ConsumerWidget {
                             color: Colors.green,
                             child: const Text("Claim the reward"),
                             onTap: () {
+                              debugPrint(ag.channel?.url ?? "== NULL ==");
                               Utils.openLink(ag.channel?.url);
                             },
                           ),

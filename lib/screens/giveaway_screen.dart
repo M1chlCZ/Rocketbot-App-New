@@ -227,7 +227,8 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                       if (snapshot.data!.data!.isNotEmpty) {
                                         return NotificationListener<UserScrollNotification>(
                                           onNotification: (UserScrollNotification notification) {
-                                            if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
+                                            if (notification.direction == ScrollDirection.forward ||
+                                                notification.direction == ScrollDirection.reverse) {
                                               scrollDirectionNotifier.value = notification.direction;
                                             }
                                             return true;
@@ -240,7 +241,10 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                               itemBuilder: (ctx, index) {
                                                 return ValueListenableBuilder(
                                                     valueListenable: scrollDirectionNotifier,
-                                                    child: GiveawayTile(key: ValueKey<int>(snapshot.data!.data![index].id!), giveaway: snapshot.data!.data![index], callBack: giveawayCallback),
+                                                    child: GiveawayTile(
+                                                        key: ValueKey<int>(snapshot.data!.data![index].id!),
+                                                        giveaway: snapshot.data!.data![index],
+                                                        callBack: giveawayCallback),
                                                     builder: (BuildContext context, scrollDirection, Widget? child) {
                                                       return AnimatedListItemWrapper(
                                                         scrollDirection: scrollDirection,
@@ -303,10 +307,10 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                       if (snapshot.data!.data!.isNotEmpty) {
                                         return NotificationListener<UserScrollNotification>(
                                           onNotification: (UserScrollNotification notification) {
-                                            if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
+                                            if (notification.direction == ScrollDirection.forward ||
+                                                notification.direction == ScrollDirection.reverse) {
                                               scrollDirectionNotifier.value = notification.direction;
                                             }
-
                                             return true;
                                           },
                                           child: ListView.builder(
@@ -384,7 +388,8 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                       if (snapshot.data!.data!.isNotEmpty) {
                                         return NotificationListener<UserScrollNotification>(
                                           onNotification: (UserScrollNotification notification) {
-                                            if (notification.direction == ScrollDirection.forward || notification.direction == ScrollDirection.reverse) {
+                                            if (notification.direction == ScrollDirection.forward ||
+                                                notification.direction == ScrollDirection.reverse) {
                                               scrollDirectionNotifier.value = notification.direction;
                                             }
 
@@ -516,11 +521,11 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                           labelWidget: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                             margin: const EdgeInsets.only(right: 10.0),
-                            child: Center(
+                            child: const Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Text('Aidrop'),
                                 ],
                               ),
@@ -542,11 +547,11 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                           labelWidget: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                             margin: const EdgeInsets.only(right: 10.0),
-                            child: Center(
+                            child: const Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Text('Giveaway'),
                                 ],
                               ),

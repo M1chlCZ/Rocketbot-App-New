@@ -25,7 +25,7 @@ class FirebaseService {
       // print("///" + credential.token.toString());
       // print("///" + credential.toString());
       await _auth.signInWithCredential(credential);
-      return ggAuth.idToken!;
+      return ggAuth.accessToken!;
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) {
         print("/////${e.message}");

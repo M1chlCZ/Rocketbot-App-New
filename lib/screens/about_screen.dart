@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/support/gradient_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,679 +18,647 @@ class AboutScreenState extends State<AboutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return  Material(
+    return Material(
       color: Theme.of(context).canvasColor,
       child: SingleChildScrollView(
         child: SafeArea(
-          child: Stack(children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        height: 30,
-                        width: 25,
-                        child: NeuButton(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: const Icon(
-                            Icons.arrow_back_ios_new,
-                            size: 20.0,
-                            color: Colors.white70,
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          height: 30,
+                          width: 25,
+                          child: NeuButton(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            icon: const Icon(
+                              Icons.arrow_back_ios_new,
+                              size: 20.0,
+                              color: Colors.white70,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 20.0,
-                      ),
-                      Text(AppLocalizations.of(context)!.about,
-                          style: Theme.of(context).textTheme.headlineMedium),
-                    ],
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(AppLocalizations.of(context)!.about, style: Theme.of(context).textTheme.headlineMedium),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GradientText(
-                        "${AppLocalizations.of(context)!.about.toUpperCase()} ROCKETBOT",
-                        gradient: const LinearGradient(colors: [
-                          Color(0xFFF05523),
-                          Color(0xFF812D88),
-                        ]),
-                        align: TextAlign.start,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(
-                            fontSize: 14.0, color: Colors.white),
-                      ),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Container(height: 0.5, color: Colors.white12,),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text: AppLocalizations.of(context)!.about_rocket,
-                          style: Theme.of(context).textTheme.headlineMedium,
-                          children: <TextSpan>[
-                            TextSpan(
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GradientText(
+                          "${AppLocalizations.of(context)!.about.toUpperCase()} ROCKETBOT",
+                          gradient: const LinearGradient(colors: [
+                            Color(0xFFF05523),
+                            Color(0xFF812D88),
+                          ]),
+                          align: TextAlign.start,
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white),
+                        ),
+                        const SizedBox(
+                          height: 5.0,
+                        ),
+                        Container(
+                          height: 0.5,
+                          color: Colors.white12,
+                        ),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            text: AppLocalizations.of(context)!.about_rocket,
+                            style: Theme.of(context).textTheme.headlineMedium,
+                            children: <TextSpan>[
+                              TextSpan(
                                 text: '',
                                 style: Theme.of(context).textTheme.headlineMedium,
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 40.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 50.0,
-                        child: Card(
-                            elevation: 0,
-                            color: Colors.black12,
-                            margin: EdgeInsets.zero,
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: InkWell(
-                              splashColor: Colors.black54,
-                              highlightColor: Colors.black54,
-                              onTap: () async {
-                                _launchURL("https://rocketbot.pro/terms");
-                              },
-                              // widget.coinSwitch(widget.coin);
-                              // widget.activeCoin(widget.coin.coin!);
-
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Text(
-                                          AppLocalizations.of(context)!
-                                              .about_terms,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineMedium!
-                                              .copyWith(
-                                              fontSize: 14.0,
-                                              color: Colors.white)),
-                                    ),
-                                    const Expanded(
-                                      child: SizedBox(),
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.only(right: 10.0),
-                                      child: NeuButton(
-                                          height: 25,
-                                          width: 20,
-                                          onTap: () async {
-                                            _launchURL("https://rocketbot.pro/terms");
-                                          },
-                                          child: const Icon(
-                                            Icons.arrow_forward_ios_sharp,
-                                            color: Colors.white,
-                                            size: 22.0,
-                                          )),
-                                    )
-                                  ],
-                                ),
                               ),
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 50.0,
-                        child: Card(
-                            elevation: 0,
-                            color: Colors.black12,
-                            margin: EdgeInsets.zero,
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: InkWell(
-                              splashColor: Colors.black54,
-                              highlightColor: Colors.black54,
-                              onTap: () async {
-                                _launchURL("https://rocketbot.pro/privacy");
-                              },
-                              // widget.coinSwitch(widget.coin);
-                              // widget.activeCoin(widget.coin.coin!);
-
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Text(
-                                          AppLocalizations.of(context)!
-                                              .about_policy,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineMedium!
-                                              .copyWith(
-                                              fontSize: 14.0,
-                                              color: Colors.white)),
-                                    ),
-                                    const Expanded(
-                                      child: SizedBox(),
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.only(right: 10.0),
-                                      child: NeuButton(
-                                          height: 25,
-                                          width: 20,
-                                          onTap: () async {
-                                            _launchURL("https://rocketbot.pro/privacy");
-                                          },
-                                          child: const Icon(
-                                            Icons.arrow_forward_ios_sharp,
-                                            color: Colors.white,
-                                            size: 22.0,
-                                          )),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 50.0,
-                        child: Card(
-                            elevation: 0,
-                            color: Colors.black12,
-                            margin: EdgeInsets.zero,
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: InkWell(
-                              splashColor: Colors.black54,
-                              highlightColor: Colors.black54,
-                              onTap: () async {
-                                _launchURL("https://rocketbot.pro/");
-                              },
-                              // widget.coinSwitch(widget.coin);
-                              // widget.activeCoin(widget.coin.coin!);
-
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Text(
-                                          AppLocalizations.of(context)!
-                                              .about_visit,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineMedium!
-                                              .copyWith(
-                                              fontSize: 14.0,
-                                              color: Colors.white)),
-                                    ),
-                                    const Expanded(
-                                      child: SizedBox(),
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.only(right: 10.0),
-                                      child: NeuButton(
-                                          height: 25,
-                                          width: 20,
-                                          onTap: () async {
-                                            _launchURL("https://rocketbot.pro/");
-                                          },
-                                          child: const Icon(
-                                            Icons.arrow_forward_ios_sharp,
-                                            color: Colors.white,
-                                            size: 22.0,
-                                          )),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 50.0,
-                        child: Card(
-                            elevation: 0,
-                            color: Colors.black12,
-                            margin: EdgeInsets.zero,
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: InkWell(
-                              splashColor: Colors.black54,
-                              highlightColor: Colors.black54,
-                              onTap: () async {
-                                _launchURL("https://projectmerge.org/");
-                              },
-                              // widget.coinSwitch(widget.coin);
-                              // widget.activeCoin(widget.coin.coin!);
-
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Text(
-                                          AppLocalizations.of(context)!
-                                              .about_merge,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineMedium!
-                                              .copyWith(
-                                              fontSize: 14.0,
-                                              color: Colors.white)),
-                                    ),
-                                    const Expanded(
-                                      child: SizedBox(),
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.only(right: 10.0),
-                                      child: NeuButton(
-                                          height: 25,
-                                          width: 20,
-                                          onTap: () async {
-                                            _launchURL("https://projectmerge.org/");
-                                          },
-                                          child: const Icon(
-                                            Icons.arrow_forward_ios_sharp,
-                                            color: Colors.white,
-                                            size: 22.0,
-                                          )),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 30.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GradientText(
-                        AppLocalizations.of(context)!.about_devs.toUpperCase(),
-                        gradient: const LinearGradient(colors: [
-                          Color(0xFFF05523),
-                          Color(0xFF812D88),
-                        ]),
-                        align: TextAlign.start,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(
-                            fontSize: 14.0, color: Colors.white),
-                      ),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Container(height: 0.5, color: Colors.white12,),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text: "Project lead: \n",
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                      ),
-                      Row(children: [
-                        const SizedBox(width: 20.0,),
-                        Text("Jon DFWplay", style: Theme.of(context).textTheme.headlineMedium,),
-                        const Expanded(child: SizedBox()),
-                        NeuButton(
-                          width: 25,
-                          height: 25,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Image.asset("images/linked.png", color: Colors.white70),
+                            ],
                           ),
-                          onTap: () {
-                            _launchURL("https://www.linkedin.com/in/jonathan-astie-2054201/");
-                          },
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 40.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 50.0,
+                          child: Card(
+                              elevation: 0,
+                              color: Colors.black12,
+                              margin: EdgeInsets.zero,
+                              clipBehavior: Clip.antiAlias,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: InkWell(
+                                splashColor: Colors.black54,
+                                highlightColor: Colors.black54,
+                                onTap: () async {
+                                  _launchURL("https://rocketbot.pro/terms");
+                                },
+                                // widget.coinSwitch(widget.coin);
+                                // widget.activeCoin(widget.coin.coin!);
+
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Text(AppLocalizations.of(context)!.about_terms,
+                                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 14.0, color: Colors.white)),
+                                      ),
+                                      const Expanded(
+                                        child: SizedBox(),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 10.0),
+                                        child: NeuButton(
+                                            height: 25,
+                                            width: 20,
+                                            onTap: () async {
+                                              _launchURL("https://rocketbot.pro/terms");
+                                            },
+                                            child: const Icon(
+                                              Icons.arrow_forward_ios_sharp,
+                                              color: Colors.white,
+                                              size: 22.0,
+                                            )),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )),
                         ),
-      const SizedBox(
-        width: 20.0,
-      ),
-                        NeuButton(
-                          width: 25,
-                          height: 25,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Image.asset("images/twitter.png", color: Colors.white70),
-                          ),
-                          onTap: () {
-                            _launchURL("https://twitter.com/DfWplay");
-                          },
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 50.0,
+                          child: Card(
+                              elevation: 0,
+                              color: Colors.black12,
+                              margin: EdgeInsets.zero,
+                              clipBehavior: Clip.antiAlias,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: InkWell(
+                                splashColor: Colors.black54,
+                                highlightColor: Colors.black54,
+                                onTap: () async {
+                                  _launchURL("https://rocketbot.pro/privacy");
+                                },
+                                // widget.coinSwitch(widget.coin);
+                                // widget.activeCoin(widget.coin.coin!);
+
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Text(AppLocalizations.of(context)!.about_policy,
+                                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 14.0, color: Colors.white)),
+                                      ),
+                                      const Expanded(
+                                        child: SizedBox(),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 10.0),
+                                        child: NeuButton(
+                                            height: 25,
+                                            width: 20,
+                                            onTap: () async {
+                                              _launchURL("https://rocketbot.pro/privacy");
+                                            },
+                                            child: const Icon(
+                                              Icons.arrow_forward_ios_sharp,
+                                              color: Colors.white,
+                                              size: 22.0,
+                                            )),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 50.0,
+                          child: Card(
+                              elevation: 0,
+                              color: Colors.black12,
+                              margin: EdgeInsets.zero,
+                              clipBehavior: Clip.antiAlias,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: InkWell(
+                                splashColor: Colors.black54,
+                                highlightColor: Colors.black54,
+                                onTap: () async {
+                                  _launchURL("https://rocketbot.pro/");
+                                },
+                                // widget.coinSwitch(widget.coin);
+                                // widget.activeCoin(widget.coin.coin!);
+
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Text(AppLocalizations.of(context)!.about_visit,
+                                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 14.0, color: Colors.white)),
+                                      ),
+                                      const Expanded(
+                                        child: SizedBox(),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 10.0),
+                                        child: NeuButton(
+                                            height: 25,
+                                            width: 20,
+                                            onTap: () async {
+                                              _launchURL("https://rocketbot.pro/");
+                                            },
+                                            child: const Icon(
+                                              Icons.arrow_forward_ios_sharp,
+                                              color: Colors.white,
+                                              size: 22.0,
+                                            )),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 50.0,
+                          child: Card(
+                              elevation: 0,
+                              color: Colors.black12,
+                              margin: EdgeInsets.zero,
+                              clipBehavior: Clip.antiAlias,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: InkWell(
+                                splashColor: Colors.black54,
+                                highlightColor: Colors.black54,
+                                onTap: () async {
+                                  _launchURL("https://projectmerge.org/");
+                                },
+                                // widget.coinSwitch(widget.coin);
+                                // widget.activeCoin(widget.coin.coin!);
+
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Text(AppLocalizations.of(context)!.about_merge,
+                                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 14.0, color: Colors.white)),
+                                      ),
+                                      const Expanded(
+                                        child: SizedBox(),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 10.0),
+                                        child: NeuButton(
+                                            height: 25,
+                                            width: 20,
+                                            onTap: () async {
+                                              _launchURL("https://projectmerge.org/");
+                                            },
+                                            child: const Icon(
+                                              Icons.arrow_forward_ios_sharp,
+                                              color: Colors.white,
+                                              size: 22.0,
+                                            )),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GradientText(
+                          AppLocalizations.of(context)!.about_devs.toUpperCase(),
+                          gradient: const LinearGradient(colors: [
+                            Color(0xFFF05523),
+                            Color(0xFF812D88),
+                          ]),
+                          align: TextAlign.start,
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white),
                         ),
                         const SizedBox(
-                          width: 20.0,
+                          height: 5.0,
                         ),
-                        NeuButton(
-                          width: 25,
-                          height: 25,
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Image.asset("images/email.png", color: Colors.white70,),
-                          ),
-                          onTap: () {
-                            _launchURL("mailto:dfwplay@gmail.com");
-                          },
-                        ),
-                      ],),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text: "APP + Staking/MN API dev: \n",
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                      ),
-                      Row(children: [
-                        const SizedBox(width: 20.0,),
-                        Text("Michal Žídek", style: Theme.of(context).textTheme.headlineMedium,),
-                        const Expanded(child: SizedBox()),
-                        NeuButton(
-                          width: 25,
-                          height: 25,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Image.asset("images/linked.png", color: Colors.white70),
-                          ),
-                          onTap: () {
-                            _launchURL("https://www.linkedin.com/in/michal-%C5%BE%C3%ADdek-b9b71b98/");
-                          },
+                        Container(
+                          height: 0.5,
+                          color: Colors.white12,
                         ),
                         const SizedBox(
-                          width: 20.0,
+                          height: 20.0,
                         ),
-                        NeuButton(
-                          width: 25,
-                          height: 25,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Image.asset("images/twitter.png", color: Colors.white70),
+                        RichText(
+                          text: TextSpan(
+                            text: "Project lead: \n",
+                            style: Theme.of(context).textTheme.headlineMedium,
                           ),
-                          onTap: () {
-                            _launchURL("https://twitter.com/m1chl");
-                          },
                         ),
-                        const SizedBox(
-                          width: 20.0,
-                        ),
-                        NeuButton(
-                          width: 25,
-                          height: 25,
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Image.asset("images/email.png", color: Colors.white70,),
-                          ),
-                          onTap: () {
-                            _launchURL("mailto:m1chl@centrum.cz");
-                          },
-                        ),
-                      ],),
-                      const SizedBox(height: 10.0,),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text: "Rocketbot API + WEB dev: \n\n",
-                          style: Theme.of(context).textTheme.headlineMedium,
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: '      Bohdan Shamro',
+                        Row(
+                          children: [
+                            const SizedBox(
+                              width: 20.0,
+                            ),
+                            Text(
+                              "Jon DFWplay",
                               style: Theme.of(context).textTheme.headlineMedium,
                             ),
+                            const Expanded(child: SizedBox()),
+                            NeuButton(
+                              width: 25,
+                              height: 25,
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Image.asset("images/linked.png", color: Colors.white70),
+                              ),
+                              onTap: () {
+                                _launchURL("https://www.linkedin.com/in/jonathan-astie-2054201/");
+                              },
+                            ),
+                            const SizedBox(
+                              width: 20.0,
+                            ),
+                            NeuButton(
+                              width: 25,
+                              height: 25,
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Image.asset("images/twitter.png", color: Colors.white70),
+                              ),
+                              onTap: () {
+                                _launchURL("https://twitter.com/DfWplay");
+                              },
+                            ),
+                            const SizedBox(
+                              width: 20.0,
+                            ),
+                            NeuButton(
+                              width: 25,
+                              height: 25,
+                              child: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Image.asset(
+                                  "images/email.png",
+                                  color: Colors.white70,
+                                ),
+                              ),
+                              onTap: () {
+                                _launchURL("mailto:dfwplay@gmail.com");
+                              },
+                            ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 50.0,
-                        child: Card(
-                            elevation: 0,
-                            color: Colors.black12,
-                            margin: EdgeInsets.zero,
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            text: "APP + Staking/MN API dev: \n",
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const SizedBox(
+                              width: 20.0,
                             ),
-                            child: InkWell(
-                              splashColor: Colors.black54,
-                              highlightColor: Colors.black54,
-                              onTap: () async {
-                                _launchURL("https://mergebcdg.com/");
-                              },
-                              // widget.coinSwitch(widget.coin);
-                              // widget.activeCoin(widget.coin.coin!);
-
+                            Text(
+                              "Michal Žídek",
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
+                            const Expanded(child: SizedBox()),
+                            NeuButton(
+                              width: 25,
+                              height: 25,
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Text(
-                                          AppLocalizations.of(context)!
-                                              .about_develop,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineMedium!
-                                              .copyWith(
-                                              fontSize: 14.0,
-                                              color: Colors.white)),
-                                    ),
-                                    const Expanded(
-                                      child: SizedBox(),
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.only(right: 10.0),
-                                      child: NeuButton(
-                                          height: 25,
-                                          width: 20,
-                                          onTap: () async {
-                                            _launchURL("https://mergebcdg.com/");
-                                          },
-                                          child: const Icon(
-                                            Icons.arrow_forward_ios_sharp,
-                                            color: Colors.white,
-                                            size: 22.0,
-                                          )),
-                                    )
-                                  ],
+                                padding: const EdgeInsets.all(4.0),
+                                child: Image.asset("images/linked.png", color: Colors.white70),
+                              ),
+                              onTap: () {
+                                _launchURL("https://www.linkedin.com/in/michal-%C5%BE%C3%ADdek-b9b71b98/");
+                              },
+                            ),
+                            const SizedBox(
+                              width: 20.0,
+                            ),
+                            NeuButton(
+                              width: 25,
+                              height: 25,
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Image.asset("images/twitter.png", color: Colors.white70),
+                              ),
+                              onTap: () {
+                                _launchURL("https://twitter.com/m1chl");
+                              },
+                            ),
+                            const SizedBox(
+                              width: 20.0,
+                            ),
+                            NeuButton(
+                              width: 25,
+                              height: 25,
+                              child: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Image.asset(
+                                  "images/email.png",
+                                  color: Colors.white70,
                                 ),
                               ),
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 50.0,
-                        child: Card(
-                            elevation: 0,
-                            color: Colors.black12,
-                            margin: EdgeInsets.zero,
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: InkWell(
-                              splashColor: Colors.black54,
-                              highlightColor: Colors.black54,
-                              onTap: () async {
-                                showLicense(context);
+                              onTap: () {
+                                _launchURL("mailto:m1chl@centrum.cz");
                               },
-                              // widget.coinSwitch(widget.coin);
-                              // widget.activeCoin(widget.coin.coin!);
-
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Text(
-                                          AppLocalizations.of(context)!
-                                              .about_licences,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineMedium!
-                                              .copyWith(
-                                              fontSize: 14.0,
-                                              color: Colors.white)),
-                                    ),
-                                    const Expanded(
-                                      child: SizedBox(),
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.only(right: 10.0),
-                                      child: NeuButton(
-                                          height: 25,
-                                          width: 20,
-                                          onTap: () async {
-                                            showLicense(context);
-                                          },
-                                          child: const Icon(
-                                            Icons.arrow_forward_ios_sharp,
-                                            color: Colors.white,
-                                            size: 22.0,
-                                          )),
-                                    )
-                                  ],
-                                ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            text: "Rocketbot API + WEB dev: \n\n",
+                            style: Theme.of(context).textTheme.headlineMedium,
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: '      Bohdan Shamro',
+                                style: Theme.of(context).textTheme.headlineMedium,
                               ),
-                            )),
-                      ),
-                    ],
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 30.0,
-                ),
-            ],)
-          ],),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 50.0,
+                          child: Card(
+                              elevation: 0,
+                              color: Colors.black12,
+                              margin: EdgeInsets.zero,
+                              clipBehavior: Clip.antiAlias,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: InkWell(
+                                splashColor: Colors.black54,
+                                highlightColor: Colors.black54,
+                                onTap: () async {
+                                  _launchURL("https://mergebcdg.com/");
+                                },
+                                // widget.coinSwitch(widget.coin);
+                                // widget.activeCoin(widget.coin.coin!);
+
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Text(AppLocalizations.of(context)!.about_develop,
+                                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 14.0, color: Colors.white)),
+                                      ),
+                                      const Expanded(
+                                        child: SizedBox(),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 10.0),
+                                        child: NeuButton(
+                                            height: 25,
+                                            width: 20,
+                                            onTap: () async {
+                                              _launchURL("https://mergebcdg.com/");
+                                            },
+                                            child: const Icon(
+                                              Icons.arrow_forward_ios_sharp,
+                                              color: Colors.white,
+                                              size: 22.0,
+                                            )),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 50.0,
+                          child: Card(
+                              elevation: 0,
+                              color: Colors.black12,
+                              margin: EdgeInsets.zero,
+                              clipBehavior: Clip.antiAlias,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: InkWell(
+                                splashColor: Colors.black54,
+                                highlightColor: Colors.black54,
+                                onTap: () async {
+                                  showLicense(context);
+                                },
+                                // widget.coinSwitch(widget.coin);
+                                // widget.activeCoin(widget.coin.coin!);
+
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Text(AppLocalizations.of(context)!.about_licences,
+                                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 14.0, color: Colors.white)),
+                                      ),
+                                      const Expanded(
+                                        child: SizedBox(),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 10.0),
+                                        child: NeuButton(
+                                            height: 25,
+                                            width: 20,
+                                            onTap: () async {
+                                              showLicense(context);
+                                            },
+                                            child: const Icon(
+                                              Icons.arrow_forward_ios_sharp,
+                                              color: Colors.white,
+                                              size: 22.0,
+                                            )),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -729,12 +697,8 @@ class AboutScreenState extends State<AboutScreen> {
                   fontWeight: FontWeight.w400,
                   fontSize: 10.0,
                 ),
-                titleSmall: TextStyle(
-                    color: Colors.white.withOpacity(0.65),
-                    fontWeight: FontWeight.w400,
-                    fontSize: 10.0,
-                    fontStyle: FontStyle.italic
-                ),
+                titleSmall:
+                    TextStyle(color: Colors.white.withOpacity(0.65), fontWeight: FontWeight.w400, fontSize: 10.0, fontStyle: FontStyle.italic),
                 bodyLarge: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -744,15 +708,16 @@ class AboutScreenState extends State<AboutScreen> {
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 18.0,
-                )
-            ),
+                )),
             primaryTextTheme: Theme.of(context).textTheme,
             appBarTheme: Theme.of(context).appBarTheme.copyWith(color: Theme.of(context).canvasColor),
-
           ),
           child: LicensePage(
             applicationVersion: _packageInfo!.version,
-            applicationIcon: Image.asset('images/logo_big.png', width: 150,),
+            applicationIcon: Image.asset(
+              'images/logo_big.png',
+              width: 150,
+            ),
             applicationLegalese: 'Legal stuff',
           ),
         ),

@@ -22,6 +22,7 @@ import 'Support/material_color_generator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Paint.enableDithering = true;
   getSetup();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

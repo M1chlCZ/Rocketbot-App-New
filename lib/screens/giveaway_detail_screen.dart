@@ -30,7 +30,7 @@ class _GiveawayDetailScreenState extends State<GiveawayDetailScreen> {
   @override
   void initState() {
     super.initState();
-    bloc = GiveawayDetailBloc(widget.giveaway.id!,widget.giveaway.socialMedia!);
+    bloc = GiveawayDetailBloc(widget.giveaway.id!, widget.giveaway.socialMedia!);
   }
 
   @override
@@ -170,7 +170,9 @@ class _GiveawayDetailScreenState extends State<GiveawayDetailScreen> {
                                         itemBuilder: (ctx, index) {
                                           return MembersTile(member: memba[index], callBack: (Members s) {});
                                         })),
-                                const SizedBox(height: 100.0,),
+                                const SizedBox(
+                                  height: 100.0,
+                                ),
                               ]),
                             ),
                             Align(

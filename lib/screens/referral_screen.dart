@@ -92,7 +92,8 @@ class _ReferralScreenState extends State<ReferralScreen> {
         await interface.post('code/submit', {"referral": code, "uuid": udid, "ver": 3}, pos: true);
         await SecureStorage.writeStorage(key: "refCode", value: code);
         _checkStatus();
-        if (context.mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way!");
+        if (context.mounted)
+          Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way!");
       } on ConflictDataException catch (e) {
         if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
       } catch (e) {
@@ -252,16 +253,22 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                         ),
                                         Visibility(
                                           visible: deviceID,
-                                          child: const Align(alignment: Alignment.centerLeft, child: Text('Device id missing or unobtainable', style: TextStyle(color: Colors.white70))),
+                                          child: const Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text('Device id missing or unobtainable', style: TextStyle(color: Colors.white70))),
                                         ),
                                         Visibility(
                                           visible: firebaseToken,
-                                          child: const Align(alignment: Alignment.centerLeft, child: Text('Firebase token unobtainable', style: TextStyle(color: Colors.white70))),
+                                          child: const Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text('Firebase token unobtainable', style: TextStyle(color: Colors.white70))),
                                         ),
                                         Visibility(
                                           visible: mergeAddress,
                                           child: const Align(
-                                              alignment: Alignment.centerLeft, child: Text('Merge Address missing (Check your email for verification)', style: TextStyle(color: Colors.white70))),
+                                              alignment: Alignment.centerLeft,
+                                              child: Text('Merge Address missing (Check your email for verification)',
+                                                  style: TextStyle(color: Colors.white70))),
                                         ),
                                       ],
                                     )),
@@ -336,7 +343,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                           )
                                         : ClipRRect(
                                             borderRadius: BorderRadius.circular(10.0),
-                                            child: QrImage(
+                                            child: QrImageView(
                                               dataModuleStyle: const QrDataModuleStyle(dataModuleShape: QrDataModuleShape.circle),
                                               eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.circle),
                                               errorCorrectionLevel: QrErrorCorrectLevel.H,

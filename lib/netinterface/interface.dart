@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -236,6 +237,7 @@ class NetInterface {
   }
 
   static Future<String?> getTokenGoogle(String tokenID) async {
+    log("getTokenGoogle: $tokenID");
     try {
       String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
       Map request = {

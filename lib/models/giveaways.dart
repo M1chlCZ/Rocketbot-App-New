@@ -1,4 +1,5 @@
 import 'package:rocketbot/models/coin.dart';
+import 'package:rocketbot/models/ordinals.dart';
 
 /// message : "string"
 /// hasError : true
@@ -72,7 +73,8 @@ class Giveaway {
       int? id, 
       bool? member, 
       double? reward,
-      Coin? coin, 
+      Coin? coin,
+    Ordinal? ordinal,
       Channel? channel, 
       int? socialMedia, 
       String? createdAt,}){
@@ -80,6 +82,7 @@ class Giveaway {
     _member = member;
     _reward = reward;
     _coin = coin;
+    _ordinal = ordinal;
     _channel = channel;
     _socialMedia = socialMedia;
     _createdAt = createdAt;
@@ -90,6 +93,7 @@ class Giveaway {
     _member = json['member'];
     _reward = json['reward'];
     _coin = json['coin'] != null ? Coin.fromJson(json['coin']) : null;
+    _ordinal = json['ordinal'] != null ? Ordinal.fromJson(json['ordinal']) : null;
     _channel = json['channel'] != null ? Channel.fromJson(json['channel']) : null;
     _socialMedia = json['socialMedia'];
     _createdAt = json['createdAt'];
@@ -98,6 +102,7 @@ class Giveaway {
   bool? _member;
   double? _reward;
   Coin? _coin;
+  Ordinal? _ordinal;
   Channel? _channel;
   int? _socialMedia;
   String? _createdAt;
@@ -105,6 +110,7 @@ Giveaway copyWith({  int? id,
   bool? member,
   double? reward,
   Coin? coin,
+  Ordinal? ordinal,
   Channel? channel,
   int? socialMedia,
   String? createdAt,
@@ -112,6 +118,7 @@ Giveaway copyWith({  int? id,
   member: member ?? _member,
   reward: reward ?? _reward,
   coin: coin ?? _coin,
+  ordinal: ordinal ?? _ordinal,
   channel: channel ?? _channel,
   socialMedia: socialMedia ?? _socialMedia,
   createdAt: createdAt ?? _createdAt,
@@ -120,6 +127,7 @@ Giveaway copyWith({  int? id,
   bool? get member => _member;
   double? get reward => _reward;
   Coin? get coin => _coin;
+  Ordinal? get ordinal => _ordinal;
   Channel? get channel => _channel;
   int? get socialMedia => _socialMedia;
   String? get createdAt => _createdAt;
@@ -131,6 +139,9 @@ Giveaway copyWith({  int? id,
     map['reward'] = _reward;
     if (_coin != null) {
       map['coin'] = _coin?.toJson();
+    }
+    if (_ordinal != null) {
+      map['ordinal'] = _ordinal?.toJson();
     }
     if (_channel != null) {
       map['channel'] = _channel?.toJson();

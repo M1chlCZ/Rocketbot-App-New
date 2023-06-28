@@ -88,9 +88,7 @@ class _TwitterGiveawayDetailScreenState extends State<TwitterGiveawayDetailScree
                                       height: 100.0,
                                       child: Row(
                                         children: [
-                                          Expanded(
-                                            child: followBlock(ag.conditions!, "Must Follow", color: Colors.amber)
-                                          ),
+                                          Expanded(child: followBlock(ag.conditions!, "Must Follow", color: Colors.amber)),
                                         ],
                                       ),
                                     ),
@@ -271,38 +269,43 @@ Widget followBlock(Conditions? c, String sub, {Color color = Colors.white10}) {
         children: [
           Expanded(
             child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: c!.mustFollowAccounts!.length,
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: c!.mustFollowAccounts!.length,
                 itemBuilder: (context, index) {
                   MustFollowAccounts item = c.mustFollowAccounts![index];
-              return Row(
-                children: [
-                  FlatCustomButton(
-                    onTap: () {
-                      Utils.openLink("https://twitter.com/${item.username!}");
-                    },
-                    color: const Color(0xFF1DA1F2),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-                      child: Center(
-                          child: Column(
+                  return Row(
+                    children: [
+                      FlatCustomButton(
+                        onTap: () {
+                          Utils.openLink("https://twitter.com/${item.username!}");
+                        },
+                        color: const Color(0xFF1DA1F2),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+                          child: Center(
+                              child: Column(
                             children: [
-                              Text(item.name!,style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Colors.white),),
+                              Text(
+                                item.name!,
+                                style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Colors.white),
+                              ),
                               // Text("Open >",style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 8.0, color: Colors.white54),),
-                        SizedBox(
-                          height: 15.0,
-                            child: Image.asset("images/twitter.png", color: Colors.white54)),
+                              SizedBox(height: 15.0, child: Image.asset("images/twitter.png", color: Colors.white54)),
                             ],
                           )),
-                    ),
-                  ),
-                  const SizedBox(width: 10.0,)
-                ],
-              );
-            }),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      )
+                    ],
+                  );
+                }),
           ),
-          const SizedBox(height: 10.0,),
+          const SizedBox(
+            height: 10.0,
+          ),
           AutoSizeText(
             sub,
             maxLines: 1,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:rocketbot/component_widgets/container_neu.dart';
 import 'package:rocketbot/main.dart';
 import 'package:rocketbot/netinterface/interface.dart';
@@ -19,6 +19,7 @@ import '../models/user.dart';
 
 class SettingsScreen extends StatefulWidget {
   final VoidCallback socials;
+
   const SettingsScreen({Key? key, required this.socials}) : super(key: key);
 
   @override
@@ -41,8 +42,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     Future.delayed(Duration.zero).then((_) async {
       if (context.mounted) {
         final Locale appLocale = Localizations.localeOf(context);
-        var i = globals.languageCodes
-            .indexWhere((element) => element.contains(appLocale.toString()));
+        var i = globals.languageCodes.indexWhere((element) => element.contains(appLocale.toString()));
         if (i != -1) {
           setState(() {
             dropLanguageValue = globals.languages[i];
@@ -87,10 +87,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                       Text(
                         AppLocalizations.of(context)!.settings_main,
                         textAlign: TextAlign.start,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontSize: 14.0, color: Colors.white24),
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14.0, color: Colors.white24),
                       ),
                       const SizedBox(
                         height: 5.0,
@@ -166,11 +163,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                             width: 7,
                           ),
                           Text(AppLocalizations.of(context)!.language,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium!
-                                  .copyWith(
-                                  fontSize: 14.0, color: Colors.white)),
+                              style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 14.0, color: Colors.white)),
                           // SizedBox(
                           //   width: MediaQuery.of(context).size.width * 0.4,
                           // ),
@@ -194,14 +187,14 @@ class SettingsScreenState extends State<SettingsScreen> {
                                         dropLanguageValue = val!;
                                         setState(() {
                                           Locale l;
-                                          int index =  globals.languages.indexWhere((values) => values.contains(val));
+                                          int index = globals.languages.indexWhere((values) => values.contains(val));
                                           // print(index);
                                           var ls = globals.languageCodes[index].split('_');
-                                          if(ls.length == 1) {
+                                          if (ls.length == 1) {
                                             l = Locale(ls[0], '');
-                                          }else if(ls.length == 2) {
+                                          } else if (ls.length == 2) {
                                             l = Locale(ls[0], ls[1]);
-                                          }else{
+                                          } else {
                                             l = Locale.fromSubtags(countryCode: ls[2], scriptCode: ls[1], languageCode: ls[0]);
                                           }
                                           MyApp.of(context)?.setLocale(l);
@@ -209,11 +202,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                                         });
                                       },
                                       items: globals.languages
-                                          .map((e) => DropdownMenuItem(
-                                          value: e,
-                                          child: SizedBox(
-                                              width: 70,
-                                              child: Text(e))))
+                                          .map((e) => DropdownMenuItem(value: e, child: SizedBox(width: 70, child: Text(e))))
                                           .toList(),
                                     ),
                                   ),
@@ -233,10 +222,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                       Text(
                         AppLocalizations.of(context)!.settings_socials,
                         textAlign: TextAlign.start,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontSize: 14.0, color: Colors.white24),
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14.0, color: Colors.white24),
                       ),
                       const SizedBox(
                         height: 5.0,
@@ -262,7 +248,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                               splashColor: Colors.black54,
                               highlightColor: Colors.black54,
                               onTap: () async {
-                               _goToSocials();
+                                _goToSocials();
                               },
                               // widget.coinSwitch(widget.coin);
                               // widget.activeCoin(widget.coin.coin!);
@@ -270,18 +256,14 @@ class SettingsScreenState extends State<SettingsScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                        AppLocalizations.of(context)!.socials_popup.toLowerCase().capitalize(),
+                                    Text(AppLocalizations.of(context)!.socials_popup.toLowerCase().capitalize(),
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineMedium!
-                                            .copyWith(
-                                            fontSize: 14.0,
-                                            color: _socialsOK ? Colors.white : const Color(0xFFF35656))),
+                                            .copyWith(fontSize: 14.0, color: _socialsOK ? Colors.white : const Color(0xFFF35656))),
                                     const Expanded(
                                       child: SizedBox(),
                                     ),
@@ -307,10 +289,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                       Text(
                         AppLocalizations.of(context)!.settings_privacy,
                         textAlign: TextAlign.start,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontSize: 14.0, color: Colors.white24),
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14.0, color: Colors.white24),
                       ),
                       const SizedBox(
                         height: 5.0,
@@ -344,19 +323,11 @@ class SettingsScreenState extends State<SettingsScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                        AppLocalizations.of(context)!
-                                            .sc_security,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineMedium!
-                                            .copyWith(
-                                                fontSize: 14.0,
-                                                color: Colors.white)),
+                                    Text(AppLocalizations.of(context)!.sc_security,
+                                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 14.0, color: Colors.white)),
                                     const Expanded(
                                       child: SizedBox(),
                                     ),
@@ -379,11 +350,10 @@ class SettingsScreenState extends State<SettingsScreen> {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      MenuSection(sectionName: "Miscellaneous",
-                          children: [
-                            MenuNode(menuText: AppLocalizations.of(context)!.about, goto: _gotoAbout),
-                            MenuNode(menuText: AppLocalizations.of(context)!.log_out, goto: _logOut)
-                          ]),
+                      MenuSection(sectionName: "Miscellaneous", children: [
+                        MenuNode(menuText: AppLocalizations.of(context)!.about, goto: _gotoAbout),
+                        MenuNode(menuText: AppLocalizations.of(context)!.log_out, goto: _logOut)
+                      ]),
                     ],
                   ),
                 )
@@ -403,23 +373,21 @@ class SettingsScreenState extends State<SettingsScreen> {
     }
     if (context.mounted) {
       Navigator.of(context)
-        .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-          return AuthScreen(
-            setupPIN: bl,
-            type: 1,
-          );
-        }, transitionsBuilder:
-            (_, Animation<double> animation, __, Widget child) {
-          return FadeTransition(opacity: animation, child: child);
-        }))
-        .then((value) => _authCallback(value));
+          .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+            return AuthScreen(
+              setupPIN: bl,
+              type: 1,
+            );
+          }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+            return FadeTransition(opacity: animation, child: child);
+          }))
+          .then((value) => _authCallback(value));
     }
   }
 
   void _authCallback(bool? b) async {
     if (b == null || b == false) return;
-    Navigator.of(context)
-        .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+    Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
       return const SecurityScreen();
     }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
       return FadeTransition(opacity: animation, child: child);
@@ -429,13 +397,13 @@ class SettingsScreenState extends State<SettingsScreen> {
   void _goToSocials() {
     Navigator.of(context)
         .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-      return SocialScreen(
-        socials: _socials,
-        me: _me!,
-      );
-    }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-      return FadeTransition(opacity: animation, child: child);
-    }))
+          return SocialScreen(
+            socials: _socials,
+            me: _me!,
+          );
+        }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+          return FadeTransition(opacity: animation, child: child);
+        }))
         .then((value) => _getUserInfo());
   }
 
@@ -478,24 +446,11 @@ class SettingsScreenState extends State<SettingsScreen> {
     Dialogs.openLogOutBox(context, () async {
       await SecureStorage.deleteAll();
       if (context.mounted) {
-        Navigator.of(context)
-            .pushReplacement(
-            PageRouteBuilder(
-                pageBuilder:
-                    (BuildContext
-                context,
-                    _,
-                    __) {
-                  return const LoginScreen();
-                }, transitionsBuilder: (_,
-                Animation<double>
-                animation,
-                __,
-                Widget child) {
-              return FadeTransition(
-                  opacity: animation,
-                  child: child);
-            }));
+        Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
+          return const LoginScreen();
+        }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+          return FadeTransition(opacity: animation, child: child);
+        }));
       }
     });
   }

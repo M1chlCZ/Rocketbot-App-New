@@ -54,7 +54,9 @@ class _ExchangeListScreenState extends State<ExchangeListScreen> {
               ),
             ]),
           ),
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
           ListView.builder(
             shrinkWrap: true,
             itemCount: widget.exchanges.length,

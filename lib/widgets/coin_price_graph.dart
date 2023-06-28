@@ -316,8 +316,8 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
           )),)
           : LineChart(
               _mainData(),
-              swapAnimationDuration: const Duration(milliseconds: 0),
-              swapAnimationCurve: Curves.linearToEaseOut,
+              duration: const Duration(milliseconds: 0),
+              curve: Curves.linearToEaseOut,
             ),
     );
   }

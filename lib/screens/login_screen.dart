@@ -18,7 +18,6 @@ import 'package:rocketbot/support/gradient_text.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 import 'package:rocketbot/widgets/button_apple.dart';
 import 'package:rocketbot/widgets/login_register.dart';
-import 'package:rocketbot/widgets/referral_widget.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -42,8 +41,8 @@ class LoginScreenState extends State<LoginScreen> {
   TextEditingController secondNameController = TextEditingController();
   TextEditingController passwordRegController = TextEditingController();
   TextEditingController passwordRegConfirmController = TextEditingController();
-  GlobalKey<ReferralWidgetState> loginRef = GlobalKey();
-  GlobalKey<ReferralWidgetState> registerRef = GlobalKey();
+  // GlobalKey<ReferralWidgetState> loginRef = GlobalKey();
+  // GlobalKey<ReferralWidgetState> registerRef = GlobalKey();
 
   bool _curtain = true;
   bool _termsAgreed = false;
@@ -243,8 +242,8 @@ class LoginScreenState extends State<LoginScreen> {
     passwordRegController.text = '';
     passwordRegConfirmController.text = '';
     referralCode = null;
-    loginRef.currentState?.clearText();
-    registerRef.currentState?.clearText();
+    // loginRef.currentState?.clearText();
+    // registerRef.currentState?.clearText();
     setState(() {
       _page = page;
     });
@@ -496,7 +495,6 @@ class LoginScreenState extends State<LoginScreen> {
                                   }
                                 } catch (e) {
                                   if (kDebugMode) {
-                                    print("======HOVNO=======");
                                     print(e);
                                   }
                                   if (e is FirebaseAuthException) {
@@ -548,13 +546,13 @@ class LoginScreenState extends State<LoginScreen> {
                                 ],
                               )
                             : Container(),
-                        ReferralWidget(
-                            key: loginRef,
-                            refCode: (value) {
-                              if (value.length == 32) {
-                                referralCode = value;
-                              }
-                            }),
+                        // ReferralWidget(
+                        //     key: loginRef,
+                        //     refCode: (value) {
+                        //       if (value.length == 32) {
+                        //         referralCode = value;
+                        //       }
+                        //     }),
                       ]),
                     ),
                   )),
@@ -694,16 +692,16 @@ class LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ))),
                         ),
-                        const SizedBox(
-                          height: 30.0,
-                        ),
-                        ReferralWidget(
-                            key: registerRef,
-                            refCode: (value) {
-                              if (value.length == 32) {
-                                referralCode = value;
-                              }
-                            }),
+                        // const SizedBox(
+                        //   height: 30.0,
+                        // ),
+                        // ReferralWidget(
+                        //     key: registerRef,
+                        //     refCode: (value) {
+                        //       if (value.length == 32) {
+                        //         referralCode = value;
+                        //       }
+                        //     }),
                         const SizedBox(
                           height: 30.0,
                         ),
@@ -738,7 +736,8 @@ class LoginScreenState extends State<LoginScreen> {
                                 color: Colors.white.withOpacity(0.05),
                                 borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                               ),
-                              child: Checkbox(checkColor: Colors.lightGreen, activeColor: Colors.white12, value: _termsAgreed, onChanged: _onTermsChanged),
+                              child: Checkbox(
+                                  checkColor: Colors.lightGreen, activeColor: Colors.white12, value: _termsAgreed, onChanged: _onTermsChanged),
                             ),
                           ],
                         ),

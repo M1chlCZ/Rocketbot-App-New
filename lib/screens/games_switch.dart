@@ -31,7 +31,8 @@ class GameSwitcherState extends State<GameSwitcher> {
           child: Row(children: [
             Expanded(
               child: AnimatedContainer(
-                decoration: BoxDecoration(color: _active == 0 ? const Color(0xFF9D9BFD) : const Color(0x009D9BFD), borderRadius: BorderRadius.circular(5.0)),
+                decoration:
+                    BoxDecoration(color: _active == 0 ? const Color(0xFF9D9BFD) : const Color(0x009D9BFD), borderRadius: BorderRadius.circular(5.0)),
                 duration: _duration,
                 child: FlatCustomButton(
                     color: Colors.transparent,
@@ -47,7 +48,10 @@ class GameSwitcherState extends State<GameSwitcher> {
                       child: Padding(
                         padding: const EdgeInsets.all(3.0),
                         child: AutoSizeText("Giveaway",
-                            maxLines: 1, minFontSize: 8.0, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold)),
+                            maxLines: 1,
+                            minFontSize: 8.0,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold)),
                       ),
                     )),
               ),
@@ -57,7 +61,8 @@ class GameSwitcherState extends State<GameSwitcher> {
             ),
             Expanded(
               child: AnimatedContainer(
-                decoration: BoxDecoration(color: _active == 1 ? const Color(0xFF9D9BFD) : const Color(0x009D9BFD), borderRadius: BorderRadius.circular(5.0)),
+                decoration:
+                    BoxDecoration(color: _active == 1 ? const Color(0xFF9D9BFD) : const Color(0x009D9BFD), borderRadius: BorderRadius.circular(5.0)),
                 // opacity: _active == 1 ? 1.0 : 0.4,
                 duration: _duration,
                 child: FlatCustomButton(
@@ -73,7 +78,10 @@ class GameSwitcherState extends State<GameSwitcher> {
                       child: Padding(
                         padding: const EdgeInsets.all(3.0),
                         child: AutoSizeText("Airdrop",
-                            maxLines: 1, minFontSize: 8.0, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold)),
+                            maxLines: 1,
+                            minFontSize: 8.0,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold)),
                       ),
                     )),
               ),
@@ -83,7 +91,8 @@ class GameSwitcherState extends State<GameSwitcher> {
             ),
             Expanded(
               child: AnimatedContainer(
-                decoration: BoxDecoration(color: _active == 2 ? const Color(0xFF9D9BFD) : const Color(0x009D9BFD), borderRadius: BorderRadius.circular(5.0)),
+                decoration:
+                    BoxDecoration(color: _active == 2 ? const Color(0xFF9D9BFD) : const Color(0x009D9BFD), borderRadius: BorderRadius.circular(5.0)),
                 // opacity: _active == 1 ? 1.0 : 0.4,
                 duration: _duration,
                 child: FlatCustomButton(
@@ -98,8 +107,11 @@ class GameSwitcherState extends State<GameSwitcher> {
                       width: 120,
                       child: Padding(
                         padding: const EdgeInsets.all(3.0),
-                        child:
-                            AutoSizeText("Spin", maxLines: 1, minFontSize: 8.0, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold)),
+                        child: AutoSizeText("Spin",
+                            maxLines: 1,
+                            minFontSize: 8.0,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold)),
                       ),
                     )),
               ),

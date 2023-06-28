@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
@@ -46,9 +45,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   }
 
   gotoNextScreen() {
-      setState(() {
-       _selectedPageIndex = 2;
-      });
+    setState(() {
+      _selectedPageIndex = 2;
+    });
     _pageController.animateToPage(_selectedPageIndex, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
   }
 
@@ -92,7 +91,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         unselectedLabelStyle: const TextStyle(
           color: Colors.red,
           fontSize: 12.0,
-
         ),
         selectedLabelStyle: const TextStyle(
           color: Colors.white,
@@ -215,7 +213,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
       ),
     );
   }
-
 
   void _onTappedBar(int value) {
     // if (value == 2) {

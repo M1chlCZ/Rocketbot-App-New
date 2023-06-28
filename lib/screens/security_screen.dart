@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:rocketbot/component_widgets/button_neu.dart';
+import 'package:flutter_biometrics/flutter_biometrics.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:rocketbot/component_widgets/container_neu.dart';
 import 'package:rocketbot/screens/auth_screen.dart';
-import 'package:flutter_biometrics/flutter_biometrics.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 
 class SecurityScreen extends StatefulWidget {
@@ -78,8 +78,7 @@ class SecurityScreenState extends State<SecurityScreen> {
             children: [
               Column(children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
+                  padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
                   child: Row(
                     children: [
                       SizedBox(
@@ -99,8 +98,7 @@ class SecurityScreenState extends State<SecurityScreen> {
                       const SizedBox(
                         width: 20.0,
                       ),
-                      Text(AppLocalizations.of(context)!.sc_security,
-                          style: Theme.of(context).textTheme.headlineMedium),
+                      Text(AppLocalizations.of(context)!.sc_security, style: Theme.of(context).textTheme.headlineMedium),
                     ],
                   ),
                 ),
@@ -116,10 +114,7 @@ class SecurityScreenState extends State<SecurityScreen> {
                         Text(
                           AppLocalizations.of(context)!.sc_auth_headline,
                           textAlign: TextAlign.start,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(fontSize: 14.0, color: Colors.white24),
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14.0, color: Colors.white24),
                         ),
                         const SizedBox(
                           height: 5.0,
@@ -136,18 +131,13 @@ class SecurityScreenState extends State<SecurityScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(AppLocalizations.of(context)!.sc_auth_type,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineMedium!
-                                    .copyWith(
-                                        fontSize: 14.0, color: Colors.white)),
+                                style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 14.0, color: Colors.white)),
                             // SizedBox(
                             //   width: MediaQuery.of(context).size.width * 0.4,
                             // ),
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 80.0, right: 8.0),
+                                padding: const EdgeInsets.only(left: 80.0, right: 8.0),
                                 child: SizedBox(
                                   height: 30,
                                   child: NeuContainer(
@@ -161,20 +151,11 @@ class SecurityScreenState extends State<SecurityScreen> {
                                             setState(() {
                                               _dropValue = val!;
                                             });
-                                            int index = _dropValues.indexWhere(
-                                                (values) =>
-                                                    values.contains(val!));
-                                            SecureStorage.writeStorage(
-                                                key: "AUTH_TYPE",
-                                                value: index.toString());
+                                            int index = _dropValues.indexWhere((values) => values.contains(val!));
+                                            SecureStorage.writeStorage(key: "AUTH_TYPE", value: index.toString());
                                           },
-                                          items: _dropValues
-                                              .map((e) => DropdownMenuItem(
-                                                  value: e,
-                                                  child: SizedBox(
-                                                      width: 70,
-                                                      child: Text(e))))
-                                              .toList(),
+                                          items:
+                                              _dropValues.map((e) => DropdownMenuItem(value: e, child: SizedBox(width: 70, child: Text(e)))).toList(),
                                         ),
                                       ),
                                     ),
@@ -198,10 +179,7 @@ class SecurityScreenState extends State<SecurityScreen> {
                         Text(
                           AppLocalizations.of(context)!.sc_pin_settings,
                           textAlign: TextAlign.start,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(fontSize: 14.0, color: Colors.white24),
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14.0, color: Colors.white24),
                         ),
                         const SizedBox(
                           height: 5.0,
@@ -233,25 +211,16 @@ class SecurityScreenState extends State<SecurityScreen> {
                                 // widget.activeCoin(widget.coin.coin!);
 
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                        AppLocalizations.of(context)!
-                                            .sc_change_pin,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineMedium!
-                                            .copyWith(
-                                                fontSize: 14.0,
-                                                color: Colors.white)),
+                                    Text(AppLocalizations.of(context)!.sc_change_pin,
+                                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 14.0, color: Colors.white)),
                                     const Expanded(
                                       child: SizedBox(),
                                     ),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 10.0),
+                                      padding: const EdgeInsets.only(right: 10.0),
                                       child: NeuButton(
                                           height: 25,
                                           width: 20,
@@ -291,25 +260,16 @@ class SecurityScreenState extends State<SecurityScreen> {
                                 // widget.activeCoin(widget.coin.coin!);
 
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                        AppLocalizations.of(context)!
-                                            .sc_remove_pin,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineMedium!
-                                            .copyWith(
-                                                fontSize: 14.0,
-                                                color: Colors.white)),
+                                    Text(AppLocalizations.of(context)!.sc_remove_pin,
+                                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 14.0, color: Colors.white)),
                                     const Expanded(
                                       child: SizedBox(),
                                     ),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 10.0),
+                                      padding: const EdgeInsets.only(right: 10.0),
                                       child: NeuButton(
                                           height: 25,
                                           width: 20,
@@ -342,8 +302,7 @@ class SecurityScreenState extends State<SecurityScreen> {
           return const AuthScreen(
             type: 2,
           );
-        }, transitionsBuilder:
-            (_, Animation<double> animation, __, Widget child) {
+        }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
           return FadeTransition(opacity: animation, child: child);
         }))
         .then((value) => _removePINCallback(value));
@@ -354,10 +313,7 @@ class SecurityScreenState extends State<SecurityScreen> {
       SecureStorage.deleteStorage(key: "PIN");
       await Future.delayed(const Duration(milliseconds: 200), () {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: SizedBox(
-              height: 40.0,
-              child: Center(
-                  child: Text(AppLocalizations.of(context)!.sc_pin_removed))),
+          content: SizedBox(height: 40.0, child: Center(child: Text(AppLocalizations.of(context)!.sc_pin_removed))),
           backgroundColor: Colors.green,
         ));
       });
@@ -367,10 +323,7 @@ class SecurityScreenState extends State<SecurityScreen> {
     } else {
       Future.delayed(const Duration(milliseconds: 200), () {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: SizedBox(
-              height: 40.0,
-              child: Center(
-                  child: Text(AppLocalizations.of(context)!.sc_pin_removed))),
+          content: SizedBox(height: 40.0, child: Center(child: Text(AppLocalizations.of(context)!.sc_pin_removed))),
           backgroundColor: Colors.green,
         ));
       });
@@ -383,8 +336,7 @@ class SecurityScreenState extends State<SecurityScreen> {
           return const AuthScreen(
             type: 2,
           );
-        }, transitionsBuilder:
-            (_, Animation<double> animation, __, Widget child) {
+        }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
           return FadeTransition(opacity: animation, child: child);
         }))
         .then((value) => _changePINCallback(value));
@@ -395,8 +347,7 @@ class SecurityScreenState extends State<SecurityScreen> {
     Navigator.of(context)
         .push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
           return const AuthScreen(setupPIN: true);
-        }, transitionsBuilder:
-            (_, Animation<double> animation, __, Widget child) {
+        }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
           return FadeTransition(opacity: animation, child: child);
         }))
         .then((value) => _changeSucc(value));
@@ -411,16 +362,13 @@ class SecurityScreenState extends State<SecurityScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: SizedBox(
             height: 40.0,
-            child: Center(
-                child: Text(state
-                    ? AppLocalizations.of(context)!.sc_change_succ
-                    : AppLocalizations.of(context)!.sc_change_fuck))),
+            child: Center(child: Text(state ? AppLocalizations.of(context)!.sc_change_succ : AppLocalizations.of(context)!.sc_change_fuck))),
         backgroundColor: state ? Colors.green : Colors.red,
       ));
     });
   }
 
-  // void _authCallback(bool b) {
-  //   debugPrint(b.toString());
-  // }
+// void _authCallback(bool b) {
+//   debugPrint(b.toString());
+// }
 }

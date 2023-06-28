@@ -12,8 +12,7 @@ class AuthScreen extends StatefulWidget {
   final bool setupPIN;
   final int type;
 
-  const AuthScreen({Key? key, this.setupPIN = false, this.type = 0})
-      : super(key: key);
+  const AuthScreen({Key? key, this.setupPIN = false, this.type = 0}) : super(key: key);
 
   @override
   AuthScreenState createState() => AuthScreenState();
@@ -73,7 +72,8 @@ class AuthScreenState extends State<AuthScreen> {
           sensitiveTransaction: true,
           biometricOnly: true,
         ),
-        localizedReason: 'Scan your fingerprint to authenticate',);
+        localizedReason: 'Scan your fingerprint to authenticate',
+      );
     } on PlatformException catch (e) {
       setState(() {
         _showFinger = false;
@@ -123,8 +123,7 @@ class AuthScreenState extends State<AuthScreen> {
                     fingerVerify: _isFingerprint,
                     borderColor: Colors.white,
                     showWrongPassDialog: false,
-                    wrongPassContent:
-                        AppLocalizations.of(context)!.as_wrong_pin,
+                    wrongPassContent: AppLocalizations.of(context)!.as_wrong_pin,
                     wrongPassTitle: "Opps!",
                     wrongPassCancelButtonText: "Cancel",
                     passCodeVerify: (passcode) async {
@@ -138,25 +137,19 @@ class AuthScreenState extends State<AuthScreen> {
                     },
                     onSuccess: () {
                       if (widget.type == 0) {
-                        Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder:
-                            (BuildContext context, _, __) {
+                        Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
                           return const MainMenuScreen();
-                        }, transitionsBuilder:
-                            (_, Animation<double> animation, __, Widget child) {
-                          return FadeTransition(
-                              opacity: animation, child: child);
+                        }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                          return FadeTransition(opacity: animation, child: child);
                         }));
                       } else if (widget.type == 2) {
                         Navigator.of(context).pop(true);
                       } else {
                         Navigator.of(context).pop();
-                        Navigator.of(context).push(PageRouteBuilder(pageBuilder:
-                            (BuildContext context, _, __) {
+                        Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
                           return const SecurityScreen();
-                        }, transitionsBuilder:
-                            (_, Animation<double> animation, __, Widget child) {
-                          return FadeTransition(
-                              opacity: animation, child: child);
+                        }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+                          return FadeTransition(opacity: animation, child: child);
                         }));
                       }
                     })),
@@ -171,14 +164,12 @@ class AuthScreenState extends State<AuthScreen> {
             child: SafeArea(
                 child: Stack(
               children: [
-
                 Visibility(
                     visible: _firstPIN,
                     child: IgnorePointer(
                       ignoring: !_firstPIN,
                       child: LockScreen(
-                          title: AppLocalizations.of(context)!
-                              .as_enter_desired_pin,
+                          title: AppLocalizations.of(context)!.as_enter_desired_pin,
                           passLength: 6,
                           numColor: Colors.white70,
                           bgImage: "images/pending_rocket_pin.png",
@@ -209,8 +200,7 @@ class AuthScreenState extends State<AuthScreen> {
                     child: IgnorePointer(
                       ignoring: _firstPIN,
                       child: LockScreen(
-                          title: AppLocalizations.of(context)!
-                              .as_enter_desired_confirm_pin,
+                          title: AppLocalizations.of(context)!.as_enter_desired_confirm_pin,
                           passLength: 6,
                           numColor: Colors.white70,
                           bgImage: "images/pending_rocket_pin.png",
@@ -251,7 +241,10 @@ class AuthScreenState extends State<AuthScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: const <Widget>[
-                              Icon(Icons.arrow_back, color: Colors.white70,),
+                              Icon(
+                                Icons.arrow_back,
+                                color: Colors.white70,
+                              ),
                             ],
                           ),
                         ),
@@ -269,10 +262,7 @@ class AuthScreenState extends State<AuthScreen> {
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(left: 20.0, top: 10.0),
-            child: SizedBox(
-                width: 100,
-                height: 50,
-                child: Image.asset("images/logo_big.png")),
+            child: SizedBox(width: 100, height: 50, child: Image.asset("images/logo_big.png")),
           ),
         ),
       ),
@@ -286,7 +276,7 @@ class AuthScreenState extends State<AuthScreen> {
     if (first == second) {
       succ = true;
       await SecureStorage.writeStorage(key: "PIN", value: first.toString());
-    }else{
+    } else {
       await SecureStorage.deleteStorage(key: "PIN");
     }
     if (context.mounted) Navigator.of(context).pop(succ);

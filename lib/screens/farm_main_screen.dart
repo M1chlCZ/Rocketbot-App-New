@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:rocketbot/screenpages/masternode_page.dart';
 import 'package:rocketbot/screenpages/staking_page.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/staking_masternode_switch.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FarmMainScreen extends StatefulWidget {
   final Coin activeCoin;
@@ -17,15 +17,17 @@ class FarmMainScreen extends StatefulWidget {
   final double free;
   final bool masternode;
 
-  const FarmMainScreen({Key? key,
-    required this.activeCoin,
-    required this.coinBalance,
-    required this.depositAddress,
-    this.depositPosAddress,
-    required this.changeFree,
-    required this.blockTouch,
-    required this.free,
-    required this.masternode}) : super(key: key);
+  const FarmMainScreen(
+      {Key? key,
+      required this.activeCoin,
+      required this.coinBalance,
+      required this.depositAddress,
+      this.depositPosAddress,
+      required this.changeFree,
+      required this.blockTouch,
+      required this.free,
+      required this.masternode})
+      : super(key: key);
 
   @override
   State<FarmMainScreen> createState() => _FarmMainScreenState();
@@ -36,7 +38,6 @@ class _FarmMainScreenState extends State<FarmMainScreen> {
   final _switchKey = GlobalKey<StakingMasternodeSwitcherState>();
   String? posDeposit;
   int page = 0;
-
 
   @override
   void initState() {
@@ -49,7 +50,6 @@ class _FarmMainScreenState extends State<FarmMainScreen> {
     _pageController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -96,18 +96,20 @@ class _FarmMainScreenState extends State<FarmMainScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 2.0,),
-
+                    const SizedBox(
+                      height: 2.0,
+                    ),
                     SizedBox(
                         height: 50,
                         width: MediaQuery.of(context).size.width,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 15.0, right: 15.0),
                           child: StakingMasternodeSwitcher(
-                            key: _switchKey,
-                              masternode: widget.masternode,changeType: (int a) {
-                            _pageController.jumpToPage(a);
-                          }),
+                              key: _switchKey,
+                              masternode: widget.masternode,
+                              changeType: (int a) {
+                                _pageController.jumpToPage(a);
+                              }),
                         )),
                   ],
                 ),
@@ -124,22 +126,25 @@ class _FarmMainScreenState extends State<FarmMainScreen> {
                   },
                   controller: _pageController,
                   children: [
-                  StakingPage(
+                    StakingPage(
                       activeCoin: widget.activeCoin,
                       depositPosAddress: widget.depositPosAddress,
                       depositAddress: widget.depositAddress,
                       coinBalance: widget.coinBalance,
                       changeFree: widget.changeFree,
                       free: widget.free,
-                      blockTouch: widget.blockTouch,),
-                  MasternodePage(activeCoin: widget.activeCoin,
-                      coinBalance: widget.coinBalance,
-                      depositAddress: widget.depositAddress,
-                      changeFree: widget.changeFree,
-                      free: widget.free,
                       blockTouch: widget.blockTouch,
-                      masternode: widget.masternode)
-                ],),
+                    ),
+                    MasternodePage(
+                        activeCoin: widget.activeCoin,
+                        coinBalance: widget.coinBalance,
+                        depositAddress: widget.depositAddress,
+                        changeFree: widget.changeFree,
+                        free: widget.free,
+                        blockTouch: widget.blockTouch,
+                        masternode: widget.masternode)
+                  ],
+                ),
               ),
             ],
           ),

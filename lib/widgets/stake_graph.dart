@@ -538,8 +538,8 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
       )),)
           : LineChart(
         mainData(),
-        swapAnimationDuration: const Duration(milliseconds: 300),
-        swapAnimationCurve: Curves.linearToEaseOut,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.linearToEaseOut,
       ),
     );
   }

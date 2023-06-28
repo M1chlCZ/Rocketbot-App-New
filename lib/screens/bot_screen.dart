@@ -56,7 +56,6 @@ class _BotScreenState extends ConsumerState<BotScreen> {
       final p = ref.read(dropdownProvider.notifier);
       p.getData();
     });
-
   }
 
   @override
@@ -141,7 +140,8 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                 onChanged: (CoinBalance? newValue) {
                                   if (newValue == null) return;
                                   if (newValue.free! <= 0.0) {
-                                    Dialogs.openAlertBox(context, "Insufficient funds", "You don't have enough ${newValue.coin?.ticker} to send a tip");
+                                    Dialogs.openAlertBox(
+                                        context, "Insufficient funds", "You don't have enough ${newValue.coin?.ticker} to send a tip");
                                     return;
                                   }
                                   setState(() {
@@ -163,7 +163,10 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                                 width: 20.0,
                                               ),
                                               Text(coin.coin?.ticker ?? "Coin",
-                                                  style: TextStyle(color: coin.free! > 0.0 ? Colors.white70 : Colors.white30, fontSize: 16.0, fontWeight: FontWeight.w600)),
+                                                  style: TextStyle(
+                                                      color: coin.free! > 0.0 ? Colors.white70 : Colors.white30,
+                                                      fontSize: 16.0,
+                                                      fontWeight: FontWeight.w600)),
                                               const SizedBox(
                                                 width: 10.0,
                                               ),
@@ -194,7 +197,8 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
                                   padding: const EdgeInsets.symmetric(vertical: 12.0),
-                                  child: const Center(child: Text("Balance", style: TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)))),
+                                  child: const Center(
+                                      child: Text("Balance", style: TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)))),
                               const SizedBox(
                                 width: 10.0,
                               ),
@@ -257,7 +261,8 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                   iconOpacity: 0.2,
                                   indicatorSize: const Size.fromWidth(120),
                                   animatedIconBuilder: (i, a, c) => Center(child: Text(a.value, style: const TextStyle(color: Colors.white))),
-                                  foregroundIndicatorIconBuilder: (i, a) => Center(child: Text(a.current, style: const TextStyle(color: Colors.black87))),
+                                  foregroundIndicatorIconBuilder: (i, a) =>
+                                      Center(child: Text(a.current, style: const TextStyle(color: Colors.black87))),
                                   borderRadius: BorderRadius.circular(8.0),
                                   borderWidth: 0,
                                   height: 40.0,
@@ -360,7 +365,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                         borderSide: BorderSide.none,
                                         borderRadius: BorderRadius.all(Radius.circular(8.0)),
                                       ),
-                                      hintText: widget.type == "spin" ? "Ticket Cost": "Enter Amount",
+                                      hintText: widget.type == "spin" ? "Ticket Cost" : "Enter Amount",
                                       hintStyle: const TextStyle(color: Colors.white30, fontSize: 16.0, fontWeight: FontWeight.w400),
                                     ),
                                   ),
@@ -369,7 +374,8 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                     width: 75,
                                     changePercent: (double percent) {
                                       setState(() {
-                                        _amountController.text = NumberFormat("###.######").format(double.parse(selectedCoin!.free!.toString()) * percent);
+                                        _amountController.text =
+                                            NumberFormat("###.######").format(double.parse(selectedCoin!.free!.toString()) * percent);
                                       });
                                       // setState(() { _percent = percent; });
                                     },
@@ -391,7 +397,8 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                   child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text(widget.type == "spin" ? "Number of Tickets":"Number of winners", style: const TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)),
+                                  Text(widget.type == "spin" ? "Number of Tickets" : "Number of winners",
+                                      style: const TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)),
                                   SizedBox(
                                     width: 100.0,
                                     child: Row(
@@ -416,35 +423,35 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                             height: 10.0,
                           ),
                           if (widget.type != "spin")
-                          AnimatedToggleSwitch<String>.custom(
-                            current: switchNums,
-                            iconOpacity: 0.2,
-                            indicatorSize: const Size.fromWidth(80),
-                            animatedIconBuilder: (i, a, c) => Center(child: Text(a.value, style: const TextStyle(color: Colors.white))),
-                            foregroundIndicatorIconBuilder: (i, a) => Center(child: Text(a.current, style: const TextStyle(color: Colors.black87))),
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderWidth: 0,
-                            height: 30.0,
-                            colorBuilder: (i) {
-                              switch (i) {
-                                case "0-100":
-                                  return Colors.redAccent;
-                                case "100+":
-                                  return Colors.lightGreen;
-                                case "days":
-                                  return Colors.amberAccent;
-                                default:
-                                  return Colors.white;
-                              }
-                            },
-                            onChanged: (i) {
-                              setState(() {
-                                switchNums = i;
-                                _valueUsers = getUserValues("${widget.type}$switchNums")['default'] as double;
-                              });
-                            },
-                            values: const ["0-100", "100+"],
-                          ),
+                            AnimatedToggleSwitch<String>.custom(
+                              current: switchNums,
+                              iconOpacity: 0.2,
+                              indicatorSize: const Size.fromWidth(80),
+                              animatedIconBuilder: (i, a, c) => Center(child: Text(a.value, style: const TextStyle(color: Colors.white))),
+                              foregroundIndicatorIconBuilder: (i, a) => Center(child: Text(a.current, style: const TextStyle(color: Colors.black87))),
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderWidth: 0,
+                              height: 30.0,
+                              colorBuilder: (i) {
+                                switch (i) {
+                                  case "0-100":
+                                    return Colors.redAccent;
+                                  case "100+":
+                                    return Colors.lightGreen;
+                                  case "days":
+                                    return Colors.amberAccent;
+                                  default:
+                                    return Colors.white;
+                                }
+                              },
+                              onChanged: (i) {
+                                setState(() {
+                                  switchNums = i;
+                                  _valueUsers = getUserValues("${widget.type}$switchNums")['default'] as double;
+                                });
+                              },
+                              values: const ["0-100", "100+"],
+                            ),
                           const SizedBox(
                             height: 10.0,
                           ),
@@ -549,7 +556,8 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                                           padding: const EdgeInsets.all(10.0),
                                                           child: Text(
                                                             item,
-                                                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white.withOpacity(0.9), fontWeight: FontWeight.w400),
+                                                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                                                fontSize: 14.0, color: Colors.white.withOpacity(0.9), fontWeight: FontWeight.w400),
                                                             textAlign: TextAlign.start,
                                                           ),
                                                         ),
@@ -592,18 +600,26 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (_amountController.text.isNotEmpty)
-                                    if(widget.type == "spin")
+                                    if (widget.type == "spin")
                                       Expanded(
-                                        child: AutoSizeText("Jackpot ${_valueUsers.toInt() * double.parse(_amountController.text)} ${selectedCoin?.coin?.ticker ?? ""}", maxLines: 1, minFontSize: 8.0, textAlign: TextAlign.center,)
-                                      ),
+                                          child: AutoSizeText(
+                                        "Jackpot ${_valueUsers.toInt() * double.parse(_amountController.text)} ${selectedCoin?.coin?.ticker ?? ""}",
+                                        maxLines: 1,
+                                        minFontSize: 8.0,
+                                        textAlign: TextAlign.center,
+                                      )),
                                   if (_amountController.text.isNotEmpty)
-                                  if(widget.type != "spin")
-                                    Expanded(
-                                      child: AutoSizeText("${_valueUsers.toInt()} winners will be rewarded ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin?.coin?.ticker ?? ""}", maxLines: 1, minFontSize: 8.0, textAlign: TextAlign.center,)
-                                    ),
+                                    if (widget.type != "spin")
+                                      Expanded(
+                                          child: AutoSizeText(
+                                        "${_valueUsers.toInt()} winners will be rewarded ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin?.coin?.ticker ?? ""}",
+                                        maxLines: 1,
+                                        minFontSize: 8.0,
+                                        textAlign: TextAlign.center,
+                                      )),
                                   if (_amountController.text.isEmpty)
                                     Text(
-                                      widget.type == "spin" ? "Please enter ticket cost": "Please enter an amount",
+                                      widget.type == "spin" ? "Please enter ticket cost" : "Please enter an amount",
                                       style: const TextStyle(color: Colors.pinkAccent, fontWeight: FontWeight.w800),
                                     ),
                                 ],

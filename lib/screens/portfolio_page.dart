@@ -31,7 +31,6 @@ import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/providers/holdings_provider.dart';
 import 'package:rocketbot/screens/main_screen.dart';
 import 'package:rocketbot/screens/notification_screen.dart';
-import 'package:rocketbot/screens/referral_screen.dart';
 import 'package:rocketbot/storage/app_database.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/globals.dart' as globals;
@@ -108,7 +107,12 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     Future.delayed(Duration.zero, () async {
       _dropValue = AppLocalizations.of(context)!.deflt;
       _dropValues.clear();
-      _dropValues = [AppLocalizations.of(context)!.deflt, AppLocalizations.of(context)!.alphabeticall, AppLocalizations.of(context)!.by_amount, AppLocalizations.of(context)!.by_value];
+      _dropValues = [
+        AppLocalizations.of(context)!.deflt,
+        AppLocalizations.of(context)!.alphabeticall,
+        AppLocalizations.of(context)!.by_amount,
+        AppLocalizations.of(context)!.by_value
+      ];
       var i = await SecureStorage.readStorage(key: globals.sortType);
       if (i == null) {
         _dropValue = _dropValues[0];
@@ -133,7 +137,6 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
         var bundleOK = numDots < 3 ? true : false;
         var st = tempPath.split("/data/user");
         var projectAppID = await PackageInfo.fromPlatform().then((value) => value.packageName);
-        print(projectAppID);
         if (projectAppID == "com.m1chl.rocketbot" && st.length == 2 && bundleOK && !tempPath.contains("virtual")) {
           return true;
         } else {
@@ -299,7 +302,9 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
       try {
         await _interface.post('code/submit', {"referral": code, "uuid": udid, "ver": 3}, pos: true);
         await SecureStorage.writeStorage(key: "refCode", value: code);
-        if (context.mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way|");
+        if (context.mounted) {
+          Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way|");
+        }
       } catch (e) {
         if (context.mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.error.toLowerCase()}", e.toString());
       }
@@ -491,9 +496,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                           width: 25,
                                           child: NeuButton(
                                             onTap: () {
-                                              Navigator.of(context)
-                                                  .push(pushRoute(const NotificationScreen()))
-                                                  .then((value) => _getUnread());
+                                              Navigator.of(context).push(pushRoute(const NotificationScreen())).then((value) => _getUnread());
                                             },
                                             imageIcon: Image.asset(
                                               _unreadNot > 0 ? "images/notification_on.png" : "images/notification_off.png",
@@ -511,22 +514,28 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                         ),
                       ),
                       SizedBox(
-                        width: double.infinity,
-                        height: 115,
-                        child: Container(
-                                margin: const EdgeInsets.all(10.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  image: const DecorationImage(
-                                      opacity: 0.5, scale: 0.5, filterQuality: FilterQuality.high, alignment: Alignment(0.0, 1.0), fit: BoxFit.cover, image: AssetImage("images/bal.png")),
-                                  gradient: const RadialGradient(center: Alignment(1.5, -3.0), radius: 5.0, colors: [
-                                    Color(0xFF7388FF),
-                                    Color(0xFFCA73FF),
-                                    Color(0xFFFF739D),
-                                  ]),
-                                ),
-                                child: m.when(data: (data) {
-                                  return Padding(
+                          width: double.infinity,
+                          height: 115,
+                          child: Container(
+                            margin: const EdgeInsets.all(10.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0),
+                              image: const DecorationImage(
+                                  opacity: 0.5,
+                                  scale: 0.5,
+                                  filterQuality: FilterQuality.high,
+                                  alignment: Alignment(0.0, 1.0),
+                                  fit: BoxFit.cover,
+                                  image: AssetImage("images/bal.png")),
+                              gradient: const RadialGradient(center: Alignment(1.5, -3.0), radius: 5.0, colors: [
+                                Color(0xFF7388FF),
+                                Color(0xFFCA73FF),
+                                Color(0xFFFF739D),
+                              ]),
+                            ),
+                            child: m.when(
+                              data: (data) {
+                                return Padding(
                                   padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 8.0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -595,15 +604,23 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                         ],
                                       ),
                                     ],
-                                  ), );
-                                }, error: (error, st) => Center(child: Text(error.toString(), style: Theme.of(context).textTheme.titleMedium,)), loading: () => Center(child: JumpingDotsProgressIndicator(
+                                  ),
+                                );
+                              },
+                              error: (error, st) => Center(
+                                  child: Text(
+                                error.toString(),
+                                style: Theme.of(context).textTheme.titleMedium,
+                              )),
+                              loading: () => Center(
+                                child: JumpingDotsProgressIndicator(
                                   numberOfDots: 3,
                                   color: Colors.white70,
                                   fontSize: 20.0,
-                                ),),
                                 ),
-                              )
-                      ),
+                              ),
+                            ),
+                          )),
                       if (!_emailOK)
                         GestureDetector(
                           onTap: () {
@@ -692,7 +709,11 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                                   width: 130,
                                                   child: Padding(
                                                     padding: const EdgeInsets.only(bottom: 2.0),
-                                                    child: Text(e, style: Theme.of(context).textTheme.displayMedium!.copyWith(fontSize: 11.0, color: Colors.white70)),
+                                                    child: Text(e,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .displayMedium!
+                                                            .copyWith(fontSize: 11.0, color: Colors.white70)),
                                                   ))))
                                           .toList(),
                                     ),
@@ -735,7 +756,10 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                         child: FittedBox(
                                             child: AutoSizeText(
                                           AppLocalizations.of(context)!.hide_zeros,
-                                          style: Theme.of(context).textTheme.displayMedium!.copyWith(fontSize: 11.0, color: _hideZero ? Colors.white : Colors.white30),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .displayMedium!
+                                              .copyWith(fontSize: 11.0, color: _hideZero ? Colors.white : Colors.white30),
                                         )),
                                       ),
                                     ),
@@ -980,7 +1004,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                             //       ),
                             //     )),
                             SizedBox(
-                              // SizedBox(
+                                // SizedBox(
                                 height: 40,
                                 child: Center(
                                   child: Directionality(
@@ -990,8 +1014,8 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                       child: TextButton(
                                         style: ButtonStyle(
                                             backgroundColor: MaterialStateProperty.resolveWith((states) => qrColors(states)),
-                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
+                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
                                         onPressed: () async {
                                           setState(() {
                                             popMenu = false;
@@ -1075,32 +1099,34 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
       ),
     );
   }
- var ps = false;
-   processScan(String? s) async{
-    if(ps) return;
+
+  var ps = false;
+
+  processScan(String? s) async {
+    if (ps) return;
     ps = true;
     try {
-      if(s != null){
-            if (s.contains('loginqr')) {
-              var ss = s.split(";")[1];
-                try {
-                  NetInterface interface = NetInterface();
-                  var tok = ss;
-                  await interface.post("/login/qr/auth", {"token": tok}, web: true, debug: true);
-                  if(context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login successful")));
-                } catch (e) {
-                  debugPrint(e.toString());
-                  if(context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login failed")));
-                }
-
-            }else{
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.qr_scan_error)));
-            }
-          }else{
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.qr_scan_error)));
+      if (s != null) {
+        if (s.contains('loginqr')) {
+          var ss = s.split(";")[1];
+          try {
+            NetInterface interface = NetInterface();
+            var tok = ss;
+            var rcktToken = await SecureStorage.readStorage(key: NetInterface.token);
+            var rcktRefreshToken = await SecureStorage.readStorage(key: NetInterface.tokenRefresh);
+            await interface.post("/login/qr/auth", {"token": tok, "tokenRocketbot" : rcktToken, "tokenRocketbotRefresh": rcktRefreshToken}, web: true, debug: true);
+            if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login successful")));
+          } catch (e) {
+            debugPrint(e.toString());
+            if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login failed")));
           }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.qr_scan_error)));
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.qr_scan_error)));
+      }
     } catch (e) {
-      print(e);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       ps = false;

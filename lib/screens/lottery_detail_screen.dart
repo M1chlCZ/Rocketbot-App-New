@@ -77,13 +77,18 @@ class _LotteryDetailScreenState extends State<LotteryDetailScreen> {
                                     child: Row(
                                       children: [
                                         Expanded(
-                                          child: smallBlockTwo("Reply with phrase #${ag.coin?.cryptoId ?? ""}, retweet & like the tweet to take part in ${ag.coin?.cryptoId ?? ""} spin wheel", "Rules", color: Colors.green),
+                                          child: smallBlockTwo(
+                                              "Reply with phrase #${ag.coin?.cryptoId ?? ""}, retweet & like the tweet to take part in ${ag.coin?.cryptoId ?? ""} spin wheel",
+                                              "Rules",
+                                              color: Colors.green),
                                         ),
                                       ],
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 20.0,),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                                   child: SizedBox(
@@ -164,7 +169,9 @@ class _LotteryDetailScreenState extends State<LotteryDetailScreen> {
                                         itemBuilder: (ctx, index) {
                                           return LotteryMembersTile(member: memba[index], callBack: (AirdropMembers a) {});
                                         })),
-                                const SizedBox(height: 100.0,),
+                                const SizedBox(
+                                  height: 100.0,
+                                ),
                               ]),
                             ),
                             Align(
@@ -194,7 +201,6 @@ class _LotteryDetailScreenState extends State<LotteryDetailScreen> {
                           ),
                         );
                       case Status.error:
-
                         return Container();
                     }
                   } else {

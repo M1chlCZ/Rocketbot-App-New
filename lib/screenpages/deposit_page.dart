@@ -314,7 +314,7 @@ class DepositPageState extends State<DepositPage> {
                     decoration: const BoxDecoration(color: Colors.transparent,borderRadius: BorderRadius.all(Radius.circular(5.0))),
                     margin: const EdgeInsets.all(0.0),
                     // child: Image.asset("images/qr_code_scan.png"),
-                    child: QrImage(
+                    child: QrImageView(
                       dataModuleStyle: const QrDataModuleStyle(
                           dataModuleShape: QrDataModuleShape.square),
                       eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square),
@@ -639,7 +639,7 @@ class DepositPageState extends State<DepositPage> {
                             Share.share(qr);
                             Navigator.pop(context);
                           },
-                          child: QrImage(
+                          child: QrImageView(
                             dataModuleStyle: const QrDataModuleStyle(
                                 dataModuleShape: QrDataModuleShape.square),
                             eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square),

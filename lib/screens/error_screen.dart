@@ -10,6 +10,11 @@ class ErrorScreen extends StatefulWidget {
 class _ErrorScreenState extends State<ErrorScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: SizedBox(child: Center(child:  Text("Unauthorized usage of the app"),),));
+    return const Scaffold(
+        body: SizedBox(
+      child: Center(
+        child: Text("Unauthorized usage of the app"),
+      ),
+    ));
   }
 }

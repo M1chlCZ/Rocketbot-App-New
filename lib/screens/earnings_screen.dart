@@ -2,8 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/stake_balance_block.dart';
 import 'package:rocketbot/cache/balances_cache.dart';
@@ -26,7 +26,7 @@ class EarningsScreen extends StatefulWidget {
   State<EarningsScreen> createState() => _EarningsScreenState();
 }
 
-class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAliveClientMixin<EarningsScreen>{
+class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAliveClientMixin<EarningsScreen> {
   NetInterface interface = NetInterface();
   List<Sector> list = [];
   double totalUSD = 0.0;
@@ -62,7 +62,6 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
     }
   }
 
-
   void getEarnings() async {
     List<Color> colors = const [
       Color(0xE6A6D23F),
@@ -97,7 +96,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
       setState(() {
         empty = false;
       });
-    }else{
+    } else {
       setState(() {
         empty = true;
       });
@@ -145,17 +144,17 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                           Color(0xFF346CBD),
                           Color(0xFF9D9BFD),
                         ]),
-                          borderRadius: BorderRadius.circular(15.0),
-                          border: Border.all(color: Colors.white24, width: 1.0),
-                          boxShadow: [
-                            const BoxShadow(color: Colors.black26, blurRadius: 1.8, spreadRadius: 0.5),
-                            BoxShadow(
-                              color: Colors.white.withOpacity(0.1),
-                              blurRadius: 10.0,
-                              spreadRadius: 5.0,
-                              offset: const Offset(0.0, 0.0),
-                            ),
-                          ],
+                        borderRadius: BorderRadius.circular(15.0),
+                        border: Border.all(color: Colors.white24, width: 1.0),
+                        boxShadow: [
+                          const BoxShadow(color: Colors.black26, blurRadius: 1.8, spreadRadius: 0.5),
+                          BoxShadow(
+                            color: Colors.white.withOpacity(0.1),
+                            blurRadius: 10.0,
+                            spreadRadius: 5.0,
+                            offset: const Offset(0.0, 0.0),
+                          ),
+                        ],
                       ),
                       child: Stack(
                         children: [
@@ -163,9 +162,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                             alignment: Alignment.bottomLeft,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                  width: 40,
-                                  child: Image.asset("images/equity.png", color: Colors.white54, fit: BoxFit.fitWidth)),
+                              child: SizedBox(width: 40, child: Image.asset("images/equity.png", color: Colors.white54, fit: BoxFit.fitWidth)),
                             ),
                           ),
                           Column(
@@ -193,14 +190,19 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                                         ),
                                         Text(
                                           "${totalUSD.toStringAsFixed(2)} \$",
-                                          style: Theme.of(context).textTheme.displaySmall!.copyWith(fontWeight: FontWeight.w800, fontSize: 18.0, color: const Color(
-                                              0xFFC3F649)),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .displaySmall!
+                                              .copyWith(fontWeight: FontWeight.w800, fontSize: 18.0, color: const Color(0xFFC3F649)),
                                         ),
                                       ],
                                     ),
                                     const Padding(
                                       padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 5.0),
-                                      child: Divider(height: 2.0, color: Colors.white70,),
+                                      child: Divider(
+                                        height: 2.0,
+                                        color: Colors.white70,
+                                      ),
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -211,78 +213,105 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
                                         ),
                                         Expanded(
                                           child: SizedBox(
-                                              height: 200,
-                                            child:Center(
+                                            height: 200,
+                                            child: Center(
                                               child: ListView.builder(
                                                 shrinkWrap: true,
-                                                itemBuilder: (context, index){
-                                                return Column(
-                                                  children: [
-                                                    Container(
-                                                      decoration: BoxDecoration(boxShadow: [
-                                                          BoxShadow(
-                                                            color: Colors.black.withOpacity(0.1),
-                                                            blurRadius: 2.0,
-                                                            spreadRadius: 0.5,
-                                                            offset: const Offset(0.0, 0.0),
+                                                itemBuilder: (context, index) {
+                                                  return Column(
+                                                    children: [
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: Colors.black.withOpacity(0.1),
+                                                              blurRadius: 2.0,
+                                                              spreadRadius: 0.5,
+                                                              offset: const Offset(0.0, 0.0),
+                                                            ),
+                                                          ],
+                                                          borderRadius: BorderRadius.circular(8.0),
+                                                          gradient: LinearGradient(
+                                                            begin: Alignment.topLeft,
+                                                            end: Alignment.bottomRight,
+                                                            colors: [
+                                                              list[index].col.withOpacity(1.0),
+                                                              list[index].col.withOpacity(0.8),
+                                                            ],
                                                           ),
-                                                        ],
-                                                        borderRadius: BorderRadius.circular(8.0),
-                                                        gradient: LinearGradient(
-                                                          begin: Alignment.topLeft,
-                                                          end: Alignment.bottomRight,
-                                                          colors: [
-                                                            list[index].col.withOpacity(1.0),
-                                                            list[index].col.withOpacity(0.8),
-                                                          ],
+                                                        ),
+                                                        height: 30,
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.all(8.0),
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              AutoSizeText(
+                                                                list[index].nam,
+                                                                maxLines: 1,
+                                                                minFontSize: 4.0,
+                                                                style: Theme.of(context)
+                                                                    .textTheme
+                                                                    .displaySmall!
+                                                                    .copyWith(fontSize: 12.0, color: Colors.white70),
+                                                              ),
+                                                              AutoSizeText(
+                                                                list[index].val.toString(),
+                                                                maxLines: 1,
+                                                                minFontSize: 4.0,
+                                                                style: Theme.of(context)
+                                                                    .textTheme
+                                                                    .displaySmall!
+                                                                    .copyWith(fontSize: 14.0, color: Colors.white70),
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
                                                       ),
-                                                      height: 30,
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            AutoSizeText(list[index].nam, maxLines: 1, minFontSize: 4.0, style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 12.0, color: Colors.white70),),
-                                                            AutoSizeText(list[index].val.toString(), maxLines: 1, minFontSize: 4.0, style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 14.0, color: Colors.white70),),
-                                                          ],
-                                                        ),
+                                                      const Divider(
+                                                        height: 5.0,
+                                                        color: Colors.transparent,
                                                       ),
-                                                    ),
-                                                    const Divider(height: 5.0, color: Colors.transparent,),
-                                                  ],
-                                                );
-                                              }, itemCount: list.length,),
-                                            ),
+                                                    ],
+                                                  );
+                                                },
+                                                itemCount: list.length,
+                                              ),
                                             ),
                                           ),
-                                        SizedBox(
-                                            height: 200,
-                                            width: 200,
-                                            child: EarningsChart(list)),
+                                        ),
+                                        SizedBox(height: 200, width: 200, child: EarningsChart(list)),
                                       ],
                                     ),
                                   ],
                                 )
+                              else if (empty)
+                                SizedBox(
+                                  height: 230,
+                                  child: Center(
+                                    child: Text(
+                                      "No data for earnings available",
+                                      style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 18.0, color: Colors.white70),
+                                    ),
+                                  ),
+                                )
                               else
-                                if (empty)
-                                  SizedBox(
-                                    height: 230,
-                                    child:
-                                    Center(child: Text("No data for earnings available", style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 18.0, color: Colors.white70),),),
-                                  )
-                                else
                                 const SizedBox(
                                   height: 230,
-                                  child:
-                                   Center(child: CircularProgressIndicator(color: Colors.white54,),),
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white54,
+                                    ),
+                                  ),
                                 ),
                             ],
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20,),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Flexible(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 3.0, left: 5.0, right: 5.0),
@@ -353,19 +382,19 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
     var depAddr = await _getDepositAddr(h.coin!.id!);
     if (context.mounted) {
       Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-            return FarmMainScreen(
-              changeFree: _changeFree,
-              depositAddress: depAddr,
-              depositPosAddress: h.posCoin!.depositAddr!,
-              activeCoin: h.coin!,
-              coinBalance: h,
-              free: h.free!,
-              blockTouch: _blockTouch,
-              masternode: posCoin!.coinsMn!.contains(h.coin?.id),
-            );
-          }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-            return FadeTransition(opacity: animation, child: child);
-          }));
+        return FarmMainScreen(
+          changeFree: _changeFree,
+          depositAddress: depAddr,
+          depositPosAddress: h.posCoin!.depositAddr!,
+          activeCoin: h.coin!,
+          coinBalance: h,
+          free: h.free!,
+          blockTouch: _blockTouch,
+          masternode: posCoin!.coinsMn!.contains(h.coin?.id),
+        );
+      }, transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+        return FadeTransition(opacity: animation, child: child);
+      }));
     }
   }
 
@@ -390,9 +419,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
     }
   }
 
-  _blockTouch(bool touch) {
-
-  }
+  _blockTouch(bool touch) {}
 
   @override
   bool get wantKeepAlive => true;
