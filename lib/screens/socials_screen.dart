@@ -34,10 +34,12 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
   Socials? _discord;
   Socials? _twitter;
   Socials? _telegram;
+  Socials? _twitch;
 
   SocialMediaAccounts? _twitterAccount;
   SocialMediaAccounts? _telegramAccount;
   SocialMediaAccounts? _discordAccount;
+  SocialMediaAccounts? _twitchAccount;
 
   bool _discordDetails = false;
 
@@ -61,6 +63,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
     await _loadDiscordDirective();
     await _loadTwitterDirective();
     await _loadTelegramDirective();
+    await _loadTwitchDirective();
   }
 
   _getUserInfo() async {
@@ -70,6 +73,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
       _twitterAccount = null;
       _telegramAccount = null;
       _discordAccount = null;
+      _twitchAccount = null;
       if (d.hasError == false) {
         _socials.clear();
         _me = d;
@@ -102,6 +106,11 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
     } catch (e) {
       debugPrint(e.toString());
     }
+    try {
+      _twitchAccount = _me!.data!.socialMediaAccounts?.firstWhere((element) => element.socialMedia == 4);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   _loadDiscordDirective() async {
@@ -109,11 +118,11 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
       "socialMedia": 1,
     };
     try {
-      final response = await _interface.post("Auth/CreateAccountConnectingKey", request);
+      final response = await _interface.get("/Auth/ConnectAccount?socialMedia=1",);
       var d = Socials.fromJson(response);
       if (d.hasError == false) {
         _discord = d;
-        _discordTextController.text = 'connect ${_discord!.data!.key!}';
+        _discordTextController.text = 'connect ${_discord!.data!.url!}';
         setState(() {});
       } else {
         debugPrint(d.error);
@@ -124,11 +133,8 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
   }
 
   _loadTwitterDirective() async {
-    Map<String, dynamic> request = {
-      "socialMedia": 3,
-    };
     try {
-      final response = await _interface.post("Auth/CreateAccountConnectingKey", request);
+      final response = await _interface.get("/Auth/ConnectAccount?socialMedia=3");
       var d = Socials.fromJson(response);
       if (d.hasError == false) {
         _twitter = d;
@@ -142,14 +148,26 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
   }
 
   _loadTelegramDirective() async {
-    Map<String, dynamic> request = {
-      "socialMedia": 2,
-    };
     try {
-      final response = await _interface.post("Auth/CreateAccountConnectingKey", request);
+      final response = await _interface.get("/Auth/ConnectAccount?socialMedia=2");
       var d = Socials.fromJson(response);
       if (d.hasError == false) {
         _telegram = d;
+        setState(() {});
+      } else {
+        debugPrint(d.error);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  _loadTwitchDirective() async {
+    try {
+      final response = await _interface.get("/Auth/ConnectAccount?socialMedia=4", debug: true);
+      var d = Socials.fromJson(response);
+      if (d.hasError == false) {
+        _twitch = d;
         setState(() {});
       } else {
         debugPrint(d.error);
@@ -176,7 +194,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
       } else {
         await _loadDirectives();
         setState(() {});
-        if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, d.error);
+        if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, d.error!);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -277,140 +295,34 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
           height: 10.0,
         ),
         SocialMediaCard(
+          name: 'Twitch',
+          cardActiveColor: const Color(0xFF6442A5),
+          pictureName: 'images/twitch.png',
+          onTap: () async {
+            if (!_socials.contains(4)) {
+              await _loadTwitchDirective();
+              _launchURL(_twitch!.data!.url!);
+            }
+          },
+          unlink: _socialsDisconnect,
+          socials: _twitchAccount,
+        ),
+        const SizedBox(
+          height: 10.0,
+        ),
+        SocialMediaCard(
           name: 'Discord',
           cardActiveColor: const Color(0xFF7289DA),
           pictureName: 'images/discord.png',
           onTap: () async {
             if (!_socials.contains(1)) {
               await _loadDiscordDirective();
-              setState(() {
-                _discordDetails ? _discordDetails = false : _discordDetails = true;
-              });
+              _launchURL(_discord!.data!.url!);
             }
           },
           unlink: _socialsDisconnect,
           socials: _discordAccount,
         ),
-        AnimatedOpacity(
-          duration: const Duration(milliseconds: 300),
-          opacity: _discordDetails ? 1.0 : 0.0,
-          child: Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(left: 10.0, right: 20.0),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                color: Color(0xFF7289DA),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          _launchURL('https://discord.gg/QJP74zNaJC');
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              '- ${AppLocalizations.of(context)!.join_discord}',
-                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0),
-                            ),
-                            const SizedBox(
-                              width: 5.0,
-                            ),
-                            Image.asset(
-                              'images/link.png',
-                              width: 20.0,
-                              color: Colors.white,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 12.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            '- ${AppLocalizations.of(context)!.send_discord}',
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    Container(
-                      // margin: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                      width: double.infinity,
-                      height: 30.0,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                        color: Color(0xFF252525),
-                      ),
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5.0, left: 5.0),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.82,
-                              child: AutoSizeTextField(
-                                maxLines: 1,
-                                minFontSize: 8.0,
-                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontSize: 14.0),
-                                autocorrect: false,
-                                readOnly: true,
-                                controller: _discordTextController,
-                                textAlign: TextAlign.left,
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                                  isDense: true,
-                                  hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.white54, fontSize: 14.0),
-                                  hintText: '',
-                                  enabledBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.transparent),
-                                  ),
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.transparent),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 0.0, right: 3.0),
-                              child: SizedBox(
-                                width: 30.0,
-                                height: 25.0,
-                                child: FlatCustomButton(
-                                    onTap: () {
-                                      Clipboard.setData(ClipboardData(text: 'connect ${_discord!.data!.key!}'));
-                                    },
-                                    color: const Color(0xFF7289DA),
-                                    splashColor: Colors.black38,
-                                    child: const Icon(
-                                      Icons.content_copy,
-                                      size: 18.0,
-                                      color: Colors.white,
-                                    )),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-        )
       ])
     ])));
   }

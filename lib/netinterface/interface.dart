@@ -28,6 +28,7 @@ class NetInterface {
   Future<dynamic> get(String url, {String? request, bool pos = false, bool web = false, bool debug = false}) async {
     String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
     var tk = await SecureStorage.readStorage(key: pos || web ? posToken : token); //TODO
+    print(tk);
     dynamic responseJson;
     try {
       var curl = "";

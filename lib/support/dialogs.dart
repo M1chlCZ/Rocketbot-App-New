@@ -75,6 +75,7 @@ class Dialogs {
                         controller: codeControl,
                         textAlign: TextAlign.center,
                         maxLines: 1,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           isDense: false,
                           contentPadding: const EdgeInsets.only(bottom: 0.0),

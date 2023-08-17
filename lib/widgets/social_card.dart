@@ -101,7 +101,7 @@ class SocialMediaCardState extends State<SocialMediaCard>with TickerProviderStat
                             width: 22.0,
                             child: Image.asset(
                               widget.pictureName,
-                              color: Colors.white70,
+                              color: widget.name != "Twitch"? Colors.white70 : null,
                             )),
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0, bottom: 0.0),

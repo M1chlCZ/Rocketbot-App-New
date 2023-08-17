@@ -1112,9 +1112,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
           try {
             NetInterface interface = NetInterface();
             var tok = ss;
-            var rcktToken = await SecureStorage.readStorage(key: NetInterface.token);
-            var rcktRefreshToken = await SecureStorage.readStorage(key: NetInterface.tokenRefresh);
-            await interface.post("/login/qr/auth", {"token": tok, "tokenRocketbot" : rcktToken, "tokenRocketbotRefresh": rcktRefreshToken}, web: true, debug: true);
+            await interface.post("/login/qr/auth", {"token": tok}, web: true, debug: true);
             if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login successful")));
           } catch (e) {
             debugPrint(e.toString());

@@ -84,7 +84,12 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
     if (ea.earnings != null) {
       for (var ee in ea.earnings!) {
         var val = ee.amount!;
-        CoinBalance bal = balList.firstWhere((element) => element.coin!.id! == ee.idCoin);
+        CoinBalance? bal;
+        try {
+          bal = balList.firstWhere((element) => element.coin!.id! == ee.idCoin);
+        } catch (e) {
+          continue;
+        }
         Coin c = bal.coin!;
         totalUSD += bal.priceData!.prices!.usd!.toDouble() * ee.amount!.toDouble();
         Sector s = Sector(val: val, col: colors[i], nam: c.ticker!, rad: 15);

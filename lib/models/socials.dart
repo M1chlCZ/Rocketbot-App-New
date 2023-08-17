@@ -1,75 +1,42 @@
-/// message : "Successfully executed."
-/// hasError : false
-/// error : null
-/// data : {"key":"a39cb8a7-fd2e-42ed-9207-e187c02e602e","url":"https://twitter.com/messages/compose?recipient_id=1273550785989804032&text=connect a39cb8a7-fd2e-42ed-9207-e187c02e602e"}
-
 class Socials {
-  Socials({
-      String? message, 
-      bool? hasError, 
-      dynamic error, 
-      Data? data,}){
-    _message = message;
-    _hasError = hasError;
-    _error = error;
-    _data = data;
-}
+  String? message;
+  bool? hasError;
+  Null? error;
+  Data? data;
 
-  Socials.fromJson(dynamic json) {
-    _message = json['message'];
-    _hasError = json['hasError'];
-    _error = json['error'];
-    _data = json['data'] != null ? Data.fromJson(json['data']) : null;
+  Socials({this.message, this.hasError, this.error, this.data});
+
+  Socials.fromJson(Map<String, dynamic> json) {
+    message = json['message'];
+    hasError = json['hasError'];
+    error = json['error'];
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
-  String? _message;
-  bool? _hasError;
-  dynamic _error;
-  Data? _data;
-
-  String? get message => _message;
-  bool? get hasError => _hasError;
-  dynamic get error => _error;
-  Data? get data => _data;
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['message'] = _message;
-    map['hasError'] = _hasError;
-    map['error'] = _error;
-    if (_data != null) {
-      map['data'] = _data?.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['message'] = message;
+    data['hasError'] = hasError;
+    data['error'] = error;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
     }
-    return map;
+    return data;
   }
-
 }
-
-/// key : "a39cb8a7-fd2e-42ed-9207-e187c02e602e"
-/// url : "https://twitter.com/messages/compose?recipient_id=1273550785989804032&text=connect a39cb8a7-fd2e-42ed-9207-e187c02e602e"
 
 class Data {
-  Data({
-      String? key, 
-      String? url,}){
-    _key = key;
-    _url = url;
-}
+  String? url;
 
-  Data.fromJson(dynamic json) {
-    _key = json['key'];
-    _url = json['url'];
+  Data({this.url});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    url = json['url'];
   }
-  String? _key;
-  String? _url;
-
-  String? get key => _key;
-  String? get url => _url;
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['key'] = _key;
-    map['url'] = _url;
-    return map;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['url'] = url;
+    return data;
   }
-
 }
