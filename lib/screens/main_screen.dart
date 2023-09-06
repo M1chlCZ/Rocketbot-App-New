@@ -123,7 +123,7 @@ class MainScreenState extends State<MainScreen> {
       "coinId": _coinActive.id!,
     };
     try {
-      final response = await _interface.post("Transfers/CreateDepositAddress", request, debug: true);
+      final response = await _interface.post("Transfers/CreateDepositAddress", request, debug: false);
       var d = DepositAddress.fromJson(response);
       setState(() {
         _depositAddr = d.data!.address!;

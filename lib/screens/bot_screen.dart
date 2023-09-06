@@ -263,19 +263,37 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                   animatedIconBuilder: (i, a, c) => Center(child: Text(a.value, style: const TextStyle(color: Colors.white))),
                                   foregroundIndicatorIconBuilder: (i, a) =>
                                       Center(child: Text(a.current, style: const TextStyle(color: Colors.black87))),
-                                  borderRadius: BorderRadius.circular(8.0),
+                                  style: ToggleStyle(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
                                   borderWidth: 0,
                                   height: 40.0,
-                                  colorBuilder: (i) {
+                                  styleBuilder: (i) {
                                     switch (i) {
                                       case "minutes":
-                                        return Colors.lightBlue;
+                                        return ToggleStyle(
+                                          borderRadius: BorderRadius.circular(8.0),
+                                          indicatorColor: Colors.lightBlue,
+                                          backgroundColor: Colors.lightBlue.withOpacity(0.2),
+                                        );
                                       case "hours":
-                                        return Colors.lightGreen;
+                                        return ToggleStyle(
+                                          borderRadius: BorderRadius.circular(8.0),
+                                          indicatorColor: Colors.lightGreen,
+                                          backgroundColor: Colors.lightGreen.withOpacity(0.2),
+                                        );
                                       case "days":
-                                        return Colors.amberAccent;
+                                        return ToggleStyle(
+                                          borderRadius: BorderRadius.circular(8.0),
+                                          indicatorColor: Colors.amberAccent,
+                                          backgroundColor: Colors.amberAccent.withOpacity(0.2),
+                                        );
                                       default:
-                                        return Colors.white;
+                                        return ToggleStyle(
+                                          borderRadius: BorderRadius.circular(8.0),
+                                          indicatorColor: Colors.white,
+                                          backgroundColor: Colors.white.withOpacity(0.2),
+                                        );
                                     }
                                   },
                                   onChanged: (i) {
@@ -429,19 +447,37 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                               indicatorSize: const Size.fromWidth(80),
                               animatedIconBuilder: (i, a, c) => Center(child: Text(a.value, style: const TextStyle(color: Colors.white))),
                               foregroundIndicatorIconBuilder: (i, a) => Center(child: Text(a.current, style: const TextStyle(color: Colors.black87))),
-                              borderRadius: BorderRadius.circular(8.0),
+                              style: ToggleStyle(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
                               borderWidth: 0,
                               height: 30.0,
-                              colorBuilder: (i) {
+                              styleBuilder: (i) {
                                 switch (i) {
                                   case "0-100":
-                                    return Colors.redAccent;
+                                    return ToggleStyle(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      indicatorColor: Colors.redAccent,
+                                      backgroundColor: Colors.redAccent.withOpacity(0.2),
+                                    );
                                   case "100+":
-                                    return Colors.lightGreen;
+                                    return ToggleStyle(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      indicatorColor: Colors.lightGreen,
+                                      backgroundColor: Colors.lightGreen.withOpacity(0.2),
+                                    );
                                   case "days":
-                                    return Colors.amberAccent;
+                                    return ToggleStyle(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      indicatorColor: Colors.amberAccent,
+                                      backgroundColor: Colors.amberAccent.withOpacity(0.2),
+                                    );
                                   default:
-                                    return Colors.white;
+                                    return ToggleStyle(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      indicatorColor: Colors.white,
+                                      backgroundColor: Colors.white.withOpacity(0.2),
+                                    );
                                 }
                               },
                               onChanged: (i) {
@@ -684,9 +720,9 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Amount must be greater than 0")));
                                 }
                               },
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Text("Share", style: TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w400)),
                                   Icon(Icons.share, color: Colors.white),
                                 ],
@@ -788,7 +824,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
     if (response == "ERROR_APP_NOT_AVAILABLE") {
       if (context.mounted) Dialogs.openAlertBox(context, "Error", "Twitter app isn't present on your device");
     } else {
-      print("error");
+      debugPrint("error");
     }
   }
 
@@ -797,7 +833,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
     if (response == "ERROR_APP_NOT_AVAILABLE") {
       if (context.mounted) Dialogs.openAlertBox(context, "Error", "Twitter app isn't present on your device");
     } else {
-      print("error");
+      debugPrint("error");
     }
   }
 

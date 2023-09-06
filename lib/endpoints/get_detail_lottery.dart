@@ -6,7 +6,7 @@ class LotteryDetail {
   final NetInterface _helper = NetInterface();
 
   Future<Map<String, dynamic>?> fetchLottery(int id) async {
-    var s = await _helper.get("Games/GetSpinLottery", request: "id=$id", debug: true);
+    var s = await _helper.get("Games/GetSpinLottery", request: "id=$id", debug: false);
     LotteryDetailsData? activeAirdrop = LotteryDetails.fromJson(s).data!;
     Map<String, dynamic> m = {"activeLottery": activeAirdrop, "members": null};
     return m;

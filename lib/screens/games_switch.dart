@@ -4,8 +4,9 @@ import 'package:rocketbot/widgets/button_flat.dart';
 
 class GameSwitcher extends StatefulWidget {
   final Function(int page)? changeType;
+  final List<String>? games;
 
-  const GameSwitcher({Key? key, this.changeType}) : super(key: key);
+  const GameSwitcher({Key? key, this.changeType, this.games = const ["Giveaway", "Airdrop", "Spin"]}) : super(key: key);
 
   @override
   GameSwitcherState createState() => GameSwitcherState();
@@ -24,94 +25,54 @@ class GameSwitcherState extends State<GameSwitcher> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 300,
+      width: MediaQuery.sizeOf(context).width * 0.8,
       child: Container(
           padding: const EdgeInsets.all(3.0),
           decoration: BoxDecoration(color: const Color(0xFF394359), borderRadius: BorderRadius.circular(8.0)),
           child: Row(children: [
-            Expanded(
-              child: AnimatedContainer(
-                decoration:
-                    BoxDecoration(color: _active == 0 ? const Color(0xFF9D9BFD) : const Color(0x009D9BFD), borderRadius: BorderRadius.circular(5.0)),
-                duration: _duration,
-                child: FlatCustomButton(
-                    color: Colors.transparent,
-                    radius: 8.0,
-                    onTap: () {
-                      setState(() {
-                        _active = 0;
-                      });
-                      widget.changeType!(0);
-                    },
-                    child: SizedBox(
-                      width: 140,
+            for (var i = 0; i < widget.games!.length; i++)
+            widget.games![i] == '*' ?  Expanded(
+                child: AnimatedContainer(
+                  decoration: BoxDecoration(color: _active == i ? const Color(0xFF9D9BFD) : const Color(0x009D9BFD), borderRadius: BorderRadius.circular(5.0)),
+                  duration: _duration,
+                  child: FlatCustomButton(
+                      color: Colors.transparent,
+                      radius: 8.0,
+                      onTap: () {
+                        setState(() {
+                          _active = i;
+                        });
+                        widget.changeType!(i);
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(3.0),
-                        child: AutoSizeText("Giveaway",
-                            maxLines: 1,
-                            minFontSize: 8.0,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold)),
-                      ),
-                    )),
-              ),
-            ),
-            const SizedBox(
-              width: 10.0,
-            ),
-            Expanded(
+                        child: Align(child: Image.asset("images/start.png", height: 30, width: 30)),
+                      )),
+                ),
+              ) : Expanded(
               child: AnimatedContainer(
-                decoration:
-                    BoxDecoration(color: _active == 1 ? const Color(0xFF9D9BFD) : const Color(0x009D9BFD), borderRadius: BorderRadius.circular(5.0)),
-                // opacity: _active == 1 ? 1.0 : 0.4,
+                decoration: BoxDecoration(color: _active == i ? const Color(0xFF9D9BFD) : const Color(0x009D9BFD), borderRadius: BorderRadius.circular(5.0)),
                 duration: _duration,
                 child: FlatCustomButton(
                     color: Colors.transparent,
                     onTap: () {
                       setState(() {
-                        _active = 1;
+                        _active = i;
                       });
-                      widget.changeType!(1);
+                      widget.changeType!(i);
                     },
                     child: SizedBox(
                       width: 120,
-                      child: Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: AutoSizeText("Airdrop",
-                            maxLines: 1,
-                            minFontSize: 8.0,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold)),
-                      ),
-                    )),
-              ),
-            ),
-            const SizedBox(
-              width: 10.0,
-            ),
-            Expanded(
-              child: AnimatedContainer(
-                decoration:
-                    BoxDecoration(color: _active == 2 ? const Color(0xFF9D9BFD) : const Color(0x009D9BFD), borderRadius: BorderRadius.circular(5.0)),
-                // opacity: _active == 1 ? 1.0 : 0.4,
-                duration: _duration,
-                child: FlatCustomButton(
-                    color: Colors.transparent,
-                    onTap: () {
-                      setState(() {
-                        _active = 2;
-                      });
-                      widget.changeType!(2);
-                    },
-                    child: SizedBox(
-                      width: 120,
-                      child: Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: AutoSizeText("Spin",
-                            maxLines: 1,
-                            minFontSize: 8.0,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold)),
+                      height: 36,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: AutoSizeText(widget.games![i],
+                              maxLines: 1,
+                              minFontSize: 8.0,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold)),
+                        ),
                       ),
                     )),
               ),

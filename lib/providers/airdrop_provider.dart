@@ -4,7 +4,7 @@ import 'package:rocketbot/providers/network_provider.dart';
 
 final airdropProvider = FutureProvider.family<Map<String, dynamic>, int>((ref, id) async {
   try {
-    var s = await ref.read(networkProvider).get("Games/Airdrop", request: "id=$id", debug: true);
+    var s = await ref.read(networkProvider).get("Games/Airdrop", request: "id=$id", debug: false);
     AirdropData? activeAirdrop = AirdropDetails.fromJson(s).data!;
     Map<String, dynamic> m = {"activeAirdrop": activeAirdrop, "members": null};
     return m;

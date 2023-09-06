@@ -78,7 +78,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
     List<CoinBalance> balList = await BalanceCache.getAllRecords(forceRefresh: true);
 
     int i = 0;
-    var res = await interface.get("earnings", pos: true, debug: true);
+    var res = await interface.get("earnings", pos: true, debug: false);
     EarnRes ea = EarnRes.fromJson(res);
 
     if (ea.earnings != null) {
@@ -413,7 +413,7 @@ class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAlive
       "coinId": coinID,
     };
     try {
-      final response = await interface.post("Transfers/CreateDepositAddress", request, debug: true);
+      final response = await interface.post("Transfers/CreateDepositAddress", request, debug: false);
       var d = DepositAddress.fromJson(response);
       return d.data!.address!;
     } catch (e) {

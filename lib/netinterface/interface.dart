@@ -19,16 +19,17 @@ class NetInterface {
   static const String baseUrl = "https://app.rocketbot.pro/api/mobile/";
   static String posUrl = "https://mobileapp.rocketbot.pro/api/"; //TODO REFRESH TOKEN are separate!!!
   static String webURL = "https://mobileapp.rocketbot.pro/web/v1";
+  static String mobileLaunchUrl = "https://rocket.art/api/api/v1";
   static const String token = "token";
   static const String posToken = "posToken";
   static const String tokenRefresh = "refreshToken";
   static const String posTokenRefresh = "posRefreshToken";
   static bool _refreshingToken = false;
 
-  Future<dynamic> get(String url, {String? request, bool pos = false, bool web = false, bool debug = false}) async {
+  Future<dynamic> get(String url, {String? request, bool pos = false, bool web = false, bool launchpad = false, bool debug = false}) async {
     String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
-    var tk = await SecureStorage.readStorage(key: pos || web ? posToken : token); //TODO
-    print(tk);
+    var tk = await SecureStorage.readStorage(key: pos || web || launchpad ? posToken : token); //TODO
+    // print(tk);
     dynamic responseJson;
     try {
       var curl = "";
@@ -36,6 +37,8 @@ class NetInterface {
         curl = posUrl + url;
       } else if (web) {
         curl = webURL + url;
+      } else if (launchpad) {
+        curl = mobileLaunchUrl + url;
       } else {
         curl = baseUrl + url;
       }
@@ -46,7 +49,7 @@ class NetInterface {
       // print(curl);
       final response = await http.get(Uri.parse(curl), headers: {
         'User-Agent': userAgent.toLowerCase(),
-        "Authorization": " ${pos || web  ? "JWT" : "Bearer"} $tk",
+        "Authorization": " ${pos || web || launchpad  ? "JWT" : "Bearer"} $tk",
       }).timeout(
         const Duration(seconds: 120),
         onTimeout: () {
@@ -58,7 +61,8 @@ class NetInterface {
         print(response.body.toString());
       }
       if (response.statusCode == 401 || response.statusCode == 403) {
-        await refreshToken(pos: pos);
+        var isPos = (pos || launchpad) ? true : false;
+        await refreshToken(pos: isPos);
         var tk = await SecureStorage.readStorage(key: pos ? posToken : token);
         final res = await http.get(Uri.parse(curl), headers: {
           'User-Agent': userAgent.toLowerCase(),
@@ -75,9 +79,9 @@ class NetInterface {
     return responseJson;
   }
 
-  Future<dynamic> post(String url, Map<String, dynamic> request, {bool pos = false, bool web = false, bool debug = false}) async {
+  Future<dynamic> post(String url, Map<String, dynamic> request, {bool pos = false, bool launchpad = false, bool web = false, bool debug = false}) async {
     String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
-    var tk = await SecureStorage.readStorage(key: pos || web ? posToken : token);
+    var tk = await SecureStorage.readStorage(key: pos || web || launchpad  ? posToken : token);
     dynamic responseJson;
     var query = json.encoder.convert(request);
     // print(_query);
@@ -87,6 +91,8 @@ class NetInterface {
         curl = posUrl + url;
       } else if (web) {
         curl = webURL + url;
+      } else if (launchpad) {
+        curl = mobileLaunchUrl + url;
       } else {
         curl = baseUrl + url;
       }
@@ -96,7 +102,7 @@ class NetInterface {
               headers: {
                 "content-type": "application/json",
                 'User-Agent': userAgent.toLowerCase(),
-                "Authorization": "${pos || web ? "JWT" : "Bearer"} $tk",
+                "Authorization": "${pos || web || launchpad ? "JWT" : "Bearer"} $tk",
               },
               body: query)
           .timeout(
@@ -110,7 +116,8 @@ class NetInterface {
       print(response.statusCode);
       }
       if (response.statusCode == 401 || response.statusCode == 403) {
-        await refreshToken(pos: pos);
+        var isPos = (pos || launchpad)  ? true : false;
+        await refreshToken(pos: isPos);
         var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
         final res = await http.post(Uri.parse(curl),
             headers: {
@@ -348,25 +355,11 @@ class NetInterface {
   static Future<int> forgotPass(String email) async {
     try {
       String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
-      Map request = {
+      Map<String, dynamic> request = {
         "email": email,
       };
-      var query = json.encoder.convert(request);
-      final response = await http.post(Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/ForgotPassword"), body: query, headers: {
-        "accept": "application/json",
-        'User-Agent': userAgent.toLowerCase(),
-      }).timeout(
-        const Duration(seconds: 15),
-        onTimeout: () {
-          return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
-        },
-      );
-
-      if (response.statusCode == 200) {
+      await NetInterface().post("Auth/ForgotPassword", request, debug: true);
         return 1;
-      } else {
-        return 0;
-      }
     } catch (e) {
       debugPrint(e.toString());
       return 0;

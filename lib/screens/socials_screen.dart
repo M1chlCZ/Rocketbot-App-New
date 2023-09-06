@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:rocketbot/models/socials.dart';
 import 'package:rocketbot/netinterface/interface.dart';
-import 'package:rocketbot/support/auto_size_text_field.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/life_cycle_watcher.dart';
 import 'package:rocketbot/support/utils.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/social_card.dart';
 
 import '../models/user.dart';
@@ -41,7 +38,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
   SocialMediaAccounts? _discordAccount;
   SocialMediaAccounts? _twitchAccount;
 
-  bool _discordDetails = false;
+  final bool _discordDetails = false;
 
   @override
   void initState() {
@@ -125,7 +122,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
         _discordTextController.text = 'connect ${_discord!.data!.url!}';
         setState(() {});
       } else {
-        debugPrint(d.error);
+        // debugPrint(d.error);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -140,7 +137,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
         _twitter = d;
         setState(() {});
       } else {
-        debugPrint(d.error);
+        // debugPrint(d.error);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -155,7 +152,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
         _telegram = d;
         setState(() {});
       } else {
-        debugPrint(d.error);
+        // debugPrint(d.error);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -164,13 +161,13 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
 
   _loadTwitchDirective() async {
     try {
-      final response = await _interface.get("/Auth/ConnectAccount?socialMedia=4", debug: true);
+      final response = await _interface.get("/Auth/ConnectAccount?socialMedia=4", debug: false);
       var d = Socials.fromJson(response);
       if (d.hasError == false) {
         _twitch = d;
         setState(() {});
       } else {
-        debugPrint(d.error);
+        // debugPrint(d.error);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -194,7 +191,7 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
       } else {
         await _loadDirectives();
         setState(() {});
-        if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, d.error!);
+        if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, d.hasError!.toString());
       }
     } catch (e) {
       debugPrint(e.toString());

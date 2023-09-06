@@ -339,13 +339,13 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
       drawVerticalLine: true,
       drawHorizontalLine: true,
       getDrawingHorizontalLine: (value) {
-        return FlLine(
+        return const FlLine(
           color: Colors.transparent,
           strokeWidth: 0.2,
         );
       },
       getDrawingVerticalLine: (value) {
-        return FlLine(
+        return const FlLine(
           color: Colors.transparent,
           strokeWidth: 0.2,
         );
@@ -398,7 +398,7 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
         //     offset: Offset(0.5, 1)),
         isStrokeCapRound: true,
         isCurved: false,
-        dotData: FlDotData(show: false),
+        dotData: const FlDotData(show: false),
         belowBarData: BarAreaData(
           show: true,
           gradient: LinearGradient(colors: _gradientColors, stops: const [0.0, 0.2, 1.0], begin: Alignment.topCenter, end: Alignment.bottomCenter),
@@ -409,7 +409,7 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
     LineChartData mainData() {
       return LineChartData(
         gridData: _gridData(),
-        titlesData: FlTitlesData(
+        titlesData: const FlTitlesData(
             bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -454,7 +454,7 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
             getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
               return spotIndexes.map((spotIndex) {
                 return TouchedSpotIndicatorData(
-                  FlLine(color: Colors.white, strokeWidth: 2.0),
+                  const FlLine(color: Colors.white, strokeWidth: 2.0),
                   FlDotData(
                       show: true,
                       getDotPainter: (FlSpot spot, double radius, LineChartBarData lc, int i) {

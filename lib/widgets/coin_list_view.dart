@@ -134,7 +134,7 @@ class _CoinListViewState extends State<CoinListView> {
                                   child: SizedBox(
                                     width: 70,
                                     child: AutoSizeText(
-                                      widget.coin.coin!.name!,
+                                      widget.coin.coin!.cryptoId!,
                                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontStyle: FontStyle.normal, fontSize: 10.0),
                                       minFontSize: 8,
                                       maxLines: 1,

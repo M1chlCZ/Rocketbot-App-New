@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rocketbot/component_widgets/container_neu.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PriceRangeSwitcher extends StatefulWidget {

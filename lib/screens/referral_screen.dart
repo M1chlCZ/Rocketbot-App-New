@@ -50,7 +50,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
 
   _getRefCode() async {
     try {
-      var res = await interface.get('code/get', request: "version=1", pos: true, debug: true);
+      var res = await interface.get('code/get', request: "version=1", pos: true, debug: false);
       refCode = res['refCode'];
       reward = double.parse(res['reward'].toString());
       codeErr = false;
@@ -92,8 +92,9 @@ class _ReferralScreenState extends State<ReferralScreen> {
         await interface.post('code/submit', {"referral": code, "uuid": udid, "ver": 3}, pos: true);
         await SecureStorage.writeStorage(key: "refCode", value: code);
         _checkStatus();
-        if (context.mounted)
+        if (context.mounted) {
           Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way!");
+        }
       } on ConflictDataException catch (e) {
         if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
       } catch (e) {

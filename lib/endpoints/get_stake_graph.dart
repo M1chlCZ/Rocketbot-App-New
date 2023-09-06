@@ -12,7 +12,7 @@ class StakeList {
       "type": type,
       "datetime": type == 1 ? DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()) : Utils.getUTC()
     };
-    var rs = await _interface.post("stake/list", m, pos: true, debug: true);
+    var rs = await _interface.post("stake/list", m, pos: true, debug: false);
     StakingData st = StakingData.fromJson(rs);
     return st;
   }

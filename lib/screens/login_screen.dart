@@ -184,7 +184,9 @@ class LoginScreenState extends State<LoginScreen> {
     if (res != null) {
       await SecureStorage.writeStorage(key: NetInterface.token, value: res);
       String? wer = await SecureStorage.readStorage(key: NetInterface.token);
-      if (wer != null) {
+      await NetInterface.registerPosHandle();
+      String? poser = await SecureStorage.readStorage(key: NetInterface.posToken);
+      if (poser != null) {
         if (context.mounted) {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MainMenuScreen()));
         }
@@ -315,7 +317,15 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   void _forgotPass(String email) async {
-    NetInterface.forgotPass(email);
+    if(context.mounted) Navigator.of(context).pop();
+    Dialogs.openWaitBox(context);
+    var i = await NetInterface.forgotPass(email);
+    if(context.mounted) Navigator.of(context).pop();
+    if (i == 1) {
+      if(context.mounted)Dialogs.openAlertBox(context, "Success", "Please check your email for reset code");
+    }else{
+      if(context.mounted)Dialogs.openAlertBox(context, "Error", "Something went wrong");
+    }
   }
 
   @override
@@ -479,11 +489,13 @@ class LoginScreenState extends State<LoginScreen> {
                                 FirebaseService service = FirebaseService();
                                 try {
                                   String? tokenID = await service.signInwithGoogle();
+
                                   setState(() {
                                     _curtain = true;
                                   });
                                   if (tokenID != null) {
                                     var asdf = await NetInterface.getTokenGoogle(tokenID);
+                                    await NetInterface.registerPosHandle();
                                     if (asdf != null) {
                                       _nextPage();
                                     } else {

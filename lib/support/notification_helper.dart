@@ -31,7 +31,6 @@ class FCM {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   setNotifications() async {
-    // print("///////////");
     FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     if (Platform.isAndroid) {
       AndroidNotificationChannel channel = const AndroidNotificationChannel(
@@ -70,7 +69,6 @@ class FCM {
     final InitializationSettings initializationSettings =
     InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings, onDidReceiveNotificationResponse: (payload) {
-      print(payload.toString());
     });
     FirebaseMessaging.instance.requestPermission(
       alert: true,

@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -31,7 +30,8 @@ class QScanWidgetState extends State<QScanWidget> {
   @override
   void initState() {
     super.initState();
-    cameraController = MobileScannerController(detectionSpeed: DetectionSpeed.noDuplicates, formats: [BarcodeFormat.qrCode]);
+    cameraController = MobileScannerController(returnImage: false,
+        detectionSpeed: DetectionSpeed.normal, formats: [BarcodeFormat.all]);
     cameraController?.start();
   }
 
@@ -93,10 +93,12 @@ class QScanWidgetState extends State<QScanWidget> {
                   if (capture.barcodes.isEmpty) {
                     debugPrint('Failed to scan Barcode');
                   } else {
+                    debugPrint('Succ to scan Barcode');
                     final List<Barcode> barcodes = capture.barcodes;
                     final String code = barcodes[0].rawValue!;
                     widget.scanResult(code);
                     cameraController!.stop();
+                    cameraController!.dispose();
                     Navigator.maybePop(context);
                     debugPrint('Barcode found! $code');
                   }

@@ -95,7 +95,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
 
   void _scrollListener(ScrollController sc, int type) {
     sc.addListener(() {
-      if (sc.position.pixels >= (sc.position.maxScrollExtent - 250)) {
+      if (sc.position.pixels >= (sc.position.maxScrollExtent - 50)) {
         if (type == 1) {
           giveawayPage++;
           gwBlock!.fetchGiveaways(page: giveawayPage);
@@ -493,11 +493,11 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                           labelWidget: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                             margin: const EdgeInsets.only(right: 10.0),
-                            child: Center(
+                            child: const Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Text('Spin'),
                                 ],
                               ),

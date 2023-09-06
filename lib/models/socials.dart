@@ -1,7 +1,7 @@
 class Socials {
   String? message;
   bool? hasError;
-  Null? error;
+  String? error;
   Data? data;
 
   Socials({this.message, this.hasError, this.error, this.data});

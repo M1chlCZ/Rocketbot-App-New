@@ -348,13 +348,13 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
       drawVerticalLine: true,
       drawHorizontalLine: true,
       getDrawingHorizontalLine: (value) {
-        return FlLine(
+        return const FlLine(
           color: Colors.transparent,
           strokeWidth: 0.2,
         );
       },
       getDrawingVerticalLine: (value) {
-        return FlLine(
+        return const FlLine(
           color: Colors.transparent,
           strokeWidth: 0.2,
         );
@@ -409,7 +409,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
         //     offset: Offset(0.5, 1)),
         isStrokeCapRound: true,
         isCurved: false,
-        dotData: FlDotData(show: false),
+        dotData: const FlDotData(show: false),
         belowBarData: BarAreaData(
           show: true,
           gradient: LinearGradient(
@@ -426,7 +426,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
       return LineChartData(
         gridData: _gridData(),
 
-        titlesData: FlTitlesData(
+        titlesData: const FlTitlesData(
             bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -479,7 +479,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
                 (LineChartBarData barData, List<int> spotIndexes) {
               return spotIndexes.map((spotIndex) {
                 return TouchedSpotIndicatorData(
-                  FlLine(color: Colors.white, strokeWidth: 2.0),
+                  const FlLine(color: Colors.white, strokeWidth: 2.0),
                   FlDotData(
                       show: true,
                       getDotPainter: (FlSpot spot, double radius,

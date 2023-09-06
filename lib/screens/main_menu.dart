@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/earnings_screen.dart';
 import 'package:rocketbot/screens/giveaway_screen.dart';
+import 'package:rocketbot/screens/launchpad_screen.dart';
 import 'package:rocketbot/screens/portfolio_page.dart';
 import 'package:rocketbot/screens/settings_screen.dart';
 import 'package:rocketbot/support/notification_helper.dart';
@@ -37,16 +38,30 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     FlutterAppBadger.removeBadge();
   }
 
-  gotoPreviousScreen() {
+  gotoPreviousScreen({bool art = false}) {
     setState(() {
-      _selectedPageIndex = 0;
+      _selectedPageIndex = art ? 1: 0;
     });
     _pageController.animateToPage(_selectedPageIndex, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
   }
 
-  gotoNextScreen() {
+  gotoNextScreen({bool art = false}) {
     setState(() {
-      _selectedPageIndex = 2;
+      _selectedPageIndex = art ? 3 : 2;
+    });
+    _pageController.animateToPage(_selectedPageIndex, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
+  }
+
+  gotoLaunchPreviousScreen() {
+    setState(() {
+      _selectedPageIndex = 1;
+    });
+    _pageController.animateToPage(_selectedPageIndex, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
+  }
+
+  gotoLaunchNextScreen() {
+    setState(() {
+      _selectedPageIndex =3;
     });
     _pageController.animateToPage(_selectedPageIndex, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
   }
@@ -71,7 +86,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 prevScreen: gotoPreviousScreen,
                 nextScreen: gotoNextScreen,
               ),
-              // Container(), //TODO NFT SCREEN
+              LaunchpadScreen(
+                prevScreen: gotoLaunchPreviousScreen,
+                nextScreen: gotoLaunchNextScreen,
+              ),
               const EarningsScreen(),
               SettingsScreen(
                 socials: _getUserInfo,
@@ -154,6 +172,11 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               color: Colors.transparent,
               child: Image.asset("images/giveaway.png", width: 30, height: 30.0, fit: BoxFit.fitWidth, color: Colors.white),
             ),
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset("images/ra_inactive.png",width: 60, height: 30.0, fit: BoxFit.fitWidth,),
+            label: 'Rocket.art',
+            activeIcon: Image.asset("images/ra_active.png",width: 60, height: 30.0, fit: BoxFit.fitWidth,),
           ),
 
           // BottomNavigationBarItem(

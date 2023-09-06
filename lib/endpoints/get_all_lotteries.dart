@@ -7,7 +7,7 @@ class LotteryList {
 
   Future<List<Lottery>?> fetchLotteries(int page) async {
     List<Lottery>? m = [];
-    Map<String, dynamic> responseG = await _helper.get("Games/ActiveSpinLotteries?Page=$page&PageSize=100", debug: true);
+    Map<String, dynamic> responseG = await _helper.get("Games/ActiveSpinLotteries?Page=$page&PageSize=100", debug: false);
     List<Lottery>? g = Lotteries.fromJson(responseG).data;
     if(g != null && g.isNotEmpty) m.addAll(g);
     return m;

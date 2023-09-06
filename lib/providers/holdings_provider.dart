@@ -50,7 +50,7 @@ class CoinBalances {
         list[i].setStaking(false);
       }
     }
-    print("|FIFTH COIN BALANCEs DONE| " + DateTime.now().toString());
+    print("|FIFTH COIN BALANCEs DONE| ${DateTime.now()}");
     return list;
   }
 

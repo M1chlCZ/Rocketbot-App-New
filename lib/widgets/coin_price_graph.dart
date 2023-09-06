@@ -125,9 +125,9 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
       gridData: _gridData(),
       titlesData: FlTitlesData(
           bottomTitles: _bottomTitles(),
-          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: AxisTitles(sideTitles:SideTitles(showTitles: false)),
-          rightTitles: AxisTitles(sideTitles:SideTitles(showTitles: false))),
+          leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles: const AxisTitles(sideTitles:SideTitles(showTitles: false)),
+          rightTitles: const AxisTitles(sideTitles:SideTitles(showTitles: false))),
       borderData: FlBorderData(
         show: false,
         border: Border.all(color: Colors.white12, width: 1),
@@ -157,7 +157,7 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
               (LineChartBarData barData, List<int> spotIndexes) {
             return spotIndexes.map((spotIndex) {
               return TouchedSpotIndicatorData(
-                FlLine(color: Colors.white54, strokeWidth: 0.8),
+                const FlLine(color: Colors.white54, strokeWidth: 0.8),
                 FlDotData(
                     show: true,
                     getDotPainter: (FlSpot spot, double radius,
@@ -234,7 +234,7 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
           blurRadius: 5.0,
           offset: Offset(0.5, 1)),
       isStrokeCapRound: true,
-      dotData: FlDotData(show: false),
+      dotData: const FlDotData(show: false),
       belowBarData: BarAreaData(
         show: true,
         gradient: LinearGradient(
@@ -293,7 +293,7 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
       show: false,
       drawVerticalLine: false,
       getDrawingHorizontalLine: (value) {
-        return FlLine(
+        return const FlLine(
           color: Colors.white12,
           strokeWidth: 1,
         );

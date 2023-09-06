@@ -5,7 +5,7 @@ import 'package:rocketbot/providers/network_provider.dart';
 
 final balanceProvider = FutureProvider.family<CoinBalance?, int>((ref, idCoin) async {
   try {
-    dynamic response = await ref.read(networkProvider).get("User/GetBalance", request: "coinId=$idCoin", pos: false, debug: true );
+    dynamic response = await ref.read(networkProvider).get("User/GetBalance", request: "coinId=$idCoin", pos: false, debug: false );
     var bal = CoinBalance.fromJson(response);
     return bal;
   } catch (e) {
@@ -33,7 +33,7 @@ final balancesProvider = FutureProvider<List<CoinBalance>>((ref) async {
   }
 });
 
-final dropdownProvider = StateNotifierProvider<DropDownController, AsyncValue<List<CoinBalance>>>((ref) {;
+final dropdownProvider = StateNotifierProvider<DropDownController, AsyncValue<List<CoinBalance>>>((ref) {
   return DropDownController();
 });
 

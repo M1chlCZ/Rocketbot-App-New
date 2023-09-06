@@ -275,7 +275,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
 
   Future<void> _getNotifications() async {
     try {
-      final response = await _interface.post("notification/list", {}, pos: true, debug: true);
+      final response = await _interface.post("notification/list", {}, pos: true, debug: false);
       Notifications not = Notifications.fromJson(response);
       await db.addNot(not);
       var i = await db.getNotUnread();
@@ -636,10 +636,10 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                     Color(0xFF812D88),
                                   ]),
                                   borderRadius: BorderRadius.circular(10.0)),
-                              child: Center(
+                              child: const Center(
                                   child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Text(
                                     "Please confirm your email",
                                     style: TextStyle(fontSize: 12.0, color: Colors.white),
@@ -1112,7 +1112,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
           try {
             NetInterface interface = NetInterface();
             var tok = ss;
-            await interface.post("/login/qr/auth", {"token": tok}, web: true, debug: true);
+            await interface.post("/login/qr/auth", {"token": tok}, web: true, debug: false);
             if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login successful")));
           } catch (e) {
             debugPrint(e.toString());

@@ -153,7 +153,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       "idCoin": _coinActive.id!,
       // "idCoin": 0
     };
-    var res = await _interface.post("masternode/info", m, pos: true, debug: true);
+    var res = await _interface.post("masternode/info", m, pos: true, debug: false);
     _mnInfo = MasternodeInfo.fromJson(res);
     if (_mnInfo == null || _mnInfo!.hasError == true) return;
     _numberNodes = _mnInfo?.mnList?.length ?? 0;
@@ -1073,7 +1073,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     MasternodeLock? mnLock;
     try {
       Map<String, dynamic> queryLock = {"idCoin": _coinActive.id!};
-      final responseLock = await _interface.post("masternode/lock", queryLock, pos: true, debug: true);
+      final responseLock = await _interface.post("masternode/lock", queryLock, pos: true, debug: false);
       mnLock = MasternodeLock.fromJson(responseLock);
       if (mnLock.node?.address == null) {
         if(context.mounted) {Navigator.of(context).pop();
@@ -1084,7 +1084,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
 
       Map<String, dynamic> query = {"coinId": _coinActive.id!, "fee": _fee, "amount": amt, "toAddress": mnLock.node!.address!};
 
-      final response = await _interface.post("Transfers/CreateWithdraw", query, debug: true);
+      final response = await _interface.post("Transfers/CreateWithdraw", query, debug: false);
       var pwid = WithdrawID.fromJson(response);
       Map<String, dynamic> queryID = {
         "id": pwid.data!.pgwIdentifier!,
@@ -1102,18 +1102,18 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
         "pwd_id": rw.data!.pgwIdentifier!,
         "node_id": mnLock.node!.id!
       };
-      await _interface.post("masternode/setup", m, pos: true, debug: true);
+      await _interface.post("masternode/setup", m, pos: true, debug: false);
       _lostMNTX();
     } on ConflictDataException catch (e) {
       Map<String, dynamic> queryLock = {"idNode": mnLock?.node?.id};
-      await _interface.post("masternode/unlock", queryLock, pos: true, debug: true);
+      await _interface.post("masternode/unlock", queryLock, pos: true, debug: false);
       if (context.mounted) Navigator.of(context).pop();
       _keyStake.currentState?.reset();
       var err = json.decode(e.toString());
       if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage']);
     } catch (e) {
       Map<String, dynamic> queryLock = {"idNode": mnLock?.node?.id};
-      await _interface.post("masternode/unlock", queryLock, pos: true, debug: true);
+      await _interface.post("masternode/unlock", queryLock, pos: true, debug: false);
       if (context.mounted) Navigator.of(context).pop();
       _keyStake.currentState?.reset();
       if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());

@@ -140,7 +140,7 @@ class CoinScreenState extends ConsumerState<CoinScreen> with SingleTickerProvide
   }
 
   void _scrollListener() {
-    if (sc.position.pixels >= (sc.position.maxScrollExtent - 400)) {
+    if (sc.position.pixels >= (sc.position.maxScrollExtent - 50)) {
       ///TODO ENDLESS SCROLL
       // if (loadedItems < dataLength) {
       //   var rem = dataLength - loadedItems;
@@ -491,7 +491,7 @@ class CoinScreenState extends ConsumerState<CoinScreen> with SingleTickerProvide
                                     if (data[index].toAddress == null) {
                                       return CoinDepositView(
                                         price: _balanceData?.priceData,
-                                        data: data![index],
+                                        data: data[index],
                                       );
                                     } else {
                                       return CoinWithdrawalView(price: _balanceData?.priceData, data: data[index]);
@@ -681,7 +681,7 @@ class CoinScreenState extends ConsumerState<CoinScreen> with SingleTickerProvide
     var userMail = mp['email'];
     try {
       List<Exchange> l = [];
-      List<dynamic> res = await _interface.post("exchanges", {"idCoin": idCoin}, pos: true, debug: true);
+      List<dynamic> res = await _interface.post("exchanges", {"idCoin": idCoin}, pos: true, debug: false);
       res.map((e) => Exchange.fromJson(e)).forEach((element) {
         l.add(element);
       });

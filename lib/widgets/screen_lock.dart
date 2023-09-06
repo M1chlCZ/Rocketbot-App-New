@@ -85,7 +85,7 @@ class LockScreen extends StatefulWidget {
 
 class LockScreenState extends State<LockScreen> {
   var _currentCodeLength = 0;
-  var _inputCodes = <int>[];
+  final _inputCodes = <int>[];
   var _currentState = 0;
   Color circleColor = Colors.white;
 
