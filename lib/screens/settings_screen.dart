@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
@@ -33,6 +34,7 @@ class SettingsScreenState extends State<SettingsScreen> {
   var firstValue = false;
   var secondValue = true;
   bool _socialsOK = true;
+  bool twoFactor = false;
   User? _me;
 
   @override
@@ -54,6 +56,7 @@ class SettingsScreenState extends State<SettingsScreen> {
         }
       }
     });
+    getTwoFactor();
   }
 
   @override
@@ -286,67 +289,19 @@ class SettingsScreenState extends State<SettingsScreen> {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      Text(
-                        AppLocalizations.of(context)!.settings_privacy,
-                        textAlign: TextAlign.start,
-                        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14.0, color: Colors.white24),
-                      ),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Container(
-                        height: 0.5,
-                        color: Colors.white12,
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      SizedBox(
-                        height: 50.0,
-                        child: Card(
-                            elevation: 0,
-                            color: Theme.of(context).canvasColor,
-                            margin: EdgeInsets.zero,
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0.0),
-                            ),
-                            child: InkWell(
-                              splashColor: Colors.black54,
-                              highlightColor: Colors.black54,
-                              onTap: () async {
-                                _handlePIN();
-                              },
-                              // widget.coinSwitch(widget.coin);
-                              // widget.activeCoin(widget.coin.coin!);
 
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(AppLocalizations.of(context)!.sc_security,
-                                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 14.0, color: Colors.white)),
-                                    const Expanded(
-                                      child: SizedBox(),
-                                    ),
-                                    NeuButton(
-                                        height: 25,
-                                        width: 20,
-                                        onTap: () async {
-                                          _handlePIN();
-                                        },
-                                        child: const Icon(
-                                          Icons.arrow_forward_ios_sharp,
-                                          color: Colors.white,
-                                          size: 22.0,
-                                        ))
-                                  ],
-                                ),
-                              ),
-                            )),
-                      ),
+                      MenuSection(sectionName: AppLocalizations.of(context)!.settings_privacy, children: [
+                        MenuNode(menuText: AppLocalizations.of(context)!.sc_security, goto: _handlePIN),
+                        MenuNode(
+                            menuText: '2FA',
+                            goto: () {
+                              if (twoFactor) {
+                                Dialogs.open2FABoxNew(context, _unset2FA);
+                              } else {
+                                _get2FACode();
+                              }
+                            })
+                      ]),
                       const SizedBox(
                         height: 20.0,
                       ),
@@ -453,5 +408,105 @@ class SettingsScreenState extends State<SettingsScreen> {
         }));
       }
     });
+  }
+
+  getTwoFactor() async {
+    try {
+      NetInterface ci = NetInterface();
+      Map<String, dynamic> m = await ci.get("/twofactor/check", pos: true, debug: false);
+      Future.delayed(Duration.zero, () {
+        setState(() {
+          twoFactor = m['twoFactor'];
+        });
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  _set2FA(String code) async {
+    Dialogs.open2FASetBox(context, code, _confirm2FA);
+  }
+
+  var run = false;
+
+  _confirm2FA(String? s) async {
+    if (!run) {
+      run = true;
+      try {
+        NetInterface interface = NetInterface();
+        await interface.post("/twofactor/activate", {"code": s}, pos: true, debug: false);
+        if (mounted) Navigator.of(context).pop();
+        setState(() {
+          twoFactor = true;
+        });
+        if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.alert, "2FA activated");
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+      }
+    }
+    run = false;
+  }
+
+  var settingUP = false;
+
+  _unset2FA(String? s) async {
+    if (settingUP) {
+      return;
+    } else {
+      settingUP = true;
+    }
+    Navigator.of(context).pop();
+    try {
+      NetInterface interface = NetInterface();
+      await interface.post("/twofactor/remove", {"token": s}, pos: true, debug: false);
+
+      setState(() {
+        twoFactor = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "2FA disabled",
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.fixed,
+          elevation: 5.0,
+        ));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "2FA disable error",
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.fixed,
+          elevation: 5.0,
+        ));
+      }
+      debugPrint(e.toString());
+    }
+    settingUP = false;
+  }
+
+  _get2FACode() async {
+    try {
+      NetInterface interface = NetInterface();
+      Map<String, dynamic> m = await interface.post("/twofactor", {}, pos: true, debug: false);
+
+      _set2FA(m['code']);
+    } catch (e) {
+      Dialogs.openAlertBox(context, "Error", "2FA already turned on");
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 }

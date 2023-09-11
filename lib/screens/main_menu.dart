@@ -1,3 +1,4 @@
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
@@ -26,6 +27,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   final NetInterface _interface = NetInterface();
   final _firebaseMessaging = GetIt.I.get<FCM>();
   final _pageController = PageController(initialPage: 0);
+  final _appLinks = AppLinks();
   int _selectedPageIndex = 0;
   bool _socialsOK = true;
   double widthScreen = 0.0;
@@ -36,6 +38,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     super.initState();
     _getUserInfo();
     FlutterAppBadger.removeBadge();
+    _appLinks.allUriLinkStream.listen((uri) {
+      print("URI: $uri");
+    });
+
   }
 
   gotoPreviousScreen({bool art = false}) {
@@ -108,11 +114,11 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             )),
         unselectedLabelStyle: const TextStyle(
           color: Colors.red,
-          fontSize: 12.0,
+          fontSize: 11.0,
         ),
         selectedLabelStyle: const TextStyle(
           color: Colors.white,
-          fontSize: 12.0,
+          fontSize: 11.0,
         ),
         showUnselectedLabels: true,
         showSelectedLabels: true,

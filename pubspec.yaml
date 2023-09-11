@@ -3,7 +3,7 @@ description: Rocketpro
 
 publish_to: 'none'
 
-version: 1.2.66+214
+version: 1.2.67+215
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
@@ -29,7 +29,7 @@ dependencies:
   flutter_snake_navigationbar: any
   appinio_social_share: ^0.2.5
   cached_network_image: ^3.2.3
-  permission_handler: ^10.4.3
+  permission_handler: ^10.4.5
   local_auth: ^2.1.7
   flutter_phoenix: ^1.1.1
   package_info_plus: ^4.1.0
@@ -73,6 +73,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   rxdart: ^0.27.7
   logger: any
+  app_links: ^3.4.3
 
 linter:
   rules:

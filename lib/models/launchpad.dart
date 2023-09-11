@@ -194,7 +194,7 @@ class Top {
   Top.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     launchpadId = json['launchpad_id'];
-    totalAmount = json['total_amount'];
+    totalAmount = json['total_amount'] != null ? double.parse(json['total_amount'].toString()) : null;
     imageUrl = json['image_url'];
   }
 

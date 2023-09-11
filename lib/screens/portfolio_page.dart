@@ -1023,9 +1023,41 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                           String? s = await Utils.scanQR(context);
                                           processScan(s);
                                         },
-                                        child: Text(
+                                        child: AutoSizeText(
                                           AppLocalizations.of(context)!.qr_scan.toUpperCase(),
+                                          maxLines: 1,
+                                          minFontSize: 4.0,
                                           style: Theme.of(context).textTheme.displayLarge!.copyWith(fontSize: 14.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )),
+                            SizedBox(
+                                // SizedBox(
+                                height: 40,
+                                child: Center(
+                                  child: Directionality(
+                                    textDirection: TextDirection.ltr,
+                                    child: SizedBox(
+                                      width: 140,
+                                      child: TextButton(
+                                        style: ButtonStyle(
+                                            backgroundColor: MaterialStateProperty.resolveWith((states) => qrColors(states)),
+                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(0.0), side: const BorderSide(color: Colors.transparent)))),
+                                        onPressed: () async {
+                                          setState(() {
+                                            popMenu = false;
+                                          });
+                                          _loginWeb();
+
+                                        },
+                                        child: AutoSizeText(
+                                          AppLocalizations.of(context)!.web_login.toUpperCase(),
+                                          maxLines: 1,
+                                          minFontSize: 4.0,
+                                          style: Theme.of(context).textTheme.displayLarge!.copyWith(fontSize: 12.0),
                                         ),
                                       ),
                                     ),
@@ -1297,4 +1329,51 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
 
   @override
   bool get wantKeepAlive => true;
+
+  bool a = false;
+  bool b= false;
+  bool c = false;
+
+  _loginWeb() async {
+    if (a) return;
+    a = true;
+    var s = await Utils.getTwoFactorStatic();
+    if (!s) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("2FA not enabled, please enable it in the settings")));
+      }
+      a = false;
+      return;
+    } else {
+      if (context.mounted) Dialogs.open2FABoxNew(context, _check2FA);
+    }
+    a = false;
+  }
+
+  _check2FA(String? s) async {
+    if (b) return;
+    b = true;
+    var aa = await Utils.check2FA(s ?? "");
+    if (context.mounted) Navigator.of(context).pop();
+    if (aa) {
+      if (context.mounted) Dialogs.openWebTokenBox(context, _webToken);
+      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login successful")));
+    } else {
+      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("2FA code is not valid")));
+    }
+    b = false;
+  }
+
+  _webToken(String webtoken) async {
+    if (c) return;
+    try {
+      await _interface.post("/user/confirm", {"auth": webtoken}, web: true);
+      if (context.mounted) Navigator.of(context).pop();
+      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Launchpad login successful")));
+      c = false;
+    } catch (e) {
+      c = false;
+      return null;
+    }
+  }
 }

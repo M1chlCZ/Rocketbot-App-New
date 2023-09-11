@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:rocketbot/NetInterface/interface.dart';
 import 'package:rocketbot/support/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -116,5 +117,25 @@ class Utils {
       } else {
         return null;
       }
+  }
+
+  static Future<bool> getTwoFactorStatic() async {
+    try {
+      NetInterface ci = NetInterface();
+      Map<String, dynamic> m = await ci.get("/twofactor/check", pos: true, debug: false);
+      return m['twoFactor'] as bool;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<bool> check2FA(String s) async {
+    try {
+      NetInterface ci = NetInterface();
+      Map<String, dynamic> m = await ci.post("/twofactor/auth", {"token": s}, pos: true, debug: false);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

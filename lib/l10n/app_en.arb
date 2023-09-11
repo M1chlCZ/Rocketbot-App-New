@@ -171,5 +171,6 @@
   "st_adjust" : "Adjust staking balance",
   "st_amount": "Subtract amount",
   "qr_scan" : "QR scanner",
-  "qr_scan_error" : "QR code is not valid for this app"
+  "qr_scan_error" : "QR code is not valid for this app",
+  "web_login" : "Rocket.art login"
 }
