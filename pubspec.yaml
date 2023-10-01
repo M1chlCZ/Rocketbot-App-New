@@ -3,7 +3,7 @@ description: Rocketpro
 
 publish_to: 'none'
 
-version: 1.2.67+215
+version: 1.2.68+216
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
@@ -27,9 +27,9 @@ dependencies:
   qr_flutter: ^4.1.0
   decimal: ^2.3.3
   flutter_snake_navigationbar: any
-  appinio_social_share: ^0.2.5
-  cached_network_image: ^3.2.3
-  permission_handler: ^10.4.5
+  appinio_social_share: ^0.2.6
+  cached_network_image: ^3.3.0
+  permission_handler: ^11.0.0
   local_auth: ^2.1.7
   flutter_phoenix: ^1.1.1
   package_info_plus: ^4.1.0
@@ -55,7 +55,7 @@ dependencies:
     git:
       url: https://github.com/eusopht2021/webviewx
       ref: main
-  flutter_riverpod: ^2.4.0
+  flutter_riverpod: ^2.4.1
   flutter_speed_dial: ^7.0.0
   animated_toggle_switch: ^0.8.0
   sliding_number: ^0.0.4
@@ -73,7 +73,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   rxdart: ^0.27.7
   logger: any
-  app_links: ^3.4.3
+  app_links: ^3.4.5
 
 linter:
   rules:

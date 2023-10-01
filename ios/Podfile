@@ -1,6 +1,6 @@
 #$FirebaseSDKVersion = '9.6.0'
 # Uncomment this line to define a global platform for your project
-platform :ios, '15.6'
+platform :ios, '16.4'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -39,10 +39,15 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
       target.build_configurations.each do |config|
-       if config.build_settings['WRAPPER_EXTENSION'] == 'bundle'
-              config.build_settings['DEVELOPMENT_TEAM'] = 'SHD7Q294X2'
-       end
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.3'
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.4'
+          xcconfig_path = config.base_configuration_reference.real_path
+          xcconfig = File.read(xcconfig_path)
+          xcconfig_mod = xcconfig.gsub(/DT_TOOLCHAIN_DIR/, "TOOLCHAIN_DIR")
+          File.open(xcconfig_path, "w") { |file| file << xcconfig_mod }
+           if config.build_settings['WRAPPER_EXTENSION'] == 'bundle'
+                  config.build_settings['DEVELOPMENT_TEAM'] = 'SHD7Q294X2'
+           end
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.4'
           config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
             '$(inherited)',
 

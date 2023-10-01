@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -503,7 +505,10 @@ class SettingsScreenState extends State<SettingsScreen> {
 
       _set2FA(m['code']);
     } catch (e) {
-      Dialogs.openAlertBox(context, "Error", "2FA already turned on");
+      var err = jsonDecode(e.toString());
+      if (mounted) {
+        Dialogs.openAlertBox(context, "Error", err['errorMessage']);
+      }
       if (kDebugMode) {
         print(e);
       }

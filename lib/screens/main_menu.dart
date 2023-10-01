@@ -9,7 +9,9 @@ import 'package:rocketbot/screens/giveaway_screen.dart';
 import 'package:rocketbot/screens/launchpad_screen.dart';
 import 'package:rocketbot/screens/portfolio_page.dart';
 import 'package:rocketbot/screens/settings_screen.dart';
+import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/notification_helper.dart';
+import 'package:rocketbot/support/utils.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 
 import '../models/user.dart';
@@ -39,14 +41,17 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     _getUserInfo();
     FlutterAppBadger.removeBadge();
     _appLinks.allUriLinkStream.listen((uri) {
-      print("URI: $uri");
+      if (uri.queryParameters.containsKey("auth")) {
+        _webToken(uri.queryParameters["auth"]!);
+      } else {
+        print("fail to launch website");
+      }
     });
-
   }
 
   gotoPreviousScreen({bool art = false}) {
     setState(() {
-      _selectedPageIndex = art ? 1: 0;
+      _selectedPageIndex = art ? 1 : 0;
     });
     _pageController.animateToPage(_selectedPageIndex, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
   }
@@ -67,9 +72,29 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   gotoLaunchNextScreen() {
     setState(() {
-      _selectedPageIndex =3;
+      _selectedPageIndex = 3;
     });
     _pageController.animateToPage(_selectedPageIndex, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
+  }
+
+  bool c = false;
+
+  _webToken(String webtoken) async {
+    if (c) return;
+    try {
+      Dialogs.openWaitBox(context);
+      await _interface.post("/user/confirm", {"auth": webtoken}, web: true, debug: true);
+      await Future.delayed(const Duration(seconds: 3), () {
+        // _getUserInfo();
+      });
+      if (context.mounted) Navigator.of(context).pop();
+      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Launchpad login successful")));
+      Utils.openLink("https://rocket.art");
+      c = false;
+    } catch (e) {
+      c = false;
+      return;
+    }
   }
 
   @override
@@ -180,9 +205,19 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             ),
           ),
           BottomNavigationBarItem(
-            icon: Image.asset("images/ra_inactive.png",width: 60, height: 30.0, fit: BoxFit.fitWidth,),
+            icon: Image.asset(
+              "images/ra_inactive.png",
+              width: 60,
+              height: 30.0,
+              fit: BoxFit.fitWidth,
+            ),
             label: 'Rocket.art',
-            activeIcon: Image.asset("images/ra_active.png",width: 60, height: 30.0, fit: BoxFit.fitWidth,),
+            activeIcon: Image.asset(
+              "images/ra_active.png",
+              width: 60,
+              height: 30.0,
+              fit: BoxFit.fitWidth,
+            ),
           ),
 
           // BottomNavigationBarItem(
