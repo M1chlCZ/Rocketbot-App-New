@@ -11,7 +11,6 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rocketbot/firebase_options.dart';
-import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/login_screen.dart';
 import 'package:rocketbot/support/get_setup.dart';
 import 'package:rocketbot/support/globals.dart' as globals;

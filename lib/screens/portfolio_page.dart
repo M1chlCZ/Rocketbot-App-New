@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -80,6 +81,8 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   bool _paused = false;
   bool _pinEnabled = false;
   bool _hideZero = false;
+
+  List<String> messageIDs = [];
 
   var _dropValue = "Default";
   var _dropValues = ["Default", "By amount", "Alphabetically"];
@@ -1299,9 +1302,31 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     await _getNotifications();
     if (_pinEnabled == true && _paused) {
       _paused = false;
+      RemoteMessage? initialMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
+      if (initialMessage != null && initialMessage.data['link'] != null) {
+        if (messageIDs.contains(initialMessage.messageId)) {
+          return;
+        } else {
+          messageIDs.add(initialMessage.messageId ?? '');
+          Utils.openLink(initialMessage.data["dataLink"]);
+        }
+      }
       var restart = await _checkCountdown();
       if (restart) {
         _restartApp();
+      }
+    }else if (_pinEnabled == false && _paused){
+      _paused = false;
+      RemoteMessage? initialMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
+      if (initialMessage != null && initialMessage.data['link'] != null) {
+        if (messageIDs.contains(initialMessage.messageId)) {
+          return;
+        } else {
+          messageIDs.add(initialMessage.messageId ?? '');
+          Utils.openLink(initialMessage.data["dataLink"]);
+        }
       }
     }
   }
