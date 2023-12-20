@@ -4,7 +4,7 @@ import 'package:rocketbot/widgets/menu_node.dart';
 class MenuSection extends StatelessWidget {
   final String sectionName;
   final List<MenuNode> children;
-  const MenuSection({Key? key, required this.sectionName, required this.children}) : super(key: key);
+  const MenuSection({super.key, required this.sectionName, required this.children});
 
   @override
   Widget build(BuildContext context) {

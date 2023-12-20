@@ -21,12 +21,12 @@ class MainScreen extends StatefulWidget {
   final VoidCallback refreshList;
 
   const MainScreen({
-    Key? key,
+    super.key,
     required this.coinBalance,
     this.listCoins,
     this.posCoinsList,
     required this.refreshList,
-  }) : super(key: key);
+  });
 
   @override
   MainScreenState createState() => MainScreenState();

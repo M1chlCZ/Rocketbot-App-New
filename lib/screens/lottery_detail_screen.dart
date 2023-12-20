@@ -14,7 +14,7 @@ import '../netinterface/interface.dart';
 class LotteryDetailScreen extends StatefulWidget {
   final Lottery lottery;
 
-  const LotteryDetailScreen({Key? key, required this.lottery}) : super(key: key);
+  const LotteryDetailScreen({super.key, required this.lottery});
 
   @override
   State<LotteryDetailScreen> createState() => _LotteryDetailScreenState();

@@ -7,7 +7,7 @@ class QScanWidget extends StatefulWidget {
   final Function(String) scanResult;
   final String? header;
 
-  const QScanWidget({Key? key, required this.scanResult, this.header}) : super(key: key);
+  const QScanWidget({super.key, required this.scanResult, this.header});
 
   @override
   QScanWidgetState createState() => QScanWidgetState();

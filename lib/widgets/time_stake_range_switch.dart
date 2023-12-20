@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class StakeTimeRangeSwitcher extends StatefulWidget {
   final Function(int time) changeTime;
   final Color? color;
-  const StakeTimeRangeSwitcher({Key? key, required this.changeTime, this.color}) : super(key: key);
+  const StakeTimeRangeSwitcher({super.key, required this.changeTime, this.color});
 
   @override
   StakeTimeRangeSwitcherState createState() => StakeTimeRangeSwitcherState();

@@ -9,8 +9,7 @@ import 'package:rocketbot/models/transaction_data.dart';
 class TransactionDetailPage extends StatefulWidget {
   final TransactionData transactionData;
 
-  const TransactionDetailPage({Key? key, required this.transactionData})
-      : super(key: key);
+  const TransactionDetailPage({super.key, required this.transactionData});
 
   @override
   TransactionDetailPageState createState() => TransactionDetailPageState();

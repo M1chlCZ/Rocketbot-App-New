@@ -16,7 +16,7 @@ class CoinMasternodeGraph extends StatefulWidget {
   final int type;
   final Function(bool touch) blockTouch;
 
-  const CoinMasternodeGraph({Key? key, this.rewards, required this.type, this.activeCoin, required this.blockTouch}) : super(key: key);
+  const CoinMasternodeGraph({super.key, this.rewards, required this.type, this.activeCoin, required this.blockTouch});
 
   @override
   CoinMasternodeGraphState createState() => CoinMasternodeGraphState();

@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AppleSignInButton extends StatelessWidget {
   final ValueSetter<AuthorizationCredentialAppleID> onSignIn;
 
-  const AppleSignInButton({Key? key,required this.onSignIn}) : super(key: key);
+  const AppleSignInButton({super.key,required this.onSignIn});
 
   @override
   Widget build(BuildContext context) {

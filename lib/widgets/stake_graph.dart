@@ -18,7 +18,7 @@ class CoinStakeGraph extends StatefulWidget {
   final int type;
   final Function (bool touch) blockTouch;
 
-  const CoinStakeGraph({Key? key, this.stake, required this.type, this.activeCoin, required this.blockTouch}) : super(key: key);
+  const CoinStakeGraph({super.key, this.stake, required this.type, this.activeCoin, required this.blockTouch});
 
   @override
   CoinStakeGraphState createState() => CoinStakeGraphState();

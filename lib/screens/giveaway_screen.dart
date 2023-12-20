@@ -29,10 +29,10 @@ class GiveAwayScreen extends StatefulWidget {
   final VoidCallback nextScreen;
 
   const GiveAwayScreen({
-    Key? key,
+    super.key,
     required this.prevScreen,
     required this.nextScreen,
-  }) : super(key: key);
+  });
 
   @override
   State<GiveAwayScreen> createState() => _GiveAwayScreenState();

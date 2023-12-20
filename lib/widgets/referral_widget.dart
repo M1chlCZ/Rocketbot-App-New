@@ -14,7 +14,7 @@ import 'package:rocketbot/support/qr_code_scanner.dart';
 class ReferralWidget extends StatefulWidget {
   final Function(String) refCode;
 
-  const ReferralWidget({Key? key, required this.refCode}) : super(key: key);
+  const ReferralWidget({super.key, required this.refCode});
 
   @override
   State<ReferralWidget> createState() => ReferralWidgetState();

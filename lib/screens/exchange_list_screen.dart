@@ -7,7 +7,7 @@ class ExchangeListScreen extends StatefulWidget {
   final String idCoin;
   final List<Exchange> exchanges;
 
-  const ExchangeListScreen({Key? key, required this.idCoin, required this.exchanges}) : super(key: key);
+  const ExchangeListScreen({super.key, required this.idCoin, required this.exchanges});
 
   @override
   State<ExchangeListScreen> createState() => _ExchangeListScreenState();

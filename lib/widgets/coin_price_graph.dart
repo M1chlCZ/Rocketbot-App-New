@@ -11,7 +11,7 @@ class CoinPriceGraph extends StatefulWidget {
   final int? time;
   final Function (bool touch) blockTouch;
 
-  const CoinPriceGraph({Key? key, this.prices, this.time, required this.blockTouch}) : super(key: key);
+  const CoinPriceGraph({super.key, this.prices, this.time, required this.blockTouch});
 
   @override
   CoinPriceGraphState createState() => CoinPriceGraphState();

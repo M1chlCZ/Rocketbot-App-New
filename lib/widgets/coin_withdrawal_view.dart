@@ -20,7 +20,7 @@ class CoinWithdrawalView extends StatefulWidget {
   final String? customLocale;
   
 
-  const CoinWithdrawalView({Key? key,required this.data, this.customLocale, this.price}) : super (key: key);
+  const CoinWithdrawalView({super.key,required this.data, this.customLocale, this.price});
 
   @override
   State<CoinWithdrawalView> createState() => _CoinWithdrawalViewState();

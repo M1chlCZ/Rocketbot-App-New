@@ -7,7 +7,7 @@ import 'package:rocketbot/widgets/button_flat.dart';
 class SwitchingButton extends StatefulWidget {
   final VoidCallback onPressed;
 
-  const SwitchingButton({Key? key, required this.onPressed}) : super(key: key);
+  const SwitchingButton({super.key, required this.onPressed});
 
   @override
   MyButtonState createState() => MyButtonState();

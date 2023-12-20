@@ -48,8 +48,8 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 
 class PortfolioScreen extends ConsumerStatefulWidget {
   const PortfolioScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   PortfolioScreenState createState() => PortfolioScreenState();

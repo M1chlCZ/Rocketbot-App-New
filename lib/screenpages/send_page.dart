@@ -28,7 +28,7 @@ class SendPage extends StatefulWidget {
   final Function(double free) changeFree;
   final double? free;
 
-  const SendPage({Key? key, this.coinActive, this.free, required this.changeFree}) : super(key: key);
+  const SendPage({super.key, this.coinActive, this.free, required this.changeFree});
 
   @override
   SendPageState createState() => SendPageState();
@@ -437,6 +437,7 @@ class SendPageState extends State<SendPage> {
                             key: _keyStake,
                             onSubmit: () {
                               _handlePIN();
+                              return null;
                             },
                           ),
                         ),

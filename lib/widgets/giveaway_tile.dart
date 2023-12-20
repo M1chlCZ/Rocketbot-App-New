@@ -7,7 +7,7 @@ class GiveawayTile extends StatelessWidget {
   final Giveaway giveaway;
   final Function(Giveaway g) callBack;
 
-  const GiveawayTile({Key? key, required this.giveaway, required this.callBack}) : super(key: key);
+  const GiveawayTile({super.key, required this.giveaway, required this.callBack});
 
   @override
   Widget build(BuildContext context) {

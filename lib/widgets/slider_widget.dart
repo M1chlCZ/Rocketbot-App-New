@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rocketbot/widgets/slider_painter.dart';
 
 class SliderWidget extends StatefulWidget {
-  const SliderWidget({Key? key}) : super(key: key);
+  const SliderWidget({super.key});
 
   @override
   SliderWidgetState createState() => SliderWidgetState();

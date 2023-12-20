@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class PriceRangeSwitcher extends StatefulWidget {
   final Function(int time) changeTime;
   final Color? color;
-  const PriceRangeSwitcher({Key? key, required this.changeTime, this.color}) : super(key: key);
+  const PriceRangeSwitcher({super.key, required this.changeTime, this.color});
 
   @override
   PriceRangeSwitcherState createState() => PriceRangeSwitcherState();

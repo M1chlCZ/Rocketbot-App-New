@@ -24,7 +24,7 @@ class DropDownIcon<T> extends StatefulWidget {
   /// if true the dropdown icon will as a leading icon, default to false
   final bool leadingIcon;
   const DropDownIcon({
-    Key? key,
+    super.key,
     this.hideIcon = false,
     required this.child,
     required this.items,
@@ -34,7 +34,7 @@ class DropDownIcon<T> extends StatefulWidget {
     this.leadingIcon = false,
     this.onChange,
     required this.currentIndex,
-  }) : super(key: key);
+  });
 
   @override
   DropDownIconState<T> createState() => DropDownIconState<T>();
@@ -203,7 +203,7 @@ class DropdownItem<T> extends StatelessWidget {
   final T? value;
   final Widget? child;
 
-  const DropdownItem({Key? key, this.value, this.child}) : super(key: key);
+  const DropdownItem({super.key, this.value, this.child});
   @override
   Widget build(BuildContext context) {
     return child!;

@@ -17,10 +17,10 @@ class LaunchpadScreen extends ConsumerStatefulWidget {
   final VoidCallback nextScreen;
 
   const LaunchpadScreen({
-    Key? key,
+    super.key,
     required this.prevScreen,
     required this.nextScreen,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<LaunchpadScreen> createState() => _LaunchpadScreenState();

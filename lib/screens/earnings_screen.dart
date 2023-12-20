@@ -20,7 +20,7 @@ import 'package:rocketbot/widgets/coin_list_view.dart';
 import 'package:rocketbot/widgets/earnings_chart.dart';
 
 class EarningsScreen extends StatefulWidget {
-  const EarningsScreen({Key? key}) : super(key: key);
+  const EarningsScreen({super.key});
 
   @override
   State<EarningsScreen> createState() => _EarningsScreenState();

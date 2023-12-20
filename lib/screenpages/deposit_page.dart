@@ -18,7 +18,7 @@ class DepositPage extends StatefulWidget {
   final double? free;
   final String? depositAddr;
 
-  const DepositPage({Key? key, this.coin, this.free, this.depositAddr}) : super(key: key);
+  const DepositPage({super.key, this.coin, this.free, this.depositAddr});
 
   @override
   DepositPageState createState() => DepositPageState();

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class PriceBadge extends StatefulWidget {
   final Decimal? percentage;
-  const PriceBadge({Key? key, required this.percentage}) : super(key: key);
+  const PriceBadge({super.key, required this.percentage});
 
   @override
   State<PriceBadge> createState() => _PriceBadgeState();

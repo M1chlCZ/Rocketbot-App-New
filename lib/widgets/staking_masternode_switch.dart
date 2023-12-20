@@ -6,7 +6,7 @@ class StakingMasternodeSwitcher extends StatefulWidget {
   final Function(int page)? changeType;
   final bool masternode;
 
-  const StakingMasternodeSwitcher({Key? key, this.changeType, required this.masternode}) : super(key: key);
+  const StakingMasternodeSwitcher({super.key, this.changeType, required this.masternode});
 
   @override
   StakingMasternodeSwitcherState createState() => StakingMasternodeSwitcherState();

@@ -5,7 +5,7 @@ import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/notification_tile.dart';
 
 class NotificationScreen extends ConsumerWidget {
-  const NotificationScreen({Key? key}) : super(key: key);
+  const NotificationScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

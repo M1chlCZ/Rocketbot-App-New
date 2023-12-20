@@ -6,7 +6,7 @@ class NeuContainer extends StatelessWidget {
   final double? width;
   final double? radius;
   final Color? color;
-  const NeuContainer({Key? key, this.child, this.height, this.width, this.radius, this.color}) : super(key: key);
+  const NeuContainer({super.key, this.child, this.height, this.width, this.radius, this.color});
 
   @override
   Widget build(BuildContext context) {

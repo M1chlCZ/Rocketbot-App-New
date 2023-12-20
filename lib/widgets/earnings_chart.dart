@@ -5,7 +5,7 @@ import 'package:rocketbot/models/sector.dart';
 class EarningsChart extends StatefulWidget {
   final List<Sector> sectors;
 
-  const EarningsChart(this.sectors, {Key? key}) : super(key: key);
+  const EarningsChart(this.sectors, {super.key});
 
   @override
   State<EarningsChart> createState() => _EarningsChartState();

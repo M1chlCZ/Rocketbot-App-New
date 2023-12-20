@@ -12,7 +12,7 @@ class AuthScreen extends StatefulWidget {
   final bool setupPIN;
   final int type;
 
-  const AuthScreen({Key? key, this.setupPIN = false, this.type = 0}) : super(key: key);
+  const AuthScreen({super.key, this.setupPIN = false, this.type = 0});
 
   @override
   AuthScreenState createState() => AuthScreenState();

@@ -21,7 +21,7 @@ import 'package:sliding_number/sliding_number.dart';
 class BotScreen extends ConsumerStatefulWidget {
   final String type;
 
-  const BotScreen(this.type, {Key? key}) : super(key: key);
+  const BotScreen(this.type, {super.key});
 
   @override
   ConsumerState<BotScreen> createState() => _BotScreenState();

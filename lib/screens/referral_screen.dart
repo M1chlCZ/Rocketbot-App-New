@@ -21,7 +21,7 @@ import 'package:rocketbot/widgets/referral_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ReferralScreen extends StatefulWidget {
-  const ReferralScreen({Key? key}) : super(key: key);
+  const ReferralScreen({super.key});
 
   @override
   State<ReferralScreen> createState() => _ReferralScreenState();

@@ -7,7 +7,7 @@ class HorizontalListView extends StatelessWidget {
   final Function(int) callBack;
   final bool active;
   final int index;
-  const HorizontalListView({Key? key, required this.coin, required this.callBack, required this.active, required this.index}) : super(key: key);
+  const HorizontalListView({super.key, required this.coin, required this.callBack, required this.active, required this.index});
 
   @override
   Widget build(BuildContext context) {

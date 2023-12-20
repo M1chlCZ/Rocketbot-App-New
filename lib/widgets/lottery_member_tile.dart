@@ -11,7 +11,7 @@ class LotteryMembersTile extends StatelessWidget {
   final Members member;
   final Function(AirdropMembers g) callBack;
 
-  const LotteryMembersTile({Key? key, required this.member, required this.callBack}) : super(key: key);
+  const LotteryMembersTile({super.key, required this.member, required this.callBack});
 
   @override
   Widget build(BuildContext context) {

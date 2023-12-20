@@ -8,7 +8,7 @@ class PictureCacheWidget extends StatefulWidget {
   final Coin? coin;
   final double? size;
 
-  const PictureCacheWidget({Key? key, this.coin, this.size}) : super(key: key);
+  const PictureCacheWidget({super.key, this.coin, this.size});
 
   @override
   State<PictureCacheWidget> createState() => _PictureCacheWidgetState();

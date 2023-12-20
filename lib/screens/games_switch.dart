@@ -6,7 +6,7 @@ class GameSwitcher extends StatefulWidget {
   final Function(int page)? changeType;
   final List<String>? games;
 
-  const GameSwitcher({Key? key, this.changeType, this.games = const ["Giveaway", "Airdrop", "Spin"]}) : super(key: key);
+  const GameSwitcher({super.key, this.changeType, this.games = const ["Giveaway", "Airdrop", "Spin"]});
 
   @override
   GameSwitcherState createState() => GameSwitcherState();

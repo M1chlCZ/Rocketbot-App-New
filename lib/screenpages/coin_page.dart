@@ -40,7 +40,7 @@ class CoinScreen extends ConsumerStatefulWidget {
   final bool masternode;
 
   const CoinScreen(
-      {Key? key,
+      {super.key,
       required this.activeCoin,
       required this.changeFree,
       this.allCoins,
@@ -51,8 +51,7 @@ class CoinScreen extends ConsumerStatefulWidget {
       required this.goToStaking,
       this.posDepositAddr,
       required this.masternode,
-        this.depositAddr})
-      : super(key: key);
+        this.depositAddr});
 
   @override
   CoinScreenState createState() => CoinScreenState();

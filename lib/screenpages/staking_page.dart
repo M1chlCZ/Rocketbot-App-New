@@ -48,7 +48,7 @@ class StakingPage extends ConsumerStatefulWidget {
   final double free;
 
   const StakingPage({
-    Key? key,
+    super.key,
     required this.activeCoin,
     required this.coinBalance,
     required this.changeFree,
@@ -56,7 +56,7 @@ class StakingPage extends ConsumerStatefulWidget {
     this.depositPosAddress,
     required this.free,
     required this.blockTouch,
-  }) : super(key: key);
+  });
 
   @override
   StakingPageState createState() => StakingPageState();
@@ -738,6 +738,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                       key: _keyStake,
                       onSubmit: () {
                         _createWithdrawal();
+                        return null;
                       },
                     ),
                   ),

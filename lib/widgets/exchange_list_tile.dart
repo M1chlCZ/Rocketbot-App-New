@@ -8,7 +8,7 @@ class ExchangeTile extends StatelessWidget {
   final Exchange ex;
   final String coin;
 
-  const ExchangeTile({Key? key, required this.ex, required this.coin}) : super(key: key);
+  const ExchangeTile({super.key, required this.ex, required this.coin});
 
   @override
   Widget build(BuildContext context) {

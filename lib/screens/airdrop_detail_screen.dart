@@ -11,7 +11,7 @@ import 'package:rocketbot/widgets/button_flat.dart';
 class AirdropDetailScreen extends ConsumerWidget {
   final Airdrop airdrop;
 
-  const AirdropDetailScreen({Key? key, required this.airdrop}) : super(key: key);
+  const AirdropDetailScreen({super.key, required this.airdrop});
 
   @override
   Widget build(BuildContext context, ref) {

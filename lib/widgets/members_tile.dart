@@ -10,7 +10,7 @@ class MembersTile extends StatelessWidget {
   final Members member;
   final Function(Members g) callBack;
 
-  const MembersTile({Key? key, required this.member, required this.callBack}) : super(key: key);
+  const MembersTile({super.key, required this.member, required this.callBack});
 
   @override
   Widget build(BuildContext context) {

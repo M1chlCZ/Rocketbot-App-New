@@ -10,7 +10,7 @@ class AirdropMembersTile extends StatelessWidget {
   final AirdropMembers member;
   final Function(AirdropMembers g) callBack;
 
-  const AirdropMembersTile({Key? key, required this.member, required this.callBack}) : super(key: key);
+  const AirdropMembersTile({super.key, required this.member, required this.callBack});
 
   @override
   Widget build(BuildContext context) {

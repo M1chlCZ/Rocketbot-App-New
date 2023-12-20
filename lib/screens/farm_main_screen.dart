@@ -18,7 +18,7 @@ class FarmMainScreen extends StatefulWidget {
   final bool masternode;
 
   const FarmMainScreen(
-      {Key? key,
+      {super.key,
       required this.activeCoin,
       required this.coinBalance,
       required this.depositAddress,
@@ -26,8 +26,7 @@ class FarmMainScreen extends StatefulWidget {
       required this.changeFree,
       required this.blockTouch,
       required this.free,
-      required this.masternode})
-      : super(key: key);
+      required this.masternode});
 
   @override
   State<FarmMainScreen> createState() => _FarmMainScreenState();

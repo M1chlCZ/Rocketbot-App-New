@@ -48,7 +48,7 @@ class MasternodePage extends ConsumerStatefulWidget {
   final bool masternode;
 
   const MasternodePage({
-    Key? key,
+    super.key,
     required this.activeCoin,
     required this.coinBalance,
     required this.changeFree,
@@ -56,7 +56,7 @@ class MasternodePage extends ConsumerStatefulWidget {
     required this.free,
     required this.blockTouch,
     required this.masternode,
-  }) : super(key: key);
+  });
 
   @override
   MasternodePageState createState() => MasternodePageState();
@@ -854,6 +854,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               key: _keyStake,
                               onSubmit: () {
                                 _createWithdrawal();
+                                return null;
                               },
                             ),
                             if (_freeMN == 0)

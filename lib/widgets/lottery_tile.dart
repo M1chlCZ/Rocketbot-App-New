@@ -7,7 +7,7 @@ class LotteryTile extends StatelessWidget {
   final Lottery lottery;
   final Function(Lottery g) callBack;
 
-  const LotteryTile({Key? key, required this.lottery, required this.callBack}) : super(key: key);
+  const LotteryTile({super.key, required this.lottery, required this.callBack});
 
   @override
   Widget build(BuildContext context) {

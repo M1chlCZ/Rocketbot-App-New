@@ -4,7 +4,7 @@ import 'package:rocketbot/widgets/button_flat.dart';
 class MenuNode extends StatelessWidget {
   final String menuText;
   final VoidCallback goto;
-  const MenuNode({Key? key, required this.menuText, required this.goto}) : super(key: key);
+  const MenuNode({super.key, required this.menuText, required this.goto});
 
   @override
   Widget build(BuildContext context) {

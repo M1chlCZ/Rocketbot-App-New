@@ -14,7 +14,7 @@ class NeuButton extends StatelessWidget {
   final Gradient? gradient;
 
   const NeuButton(
-      {Key? key,
+      {super.key,
       this.color,
       this.onTap,
       this.icon,
@@ -25,8 +25,7 @@ class NeuButton extends StatelessWidget {
       this.child,
       this.height,
       this.width,
-      this.gradient})
-      : super(key: key);
+      this.gradient});
 
   @override
   Widget build(BuildContext context) {

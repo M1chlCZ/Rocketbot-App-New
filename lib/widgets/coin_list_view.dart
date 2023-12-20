@@ -15,7 +15,7 @@ class CoinListView extends StatefulWidget {
   final Function(CoinBalance h) coinSwitch;
   final Decimal? free;
 
-  const CoinListView({Key? key, required this.coin, this.customLocale, this.free, required this.coinSwitch}) : super(key: key);
+  const CoinListView({super.key, required this.coin, this.customLocale, this.free, required this.coinSwitch});
 
   @override
   State<CoinListView> createState() => _CoinListViewState();

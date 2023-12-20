@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class InputDoneView extends StatelessWidget {
-  const InputDoneView({Key? key}) : super(key: key);
+  const InputDoneView({super.key});
 
   @override
   Widget build(BuildContext context) {

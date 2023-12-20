@@ -14,13 +14,12 @@ class SocialMediaCard extends StatefulWidget {
   final Function(int socSite) unlink;
 
   const SocialMediaCard(
-      {Key? key,
+      {super.key,
       this.socials,
       required this.name,
       required this.pictureName,
       required this.onTap,
-      required this.cardActiveColor, required this.unlink})
-      : super(key: key);
+      required this.cardActiveColor, required this.unlink});
 
   @override
   SocialMediaCardState createState() => SocialMediaCardState();

@@ -15,8 +15,7 @@ class CustomLockScrollPhysics extends ScrollPhysics {
   /// Creates physics for a [PageView].
   /// [lockLeft] Lock scroll to the left
   /// [lockRight] Lock scroll to the right
-  CustomLockScrollPhysics({ScrollPhysics? parent, this.lockLeft = false, this.lockRight = false})
-      : super(parent: parent);
+  CustomLockScrollPhysics({super.parent, this.lockLeft = false, this.lockRight = false});
 
   @override
   CustomLockScrollPhysics applyTo(ScrollPhysics? ancestor) {

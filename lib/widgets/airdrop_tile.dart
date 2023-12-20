@@ -7,7 +7,7 @@ class AirdropTile extends StatelessWidget {
   final Airdrop airdrop;
   final Function(Airdrop g) callBack;
 
-  const AirdropTile({Key? key, required this.airdrop, required this.callBack}) : super(key: key);
+  const AirdropTile({super.key, required this.airdrop, required this.callBack});
 
   @override
   Widget build(BuildContext context) {

@@ -9,7 +9,7 @@ import 'package:rocketbot/screens/auth_screen.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 
 class SecurityScreen extends StatefulWidget {
-  const SecurityScreen({Key? key}) : super(key: key);
+  const SecurityScreen({super.key});
 
   @override
   SecurityScreenState createState() => SecurityScreenState();

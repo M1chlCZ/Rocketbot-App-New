@@ -10,7 +10,7 @@ class LaunchpadMemberTile extends StatelessWidget {
 
   // final Function(Members g) callBack;
 
-  const LaunchpadMemberTile({Key? key, required this.member}) : super(key: key);
+  const LaunchpadMemberTile({super.key, required this.member});
 
   @override
   Widget build(BuildContext context) {

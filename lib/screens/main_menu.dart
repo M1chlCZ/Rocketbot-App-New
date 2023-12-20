@@ -19,7 +19,7 @@ import '../models/user.dart';
 class MainMenuScreen extends StatefulWidget {
   static const String route = "menu";
 
-  const MainMenuScreen({Key? key}) : super(key: key);
+  const MainMenuScreen({super.key});
 
   @override
   State<MainMenuScreen> createState() => _MainMenuScreenState();

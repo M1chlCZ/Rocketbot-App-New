@@ -8,7 +8,7 @@ import 'package:rocketbot/support/utils.dart';
 class NotificationTile extends StatelessWidget {
   final NotNode node;
 
-  const NotificationTile({Key? key, required this.node}) : super(key: key);
+  const NotificationTile({super.key, required this.node});
 
   @override
   Widget build(BuildContext context) {

@@ -23,7 +23,7 @@ import '../models/user.dart';
 class SettingsScreen extends StatefulWidget {
   final VoidCallback socials;
 
-  const SettingsScreen({Key? key, required this.socials}) : super(key: key);
+  const SettingsScreen({super.key, required this.socials});
 
   @override
   SettingsScreenState createState() => SettingsScreenState();

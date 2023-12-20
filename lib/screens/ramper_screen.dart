@@ -11,7 +11,7 @@ class RamperScreen extends ConsumerStatefulWidget {
   final int userID;
   final String email;
 
-  const RamperScreen({Key? key, required this.coin, required this.userID, required this.email}) : super(key: key);
+  const RamperScreen({super.key, required this.coin, required this.userID, required this.email});
 
   @override
   ConsumerState<RamperScreen> createState() => _RamperScreenState();

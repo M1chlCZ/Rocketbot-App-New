@@ -14,7 +14,7 @@ import '../netinterface/interface.dart';
 class TwitterGiveawayDetailScreen extends StatefulWidget {
   final Giveaway giveaway;
 
-  const TwitterGiveawayDetailScreen({Key? key, required this.giveaway}) : super(key: key);
+  const TwitterGiveawayDetailScreen({super.key, required this.giveaway});
 
   @override
   State<TwitterGiveawayDetailScreen> createState() => _TwitterGiveawayDetailScreenState();

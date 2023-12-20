@@ -15,7 +15,7 @@ class SocialScreen extends ConsumerStatefulWidget {
   final List<int> socials;
   final User me;
 
-  const SocialScreen({Key? key, required this.socials, required this.me}) : super(key: key);
+  const SocialScreen({super.key, required this.socials, required this.me});
 
   @override
   SocialScreenState createState() => SocialScreenState();

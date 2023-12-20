@@ -7,7 +7,7 @@ class LaunchpadTile extends StatelessWidget {
   final Stuff launchpad;
   final Function(int launchpadID) callBack;
 
-  const LaunchpadTile({Key? key, required this.launchpad, required this.callBack}) : super(key: key);
+  const LaunchpadTile({super.key, required this.launchpad, required this.callBack});
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +103,7 @@ class LaunchpadTopTile extends StatelessWidget {
   final int position;
   final Function(int launchpadID) callBack;
 
-  const LaunchpadTopTile({Key? key, required this.launchpad, required this.callBack, required this.position}) : super(key: key);
+  const LaunchpadTopTile({super.key, required this.launchpad, required this.callBack, required this.position});
 
   @override
   Widget build(BuildContext context) {

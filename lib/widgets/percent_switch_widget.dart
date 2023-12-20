@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class PercentSwitchWidget extends StatefulWidget {
   final Function(double percent) changePercent;
   final double? width;
-  const PercentSwitchWidget({Key? key, required this.changePercent, this.width}) : super(key: key);
+  const PercentSwitchWidget({super.key, required this.changePercent, this.width});
 
   @override
   PercentSwitchWidgetState createState() => PercentSwitchWidgetState();

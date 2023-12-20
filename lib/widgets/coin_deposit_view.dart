@@ -19,7 +19,7 @@ class CoinDepositView extends StatefulWidget {
   final String? customLocale;
   
 
-  const CoinDepositView({Key? key,required this.data, this.customLocale, required this.price}) : super (key: key);
+  const CoinDepositView({super.key,required this.data, this.customLocale, required this.price});
 
   @override
   State<CoinDepositView> createState() => _CoinDepositViewState();

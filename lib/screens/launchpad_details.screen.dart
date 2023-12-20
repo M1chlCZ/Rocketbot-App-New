@@ -16,7 +16,7 @@ import 'package:rocketbot/widgets/launchpad_members.dart';
 class LaunchpadDetailsScreen extends ConsumerStatefulWidget {
   final int launchpadID;
 
-  const LaunchpadDetailsScreen({Key? key, required this.launchpadID}) : super(key: key);
+  const LaunchpadDetailsScreen({super.key, required this.launchpadID});
 
   @override
   ConsumerState<LaunchpadDetailsScreen> createState() => _LaunchpadDetailsScreenState();

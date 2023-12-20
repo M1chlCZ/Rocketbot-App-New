@@ -10,7 +10,7 @@ import 'package:rocketbot/widgets/button_flat.dart';
 class MasternodeManageScreen extends StatefulWidget {
   final MasternodeInfo mnInfo;
 
-  const MasternodeManageScreen({Key? key, required this.mnInfo}) : super(key: key);
+  const MasternodeManageScreen({super.key, required this.mnInfo});
 
   @override
   State<MasternodeManageScreen> createState() => _MasternodeManageScreenState();

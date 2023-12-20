@@ -56,7 +56,7 @@ class LockScreen extends StatefulWidget {
 
   /// Lock Screen constructer
   const LockScreen({
-    Key? key,
+    super.key,
     required this.onSuccess,
     required this.title,
     this.borderColor,
@@ -76,8 +76,7 @@ class LockScreen extends StatefulWidget {
   })  : assert(passLength <= 8),
         assert(bgImage != null),
         assert(borderColor != null),
-        assert(foregroundColor != null),
-  super(key: key);
+        assert(foregroundColor != null);
 
   @override
   LockScreenState createState() => LockScreenState();
@@ -444,7 +443,7 @@ class CodePanel extends StatelessWidget {
   final int? status;
 
   const CodePanel(
-      {Key? key,
+      {super.key,
         this.codeLength,
       this.currentLength,
       this.borderColor,
@@ -456,8 +455,7 @@ class CodePanel extends StatelessWidget {
         assert(currentLength >= 0),
         assert(currentLength <= codeLength),
         assert(deleteCode != null),
-        assert(status == 0 || status == 1 || status == 2),
-  super(key: key);
+        assert(status == 0 || status == 1 || status == 2);
 
   @override
   Widget build(BuildContext context) {

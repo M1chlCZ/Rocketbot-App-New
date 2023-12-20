@@ -15,7 +15,7 @@ class FlatCustomButton extends StatelessWidget {
   final EdgeInsets? padding;
   final double? borderWidth;
 
-  const FlatCustomButton({Key? key, this.color, this.onTap, this.icon, this.imageIcon, this.splashColor, this.animIcon, this.radius = 4.0, this.child, this.borderColor, this.height, this.width, this.padding, this.borderWidth}) : super(key: key);
+  const FlatCustomButton({super.key, this.color, this.onTap, this.icon, this.imageIcon, this.splashColor, this.animIcon, this.radius = 4.0, this.child, this.borderColor, this.height, this.width, this.padding, this.borderWidth});
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class LoginRegisterSwitcher extends StatefulWidget {
   final Function(int time)? changeType;
 
-  const LoginRegisterSwitcher({Key? key, this.changeType}) : super(key: key);
+  const LoginRegisterSwitcher({super.key, this.changeType});
 
   @override
   LoginRegisterSwitcherState createState() => LoginRegisterSwitcherState();

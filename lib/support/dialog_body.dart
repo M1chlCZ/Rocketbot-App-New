@@ -14,14 +14,14 @@ class DialogBody extends StatefulWidget {
   final double? width;
 
   const DialogBody({
-    Key? key,
+    super.key,
     this.onTap,
     required this.header,
     required this.child,
     required this.buttonLabel,
     this.oneButton = false,
     this.buttonCancelLabel = 'Cancel', this.noButtons = false, this.width,
-  }) : super(key: key);
+  });
 
   @override
   DialogBodyState createState() => DialogBodyState();
