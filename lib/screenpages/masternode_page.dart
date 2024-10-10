@@ -107,7 +107,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     super.initState();
     _price = widget.coinBalance.priceData!.prices!.usd!.toDouble();
     _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
-    _animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _animationController!, curve: Curves.fastLinearToSlowEaseIn));
+    _animation = Tween(begin: 0.0, end: 1.0)
+        .animate(CurvedAnimation(parent: _animationController!, curve: Curves.fastLinearToSlowEaseIn));
     _coinActive = widget.activeCoin;
     _free = widget.free;
     _changeFree();
@@ -172,7 +173,9 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     _pendingMasternodes = _mnInfo?.pendingList?.length ?? 0;
     _collateralTiers = _mnInfo?.collateralTiers ?? [_collateral];
     _roi = _mnInfo?.roi ?? 0.0;
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -298,8 +301,11 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         Text(
                           "${AppLocalizations.of(context)!.stake_available}:",
                           // textAlign: TextAlign.end,
-                          style:
-                              TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                          style: TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.0,
+                              color: Colors.white.withOpacity(0.4)),
                         ),
                         Expanded(
                           child: Padding(
@@ -309,14 +315,21 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
-                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(fontSize: 14.0, color: Colors.white70),
                             ),
                           ),
                         ),
                         Text(
                           _coinActive.ticker!,
                           // textAlign: TextAlign.end,
-                          style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
+                          style: const TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontWeight: FontWeight.w800,
+                              fontSize: 14.0,
+                              color: Color(0xFFF68DB2)),
                         ),
                       ],
                     ),
@@ -334,8 +347,11 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         Text(
                           "${AppLocalizations.of(context)!.mn_collateral}:",
                           // textAlign: TextAlign.end,
-                          style:
-                              TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                          style: TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.0,
+                              color: Colors.white.withOpacity(0.4)),
                         ),
                         Expanded(
                           child: Padding(
@@ -345,7 +361,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
-                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(fontSize: 14.0, color: Colors.white70),
                             ),
                           ),
                         ),
@@ -354,7 +373,11 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                           child: Text(
                             _collateralTiers.length > 1 ? "TIERS" : _coinActive.ticker!,
                             // textAlign: TextAlign.end,
-                            style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
+                            style: const TextStyle(
+                                fontFamily: 'JosefinSans',
+                                fontWeight: FontWeight.w800,
+                                fontSize: 14.0,
+                                color: Color(0xFFF68DB2)),
                           ),
                         ),
                       ],
@@ -373,8 +396,11 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         Text(
                           "${AppLocalizations.of(context)!.mn_your_mns}:",
                           // textAlign: TextAlign.end,
-                          style:
-                              TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                          style: TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.0,
+                              color: Colors.white.withOpacity(0.4)),
                         ),
                         Expanded(
                           child: Padding(
@@ -384,14 +410,21 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
-                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(fontSize: 14.0, color: Colors.white70),
                             ),
                           ),
                         ),
                         const Text(
                           "MNs",
                           // textAlign: TextAlign.end,
-                          style: TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
+                          style: TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontWeight: FontWeight.w800,
+                              fontSize: 14.0,
+                              color: Color(0xFFF68DB2)),
                         ),
                       ],
                     ),
@@ -415,7 +448,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                   "${AppLocalizations.of(context)!.mn_uncofirmed}:",
                                   // textAlign: TextAlign.end,
                                   style: TextStyle(
-                                      fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                                      fontFamily: 'JosefinSans',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16.0,
+                                      color: Colors.white.withOpacity(0.4)),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -425,7 +461,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -433,7 +472,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                   _pendingMasternodes == 1 ? "MN" : "MNs",
                                   // textAlign: TextAlign.end,
                                   style: const TextStyle(
-                                      fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
+                                      fontFamily: 'JosefinSans',
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 14.0,
+                                      color: Color(0xFFF68DB2)),
                                 ),
                               ],
                             ),
@@ -454,8 +496,11 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         Text(
                           "${AppLocalizations.of(context)!.mn_reward}:",
                           // textAlign: TextAlign.end,
-                          style:
-                              TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white.withOpacity(0.4)),
+                          style: TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.0,
+                              color: Colors.white.withOpacity(0.4)),
                         ),
                         Expanded(
                           child: Padding(
@@ -465,14 +510,21 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               maxLines: 1,
                               minFontSize: 8.0,
                               textAlign: TextAlign.end,
-                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(fontSize: 14.0, color: Colors.white70),
                             ),
                           ),
                         ),
                         Text(
                           _coinActive.ticker!,
                           // textAlign: TextAlign.end,
-                          style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 14.0, color: Color(0xFFF68DB2)),
+                          style: const TextStyle(
+                              fontFamily: 'JosefinSans',
+                              fontWeight: FontWeight.w800,
+                              fontSize: 14.0,
+                              color: Color(0xFFF68DB2)),
                         ),
                       ],
                     ),
@@ -505,7 +557,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -515,7 +570,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -536,7 +594,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -546,7 +607,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -554,7 +618,6 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                             ),
                           ),
                         ),
-
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
@@ -568,7 +631,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -578,7 +644,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -599,7 +668,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -609,7 +681,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -631,7 +706,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       Colors.white54,
                                     ]),
                                     // textAlign: TextAlign.end,
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(fontSize: 12.0, color: Colors.white70),
                                   ),
                                   Expanded(
                                     child: Padding(
@@ -641,7 +719,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                         maxLines: 1,
                                         minFontSize: 8.0,
                                         textAlign: TextAlign.end,
-                                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge!
+                                            .copyWith(fontSize: 14.0, color: Colors.white70),
                                       ),
                                     ),
                                   ),
@@ -649,38 +730,44 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               ),
                             ),
                           ),
-                        if(_staking)
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 10.0, left: 10.0),
-                            child: Row(
-                              children: [
-                                GradientText(
-                                  "${AppLocalizations.of(context)!.staking_est}:",
-                                  gradient: const LinearGradient(colors: [
-                                    Colors.white70,
-                                    Colors.white54,
-                                  ]),
-                                  // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 8.0, top: 1.0),
-                                    child: AutoSizeText(
-                                      "${_estimated.toStringAsFixed(3)} ${_coinActive.ticker!}/${AppLocalizations.of(context)!.staking_day.toString().toUpperCase()}",
-                                      maxLines: 1,
-                                      minFontSize: 8.0,
-                                      textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
+                        if (_staking)
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                              child: Row(
+                                children: [
+                                  GradientText(
+                                    "${AppLocalizations.of(context)!.staking_est}:",
+                                    gradient: const LinearGradient(colors: [
+                                      Colors.white70,
+                                      Colors.white54,
+                                    ]),
+                                    // textAlign: TextAlign.end,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(fontSize: 12.0, color: Colors.white70),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 8.0, top: 1.0),
+                                      child: AutoSizeText(
+                                        "${_estimated.toStringAsFixed(3)} ${_coinActive.ticker!}/${AppLocalizations.of(context)!.staking_day.toString().toUpperCase()}",
+                                        maxLines: 1,
+                                        minFontSize: 8.0,
+                                        textAlign: TextAlign.end,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge!
+                                            .copyWith(fontSize: 14.0, color: Colors.white70),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
@@ -694,7 +781,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                     Colors.white54,
                                   ]),
                                   // textAlign: TextAlign.end,
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 12.0, color: Colors.white70),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(fontSize: 12.0, color: Colors.white70),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -704,7 +794,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                       maxLines: 1,
                                       minFontSize: 8.0,
                                       textAlign: TextAlign.end,
-                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 14.0, color: Colors.white70),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(fontSize: 14.0, color: Colors.white70),
                                     ),
                                   ),
                                 ),
@@ -745,9 +838,14 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                             height: 8.0,
                           ),
                           Text(
-                            _detailsExtended ? AppLocalizations.of(context)!.st_less : AppLocalizations.of(context)!.st_more,
+                            _detailsExtended
+                                ? AppLocalizations.of(context)!.st_less
+                                : AppLocalizations.of(context)!.st_more,
                             // textAlign: TextAlign.end,
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontFamily: 'JosefinSans', fontSize: 14.0, color: Colors.white70),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(fontFamily: 'JosefinSans', fontSize: 14.0, color: Colors.white70),
                           ),
                           const SizedBox(
                             height: 8.0,
@@ -770,14 +868,19 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                         Container(
                           margin: const EdgeInsets.all(10.0),
                           padding: const EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), color: const Color(0xFFF68DB2)),
+                          decoration:
+                              BoxDecoration(borderRadius: BorderRadius.circular(12.0), color: const Color(0xFFF68DB2)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Padding(
                                 padding: EdgeInsets.only(top: 4.0),
                                 child: Text("Masternode tier",
-                                    style: TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.white)),
+                                    style: TextStyle(
+                                        fontFamily: 'JosefinSans',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16.0,
+                                        color: Colors.white)),
                               ),
                               SizedBox(
                                 width: 175,
@@ -812,7 +915,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                               padding: const EdgeInsets.all(10.0),
                                               child: Text(
                                                 "${formatter.format(item.value).replaceAll(",", " ")} ${_coinActive.ticker!}",
-                                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 16.0, color: Colors.white),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge!
+                                                    .copyWith(fontSize: 16.0, color: Colors.white),
                                                 textAlign: TextAlign.start,
                                               ),
                                             ),
@@ -828,7 +934,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                       Container(
                         margin: const EdgeInsets.all(10.0),
                         padding: const EdgeInsets.all(3.0),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), color: const Color(0xFFF68DB2)),
+                        decoration:
+                            BoxDecoration(borderRadius: BorderRadius.circular(12.0), color: const Color(0xFFF68DB2)),
                         child: Stack(
                           children: [
                             SlideAction(
@@ -850,7 +957,11 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                 size: 35.0,
                               ),
                               sliderRotate: false,
-                              textStyle: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
+                              textStyle: const TextStyle(
+                                  fontFamily: 'JosefinSans',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18.0,
+                                  color: Colors.white),
                               key: _keyStake,
                               onSubmit: () {
                                 _createWithdrawal();
@@ -861,7 +972,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               Container(
                                 width: MediaQuery.of(context).size.width,
                                 height: 60.0,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: const Color(0xFFBE235A)),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0), color: const Color(0xFFBE235A)),
                                 child: Center(
                                     child: Padding(
                                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -925,7 +1037,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                                                 : Text(
                                                     AppLocalizations.of(context)!.stake_get_reward,
                                                     style: const TextStyle(
-                                                        fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 18.0, color: Colors.white),
+                                                        fontFamily: 'JosefinSans',
+                                                        fontWeight: FontWeight.w800,
+                                                        fontSize: 18.0,
+                                                        color: Colors.white),
                                                   ))),
                                   )),
                             ),
@@ -1047,7 +1162,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
 
     if (amt > _free) {
       Navigator.of(context).pop();
-      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, AppLocalizations.of(context)!.staking_not_enough);
+      Dialogs.openAlertBox(
+          context, AppLocalizations.of(context)!.error, AppLocalizations.of(context)!.staking_not_enough);
       _keyStake.currentState?.reset();
       return;
     }
@@ -1061,7 +1177,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
 
     if (minAmount) {
       Navigator.of(context).pop();
-      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, AppLocalizations.of(context)!.staking_not_min(_min!.toString(), _coinActive.ticker!));
+      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error,
+          AppLocalizations.of(context)!.staking_not_min(_min!.toString(), _coinActive.ticker!));
       _keyStake.currentState?.reset();
       return;
     }
@@ -1077,13 +1194,20 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       final responseLock = await _interface.post("masternode/lock", queryLock, pos: true, debug: false);
       mnLock = MasternodeLock.fromJson(responseLock);
       if (mnLock.node?.address == null) {
-        if(context.mounted) {Navigator.of(context).pop();
-        Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Data err");}
+        if (context.mounted) {
+          Navigator.of(context).pop();
+          Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Data err");
+        }
         _keyStake.currentState?.reset();
         return;
       }
 
-      Map<String, dynamic> query = {"coinId": _coinActive.id!, "fee": _fee, "amount": amt, "toAddress": mnLock.node!.address!};
+      Map<String, dynamic> query = {
+        "coinId": _coinActive.id!,
+        "fee": _fee,
+        "amount": amt,
+        "toAddress": mnLock.node!.address!
+      };
 
       final response = await _interface.post("Transfers/CreateWithdraw", query, debug: false);
       var pwid = WithdrawID.fromJson(response);
@@ -1092,7 +1216,8 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       };
       var resWith = await _interface.post("Transfers/ConfirmWithdraw", queryID);
       rw = WithdrawConfirm.fromJson(resWith);
-      await db.addTX(rw.data!.pgwIdentifier!, _coinActive.id!, double.parse(_mnInfo!.collateral!.toString()), widget.depositAddress!,
+      await db.addTX(rw.data!.pgwIdentifier!, _coinActive.id!, double.parse(_mnInfo!.collateral!.toString()),
+          widget.depositAddress!,
           masternode: true);
       problem = serverTypePos;
 
@@ -1123,7 +1248,9 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
     if (rw == null) {
       _keyStake.currentState?.reset();
       if (context.mounted) Navigator.of(context).pop();
-      if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Couldn't send coins for Staking \n\n$serverTypeRckt");
+      if (context.mounted)
+        Dialogs.openAlertBox(
+            context, AppLocalizations.of(context)!.error, "Couldn't send coins for Staking \n\n$serverTypeRckt");
     }
     _changeFree();
     _keyStake.currentState?.reset();
@@ -1207,14 +1334,15 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
       setState(() {});
       if (context.mounted) {
         Navigator.of(context).pop();
-        await Dialogs.openAlertBox(
-            context, AppLocalizations.of(context)!.alert, AppLocalizations.of(context)!.staking_with_info(conf.toString()));
+        await Dialogs.openAlertBox(context, AppLocalizations.of(context)!.alert,
+            AppLocalizations.of(context)!.staking_with_info(conf.toString()));
         await _getMasternodeDetails();
         _getMN();
       }
     } on ConflictDataException catch (e) {
       var err = json.decode(e.toString());
-      if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage'].toString());
+      if (context.mounted)
+        Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage'].toString());
     } catch (e) {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());

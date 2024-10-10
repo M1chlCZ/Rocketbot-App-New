@@ -2,21 +2,20 @@ import 'dart:io';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:rocketbot/models/coin.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rocketbot/models/graph_stake_data.dart';
 import 'package:rocketbot/support/duration_extension.dart';
 
 import '../models/stake_data.dart';
 
-
 class CoinStakeGraph extends StatefulWidget {
   final StakingData? stake;
   final Coin? activeCoin;
   final int type;
-  final Function (bool touch) blockTouch;
+  final Function(bool touch) blockTouch;
 
   const CoinStakeGraph({super.key, this.stake, required this.type, this.activeCoin, required this.blockTouch});
 
@@ -50,7 +49,6 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
     _stakes = widget.stake;
     _getDate();
     _prepareStakeData();
-
   }
 
   void _getDate() {
@@ -58,7 +56,6 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     _date = formatter.format(now);
   }
-
 
   @override
   void dispose() {
@@ -73,10 +70,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
       List<String> dt = day!.split("-");
       return DateTime(int.parse(dt[0]), int.parse(dt[1]));
     }
-    var timeDifference = DateTime
-        .now()
-        .timeZoneOffset
-        .inHours;
+    var timeDifference = DateTime.now().timeZoneOffset.inHours;
     var datetime = DateTime.parse(day!);
     DateTime newTime = DateTime.now();
     if (timeDifference >= 0) {
@@ -128,12 +122,13 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
         if (_dropdownValue == 0) {
           valuesData = data
               .map((stakeData) {
-            var d = Duration(minutes: 0, hours: stakeData.date.hour);
-            return FlSpot(
-              d.inMinutes.toDouble(),
-              stakeData.amount,
-            );
-          }).cast<FlSpot>()
+                var d = Duration(minutes: 0, hours: stakeData.date.hour);
+                return FlSpot(
+                  d.inMinutes.toDouble(),
+                  stakeData.amount,
+                );
+              })
+              .cast<FlSpot>()
               .toList();
           _values.addAll(valuesData);
         } else if (_dropdownValue == 1) {
@@ -148,50 +143,49 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
               }
               if (add) {
                 var k = element.amount - subst;
-                dt.add(
-                    StakeData(date: element.date, amount: k)
-                );
+                dt.add(StakeData(date: element.date, amount: k));
               } else {
                 subst = element.amount;
               }
             }
           } else {
-            dt.add(
-                StakeData(date: data.last.date, amount: data.last.amount)
-            );
+            dt.add(StakeData(date: data.last.date, amount: data.last.amount));
           }
           var i = 1;
           List<FlSpot> valuesData = dt
               .map((stakeData) {
-            var d = Duration(days: i);
-            i++;
-            return FlSpot(
-              d.inDays.toDouble(),
-              stakeData.amount,
-            );
-          }).cast<FlSpot>()
+                var d = Duration(days: i);
+                i++;
+                return FlSpot(
+                  d.inDays.toDouble(),
+                  stakeData.amount,
+                );
+              })
+              .cast<FlSpot>()
               .toList();
           _values.addAll(valuesData);
         } else if (_dropdownValue == 2) {
           valuesData = data
               .map((stakeData) {
-            var d = Duration(days: stakeData.date.day);
-            return FlSpot(
-              d.inDays.toDouble(),
-              stakeData.amount,
-            );
-          }).cast<FlSpot>()
+                var d = Duration(days: stakeData.date.day);
+                return FlSpot(
+                  d.inDays.toDouble(),
+                  stakeData.amount,
+                );
+              })
+              .cast<FlSpot>()
               .toList();
           _values.addAll(valuesData);
         } else if (_dropdownValue == 3) {
           valuesData = data
               .map((stakeData) {
-            // var d = Duration(days: stakeData.date.month);
-            return FlSpot(
-              stakeData.date.month.toDouble(),
-              stakeData.amount,
-            );
-          }).cast<FlSpot>()
+                // var d = Duration(days: stakeData.date.month);
+                return FlSpot(
+                  stakeData.date.month.toDouble(),
+                  stakeData.amount,
+                );
+              })
+              .cast<FlSpot>()
               .toList();
           _values.addAll(valuesData);
         }
@@ -327,9 +321,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
 
   String _getMeTime(String? d, String format) {
     if (d == null) return "";
-    String languageCode = Localizations
-        .localeOf(context)
-        .languageCode;
+    String languageCode = Localizations.localeOf(context).languageCode;
     var date = DateTime.parse(d);
     String dateTime = DateFormat(format, languageCode).format(date);
     return dateTime;
@@ -373,9 +365,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
       return '${_getMeTime("0000-00-00 ${Duration(minutes: time).toHoursMinutes()}", "HH:mm")}\n';
     } else if (_dropdownValue == 1) {
       DateTime date = DateTime.parse("1970-00-00");
-      DateTime d = Jiffy.parseFromDateTime(date)
-          .add(days: time)
-          .dateTime;
+      DateTime d = Jiffy.parseFromDateTime(date).add(days: time).dateTime;
       return '${DateFormat.EEEE(_locale).format(d)}\n';
     } else if (_dropdownValue == 2) {
       List<String> dateParts = _date.toString().split("-");
@@ -391,7 +381,6 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
       return '${Duration(days: time * 31).inDays.toString()} \n';
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -416,8 +405,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
               colors: _gradientColors,
               stops: const [0.0, 0.2, 1.0],
               begin: Alignment.topCenter,
-              end: Alignment.bottomCenter
-          ),
+              end: Alignment.bottomCenter),
         ),
       ),
     ];
@@ -425,7 +413,6 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
     LineChartData mainData() {
       return LineChartData(
         gridData: _gridData(),
-
         titlesData: const FlTitlesData(
             bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -447,11 +434,8 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
           ]);
         }).toList(),
         lineTouchData: LineTouchData(
-            touchCallback:
-                (FlTouchEvent? event, LineTouchResponse? touchResponse) {
-              if (event is FlTapDownEvent ||
-                  event is FlPointerHoverEvent ||
-                  event is FlPanDownEvent) {
+            touchCallback: (FlTouchEvent? event, LineTouchResponse? touchResponse) {
+              if (event is FlTapDownEvent || event is FlPointerHoverEvent || event is FlPanDownEvent) {
                 setState(() {
                   _touch = true;
                 });
@@ -463,27 +447,23 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
                 setState(() {
                   _touch = false;
                 });
-              } else if (event is FlPanStartEvent ||
-                  event is FlLongPressMoveUpdate) {
+              } else if (event is FlPanStartEvent || event is FlLongPressMoveUpdate) {
                 setState(() {
                   _touch = true;
                 });
-              } else if (event is FlPanEndEvent ||
-                  event is FlPanCancelEvent) {
+              } else if (event is FlPanEndEvent || event is FlPanCancelEvent) {
                 setState(() {
                   _touch = false;
                 });
               }
             },
-            getTouchedSpotIndicator:
-                (LineChartBarData barData, List<int> spotIndexes) {
+            getTouchedSpotIndicator: (LineChartBarData barData, List<int> spotIndexes) {
               return spotIndexes.map((spotIndex) {
                 return TouchedSpotIndicatorData(
                   const FlLine(color: Colors.white, strokeWidth: 2.0),
                   FlDotData(
                       show: true,
-                      getDotPainter: (FlSpot spot, double radius,
-                          LineChartBarData lc, int i) {
+                      getDotPainter: (FlSpot spot, double radius, LineChartBarData lc, int i) {
                         return FlDotCirclePainter(
                             color: const Color(0xFF312d53).withOpacity(0.5),
                             strokeColor: Colors.white,
@@ -498,23 +478,17 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
                 fitInsideVertically: true,
                 tooltipRoundedRadius: 4,
                 tooltipMargin: 12.0,
-                tooltipBgColor: const Color(0xFF9BD41E),
+                getTooltipColor: (LineBarSpot barSpot) => const Color(0xFF9BD41E),
                 getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
                   return touchedBarSpots.map((barSpot) {
                     final flSpot = barSpot;
                     return LineTooltipItem(
                       _getToolTip(flSpot.x.toInt()),
-                      Theme
-                          .of(context)
-                          .textTheme
-                          .titleMedium!,
+                      Theme.of(context).textTheme.titleMedium!,
                       children: [
                         TextSpan(
                           text: "${_formatTooltip(flSpot.y)} ${widget.activeCoin!.cryptoId!}",
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14),
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
                         ),
                       ],
                     );
@@ -524,28 +498,32 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
         lineBarsData: lineBarData,
       );
     }
+
     return Padding(
-      padding:
-      const EdgeInsets.only(right: 0.0, left: 0.0, top: 15, bottom: 0),
+      padding: const EdgeInsets.only(right: 0.0, left: 0.0, top: 15, bottom: 0),
       child: _values.isEmpty
-          ? Container(color: Colors.transparent, child: Center(child: Padding(
-        padding: const EdgeInsets.only(top: 200.0),
-        child: Text(AppLocalizations.of(context)!.graph_no_data, style: Theme
-            .of(context)
-            .textTheme
-            .titleSmall!
-            .copyWith(color: Colors.white24),),
-      )),)
+          ? Container(
+              color: Colors.transparent,
+              child: Center(
+                  child: Padding(
+                padding: const EdgeInsets.only(top: 200.0),
+                child: Text(
+                  AppLocalizations.of(context)!.graph_no_data,
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.white24),
+                ),
+              )),
+            )
           : LineChart(
-        mainData(),
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.linearToEaseOut,
-      ),
+              mainData(),
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.linearToEaseOut,
+            ),
     );
   }
 }
- List<Color> _gradientColors = [
-   const Color.fromRGBO(155, 212, 30, 0.8235294117647058),
-   const Color.fromRGBO(155, 212, 30, 0.25882352941176473),
-   const Color.fromRGBO(255, 255, 255, 0),
+
+List<Color> _gradientColors = [
+  const Color.fromRGBO(155, 212, 30, 0.8235294117647058),
+  const Color.fromRGBO(155, 212, 30, 0.25882352941176473),
+  const Color.fromRGBO(255, 255, 255, 0),
 ];

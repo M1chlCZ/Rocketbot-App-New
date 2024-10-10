@@ -13,52 +13,58 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: ^9.2.2
   firebase_messaging: any
   firebase_core: any
   firebase_auth: any
   google_sign_in: ^6.2.1
-  http: ^1.1.2
+  http: ^1.2.2
   auto_size_text: 3.0.0
   intl: any
-  fl_chart: ^0.65.0
+  fl_chart: ^0.69.0
   progress_indicators: ^1.0.0
-  url_launcher: ^6.2.2
+  url_launcher: ^6.3.1
   qr_flutter: ^4.1.0
-  decimal: ^2.3.3
+  decimal: ^3.0.2
   flutter_snake_navigationbar: any
-  appinio_social_share: ^0.2.6
-  cached_network_image: ^3.3.0
-  permission_handler: ^11.1.0
-  local_auth: ^2.1.7
+  appinio_social_share: ^0.3.2
+  cached_network_image: ^3.4.1
+  permission_handler: ^11.3.1
+  local_auth: ^2.3.0
   flutter_phoenix: ^1.1.1
-  package_info_plus: ^5.0.1
+  package_info_plus: ^8.0.3
   path_provider: any
-  sign_in_with_apple: ^5.0.0
+  sign_in_with_apple: ^6.1.3
   flutter_displaymode: ^0.6.0
-  flutter_local_notifications: ^16.2.0
-  flutter_udid: ^2.0.1
-  sqflite: ^2.3.0
-  jiffy: ^6.2.1
+  flutter_local_notifications: ^17.2.3
+  flutter_udid: ^3.0.0
+  sqflite: ^2.4.0
+  jiffy: ^6.3.1
   sprintf: any
   slide_to_act: ^2.0.2
-  mobile_scanner: ^3.5.5
-  share_plus: ^7.2.1
-  walletconnect_dart: ^0.0.11
-  device_info_plus: ^9.1.1
-  flutter_app_badger: ^1.5.0
+  mobile_scanner: ^6.0.0
+  share_plus: ^10.0.3
+  walletconnect_dart:
+    git:
+        url: https://github.com/AstroxNetwork/walletconnect-dart-sdk
+        ref: master
+  device_info_plus: ^11.0.0
+  flutter_app_badger:
+    git:
+      url: https://github.com/jennifer-ha/flutter_app_badger
+      ref: master
   universal_io: any
   webviewx:
     git:
-      url: https://github.com/eusopht2021/webviewx
+      url: https://github.com/M1chlCZ/webviewx
       ref: main
-  flutter_riverpod: ^2.4.9
+  flutter_riverpod: ^2.5.1
   flutter_speed_dial: ^7.0.0
-  animated_toggle_switch: ^0.8.0
+  animated_toggle_switch: ^0.8.3
   sliding_number: ^0.0.4
   animated_text_kit: ^4.2.2
   get_it: any
-  web_socket_channel: ^2.4.1
+  web_socket_channel: ^2.4.0
   flutter_user_agent:
     git:
       url: https://github.com/M1chlCZ/flutter_user_agent.git
@@ -67,10 +73,10 @@ dependencies:
     git:
       url: https://github.com/M1chlCZ/flutter_biometrics.git
       ref: main
-  cupertino_icons: ^1.0.6
-  rxdart: ^0.27.7
+  cupertino_icons: ^1.0.8
+  rxdart: ^0.28.0
   logger: any
-  app_links: ^3.5.0
+  app_links: ^6.3.2
 
 linter:
   rules:
@@ -78,7 +84,7 @@ linter:
 
 
 dev_dependencies:
-  flutter_lints: ^3.0.1
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
 

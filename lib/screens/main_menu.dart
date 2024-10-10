@@ -40,7 +40,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     super.initState();
     _getUserInfo();
     FlutterAppBadger.removeBadge();
-    _appLinks.allUriLinkStream.listen((uri) {
+    _appLinks.uriLinkStream.listen((uri) {
       if (uri.queryParameters.containsKey("auth")) {
         _webToken(uri.queryParameters["auth"]!);
       } else {
@@ -53,28 +53,32 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     setState(() {
       _selectedPageIndex = art ? 1 : 0;
     });
-    _pageController.animateToPage(_selectedPageIndex, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
+    _pageController.animateToPage(_selectedPageIndex,
+        duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
   }
 
   gotoNextScreen({bool art = false}) {
     setState(() {
       _selectedPageIndex = art ? 3 : 2;
     });
-    _pageController.animateToPage(_selectedPageIndex, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
+    _pageController.animateToPage(_selectedPageIndex,
+        duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
   }
 
   gotoLaunchPreviousScreen() {
     setState(() {
       _selectedPageIndex = 1;
     });
-    _pageController.animateToPage(_selectedPageIndex, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
+    _pageController.animateToPage(_selectedPageIndex,
+        duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
   }
 
   gotoLaunchNextScreen() {
     setState(() {
       _selectedPageIndex = 3;
     });
-    _pageController.animateToPage(_selectedPageIndex, duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
+    _pageController.animateToPage(_selectedPageIndex,
+        duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
   }
 
   bool c = false;
@@ -88,7 +92,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         // _getUserInfo();
       });
       if (context.mounted) Navigator.of(context).pop();
-      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Launchpad login successful")));
+      if (context.mounted)
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Launchpad login successful")));
       Utils.openLink("https://rocket.art");
       c = false;
     } catch (e) {
@@ -193,7 +198,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               height: 30,
               radius: 10.0,
               color: Colors.transparent,
-              child: Image.asset("images/giveaway_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitWidth, color: Colors.white),
+              child: Image.asset("images/giveaway_inactive.png",
+                  width: 30, height: 30.0, fit: BoxFit.fitWidth, color: Colors.white),
             ),
             label: 'Games',
             activeIcon: FlatCustomButton(
@@ -201,7 +207,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               height: 30,
               radius: 10.0,
               color: Colors.transparent,
-              child: Image.asset("images/giveaway.png", width: 30, height: 30.0, fit: BoxFit.fitWidth, color: Colors.white),
+              child: Image.asset("images/giveaway.png",
+                  width: 30, height: 30.0, fit: BoxFit.fitWidth, color: Colors.white),
             ),
           ),
           BottomNavigationBarItem(
@@ -243,7 +250,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               height: 30,
               radius: 10.0,
               color: Colors.transparent,
-              child: Image.asset("images/wallet_inactive.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white),
+              child: Image.asset("images/wallet_inactive.png",
+                  width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white),
             ),
             label: 'Earn',
             activeIcon: FlatCustomButton(
@@ -251,7 +259,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               height: 30,
               radius: 10.0,
               color: Colors.transparent,
-              child: Image.asset("images/wallet.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white),
+              child:
+                  Image.asset("images/wallet.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white),
             ),
           ),
           BottomNavigationBarItem(
@@ -261,7 +270,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               radius: 10.0,
               color: Colors.transparent,
               child: Image.asset("images/set_inactive.png",
-                  width: 30, height: 30.0, fit: BoxFit.fitWidth, color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
+                  width: 30,
+                  height: 30.0,
+                  fit: BoxFit.fitWidth,
+                  color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
             ),
             label: 'Settings',
             activeIcon: FlatCustomButton(
@@ -270,7 +282,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               radius: 10.0,
               color: Colors.transparent,
               child: Image.asset("images/set.png",
-                  width: 30, height: 30.0, fit: BoxFit.fitWidth, color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
+                  width: 30,
+                  height: 30.0,
+                  fit: BoxFit.fitWidth,
+                  color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
             ),
           ),
         ],

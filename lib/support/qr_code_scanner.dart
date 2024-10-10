@@ -1,3 +1,4 @@
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -13,12 +14,13 @@ class QScanWidget extends StatefulWidget {
   QScanWidgetState createState() => QScanWidgetState();
 }
 
-class QScanWidgetState extends State<QScanWidget> {
+class QScanWidgetState extends State<QScanWidget> with WidgetsBindingObserver {
   Barcode? result;
+  StreamSubscription<BarcodeCapture>? _subscription;
 
   // QRViewController? controller;controller
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  MobileScannerController? cameraController;
+  late final MobileScannerController cameraController;
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -30,9 +32,11 @@ class QScanWidgetState extends State<QScanWidget> {
   @override
   void initState() {
     super.initState();
-    cameraController = MobileScannerController(returnImage: false,
-        detectionSpeed: DetectionSpeed.normal, formats: [BarcodeFormat.all]);
-    cameraController?.start();
+    WidgetsBinding.instance.addObserver(this);
+    cameraController = MobileScannerController(
+        returnImage: false, detectionSpeed: DetectionSpeed.normal, formats: [BarcodeFormat.all]);
+    _subscription = cameraController.barcodes.listen(_handleBarcode);
+    unawaited(cameraController.start());
   }
 
   @override
@@ -48,36 +52,17 @@ class QScanWidgetState extends State<QScanWidget> {
         actions: [
           IconButton(
             color: Colors.white,
-            icon: ValueListenableBuilder(
-              valueListenable: cameraController!.torchState,
-              builder: (context, state, child) {
-                switch (state) {
-                  case TorchState.off:
-                    return const Icon(Icons.flash_off, color: Colors.white54);
-                  case TorchState.on:
-                    return const Icon(Icons.flash_on, color: Colors.white);
-                }
-              },
-            ),
+            icon: cameraController.torchEnabled
+                ? const Icon(Icons.flash_off, color: Colors.white54)
+                : const Icon(Icons.flash_on, color: Colors.white),
             iconSize: 32.0,
-            onPressed: () => cameraController!.toggleTorch(),
+            onPressed: () => cameraController.toggleTorch(),
           ),
           IconButton(
             color: Colors.white,
-            icon: ValueListenableBuilder(
-              valueListenable: cameraController!.cameraFacingState,
-              builder: (context, state, child) {
-                switch (state) {
-                  case CameraFacing.front:
-                    return Icon(
-                      Icons.flip_camera_android_sharp,
-                      color: Colors.white.withOpacity(0.9),
-                    );
-                  case CameraFacing.back:
-                    return Icon(Icons.flip_camera_android_sharp, color: Colors.white.withOpacity(0.9));
-                }
-              },
-            ),
+            icon: cameraController.facing == CameraFacing.back
+                ? Icon(Icons.flip_camera_android_sharp, color: Colors.white.withOpacity(0.9))
+                : Icon(Icons.flip_camera_android_sharp, color: Colors.white.withOpacity(0.9)),
             iconSize: 32.0,
             onPressed: () => cameraController!.switchCamera(),
           ),
@@ -119,8 +104,58 @@ class QScanWidgetState extends State<QScanWidget> {
   }
 
   @override
-  void dispose() {
-    cameraController?.dispose();
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // If the controller is not ready, do not try to start or stop it.
+    // Permission dialogs can trigger lifecycle changes before the controller is ready.
+    if (!cameraController.value.hasCameraPermission) {
+      return;
+    }
+
+    switch (state) {
+      case AppLifecycleState.detached:
+        break;
+      case AppLifecycleState.hidden:
+        break;
+      case AppLifecycleState.paused:
+        break;
+      case AppLifecycleState.resumed:
+        // Restart the scanner when the app is resumed.
+        // Don't forget to resume listening to the barcode events.
+        _subscription = cameraController.barcodes.listen(_handleBarcode);
+
+        unawaited(cameraController.start());
+        break;
+      case AppLifecycleState.inactive:
+        // Stop the scanner when the app is paused.
+        // Also stop the barcode events subscription.
+        unawaited(_subscription?.cancel());
+        _subscription = null;
+        unawaited(cameraController.stop());
+        break;
+    }
+  }
+
+  @override
+  void dispose() async {
+    WidgetsBinding.instance.removeObserver(this);
+    unawaited(_subscription?.cancel());
+    _subscription = null;
     super.dispose();
+    await cameraController.dispose();
+  }
+
+  void _handleBarcode(BarcodeCapture event) {
+    if (event.barcodes.isEmpty) {
+      debugPrint('Failed to scan Barcode');
+    } else {
+      debugPrint('Succ to scan Barcode');
+      final List<Barcode> barcodes = event.barcodes;
+      final String code = barcodes[0].rawValue!;
+      widget.scanResult(code);
+      cameraController.stop();
+      cameraController.dispose();
+      Navigator.maybePop(context);
+      debugPrint('Barcode found! $code');
+    }
   }
 }

@@ -401,7 +401,11 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
         dotData: const FlDotData(show: false),
         belowBarData: BarAreaData(
           show: true,
-          gradient: LinearGradient(colors: _gradientColors, stops: const [0.0, 0.2, 1.0], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+          gradient: LinearGradient(
+              colors: _gradientColors,
+              stops: const [0.0, 0.2, 1.0],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter),
         ),
       ),
     ];
@@ -416,7 +420,9 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false))),
         borderData: FlBorderData(
           show: false,
-          border: const Border(bottom: BorderSide(color: Colors.white10, width: 0.5), left: BorderSide(color: Colors.white10, width: 0.5)),
+          border: const Border(
+              bottom: BorderSide(color: Colors.white10, width: 0.5),
+              left: BorderSide(color: Colors.white10, width: 0.5)),
         ),
         minX: _minX,
         maxX: _maxX,
@@ -458,7 +464,11 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
                   FlDotData(
                       show: true,
                       getDotPainter: (FlSpot spot, double radius, LineChartBarData lc, int i) {
-                        return FlDotCirclePainter(color: const Color(0xFF312d53).withOpacity(0.5), strokeColor: Colors.white, strokeWidth: 5.0, radius: 3.0);
+                        return FlDotCirclePainter(
+                            color: const Color(0xFF312d53).withOpacity(0.5),
+                            strokeColor: Colors.white,
+                            strokeWidth: 5.0,
+                            radius: 3.0);
                       }),
                 );
               }).toList();
@@ -468,7 +478,7 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
                 fitInsideVertically: true,
                 tooltipRoundedRadius: 4,
                 tooltipMargin: 12.0,
-                tooltipBgColor: const Color(0xFFF68DB2),
+                getTooltipColor: (LineBarSpot barSpot) => const Color(0xFFF68DB2),
                 getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
                   return touchedBarSpots.map((barSpot) {
                     final flSpot = barSpot;

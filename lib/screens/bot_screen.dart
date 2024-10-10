@@ -101,7 +101,11 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                       padding: const EdgeInsets.only(top: 4.0),
                       child: Text(
                         "Create ${widget.type == "gw" ? "Giveaway" : widget.type.capitalize()}",
-                        style: const TextStyle(fontFamily: 'JosefinSans', fontWeight: FontWeight.w800, fontSize: 20.0, color: Colors.white),
+                        style: const TextStyle(
+                            fontFamily: 'JosefinSans',
+                            fontWeight: FontWeight.w800,
+                            fontSize: 20.0,
+                            color: Colors.white),
                       ),
                     ),
                     const SizedBox(
@@ -113,170 +117,390 @@ class _BotScreenState extends ConsumerState<BotScreen> {
               ctrl.when(data: (data) {
                 if (data.isNotEmpty) {
                   selectedCoin ??= data.firstWhere((element) => element.free! > 0.0);
-                  return Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                        decoration: BoxDecoration(
-                          color: Colors.black12,
-                          borderRadius: BorderRadius.circular(8.0),
+                  return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 20.0,
                         ),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<CoinBalance>(
-                                value: selectedCoin,
-                                icon: const Icon(
-                                  Icons.arrow_drop_down_circle_outlined,
-                                  color: Colors.white70,
-                                ),
-                                iconSize: 20,
-                                iconEnabledColor: Colors.white70,
-                                elevation: 16,
-                                style: const TextStyle(color: Colors.white70),
-                                onChanged: (CoinBalance? newValue) {
-                                  if (newValue == null) return;
-                                  if (newValue.free! <= 0.0) {
-                                    Dialogs.openAlertBox(
-                                        context, "Insufficient funds", "You don't have enough ${newValue.coin?.ticker} to send a tip");
-                                    return;
-                                  }
-                                  setState(() {
-                                    key.currentState?.deActivate();
-                                    _amountController.clear();
-                                    selectedCoin = newValue;
-                                  });
-                                },
-                                items: data
-                                    .map((coin) => DropdownMenuItem<CoinBalance>(
-                                          value: coin,
-                                          child: Row(
-                                            children: [
-                                              Opacity(
-                                                opacity: coin.free! > 0.0 ? 1.0 : 0.3,
-                                                child: SizedBox(width: 25.0, height: 25.0, child: PictureCacheWidget(coin: coin.coin!)),
+                        Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                            decoration: BoxDecoration(
+                              color: Colors.black12,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<CoinBalance>(
+                                    value: selectedCoin,
+                                    icon: const Icon(
+                                      Icons.arrow_drop_down_circle_outlined,
+                                      color: Colors.white70,
+                                    ),
+                                    iconSize: 20,
+                                    iconEnabledColor: Colors.white70,
+                                    elevation: 16,
+                                    style: const TextStyle(color: Colors.white70),
+                                    onChanged: (CoinBalance? newValue) {
+                                      if (newValue == null) return;
+                                      if (newValue.free! <= 0.0) {
+                                        Dialogs.openAlertBox(context, "Insufficient funds",
+                                            "You don't have enough ${newValue.coin?.ticker} to send a tip");
+                                        return;
+                                      }
+                                      setState(() {
+                                        key.currentState?.deActivate();
+                                        _amountController.clear();
+                                        selectedCoin = newValue;
+                                      });
+                                    },
+                                    items: data
+                                        .map((coin) => DropdownMenuItem<CoinBalance>(
+                                              value: coin,
+                                              child: Row(
+                                                children: [
+                                                  Opacity(
+                                                    opacity: coin.free! > 0.0 ? 1.0 : 0.3,
+                                                    child: SizedBox(
+                                                        width: 25.0,
+                                                        height: 25.0,
+                                                        child: PictureCacheWidget(coin: coin.coin!)),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 20.0,
+                                                  ),
+                                                  Text(coin.coin?.ticker ?? "Coin",
+                                                      style: TextStyle(
+                                                          color: coin.free! > 0.0 ? Colors.white70 : Colors.white30,
+                                                          fontSize: 16.0,
+                                                          fontWeight: FontWeight.w600)),
+                                                  const SizedBox(
+                                                    width: 10.0,
+                                                  ),
+                                                ],
                                               ),
-                                              const SizedBox(
-                                                width: 20.0,
+                                            ))
+                                        .toList()),
+                              ),
+                            )),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black12,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
+                            margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Column(children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Container(
+                                      width: 110.0,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black12,
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                                      child: const Center(
+                                          child: Text("Balance",
+                                              style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.w400)))),
+                                  const SizedBox(
+                                    width: 10.0,
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black12,
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                      child: AutoSizeText(
+                                          "${selectedCoin?.free ?? 0.0} ${selectedCoin?.coin?.ticker ?? "Coin"}",
+                                          maxLines: 1,
+                                          minFontSize: 8.0,
+                                          textAlign: TextAlign.end,
+                                          style: const TextStyle(color: Colors.white70)),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              if (widget.type == "gw")
+                                Column(
+                                  children: [
+                                    Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.black12,
+                                          borderRadius: BorderRadius.circular(8.0),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                                        child: Center(
+                                            child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            const Text("Duration",
+                                                style: TextStyle(
+                                                    color: Colors.white70,
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.w400)),
+                                            SizedBox(
+                                              width: 100.0,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  SlidingNumber(
+                                                    number: _value.toInt(),
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 16.0,
+                                                        fontWeight: FontWeight.w800),
+                                                    duration: const Duration(milliseconds: 500),
+                                                    curve: Curves.easeInOutCubicEmphasized,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 5.0,
+                                                  ),
+                                                  Text(
+                                                      _value == 1
+                                                          ? switchValue.replaceAll("s", "").capitalize()
+                                                          : switchValue.capitalize(),
+                                                      style: const TextStyle(
+                                                          color: Colors.white70,
+                                                          fontSize: 16.0,
+                                                          fontWeight: FontWeight.w400)),
+                                                ],
                                               ),
-                                              Text(coin.coin?.ticker ?? "Coin",
-                                                  style: TextStyle(
-                                                      color: coin.free! > 0.0 ? Colors.white70 : Colors.white30,
-                                                      fontSize: 16.0,
-                                                      fontWeight: FontWeight.w600)),
-                                              const SizedBox(
-                                                width: 10.0,
-                                              ),
-                                            ],
+                                            ),
+                                          ],
+                                        ))),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    AnimatedToggleSwitch<String>.custom(
+                                      current: switchValue,
+                                      iconOpacity: 0.2,
+                                      indicatorSize: const Size.fromWidth(120),
+                                      animatedIconBuilder: (i, a, c) =>
+                                          Center(child: Text(a.value, style: const TextStyle(color: Colors.white))),
+                                      foregroundIndicatorIconBuilder: (i, a) =>
+                                          Center(child: Text(a.current, style: const TextStyle(color: Colors.black87))),
+                                      style: ToggleStyle(
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                      borderWidth: 0,
+                                      height: 40.0,
+                                      styleBuilder: (i) {
+                                        switch (i) {
+                                          case "minutes":
+                                            return ToggleStyle(
+                                              borderRadius: BorderRadius.circular(8.0),
+                                              indicatorColor: Colors.lightBlue,
+                                              backgroundColor: Colors.lightBlue.withOpacity(0.2),
+                                            );
+                                          case "hours":
+                                            return ToggleStyle(
+                                              borderRadius: BorderRadius.circular(8.0),
+                                              indicatorColor: Colors.lightGreen,
+                                              backgroundColor: Colors.lightGreen.withOpacity(0.2),
+                                            );
+                                          case "days":
+                                            return ToggleStyle(
+                                              borderRadius: BorderRadius.circular(8.0),
+                                              indicatorColor: Colors.amberAccent,
+                                              backgroundColor: Colors.amberAccent.withOpacity(0.2),
+                                            );
+                                          default:
+                                            return ToggleStyle(
+                                              borderRadius: BorderRadius.circular(8.0),
+                                              indicatorColor: Colors.white,
+                                              backgroundColor: Colors.white.withOpacity(0.2),
+                                            );
+                                        }
+                                      },
+                                      onChanged: (i) {
+                                        setState(() {
+                                          switchValue = i;
+                                          _value = 1;
+                                        });
+                                      },
+                                      values: const ["minutes", "hours", "days"],
+                                    ),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF252F45),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        border: Border.all(color: const Color(0xFF37394F), width: 1.0),
+                                      ),
+                                      child: SliderTheme(
+                                        data: SliderTheme.of(context).copyWith(
+                                          trackHeight: 10.0,
+                                          trackShape: const RoundedRectSliderTrackShape(),
+                                          activeTrackColor: thumbColor(switchValue).withOpacity(0.8),
+                                          inactiveTrackColor: Colors.black38,
+                                          thumbShape: const RoundSliderThumbShape(
+                                            enabledThumbRadius: 14.0,
+                                            pressedElevation: 20.0,
+                                            elevation: 5.0,
                                           ),
-                                        ))
-                                    .toList()),
-                          ),
-                        )),
-                    const SizedBox(
-                      height: 15.0,
-                    ),
-                    Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black12,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
-                        margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Column(children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
+                                          thumbColor: thumbColor(switchValue),
+                                          overlayColor: thumbColor(switchValue).withOpacity(0.2),
+                                          overlayShape: const RoundSliderOverlayShape(overlayRadius: 32.0),
+                                          tickMarkShape: const RoundSliderTickMarkShape(),
+                                          activeTickMarkColor: thumbColor(switchValue).withOpacity(0.5),
+                                          inactiveTickMarkColor: Colors.white30,
+                                          valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
+                                          valueIndicatorColor: Colors.black,
+                                          valueIndicatorTextStyle: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20.0,
+                                          ),
+                                        ),
+                                        child: Slider(
+                                          min: getSliderValues(switchValue)['min'] ?? 0.0,
+                                          max: getSliderValues(switchValue)['max'] ?? 0.0,
+                                          value: _value,
+                                          divisions: getSliderValues(switchValue)['divisions']!.toInt(),
+                                          label: '${_value.round()}',
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _value = value;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                  ],
+                                ),
                               Container(
-                                  width: 110.0,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF252F45),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  border: Border.all(color: const Color(0xFF37394F), width: 1.0),
+                                ),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      TextField(
+                                        controller: _amountController,
+                                        textAlign: TextAlign.center,
+                                        cursorColor: Colors.white,
+                                        keyboardType: Platform.isIOS
+                                            ? const TextInputType.numberWithOptions(signed: true)
+                                            : TextInputType.number,
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,8}')),
+                                        ],
+                                        style: const TextStyle(
+                                            color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w800),
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor: Colors.black38,
+                                          border: const OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                                          ),
+                                          hintText: widget.type == "spin" ? "Ticket Cost" : "Enter Amount",
+                                          hintStyle: const TextStyle(
+                                              color: Colors.white30, fontSize: 16.0, fontWeight: FontWeight.w400),
+                                        ),
+                                      ),
+                                      PercentSwitchWidget(
+                                        key: key,
+                                        width: 75,
+                                        changePercent: (double percent) {
+                                          setState(() {
+                                            _amountController.text = NumberFormat("###.######")
+                                                .format(double.parse(selectedCoin!.free!.toString()) * percent);
+                                          });
+                                          // setState(() { _percent = percent; });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              Container(
                                   decoration: BoxDecoration(
                                     color: Colors.black12,
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
                                   padding: const EdgeInsets.symmetric(vertical: 12.0),
-                                  child: const Center(
-                                      child: Text("Balance", style: TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)))),
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              Expanded(
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black12,
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                  child: AutoSizeText("${selectedCoin?.free ?? 0.0} ${selectedCoin?.coin?.ticker ?? "Coin"}",
-                                      maxLines: 1, minFontSize: 8.0, textAlign: TextAlign.end, style: const TextStyle(color: Colors.white70)),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          if (widget.type == "gw")
-                            Column(
-                              children: [
-                                Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.black12,
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(vertical: 12.0),
-                                    child: Center(
+                                  child: Center(
+                                      child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(widget.type == "spin" ? "Number of Tickets" : "Number of winners",
+                                          style: const TextStyle(
+                                              color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)),
+                                      SizedBox(
+                                        width: 100.0,
                                         child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        const Text("Duration", style: TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)),
-                                        SizedBox(
-                                          width: 100.0,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              SlidingNumber(
-                                                number: _value.toInt(),
-                                                style: const TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w800),
-                                                duration: const Duration(milliseconds: 500),
-                                                curve: Curves.easeInOutCubicEmphasized,
-                                              ),
-                                              const SizedBox(
-                                                width: 5.0,
-                                              ),
-                                              Text(_value == 1 ? switchValue.replaceAll("s", "").capitalize() : switchValue.capitalize(),
-                                                  style: const TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)),
-                                            ],
-                                          ),
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            SlidingNumber(
+                                              number: _valueUsers.toInt(),
+                                              style: const TextStyle(
+                                                  color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w800),
+                                              duration: const Duration(milliseconds: 500),
+                                              curve: Curves.easeInOutCubicEmphasized,
+                                            ),
+                                            const SizedBox(
+                                              width: 10.0,
+                                            ),
+                                            const Icon(Icons.person_2, color: Colors.white70),
+                                          ],
                                         ),
-                                      ],
-                                    ))),
-                                const SizedBox(
-                                  height: 10.0,
-                                ),
+                                      ),
+                                    ],
+                                  ))),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              if (widget.type != "spin")
                                 AnimatedToggleSwitch<String>.custom(
-                                  current: switchValue,
+                                  current: switchNums,
                                   iconOpacity: 0.2,
-                                  indicatorSize: const Size.fromWidth(120),
-                                  animatedIconBuilder: (i, a, c) => Center(child: Text(a.value, style: const TextStyle(color: Colors.white))),
+                                  indicatorSize: const Size.fromWidth(80),
+                                  animatedIconBuilder: (i, a, c) =>
+                                      Center(child: Text(a.value, style: const TextStyle(color: Colors.white))),
                                   foregroundIndicatorIconBuilder: (i, a) =>
                                       Center(child: Text(a.current, style: const TextStyle(color: Colors.black87))),
                                   style: ToggleStyle(
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
                                   borderWidth: 0,
-                                  height: 40.0,
+                                  height: 30.0,
                                   styleBuilder: (i) {
                                     switch (i) {
-                                      case "minutes":
+                                      case "0-100":
                                         return ToggleStyle(
                                           borderRadius: BorderRadius.circular(8.0),
-                                          indicatorColor: Colors.lightBlue,
-                                          backgroundColor: Colors.lightBlue.withOpacity(0.2),
+                                          indicatorColor: Colors.redAccent,
+                                          backgroundColor: Colors.redAccent.withOpacity(0.2),
                                         );
-                                      case "hours":
+                                      case "100+":
                                         return ToggleStyle(
                                           borderRadius: BorderRadius.circular(8.0),
                                           indicatorColor: Colors.lightGreen,
@@ -298,442 +522,263 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                   },
                                   onChanged: (i) {
                                     setState(() {
-                                      switchValue = i;
-                                      _value = 1;
+                                      switchNums = i;
+                                      _valueUsers = getUserValues("${widget.type}$switchNums")['default'] as double;
                                     });
                                   },
-                                  values: const ["minutes", "hours", "days"],
+                                  values: const ["0-100", "100+"],
                                 ),
-                                const SizedBox(
-                                  height: 10.0,
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF252F45),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  border: Border.all(color: const Color(0xFF37394F), width: 1.0),
                                 ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF252F45),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    border: Border.all(color: const Color(0xFF37394F), width: 1.0),
-                                  ),
-                                  child: SliderTheme(
-                                    data: SliderTheme.of(context).copyWith(
-                                      trackHeight: 10.0,
-                                      trackShape: const RoundedRectSliderTrackShape(),
-                                      activeTrackColor: thumbColor(switchValue).withOpacity(0.8),
-                                      inactiveTrackColor: Colors.black38,
-                                      thumbShape: const RoundSliderThumbShape(
-                                        enabledThumbRadius: 14.0,
-                                        pressedElevation: 20.0,
-                                        elevation: 5.0,
-                                      ),
-                                      thumbColor: thumbColor(switchValue),
-                                      overlayColor: thumbColor(switchValue).withOpacity(0.2),
-                                      overlayShape: const RoundSliderOverlayShape(overlayRadius: 32.0),
-                                      tickMarkShape: const RoundSliderTickMarkShape(),
-                                      activeTickMarkColor: thumbColor(switchValue).withOpacity(0.5),
-                                      inactiveTickMarkColor: Colors.white30,
-                                      valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
-                                      valueIndicatorColor: Colors.black,
-                                      valueIndicatorTextStyle: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20.0,
-                                      ),
+                                child: SliderTheme(
+                                  data: SliderTheme.of(context).copyWith(
+                                    trackHeight: 10.0,
+                                    trackShape: const RoundedRectSliderTrackShape(),
+                                    activeTrackColor: thumbColor(switchValue).withOpacity(0.8),
+                                    inactiveTrackColor: Colors.black38,
+                                    thumbShape: const RoundSliderThumbShape(
+                                      enabledThumbRadius: 14.0,
+                                      pressedElevation: 20.0,
+                                      elevation: 5.0,
                                     ),
-                                    child: Slider(
-                                      min: getSliderValues(switchValue)['min'] ?? 0.0,
-                                      max: getSliderValues(switchValue)['max'] ?? 0.0,
-                                      value: _value,
-                                      divisions: getSliderValues(switchValue)['divisions']!.toInt(),
-                                      label: '${_value.round()}',
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _value = value;
-                                        });
-                                      },
+                                    thumbColor: thumbColor(switchValue),
+                                    overlayColor: thumbColor(switchValue).withOpacity(0.2),
+                                    overlayShape: const RoundSliderOverlayShape(overlayRadius: 32.0),
+                                    tickMarkShape: const RoundSliderTickMarkShape(),
+                                    activeTickMarkColor: thumbColor(switchValue).withOpacity(0.5),
+                                    inactiveTickMarkColor: Colors.white30,
+                                    valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
+                                    valueIndicatorColor: Colors.black,
+                                    valueIndicatorTextStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
                                     ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 10.0,
-                                ),
-                              ],
-                            ),
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF252F45),
-                              borderRadius: BorderRadius.circular(8.0),
-                              border: Border.all(color: const Color(0xFF37394F), width: 1.0),
-                            ),
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  TextField(
-                                    controller: _amountController,
-                                    textAlign: TextAlign.center,
-                                    cursorColor: Colors.white,
-                                    keyboardType: Platform.isIOS ? const TextInputType.numberWithOptions(signed: true) : TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,8}')),
-                                    ],
-                                    style: const TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w800),
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.black38,
-                                      border: const OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                                      ),
-                                      hintText: widget.type == "spin" ? "Ticket Cost" : "Enter Amount",
-                                      hintStyle: const TextStyle(color: Colors.white30, fontSize: 16.0, fontWeight: FontWeight.w400),
-                                    ),
-                                  ),
-                                  PercentSwitchWidget(
-                                    key: key,
-                                    width: 75,
-                                    changePercent: (double percent) {
+                                  child: Slider(
+                                    min: getUserValues("${widget.type}$switchNums")['min'] ?? 0.0,
+                                    max: getUserValues("${widget.type}$switchNums")['max'] ?? 0.0,
+                                    value: _valueUsers,
+                                    divisions: getUserValues("${widget.type}$switchNums")['divisions']!.toInt(),
+                                    label: '${_valueUsers.round()}',
+                                    onChanged: (value) {
                                       setState(() {
-                                        _amountController.text =
-                                            NumberFormat("###.######").format(double.parse(selectedCoin!.free!.toString()) * percent);
+                                        _valueUsers = value;
                                       });
-                                      // setState(() { _percent = percent; });
                                     },
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black12,
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 12.0),
-                              child: Center(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(widget.type == "spin" ? "Number of Tickets" : "Number of winners",
-                                      style: const TextStyle(color: Colors.white70, fontSize: 16.0, fontWeight: FontWeight.w400)),
-                                  SizedBox(
-                                    width: 100.0,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        SlidingNumber(
-                                          number: _valueUsers.toInt(),
-                                          style: const TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w800),
-                                          duration: const Duration(milliseconds: 500),
-                                          curve: Curves.easeInOutCubicEmphasized,
-                                        ),
-                                        const SizedBox(
-                                          width: 10.0,
-                                        ),
-                                        const Icon(Icons.person_2, color: Colors.white70),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ))),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          if (widget.type != "spin")
-                            AnimatedToggleSwitch<String>.custom(
-                              current: switchNums,
-                              iconOpacity: 0.2,
-                              indicatorSize: const Size.fromWidth(80),
-                              animatedIconBuilder: (i, a, c) => Center(child: Text(a.value, style: const TextStyle(color: Colors.white))),
-                              foregroundIndicatorIconBuilder: (i, a) => Center(child: Text(a.current, style: const TextStyle(color: Colors.black87))),
-                              style: ToggleStyle(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              borderWidth: 0,
-                              height: 30.0,
-                              styleBuilder: (i) {
-                                switch (i) {
-                                  case "0-100":
-                                    return ToggleStyle(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      indicatorColor: Colors.redAccent,
-                                      backgroundColor: Colors.redAccent.withOpacity(0.2),
-                                    );
-                                  case "100+":
-                                    return ToggleStyle(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      indicatorColor: Colors.lightGreen,
-                                      backgroundColor: Colors.lightGreen.withOpacity(0.2),
-                                    );
-                                  case "days":
-                                    return ToggleStyle(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      indicatorColor: Colors.amberAccent,
-                                      backgroundColor: Colors.amberAccent.withOpacity(0.2),
-                                    );
-                                  default:
-                                    return ToggleStyle(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      indicatorColor: Colors.white,
-                                      backgroundColor: Colors.white.withOpacity(0.2),
-                                    );
-                                }
-                              },
-                              onChanged: (i) {
-                                setState(() {
-                                  switchNums = i;
-                                  _valueUsers = getUserValues("${widget.type}$switchNums")['default'] as double;
-                                });
-                              },
-                              values: const ["0-100", "100+"],
-                            ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF252F45),
-                              borderRadius: BorderRadius.circular(8.0),
-                              border: Border.all(color: const Color(0xFF37394F), width: 1.0),
-                            ),
-                            child: SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                trackHeight: 10.0,
-                                trackShape: const RoundedRectSliderTrackShape(),
-                                activeTrackColor: thumbColor(switchValue).withOpacity(0.8),
-                                inactiveTrackColor: Colors.black38,
-                                thumbShape: const RoundSliderThumbShape(
-                                  enabledThumbRadius: 14.0,
-                                  pressedElevation: 20.0,
-                                  elevation: 5.0,
-                                ),
-                                thumbColor: thumbColor(switchValue),
-                                overlayColor: thumbColor(switchValue).withOpacity(0.2),
-                                overlayShape: const RoundSliderOverlayShape(overlayRadius: 32.0),
-                                tickMarkShape: const RoundSliderTickMarkShape(),
-                                activeTickMarkColor: thumbColor(switchValue).withOpacity(0.5),
-                                inactiveTickMarkColor: Colors.white30,
-                                valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
-                                valueIndicatorColor: Colors.black,
-                                valueIndicatorTextStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
                                 ),
                               ),
-                              child: Slider(
-                                min: getUserValues("${widget.type}$switchNums")['min'] ?? 0.0,
-                                max: getUserValues("${widget.type}$switchNums")['max'] ?? 0.0,
-                                value: _valueUsers,
-                                divisions: getUserValues("${widget.type}$switchNums")['divisions']!.toInt(),
-                                label: '${_valueUsers.round()}',
-                                onChanged: (value) {
-                                  setState(() {
-                                    _valueUsers = value;
-                                  });
-                                },
+                              const SizedBox(
+                                height: 10.0,
                               ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          SizedBox(
-                              width: double.infinity,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Flexible(
-                                    child: Container(
-                                      height: 48.0,
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.symmetric(vertical: 2.5, horizontal: 10.0),
-                                      decoration: BoxDecoration(
-                                        color: getColor(currentSocial),
-                                        borderRadius: BorderRadius.circular(8.0),
-                                      ),
-                                      child: DropDownIcon<String>(
-                                          onChange: (String value, int index) {
-                                            setState(() {
-                                              currentSocial = value;
-                                            });
-                                          },
-                                          dropdownButtonStyle: DropdownButtonStyle(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            height: 50,
-                                            width: 180,
-                                            elevation: 5,
-                                            backgroundColor: getColor(currentSocial),
-                                            primaryColor: Colors.white,
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(5)),
-                                            ),
+                              SizedBox(
+                                  width: double.infinity,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Flexible(
+                                        child: Container(
+                                          height: 48.0,
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.symmetric(vertical: 2.5, horizontal: 10.0),
+                                          decoration: BoxDecoration(
+                                            color: getColor(currentSocial),
+                                            borderRadius: BorderRadius.circular(8.0),
                                           ),
-                                          dropdownStyle: DropdownStyle(
-                                            borderRadius: BorderRadius.circular(5),
-                                            elevation: 5,
-                                            color: const Color(0xFF579B61),
-                                            offset: const Offset(0, 50),
-                                          ),
-                                          items: socials
-                                              .map(
-                                                (item) => DropdownItem<String>(
-                                                  value: item,
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color: getColor(item),
-                                                      borderRadius: getBorderRadius(socials.indexOf(item)),
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: [
-                                                        Padding(
-                                                          padding: const EdgeInsets.all(10.0),
-                                                          child: Text(
-                                                            item,
-                                                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                                                fontSize: 14.0, color: Colors.white.withOpacity(0.9), fontWeight: FontWeight.w400),
-                                                            textAlign: TextAlign.start,
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding: const EdgeInsets.only(top: 5.0, right: 10.0),
-                                                          child: Image.asset(
-                                                            "images/${item.toLowerCase()}.png",
-                                                            width: 20.0,
-                                                            height: 20.0,
-                                                            color: Colors.white70,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
+                                          child: DropDownIcon<String>(
+                                              onChange: (String value, int index) {
+                                                setState(() {
+                                                  currentSocial = value;
+                                                });
+                                              },
+                                              dropdownButtonStyle: DropdownButtonStyle(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                height: 50,
+                                                width: 180,
+                                                elevation: 5,
+                                                backgroundColor: getColor(currentSocial),
+                                                primaryColor: Colors.white,
+                                                shape: const RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(Radius.circular(5)),
                                                 ),
-                                              )
-                                              .toList(),
-                                          currentIndex: indexSocial,
-                                          child: const SizedBox.shrink()),
-                                    ),
+                                              ),
+                                              dropdownStyle: DropdownStyle(
+                                                borderRadius: BorderRadius.circular(5),
+                                                elevation: 5,
+                                                color: const Color(0xFF579B61),
+                                                offset: const Offset(0, 50),
+                                              ),
+                                              items: socials
+                                                  .map(
+                                                    (item) => DropdownItem<String>(
+                                                      value: item,
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                          color: getColor(item),
+                                                          borderRadius: getBorderRadius(socials.indexOf(item)),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Padding(
+                                                              padding: const EdgeInsets.all(10.0),
+                                                              child: Text(
+                                                                item,
+                                                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                                                    fontSize: 14.0,
+                                                                    color: Colors.white.withOpacity(0.9),
+                                                                    fontWeight: FontWeight.w400),
+                                                                textAlign: TextAlign.start,
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(top: 5.0, right: 10.0),
+                                                              child: Image.asset(
+                                                                "images/${item.toLowerCase()}.png",
+                                                                width: 20.0,
+                                                                height: 20.0,
+                                                                color: Colors.white70,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                              currentIndex: indexSocial,
+                                              child: const SizedBox.shrink()),
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                              const SizedBox(
+                                height: 15.0,
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: 48.0,
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF252F45),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  border: Border.all(color: const Color(0xFF37394F), width: 1.0),
+                                ),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      if (_amountController.text.isNotEmpty)
+                                        if (widget.type == "spin")
+                                          Expanded(
+                                              child: AutoSizeText(
+                                            "Jackpot ${_valueUsers.toInt() * double.parse(_amountController.text)} ${selectedCoin?.coin?.ticker ?? ""}",
+                                            maxLines: 1,
+                                            minFontSize: 8.0,
+                                            textAlign: TextAlign.center,
+                                          )),
+                                      if (_amountController.text.isNotEmpty)
+                                        if (widget.type != "spin")
+                                          Expanded(
+                                              child: AutoSizeText(
+                                            "${_valueUsers.toInt()} winners will be rewarded ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin?.coin?.ticker ?? ""}",
+                                            maxLines: 1,
+                                            minFontSize: 8.0,
+                                            textAlign: TextAlign.center,
+                                          )),
+                                      if (_amountController.text.isEmpty)
+                                        Text(
+                                          widget.type == "spin" ? "Please enter ticket cost" : "Please enter an amount",
+                                          style: const TextStyle(color: Colors.pinkAccent, fontWeight: FontWeight.w800),
+                                        ),
+                                    ],
                                   ),
-                                ],
-                              )),
-                          const SizedBox(
-                            height: 15.0,
-                          ),
-                          Container(
-                            width: double.infinity,
-                            height: 48.0,
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF252F45),
-                              borderRadius: BorderRadius.circular(8.0),
-                              border: Border.all(color: const Color(0xFF37394F), width: 1.0),
-                            ),
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  if (_amountController.text.isNotEmpty)
-                                    if (widget.type == "spin")
-                                      Expanded(
-                                          child: AutoSizeText(
-                                        "Jackpot ${_valueUsers.toInt() * double.parse(_amountController.text)} ${selectedCoin?.coin?.ticker ?? ""}",
-                                        maxLines: 1,
-                                        minFontSize: 8.0,
-                                        textAlign: TextAlign.center,
-                                      )),
-                                  if (_amountController.text.isNotEmpty)
-                                    if (widget.type != "spin")
-                                      Expanded(
-                                          child: AutoSizeText(
-                                        "${_valueUsers.toInt()} winners will be rewarded ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin?.coin?.ticker ?? ""}",
-                                        maxLines: 1,
-                                        minFontSize: 8.0,
-                                        textAlign: TextAlign.center,
-                                      )),
-                                  if (_amountController.text.isEmpty)
-                                    Text(
-                                      widget.type == "spin" ? "Please enter ticket cost" : "Please enter an amount",
-                                      style: const TextStyle(color: Colors.pinkAccent, fontWeight: FontWeight.w800),
-                                    ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 15.0,
-                          ),
-                          Opacity(
-                            opacity: _amountController.text.isNotEmpty ? 1.0 : 0.5,
-                            child: FlatCustomButton(
-                              radius: 8.0,
-                              width: double.infinity,
-                              height: 50.0,
-                              color: getColor(currentSocial),
-                              onTap: () {
-                                if (_amountController.text.isNotEmpty) {
-                                  switch (currentSocial) {
-                                    case "Twitter":
-                                      {
-                                        String s = "";
-                                        if (widget.type == "gw") {
-                                          s = "${_amountController.text} ${selectedCoin?.coin?.ticker ?? ""} Giveaway in ${_value.toInt()} ${dateShort.toUpperCase()}\nRT ❤️ and comment #MERGE to enter \n\n @rocketbotpro ${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} ${_value.toInt()}$dateShort";
-                                        } else if (widget.type == "airdrop") {
-                                          s = "${_amountController.text} ${selectedCoin?.coin?.ticker ?? ""} Airdrop 🪂\nRT ❤️ and comment #MERGE to enter \n\n@rocketbotpro ${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
-                                        } else if (widget.type == "spin") {
-                                          s = "${_valueUsers.toInt() * double.parse(_amountController.text)} ${selectedCoin?.coin?.ticker ?? ""} Spin 🧧\nTicket cost ${double.parse(_amountController.text)} ${selectedCoin?.coin?.ticker ?? ""}\nComment #MERGE to enter\n\n @rocketbotpro ${widget.type} ${_valueUsers.toInt() * double.parse(_amountController.text)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} #${selectedCoin!.coin!.ticker?.toUpperCase()}";
-                                        }
-                                        shareToTwitter(s);
-                                      }
-                                      break;
-                                    case "Telegram":
-                                      {
-                                        String s = "";
-                                        if (widget.type == "gw") {
-                                          s = "!${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} ${_value.toInt()}$dateShort";
-                                        } else if (widget.type == "airdrop") {
-                                          s = "!${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
-                                        } else if (widget.type == "spin") {
-                                          s = "!${widget.type} ${_valueUsers.toInt() * double.parse(_amountController.text)} ${_valueUsers.toInt()}";
-                                        }
-                                        shareToTelegram(s);
-                                      }
+                              const SizedBox(
+                                height: 15.0,
+                              ),
+                              Opacity(
+                                opacity: _amountController.text.isNotEmpty ? 1.0 : 0.5,
+                                child: FlatCustomButton(
+                                  radius: 8.0,
+                                  width: double.infinity,
+                                  height: 50.0,
+                                  color: getColor(currentSocial),
+                                  onTap: () {
+                                    if (_amountController.text.isNotEmpty) {
+                                      switch (currentSocial) {
+                                        case "Twitter":
+                                          {
+                                            String s = "";
+                                            if (widget.type == "gw") {
+                                              s = "${_amountController.text} ${selectedCoin?.coin?.ticker ?? ""} Giveaway in ${_value.toInt()} ${dateShort.toUpperCase()}\nRT ❤️ and comment #MERGE to enter \n\n @rocketbotpro ${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} ${_value.toInt()}$dateShort";
+                                            } else if (widget.type == "airdrop") {
+                                              s = "${_amountController.text} ${selectedCoin?.coin?.ticker ?? ""} Airdrop 🪂\nRT ❤️ and comment #MERGE to enter \n\n@rocketbotpro ${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
+                                            } else if (widget.type == "spin") {
+                                              s = "${_valueUsers.toInt() * double.parse(_amountController.text)} ${selectedCoin?.coin?.ticker ?? ""} Spin 🧧\nTicket cost ${double.parse(_amountController.text)} ${selectedCoin?.coin?.ticker ?? ""}\nComment #MERGE to enter\n\n @rocketbotpro ${widget.type} ${_valueUsers.toInt() * double.parse(_amountController.text)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} #${selectedCoin!.coin!.ticker?.toUpperCase()}";
+                                            }
+                                            shareToTwitter(s);
+                                          }
+                                          break;
+                                        case "Telegram":
+                                          {
+                                            String s = "";
+                                            if (widget.type == "gw") {
+                                              s = "!${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} ${_value.toInt()}$dateShort";
+                                            } else if (widget.type == "airdrop") {
+                                              s = "!${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
+                                            } else if (widget.type == "spin") {
+                                              s = "!${widget.type} ${_valueUsers.toInt() * double.parse(_amountController.text)} ${_valueUsers.toInt()}";
+                                            }
+                                            shareToTelegram(s);
+                                          }
 
-                                      break;
-                                    case "Discord":
-                                      {
-                                        String s = "";
-                                        if (widget.type == "gw") {
-                                          s = "/${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} ${_value.toInt()}$dateShort";
-                                        } else if (widget.type == "airdrop") {
-                                          s = "/${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
-                                        }
-                                        if (s.isNotEmpty) {
-                                          Share.share(s);
-                                        }
+                                          break;
+                                        case "Discord":
+                                          {
+                                            String s = "";
+                                            if (widget.type == "gw") {
+                                              s = "/${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()} ${_value.toInt()}$dateShort";
+                                            } else if (widget.type == "airdrop") {
+                                              s = "/${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
+                                            }
+                                            if (s.isNotEmpty) {
+                                              Share.share(s);
+                                            }
+                                          }
+                                          break;
                                       }
-                                      break;
-                                  }
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Amount must be greater than 0")));
-                                }
-                              },
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("Share", style: TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w400)),
-                                  Icon(Icons.share, color: Colors.white),
-                                ],
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(content: Text("Amount must be greater than 0")));
+                                    }
+                                  },
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Share",
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.w400)),
+                                      Icon(Icons.share, color: Colors.white),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 15.0,
-                          ),
-                        ]))
-                  ]);
+                              const SizedBox(
+                                height: 15.0,
+                              ),
+                            ]))
+                      ]);
                 } else {
                   return const Text("No coins");
                 }
@@ -820,7 +865,12 @@ class _BotScreenState extends ConsumerState<BotScreen> {
   }
 
   Future<void> shareToTwitter(String message) async {
-    String response = await appinioSocialShare.shareToTwitter(message);
+    String response;
+    if (Platform.isAndroid) {
+      response = await appinioSocialShare.android.shareToTwitter(message, null);
+    } else {
+      response = await appinioSocialShare.iOS.shareToTwitter(message, null);
+    }
     if (response == "ERROR_APP_NOT_AVAILABLE") {
       if (context.mounted) Dialogs.openAlertBox(context, "Error", "Twitter app isn't present on your device");
     } else {
@@ -829,7 +879,12 @@ class _BotScreenState extends ConsumerState<BotScreen> {
   }
 
   Future<void> shareToTelegram(String message) async {
-    String response = await appinioSocialShare.shareToTelegram(message);
+    String response;
+    if (Platform.isAndroid) {
+      response = await appinioSocialShare.android.shareToTelegram(message, null);
+    } else {
+      response = await appinioSocialShare.iOS.shareToTelegram(message);
+    }
     if (response == "ERROR_APP_NOT_AVAILABLE") {
       if (context.mounted) Dialogs.openAlertBox(context, "Error", "Twitter app isn't present on your device");
     } else {
