@@ -15,6 +15,7 @@ class CoinImage extends StatelessWidget {
       cacheKey: coin.cryptoId!,
       width: size,
       height: size,
+      fit: BoxFit.scaleDown,
     );
   }
 }
