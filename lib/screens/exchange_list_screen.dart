@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rocketbot/models/exchanges.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/exchange_list_tile.dart';
 
 class ExchangeListScreen extends StatefulWidget {
@@ -31,7 +31,7 @@ class _ExchangeListScreenState extends State<ExchangeListScreen> {
               SizedBox(
                 height: 30,
                 width: 25,
-                child: FlatCustomButton(
+                child: AppFlatButton(
                   onTap: () {
                     Navigator.of(context).pop();
                   },

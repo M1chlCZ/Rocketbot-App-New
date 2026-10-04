@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:rocketbot/providers/dep_addr_provider.dart';
 import 'package:rocketbot/providers/websocket_test_provider.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:webviewx/webviewx.dart';
 
 class RamperScreen extends ConsumerStatefulWidget {
@@ -72,7 +72,7 @@ class _RamperScreenState extends ConsumerState<RamperScreen> {
                   SizedBox(
                     height: 30,
                     width: 25,
-                    child: FlatCustomButton(
+                    child: AppFlatButton(
                       onTap: () {
                         Navigator.of(context).pop();
                       },

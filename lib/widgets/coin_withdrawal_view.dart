@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:rocketbot/component_widgets/button_neu.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/models/coin_graph.dart';
 import 'package:rocketbot/models/transaction_data.dart';
 import 'package:url_launcher/url_launcher.dart';

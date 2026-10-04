@@ -5,7 +5,7 @@ import 'package:rocketbot/netInterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/utils.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 
 class MasternodeManageScreen extends StatefulWidget {
   final MasternodeInfo mnInfo;
@@ -39,7 +39,7 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
           child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
                 padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 0.0),
-                child: FlatCustomButton(
+                child: AppFlatButton(
                   onTap: () {
                     Navigator.of(context).pop();
                   },
@@ -203,7 +203,7 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               //add some actions, icons...etc
-                              // FlatCustomButton(
+                              // AppFlatButton(
                               //     onTap: () {
                               //       Dialogs.openAlertBox(context, "Info", "Not yet implemented");
                               //     },
@@ -215,7 +215,7 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
                               // const SizedBox(
                               //   width: 20.0,
                               // ),
-                              FlatCustomButton(
+                              AppFlatButton(
                                   onTap: () {
                                     Dialogs.openMNWithdrawBox(context, sortedList[index].id!, () {
                                       _withdrawNode(sortedList[index].id!);

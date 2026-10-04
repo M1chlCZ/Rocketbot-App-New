@@ -25,10 +25,8 @@ import 'package:rocketbot/screens/keyboard_overlay.dart';
 import 'package:rocketbot/screens/mn_manage_screen.dart';
 import 'package:rocketbot/storage/app_database.dart';
 import 'package:rocketbot/support/dialogs.dart';
-import 'package:rocketbot/support/gradient_text.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/support/life_cycle_watcher.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
-import 'package:rocketbot/widgets/dropdown_menu_icon.dart';
 import 'package:rocketbot/widgets/masternode_graph.dart';
 import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:slide_to_act/slide_to_act.dart';
@@ -36,7 +34,6 @@ import 'package:slide_to_act/slide_to_act.dart';
 import '../models/balance_list.dart';
 import '../models/coin.dart';
 import '../widgets/coin_price_graph.dart';
-import '../widgets/time_stake_range_switch.dart';
 
 class MasternodePage extends ConsumerStatefulWidget {
   final Coin activeCoin;
@@ -251,10 +248,10 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
             ),
             SizedBox(
                 height: 40,
-                child: StakeTimeRangeSwitcher(
+                child: TimeRangeSwitch(
                   color: const Color(0xFFF68DB2),
                   key: const ValueKey<int>(1),
-                  changeTime: _changeTime,
+                  onChanged: (value) => _changeTime(value.index),
                 )),
             const SizedBox(
               height: 20.0,
@@ -884,7 +881,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               ),
                               SizedBox(
                                 width: 175,
-                                child: DropDownIcon(
+                                child: DropdownMenuIcon(
                                     onChange: (int value, int index) {
                                       setState(() {
                                         _collateral = value;
@@ -1015,7 +1012,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               opacity: _amountReward == "0.0" ? 0.3 : 1.0,
                               child: Padding(
                                   padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                                  child: FlatCustomButton(
+                                  child: AppFlatButton(
                                     onTap: () {
                                       if (!_loadingReward) {
                                         _unStake(1);
@@ -1054,7 +1051,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                               opacity: _staking == false ? 0.3 : 1.0,
                               child: Padding(
                                   padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                                  child: FlatCustomButton(
+                                  child: AppFlatButton(
                                     onTap: () {
                                       if (!_loadingCoins) {
                                         _goToManagement();

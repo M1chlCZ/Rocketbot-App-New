@@ -9,14 +9,12 @@ import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:rocketbot/component_widgets/button_neu.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/models/deposit_address.dart';
 import 'package:rocketbot/netInterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/dialogs.dart';
-import 'package:rocketbot/support/gradient_text.dart';
 import 'package:rocketbot/support/secure_storage.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/referral_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -197,7 +195,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                                         }),
                                     // SizedBox(
                                     //   height: 50,
-                                    //   child: FlatCustomButton(
+                                    //   child: AppFlatButton(
                                     //     color: Colors.white12,
                                     //     onTap: () {
                                     //       _openQRScanner();
@@ -372,7 +370,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                     SizedBox(
                       width: 150,
                       height: 40,
-                      child: FlatCustomButton(
+                      child: AppFlatButton(
                         color: Colors.green,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,

@@ -24,10 +24,8 @@ import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/keyboard_overlay.dart';
 import 'package:rocketbot/storage/app_database.dart';
 import 'package:rocketbot/support/dialogs.dart';
-import 'package:rocketbot/support/gradient_text.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/support/life_cycle_watcher.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
-import 'package:rocketbot/widgets/percent_switch_widget.dart';
 import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:rocketbot/widgets/stake_graph.dart';
 import 'package:slide_to_act/slide_to_act.dart';
@@ -36,7 +34,6 @@ import '../models/balance_list.dart';
 import '../models/coin.dart';
 import '../support/auto_size_text_field.dart';
 import '../widgets/coin_price_graph.dart';
-import '../widgets/time_stake_range_switch.dart';
 
 class StakingPage extends ConsumerStatefulWidget {
   final Coin activeCoin;
@@ -66,7 +63,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
   // final _storage = const FlutterSecureStorage();
   final NetInterface _interface = NetInterface();
   final _graphKey = GlobalKey<CoinPriceGraphState>();
-  final _percentageKey = GlobalKey<PercentSwitchWidgetState>();
+  final _percentageKey = GlobalKey<PercentSwitchState>();
   final GlobalKey<SlideActionState> _keyStake = GlobalKey();
   final TextEditingController _amountController = TextEditingController();
   AppDatabase db = GetIt.I.get<AppDatabase>();
@@ -240,9 +237,9 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
             ),
             SizedBox(
                 height: 40,
-                child: StakeTimeRangeSwitcher(
+                child: TimeRangeSwitch(
                   key: const ValueKey<int>(0),
-                  changeTime: _changeTime,
+                  onChanged: (value) => _changeTime(value.index),
                 )),
             const SizedBox(
               height: 20.0,
@@ -685,9 +682,9 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                     ),
                   ),
                 ),
-                PercentSwitchWidget(
+                PercentSwitch(
                   key: _percentageKey,
-                  changePercent: _changePercentage,
+                  onChanged: _changePercentage,
                 ),
                 Container(
                   decoration: const BoxDecoration(
@@ -766,7 +763,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                               opacity: _amountReward == "0.0" ? 0.3 : 1.0,
                               child: Padding(
                                   padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                                  child: FlatCustomButton(
+                                  child: AppFlatButton(
                                     onTap: () {
                                       if (!_loadingReward) {
                                         _unStake(1);
@@ -800,7 +797,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                           ),
                           Padding(
                               padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                              child: FlatCustomButton(
+                              child: AppFlatButton(
                                 onTap: () {
                                   if (!_adjustReward) {
                                     // _unStake(2);
@@ -838,7 +835,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                           ),
                           Padding(
                               padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                              child: FlatCustomButton(
+                              child: AppFlatButton(
                                 onTap: () {
                                   if (!_loadingCoins) {
                                     _unStake(0);

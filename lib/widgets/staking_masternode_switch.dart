@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 
 class StakingMasternodeSwitcher extends StatefulWidget {
   final Function(int page)? changeType;
@@ -34,7 +34,7 @@ class StakingMasternodeSwitcherState extends State<StakingMasternodeSwitcher> {
               child: AnimatedContainer(
                 decoration: BoxDecoration(color: _active == 0 ? const Color(0xFF9BD41E) : Colors.transparent, borderRadius: BorderRadius.circular(8.0)),
                 duration: _duration,
-                child: FlatCustomButton(
+                child: AppFlatButton(
                     color: Colors.transparent,
                     radius: 8.0,
                     onTap: () {
@@ -62,7 +62,7 @@ class StakingMasternodeSwitcherState extends State<StakingMasternodeSwitcher> {
                     decoration: BoxDecoration(color: _active == 0 ? Colors.transparent : const Color(0xFFF68DB2), borderRadius: BorderRadius.circular(8.0)),
                     // opacity: _active == 1 ? 1.0 : 0.4,
                     duration: _duration,
-                    child: FlatCustomButton(
+                    child: AppFlatButton(
                         color: Colors.transparent,
                         onTap: () {
                           setState(() {

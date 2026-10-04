@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/widgets/coin_image.dart';
 
-import 'price_badge.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 
 class CoinListView extends StatefulWidget {
   final CoinBalance coin;

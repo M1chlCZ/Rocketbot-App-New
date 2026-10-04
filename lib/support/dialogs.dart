@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/support/dialog_body.dart';
-import 'package:rocketbot/widgets/percent_switch_widget.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 
 class Dialogs {
   static Future<void> openAlertBox(context, String? header, String message) async {
@@ -333,8 +333,8 @@ class Dialogs {
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: PercentSwitchWidget(
-                      changePercent: changePercentage,
+                    child: PercentSwitch(
+                      onChanged: changePercentage,
                     ),
                   ),
                 ],

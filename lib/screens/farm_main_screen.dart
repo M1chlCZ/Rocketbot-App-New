@@ -4,7 +4,7 @@ import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:rocketbot/screenpages/masternode_page.dart';
 import 'package:rocketbot/screenpages/staking_page.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/staking_masternode_switch.dart';
 
 class FarmMainScreen extends StatefulWidget {
@@ -71,7 +71,7 @@ class _FarmMainScreenState extends State<FarmMainScreen> {
                           SizedBox(
                             height: 30,
                             width: 25,
-                            child: FlatCustomButton(
+                            child: AppFlatButton(
                               onTap: () {
                                 Navigator.of(context).pop();
                               },

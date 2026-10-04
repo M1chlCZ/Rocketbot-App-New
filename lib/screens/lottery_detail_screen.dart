@@ -6,7 +6,7 @@ import 'package:rocketbot/models/loterries.dart';
 import 'package:rocketbot/models/lottery_details.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/support/utils.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/lottery_member_tile.dart';
 
 import '../netinterface/interface.dart';
@@ -51,7 +51,7 @@ class _LotteryDetailScreenState extends State<LotteryDetailScreen> {
                               child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.start, children: [
                                 Padding(
                                     padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 0.0),
-                                    child: FlatCustomButton(
+                                    child: AppFlatButton(
                                       onTap: () {
                                         Navigator.of(context).pop();
                                       },
@@ -179,7 +179,7 @@ class _LotteryDetailScreenState extends State<LotteryDetailScreen> {
                               child: Container(
                                 height: 50.0,
                                 margin: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
-                                child: FlatCustomButton(
+                                child: AppFlatButton(
                                   color: Colors.green,
                                   child: const Text("Claim the reward"),
                                   onTap: () {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rocketbot/component_widgets/button_neu.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/models/socials.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/dialogs.dart';

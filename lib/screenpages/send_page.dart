@@ -19,7 +19,7 @@ import 'package:rocketbot/support/auto_size_text_field.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/qr_code_scanner.dart';
 import 'package:rocketbot/support/secure_storage.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
@@ -208,7 +208,7 @@ class SendPageState extends State<SendPage> {
                       SizedBox(
                         height: 30,
                         width: 25,
-                        child: FlatCustomButton(
+                        child: AppFlatButton(
                           onTap: () {
                             Navigator.of(context).pop();
                           },
@@ -505,7 +505,7 @@ class SendPageState extends State<SendPage> {
                 const SizedBox(
                   height: 20.0,
                 ),
-                FlatCustomButton(
+                AppFlatButton(
                   radius: 8.0,
                   color: Colors.lightGreen.withOpacity(0.5),
                   onTap: () {

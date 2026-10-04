@@ -14,7 +14,7 @@ import 'package:rocketbot/providers/coins_provider.dart';
 import 'package:rocketbot/providers/tx_provider.dart';
 import 'package:rocketbot/screens/exchange_list_screen.dart';
 import 'package:rocketbot/screens/ramper_screen.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/coin_deposit_view.dart';
 import 'package:rocketbot/widgets/coin_withdrawal_view.dart';
 import 'package:rocketbot/widgets/horizontal_list_tile.dart';
@@ -24,7 +24,6 @@ import 'package:rocketbot/widgets/switching_button.dart';
 import '../models/balance_list.dart';
 import '../models/coin.dart';
 import '../widgets/coin_price_graph.dart';
-import '../widgets/price_badge.dart';
 
 class CoinScreen extends ConsumerStatefulWidget {
   final Coin activeCoin;
@@ -180,7 +179,7 @@ class CoinScreenState extends ConsumerState<CoinScreen> with SingleTickerProvide
                     SizedBox(
                       height: 30,
                       width: 25,
-                      child: FlatCustomButton(
+                      child: AppFlatButton(
                         onTap: () {
                           Navigator.of(context).pop();
                         },
@@ -435,7 +434,7 @@ class CoinScreenState extends ConsumerState<CoinScreen> with SingleTickerProvide
                                   _getExchange(_coinActive.id!);
                                 },
                               ),
-                              // FlatCustomButton(
+                              // AppFlatButton(
                               //   height: 30,
                               //   width: 120,
                               //   radius: 8.0,

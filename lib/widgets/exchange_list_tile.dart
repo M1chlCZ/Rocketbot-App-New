@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rocketbot/models/exchanges.dart';
 import 'package:rocketbot/support/utils.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 
 class ExchangeTile extends StatelessWidget {
   final Exchange ex;
@@ -57,7 +57,7 @@ class ExchangeTile extends StatelessWidget {
                   const SizedBox(
                     width: 2.0,
                   ),
-                  FlatCustomButton(
+                  AppFlatButton(
                     width: 30,
                     height: double.infinity,
                     color: Colors.transparent,

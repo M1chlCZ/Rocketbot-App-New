@@ -3,11 +3,10 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rocketbot/component_widgets/button_neu.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -69,7 +68,7 @@ class DepositPageState extends State<DepositPage> {
                       SizedBox(
                         height: 30,
                         width: 25,
-                        child: FlatCustomButton(
+                        child: AppFlatButton(
                           onTap: () {
                             Navigator.of(context).pop();
                           },
@@ -270,7 +269,7 @@ class DepositPageState extends State<DepositPage> {
                         ),
                       ),
                       Container(height: double.infinity, width: 2,color: const Color(0xFF537FB0)),
-                      FlatCustomButton(
+                      AppFlatButton(
                         height: 40.0,
                         width: 40.0,
                         color: Colors.transparent,

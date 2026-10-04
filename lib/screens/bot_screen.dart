@@ -11,9 +11,7 @@ import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/providers/balance_provider.dart';
 import 'package:rocketbot/screens/socials_screen.dart';
 import 'package:rocketbot/support/dialogs.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
-import 'package:rocketbot/widgets/dropdown_menu_icon.dart';
-import 'package:rocketbot/widgets/percent_switch_widget.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sliding_number/sliding_number.dart';
@@ -30,7 +28,7 @@ class BotScreen extends ConsumerStatefulWidget {
 class _BotScreenState extends ConsumerState<BotScreen> {
   final TextEditingController _amountController = TextEditingController();
   AppinioSocialShare appinioSocialShare = AppinioSocialShare();
-  final key = GlobalKey<PercentSwitchWidgetState>();
+  final key = GlobalKey<PercentSwitchState>();
   CoinBalance? selectedCoin;
   int indexCoin = 0;
 
@@ -83,7 +81,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                     SizedBox(
                       height: 30,
                       width: 25,
-                      child: FlatCustomButton(
+                      child: AppFlatButton(
                         onTap: () {
                           Navigator.of(context).pop();
                         },
@@ -423,10 +421,10 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                               color: Colors.white30, fontSize: 16.0, fontWeight: FontWeight.w400),
                                         ),
                                       ),
-                                      PercentSwitchWidget(
+                                      PercentSwitch(
                                         key: key,
                                         width: 75,
-                                        changePercent: (double percent) {
+                                        onChanged: (double percent) {
                                           setState(() {
                                             _amountController.text = NumberFormat("###.######")
                                                 .format(double.parse(selectedCoin!.free!.toString()) * percent);
@@ -593,7 +591,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                             color: getColor(currentSocial),
                                             borderRadius: BorderRadius.circular(8.0),
                                           ),
-                                          child: DropDownIcon<String>(
+                                          child: DropdownMenuIcon<String>(
                                               onChange: (String value, int index) {
                                                 setState(() {
                                                   currentSocial = value;
@@ -709,7 +707,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                               ),
                               Opacity(
                                 opacity: _amountController.text.isNotEmpty ? 1.0 : 0.5,
-                                child: FlatCustomButton(
+                                child: AppFlatButton(
                                   radius: 8.0,
                                   width: double.infinity,
                                   height: 50.0,

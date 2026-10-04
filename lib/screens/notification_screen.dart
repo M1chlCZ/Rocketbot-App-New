@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rocketbot/providers/not_provider.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/notification_tile.dart';
 
 class NotificationScreen extends ConsumerWidget {
@@ -25,7 +25,7 @@ class NotificationScreen extends ConsumerWidget {
                   SizedBox(
                     height: 30,
                     width: 25,
-                    child: FlatCustomButton(
+                    child: AppFlatButton(
                       onTap: () {
                         Navigator.of(context).pop();
                       },

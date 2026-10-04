@@ -20,7 +20,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:rocketbot/bloc/balance_bloc.dart';
 import 'package:rocketbot/cache/price_graph_cache.dart';
-import 'package:rocketbot/component_widgets/button_neu.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/models/deposit_address.dart';
 import 'package:rocketbot/models/get_withdraws.dart';
@@ -36,10 +36,8 @@ import 'package:rocketbot/storage/app_database.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/globals.dart' as globals;
 import 'package:rocketbot/support/life_cycle_watcher.dart';
-import 'package:rocketbot/support/route.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 import 'package:rocketbot/support/utils.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
 
 import '../models/user.dart';
 import '../widgets/coin_list_view.dart';
@@ -499,7 +497,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                           width: 25,
                                           child: NeuButton(
                                             onTap: () {
-                                              Navigator.of(context).push(pushRoute(const NotificationScreen())).then((value) => _getUnread());
+                                              Navigator.of(context).push(slideUpRoute(const NotificationScreen())).then((value) => _getUnread());
                                             },
                                             imageIcon: Image.asset(
                                               _unreadNot > 0 ? "images/notification_on.png" : "images/notification_off.png",
@@ -737,7 +735,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 1.0),
-                                    child: FlatCustomButton(
+                                    child: AppFlatButton(
                                       onTap: () async {
                                         _bloc!.showWait();
                                         await Future.delayed(const Duration(milliseconds: 100), () {});
@@ -833,7 +831,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                           //       coinSwitch: _changeCoin,
                                           //     ),
                                           //    builder: (context, ScrollDirection scrollDirection, child) {
-                                          //      return AnimatedListItemWrapper(
+                                          //      return AnimatedListItem(
                                           //        scrollDirection: scrollDirection,
                                           //        child: child!,
                                           //      );

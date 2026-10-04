@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 
 class SwitchingButton extends StatefulWidget {
   final VoidCallback onPressed;
@@ -68,7 +68,7 @@ class MyButtonState extends State<SwitchingButton> {
               child: SizedBox(
                 height: 25,
                 width: 120,
-                child: FlatCustomButton(
+                child: AppFlatButton(
                   radius: 5,
                   color: Colors.transparent,
                   onTap: () {

@@ -16,13 +16,12 @@ import 'package:rocketbot/screens/games_switch.dart';
 import 'package:rocketbot/screens/giveaway_detail_screen.dart';
 import 'package:rocketbot/screens/lottery_detail_screen.dart';
 import 'package:rocketbot/screens/twitter_giveaway_detail_screen.dart';
-import 'package:rocketbot/support/route.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/airdrop_tile.dart';
 import 'package:rocketbot/widgets/giveaway_tile.dart';
 import 'package:rocketbot/widgets/lottery_tile.dart';
 
 import '../netinterface/interface.dart';
-import '../widgets/animted_list_item_wrapper.dart';
 
 class GiveAwayScreen extends StatefulWidget {
   final VoidCallback prevScreen;
@@ -246,7 +245,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                                         giveaway: snapshot.data!.data![index],
                                                         callBack: giveawayCallback),
                                                     builder: (BuildContext context, scrollDirection, Widget? child) {
-                                                      return AnimatedListItemWrapper(
+                                                      return AnimatedListItem(
                                                         scrollDirection: scrollDirection,
                                                         child: child!,
                                                       );
@@ -327,7 +326,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                                       callBack: aidropCallBack,
                                                     ),
                                                     builder: (BuildContext context, scrollDirection, Widget? child) {
-                                                      return AnimatedListItemWrapper(
+                                                      return AnimatedListItem(
                                                         scrollDirection: scrollDirection,
                                                         child: child!,
                                                       );
@@ -409,7 +408,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                                                       callBack: lotteryCallback,
                                                     ),
                                                     builder: (BuildContext context, scrollDirection, Widget? child) {
-                                                      return AnimatedListItemWrapper(
+                                                      return AnimatedListItem(
                                                         scrollDirection: scrollDirection,
                                                         child: child!,
                                                       );
@@ -489,7 +488,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                           backgroundColor: Colors.white,
                           foregroundColor: Colors.white,
                           visible: true,
-                          onTap: () => Navigator.push(context, pushRoute(const BotScreen("spin"))),
+                          onTap: () => Navigator.push(context, slideUpRoute(const BotScreen("spin"))),
                           labelWidget: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                             margin: const EdgeInsets.only(right: 10.0),
@@ -517,7 +516,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                           labelShadow: null,
                           labelStyle: const TextStyle(fontSize: 18.0),
                           labelBackgroundColor: Colors.black87,
-                          onTap: () => Navigator.push(context, pushRoute(const BotScreen("airdrop"))),
+                          onTap: () => Navigator.push(context, slideUpRoute(const BotScreen("airdrop"))),
                           labelWidget: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                             margin: const EdgeInsets.only(right: 10.0),
@@ -542,7 +541,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                           backgroundColor: Colors.white,
                           foregroundColor: Colors.white,
                           label: 'Second',
-                          onTap: () => Navigator.push(context, pushRoute(const BotScreen("gw"))),
+                          onTap: () => Navigator.push(context, slideUpRoute(const BotScreen("gw"))),
                           elevation: 5.0,
                           labelWidget: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -565,7 +564,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
                       // radius: 50.0,
                       // color: Colors.lightGreen,
                       // onTap: () {
-                      //   Navigator.push(context, pushRoute(const BotScreen()));
+                      //   Navigator.push(context, slideUpRoute(const BotScreen()));
                       // },
                       child: const Text(
                         "+",

@@ -5,10 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:rocketbot/component_widgets/button_neu.dart';
-import 'package:rocketbot/component_widgets/container_neu.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/support/auto_size_text_field.dart';
-import 'package:rocketbot/support/gradient_text.dart';
 import 'package:rocketbot/support/qr_code_scanner.dart';
 
 class ReferralWidget extends StatefulWidget {

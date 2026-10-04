@@ -9,7 +9,7 @@ import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screenpages/coin_page.dart';
 import 'package:rocketbot/screenpages/deposit_page.dart';
 import 'package:rocketbot/screenpages/send_page.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 
 import '../screens/portfolio_page.dart';
 import 'farm_main_screen.dart';
@@ -226,7 +226,7 @@ class MainScreenState extends State<MainScreen> {
         padding: const EdgeInsets.only(left: 15.0, right: 15.0),
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: FlatCustomButton(
+            icon: AppFlatButton(
                 width: 40,
                 height: 30,
                 radius: 10.0,
@@ -240,7 +240,7 @@ class MainScreenState extends State<MainScreen> {
                 )),
             backgroundColor: Colors.amber,
             label: 'Receive',
-            activeIcon: FlatCustomButton(
+            activeIcon: AppFlatButton(
               width: 40,
               height: 30,
               radius: 10.0,
@@ -258,7 +258,7 @@ class MainScreenState extends State<MainScreen> {
             ),
           ),
           BottomNavigationBarItem(
-            icon: FlatCustomButton(
+            icon: AppFlatButton(
                 width: 40,
                 height: 30,
                 radius: 10.0,
@@ -271,7 +271,7 @@ class MainScreenState extends State<MainScreen> {
                   color: Colors.white,
                 )),
             label: 'Transactions',
-            activeIcon: FlatCustomButton(
+            activeIcon: AppFlatButton(
               width: 40,
               height: 30,
               radius: 10.0,
@@ -289,7 +289,7 @@ class MainScreenState extends State<MainScreen> {
             ),
           ),
           BottomNavigationBarItem(
-            icon: FlatCustomButton(
+            icon: AppFlatButton(
                 width: 40,
                 height: 30,
                 radius: 10.0,
@@ -302,7 +302,7 @@ class MainScreenState extends State<MainScreen> {
                   color: Colors.white,
                 )),
             label: 'Send',
-            activeIcon: FlatCustomButton(
+            activeIcon: AppFlatButton(
               width: 40,
               height: 30,
               radius: 10.0,

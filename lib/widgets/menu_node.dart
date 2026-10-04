@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 
 class MenuNode extends StatelessWidget {
   final String menuText;
@@ -45,7 +45,7 @@ class MenuNode extends StatelessWidget {
                   const Expanded(
                     child: SizedBox(),
                   ),
-                  FlatCustomButton(
+                  AppFlatButton(
                       height: 25,
                       width: 20,
                       onTap: ()  {

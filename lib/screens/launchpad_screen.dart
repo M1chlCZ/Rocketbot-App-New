@@ -10,7 +10,7 @@ import 'package:rocketbot/screens/launchpad_details.screen.dart';
 import 'package:rocketbot/widgets/launchpad_tile.dart';
 
 import '../netinterface/interface.dart';
-import '../widgets/animted_list_item_wrapper.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 
 class LaunchpadScreen extends ConsumerStatefulWidget {
   final VoidCallback prevScreen;
@@ -174,7 +174,7 @@ class _LaunchpadScreenState extends ConsumerState<LaunchpadScreen> with Automati
                                                 position: weekIndex,
                                               ),
                                               builder: (BuildContext context, scrollDirection, Widget? child) {
-                                                return AnimatedListItemWrapper(
+                                                return AnimatedListItem(
                                                   scrollDirection: scrollDirection,
                                                   child: child!,
                                                 );
@@ -197,7 +197,7 @@ class _LaunchpadScreenState extends ConsumerState<LaunchpadScreen> with Automati
                                                 position: foreverIndex,
                                               ),
                                               builder: (BuildContext context, scrollDirection, Widget? child) {
-                                                return AnimatedListItemWrapper(
+                                                return AnimatedListItem(
                                                   scrollDirection: scrollDirection,
                                                   child: child!,
                                                 );
@@ -236,7 +236,7 @@ class _LaunchpadScreenState extends ConsumerState<LaunchpadScreen> with Automati
                                                 launchpad: data.whitelist![index],
                                                 callBack: launchpadCallback),
                                             builder: (BuildContext context, scrollDirection, Widget? child) {
-                                              return AnimatedListItemWrapper(
+                                              return AnimatedListItem(
                                                 scrollDirection: scrollDirection,
                                                 child: child!,
                                               );
@@ -274,7 +274,7 @@ class _LaunchpadScreenState extends ConsumerState<LaunchpadScreen> with Automati
                                                 launchpad: data.presale![index],
                                                 callBack: launchpadCallback),
                                             builder: (BuildContext context, scrollDirection, Widget? child) {
-                                              return AnimatedListItemWrapper(
+                                              return AnimatedListItem(
                                                 scrollDirection: scrollDirection,
                                                 child: child!,
                                               );
@@ -312,7 +312,7 @@ class _LaunchpadScreenState extends ConsumerState<LaunchpadScreen> with Automati
                                                 launchpad: data.public![index],
                                                 callBack: launchpadCallback),
                                             builder: (BuildContext context, scrollDirection, Widget? child) {
-                                              return AnimatedListItemWrapper(
+                                              return AnimatedListItem(
                                                 scrollDirection: scrollDirection,
                                                 child: child!,
                                               );

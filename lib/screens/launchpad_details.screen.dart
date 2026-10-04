@@ -10,7 +10,7 @@ import 'package:rocketbot/providers/network_provider.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/extensions.dart';
 import 'package:rocketbot/support/utils.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/launchpad_members.dart';
 
 class LaunchpadDetailsScreen extends ConsumerStatefulWidget {
@@ -49,7 +49,7 @@ class _LaunchpadDetailsScreenState extends ConsumerState<LaunchpadDetailsScreen>
           child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
                 padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 0.0),
-                child: FlatCustomButton(
+                child: AppFlatButton(
                   onTap: () {
                     Navigator.of(context).pop();
                   },
@@ -207,7 +207,7 @@ class _LaunchpadDetailsScreenState extends ConsumerState<LaunchpadDetailsScreen>
                           Container(
                             height: 60.0,
                             margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
-                            child: FlatCustomButton(
+                            child: AppFlatButton(
                               color: Colors.pink,
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -238,7 +238,7 @@ class _LaunchpadDetailsScreenState extends ConsumerState<LaunchpadDetailsScreen>
                           Container(
                             height: 60.0,
                             margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
-                            child: FlatCustomButton(
+                            child: AppFlatButton(
                               color: Colors.pink,
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -357,7 +357,7 @@ class _LaunchpadDetailsScreenState extends ConsumerState<LaunchpadDetailsScreen>
                                       style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 24.0, color: Colors.white70),
                                     ),
                                   ),
-                                  FlatCustomButton(
+                                  AppFlatButton(
                                     height: 40,
                                     width: 60,
                                     icon: const Icon(

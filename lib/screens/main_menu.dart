@@ -12,7 +12,7 @@ import 'package:rocketbot/screens/settings_screen.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/notification_helper.dart';
 import 'package:rocketbot/support/utils.dart';
-import 'package:rocketbot/widgets/button_flat.dart';
+import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 
 import '../models/user.dart';
 
@@ -164,7 +164,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             tooltip: 'Portfolio',
-            icon: FlatCustomButton(
+            icon: AppFlatButton(
               width: 40,
               height: 30,
               radius: 10.0,
@@ -178,7 +178,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               ),
             ),
             label: 'Home',
-            activeIcon: FlatCustomButton(
+            activeIcon: AppFlatButton(
               width: 40,
               height: 30,
               radius: 10.0,
@@ -193,7 +193,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             ),
           ),
           BottomNavigationBarItem(
-            icon: FlatCustomButton(
+            icon: AppFlatButton(
               width: 40,
               height: 30,
               radius: 10.0,
@@ -202,7 +202,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   width: 30, height: 30.0, fit: BoxFit.fitWidth, color: Colors.white),
             ),
             label: 'Games',
-            activeIcon: FlatCustomButton(
+            activeIcon: AppFlatButton(
               width: 40,
               height: 30,
               radius: 10.0,
@@ -228,7 +228,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           ),
 
           // BottomNavigationBarItem(
-          //   icon: FlatCustomButton(
+          //   icon: AppFlatButton(
           //     width: 40,
           //     height: 30,
           //     radius: 10.0,
@@ -236,7 +236,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           //     child: Image.asset("images/mona.png", width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white30),
           //   ),
           //   label: 'NFT',
-          //   activeIcon: FlatCustomButton(
+          //   activeIcon: AppFlatButton(
           //     width: 40,
           //     height: 30,
           //     radius: 10.0,
@@ -245,7 +245,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           //   ),
           // ),
           BottomNavigationBarItem(
-            icon: FlatCustomButton(
+            icon: AppFlatButton(
               width: 40,
               height: 30,
               radius: 10.0,
@@ -254,7 +254,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   width: 30, height: 30.0, fit: BoxFit.fitHeight, color: Colors.white),
             ),
             label: 'Earn',
-            activeIcon: FlatCustomButton(
+            activeIcon: AppFlatButton(
               width: 40,
               height: 30,
               radius: 10.0,
@@ -264,7 +264,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             ),
           ),
           BottomNavigationBarItem(
-            icon: FlatCustomButton(
+            icon: AppFlatButton(
               width: 40,
               height: 30,
               radius: 10.0,
@@ -276,7 +276,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   color: _socialsOK ? Colors.white : const Color(0xFFF35656)),
             ),
             label: 'Settings',
-            activeIcon: FlatCustomButton(
+            activeIcon: AppFlatButton(
               width: 40,
               height: 30,
               radius: 10.0,
