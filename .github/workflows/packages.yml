@@ -35,7 +35,7 @@ jobs:
         with:
           flutter-version: '3.47.0'
           cache: true
-      - run: dart pub global activate melos 6.2.0
+      - run: dart pub global activate melos 6.3.3
       - run: melos bootstrap
       - run: melos run analyze
       - run: melos run test:dart
