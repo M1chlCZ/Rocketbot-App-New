@@ -181,7 +181,6 @@ class AuthScreenState extends State<AuthScreen> {
                           ),
                           fingerPrintImage: null,
                           showFingerPass: false,
-                          fingerFunction: biometrics,
                           fingerVerify: _isFingerprint,
                           showWrongPassDialog: false,
                           strings: const PinLockStrings(
@@ -215,7 +214,6 @@ class AuthScreenState extends State<AuthScreen> {
                           ),
                           fingerPrintImage: null,
                           showFingerPass: false,
-                          fingerFunction: biometrics,
                           fingerVerify: _isFingerprint,
                           showWrongPassDialog: false,
                           strings: const PinLockStrings(
