@@ -1,0 +1,28 @@
+name: packages
+
+on:
+  push:
+    paths:
+      - 'packages/**'
+      - 'melos.yaml'
+      - '.github/workflows/packages.yml'
+  pull_request:
+    paths:
+      - 'packages/**'
+      - 'melos.yaml'
+      - '.github/workflows/packages.yml'
+
+jobs:
+  analyze-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: dart pub global activate melos 6.2.0
+      - run: melos bootstrap
+      - run: melos run analyze
+      - run: melos run test:dart
+      - run: melos run test:flutter
