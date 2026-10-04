@@ -22,6 +22,9 @@ class CoinImage extends StatelessWidget {
   /// Characters outside `[A-Za-z0-9._-]` become `_`, trailing dots are
   /// removed, and the key is prefixed and truncated so that it is never a
   /// Windows reserved device name and never exceeds 128 characters.
+  ///
+  /// Public for testability; callers should treat the exact sanitization
+  /// scheme as an implementation detail.
   static String cacheKeyFor(String cryptoId) {
     var sanitized = cryptoId.replaceAll(_invalidKeyCharacters, '_');
     sanitized = sanitized.replaceAll(_trailingDotsOrSpaces, '');
