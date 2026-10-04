@@ -1,0 +1,19 @@
+name: rocketbot_workspace
+packages:
+  - packages/*
+
+scripts:
+  analyze:
+    exec: dart analyze --fatal-infos
+  format:
+    exec: dart format --set-exit-if-changed .
+  test:dart:
+    exec: dart test
+    packageFilters:
+      flutter: false
+  test:flutter:
+    exec: flutter test
+    packageFilters:
+      flutter: true
+  dry-run:
+    exec: dart pub publish --dry-run
