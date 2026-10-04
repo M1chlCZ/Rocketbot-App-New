@@ -6,7 +6,7 @@ scripts:
   analyze:
     exec: dart analyze --fatal-infos
   format:
-    exec: dart format --set-exit-if-changed .
+    exec: dart format --output=none --set-exit-if-changed .
   test:dart:
     exec: dart test
     packageFilters:
@@ -17,3 +17,5 @@ scripts:
       flutter: true
   dry-run:
     exec: dart pub publish --dry-run
+    packageFilters:
+      private: false

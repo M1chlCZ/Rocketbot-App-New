@@ -24,12 +24,14 @@
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
+.melos_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
 .pub-cache/
 .pub/
 /build/
+pubspec_overrides.yaml
 
 # Web related
 lib/generated_plugin_registrant.dart
