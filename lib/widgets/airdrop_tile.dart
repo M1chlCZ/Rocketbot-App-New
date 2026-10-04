@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rocketbot/models/airdrops.dart';
-import 'package:rocketbot/widgets/picture_cache.dart';
+import 'package:rocketbot/widgets/coin_image.dart';
 
 class AirdropTile extends StatelessWidget {
   final Airdrop airdrop;
@@ -47,7 +47,7 @@ class AirdropTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18.0),
                   ),
                   padding: const EdgeInsets.all(8.0),
-                  child: PictureCacheWidget(coin: airdrop.coin!),
+                  child: CoinImage(coin: airdrop.coin!),
                 ),
                 const SizedBox(
                   width: 60.0,

@@ -30,7 +30,7 @@ import 'package:rocketbot/support/life_cycle_watcher.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/dropdown_menu_icon.dart';
 import 'package:rocketbot/widgets/masternode_graph.dart';
-import 'package:rocketbot/widgets/picture_cache.dart';
+import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
 import '../models/balance_list.dart';
@@ -271,7 +271,7 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    PictureCacheWidget(
+                    CoinImage(
                       coin: widget.activeCoin,
                       size: 30.0,
                     ),

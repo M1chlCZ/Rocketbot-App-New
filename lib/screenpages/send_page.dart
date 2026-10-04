@@ -20,7 +20,7 @@ import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/qr_code_scanner.dart';
 import 'package:rocketbot/support/secure_storage.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
-import 'package:rocketbot/widgets/picture_cache.dart';
+import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
 class SendPage extends StatefulWidget {
@@ -254,7 +254,7 @@ class SendPageState extends State<SendPage> {
                               size: 50.0,
                               color: Colors.white,
                             )
-                          : SizedBox(width: 50.0, height: 50.0, child: PictureCacheWidget(coin: widget.coinActive!)),
+                          : SizedBox(width: 50.0, height: 50.0, child: CoinImage(coin: widget.coinActive!)),
                       const SizedBox(
                         width: 10.0,
                       ),

@@ -5,7 +5,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rocketbot/models/balance_list.dart';
-import 'package:rocketbot/widgets/picture_cache.dart';
+import 'package:rocketbot/widgets/coin_image.dart';
 
 import 'price_badge.dart';
 
@@ -102,7 +102,7 @@ class _CoinListViewState extends State<CoinListView> {
                                       child: SizedBox(
                                     height: 30,
                                     width: 40.0,
-                                    child: PictureCacheWidget(coin: widget.coin.coin!),
+                                    child: CoinImage(coin: widget.coin.coin!),
                                   )),
                                 ),
                                 PriceBadge(

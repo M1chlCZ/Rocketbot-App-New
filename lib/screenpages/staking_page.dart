@@ -28,7 +28,7 @@ import 'package:rocketbot/support/gradient_text.dart';
 import 'package:rocketbot/support/life_cycle_watcher.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/percent_switch_widget.dart';
-import 'package:rocketbot/widgets/picture_cache.dart';
+import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:rocketbot/widgets/stake_graph.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
@@ -259,7 +259,7 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    PictureCacheWidget(
+                    CoinImage(
                       coin: widget.activeCoin,
                       size: 30.0,
                     ),

@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rocketbot/models/loterries.dart';
-import 'package:rocketbot/widgets/picture_cache.dart';
+import 'package:rocketbot/widgets/coin_image.dart';
 
 class LotteryTile extends StatelessWidget {
   final Lottery lottery;
@@ -47,7 +47,7 @@ class LotteryTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18.0),
                   ),
                   padding: const EdgeInsets.all(8.0),
-                  child: PictureCacheWidget(coin: lottery.coin!),
+                  child: CoinImage(coin: lottery.coin!),
                 ),
                 const SizedBox(
                   width: 60.0,

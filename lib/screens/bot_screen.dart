@@ -14,7 +14,7 @@ import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
 import 'package:rocketbot/widgets/dropdown_menu_icon.dart';
 import 'package:rocketbot/widgets/percent_switch_widget.dart';
-import 'package:rocketbot/widgets/picture_cache.dart';
+import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sliding_number/sliding_number.dart';
 
@@ -167,7 +167,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                                     child: SizedBox(
                                                         width: 25.0,
                                                         height: 25.0,
-                                                        child: PictureCacheWidget(coin: coin.coin!)),
+                                                        child: CoinImage(coin: coin.coin!)),
                                                   ),
                                                   const SizedBox(
                                                     width: 20.0,

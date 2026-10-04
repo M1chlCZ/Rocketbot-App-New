@@ -71,6 +71,8 @@ dependencies:
   app_links: ^6.3.2
   lock_screen_pin:
     path: packages/lock_screen_pin
+  disk_cached_image:
+    path: packages/disk_cached_image
 
 linter:
   rules:

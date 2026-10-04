@@ -8,7 +8,7 @@ import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rocketbot/widgets/button_flat.dart';
-import 'package:rocketbot/widgets/picture_cache.dart';
+import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../support/auto_size_text_field.dart';
@@ -147,7 +147,7 @@ class DepositPageState extends State<DepositPage> {
                           : SizedBox(
                               width: 50.0,
                               height: 50.0,
-                              child: PictureCacheWidget(coin: activeCoin!)
+                              child: CoinImage(coin: activeCoin!)
                             ),
                       const SizedBox(
                         width: 10.0,

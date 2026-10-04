@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:rocketbot/models/giveaways.dart';
-import 'package:rocketbot/widgets/picture_cache.dart';
+import 'package:rocketbot/widgets/coin_image.dart';
 
 class GiveawayTile extends StatelessWidget {
   final Giveaway giveaway;
@@ -50,7 +50,7 @@ class GiveawayTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18.0),
                   ),
                   padding: const EdgeInsets.all(8.0),
-                  child: PictureCacheWidget(coin: giveaway.coin!),
+                  child: CoinImage(coin: giveaway.coin!),
                 ),
                 const SizedBox(
                   width: 60.0,
