@@ -79,11 +79,14 @@ class MyAppState extends State<MyApp> {
     _handleStuff();
   }
 
+  static const String _storageResetMarker = "storage_reset_done";
+
   Future<void> _handleStuff() async {
     String? s = await secureStore.read("nxgn");
-    if (s == null) {
+    if (s == null && await secureStore.read(_storageResetMarker) == null) {
       await secureStore.deleteAll();
       await secureStore.write("nxgn", "1");
+      await secureStore.write(_storageResetMarker, "1");
     }
 
     _getSetLang();

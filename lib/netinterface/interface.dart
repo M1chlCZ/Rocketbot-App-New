@@ -176,7 +176,6 @@ class NetInterface {
         var js = SignKey.fromJson(json.decode(response.body));
         return js.data!.key!;
       } else {
-        // await const FlutterSecureStorage().delete(key: NetInterface.token);
         return null;
       }
     } catch (e) {
@@ -202,7 +201,6 @@ class NetInterface {
         // var js = SignKey.fromJson(json.decode(response.body));
         return true;
       } else {
-        // await const FlutterSecureStorage().delete(key: NetInterface.token);
         return false;
       }
     } catch (e) {
@@ -234,7 +232,6 @@ class NetInterface {
         await secureStore.write(globals.id, res.data!.user!.id!.toString());
         return res.data!.token!;
       } else {
-        // await const FlutterSecureStorage().delete(key: NetInterface.token);
         return null;
       }
     } catch (e) {
@@ -269,7 +266,6 @@ class NetInterface {
           return null;
         }
       } else {
-        // await const FlutterSecureStorage().delete(key: NetInterface.token);
         return null;
       }
     } catch (e) {
@@ -303,7 +299,6 @@ class NetInterface {
           return null;
         }
       } else {
-        // await const FlutterSecureStorage().delete(key: NetInterface.token);
         return null;
       }
     } catch (e) {

@@ -61,7 +61,6 @@ class StakingPage extends ConsumerStatefulWidget {
 
 class StakingPageState extends ConsumerState<StakingPage>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin, LifecycleWatcher<StakingPage> {
-  // final _storage = const FlutterSecureStorage();
   final NetInterface _interface = NetInterface();
   final _graphKey = GlobalKey<CoinPriceGraphState>();
   final _percentageKey = GlobalKey<PercentSwitchState>();
