@@ -5,7 +5,7 @@ import 'package:flutter_biometrics/flutter_biometrics.dart';
 import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/screens/auth_screen.dart';
-import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/app_services.dart';
 
 class SecurityScreen extends StatefulWidget {
   const SecurityScreen({super.key});
@@ -58,7 +58,7 @@ class SecurityScreenState extends State<SecurityScreen> {
   }
 
   _getAuthType() async {
-    String? auth = await SecureStorage.readStorage(key: "AUTH_TYPE");
+    String? auth = await secureStore.read("AUTH_TYPE");
     if (auth != null) {
       Future.delayed(Duration.zero, () {
         setState(() {
@@ -151,7 +151,7 @@ class SecurityScreenState extends State<SecurityScreen> {
                                               _dropValue = val!;
                                             });
                                             int index = _dropValues.indexWhere((values) => values.contains(val!));
-                                            SecureStorage.writeStorage(key: "AUTH_TYPE", value: index.toString());
+                                            secureStore.write("AUTH_TYPE", index.toString());
                                           },
                                           items:
                                               _dropValues.map((e) => DropdownMenuItem(value: e, child: SizedBox(width: 70, child: Text(e)))).toList(),
@@ -309,7 +309,7 @@ class SecurityScreenState extends State<SecurityScreen> {
 
   void _removePINCallback(bool? b) async {
     if (b != null || b != false) {
-      SecureStorage.deleteStorage(key: "PIN");
+      secureStore.delete("PIN");
       await Future.delayed(const Duration(milliseconds: 200), () {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: SizedBox(height: 40.0, child: Center(child: Text(AppLocalizations.of(context)!.sc_pin_removed))),

@@ -26,7 +26,7 @@ import 'package:rocketbot/screens/mn_manage_screen.dart';
 import 'package:rocketbot/storage/app_database.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
-import 'package:rocketbot/support/life_cycle_watcher.dart';
+import 'package:core_utils_kit/core_utils_kit.dart';
 import 'package:rocketbot/widgets/masternode_graph.dart';
 import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:slide_to_act/slide_to_act.dart';
@@ -59,7 +59,8 @@ class MasternodePage extends ConsumerStatefulWidget {
   MasternodePageState createState() => MasternodePageState();
 }
 
-class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
+class MasternodePageState extends ConsumerState<MasternodePage>
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin, LifecycleWatcher<MasternodePage> {
   final NetInterface _interface = NetInterface();
   final _graphKey = GlobalKey<CoinPriceGraphState>();
   final GlobalKey<SlideActionState> _keyStake = GlobalKey();
@@ -1357,28 +1358,28 @@ class MasternodePageState extends LifecycleWatcherState<MasternodePage> {
   }
 
   @override
-  void onDetached() {
+  void onAppDetached() {
     if (!_paused) {
       _paused = true;
     }
   }
 
   @override
-  void onInactive() {
+  void onAppInactive() {
     if (!_paused) {
       _paused = true;
     }
   }
 
   @override
-  void onPaused() {
+  void onAppPaused() {
     if (!_paused) {
       _paused = true;
     }
   }
 
   @override
-  void onResumed() {
+  void onAppResumed() {
     if (_paused) {
       _getMN();
       _paused = false;

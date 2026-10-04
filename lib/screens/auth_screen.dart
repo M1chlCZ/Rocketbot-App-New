@@ -6,7 +6,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:lock_screen_pin/lock_screen_pin.dart';
 import 'package:rocketbot/screens/main_menu.dart';
 import 'package:rocketbot/screens/security_screen.dart';
-import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/app_services.dart';
 
 class AuthScreen extends StatefulWidget {
   final bool setupPIN;
@@ -36,14 +36,14 @@ class AuthScreenState extends State<AuthScreen> {
   }
 
   void _getPIN() async {
-    String? nums = await SecureStorage.readStorage(key: "PIN");
+    String? nums = await secureStore.read("PIN");
     if (nums == null) return;
     _myPass = nums.split('').map(int.parse).toList();
   }
 
   void _getAuthType() async {
     if (widget.setupPIN != true) {
-      var i = await SecureStorage.readStorage(key: "AUTH_TYPE");
+      var i = await secureStore.read("AUTH_TYPE");
       if (i != null) {
         if (int.parse(i) == 0) {
           setState(() {
@@ -243,7 +243,7 @@ class AuthScreenState extends State<AuthScreen> {
                         child: InkWell(
                           splashColor: Colors.white.withOpacity(0.8), // splash color
                           onTap: () {
-                            SecureStorage.deleteStorage(key: "PIN");
+                            secureStore.delete("PIN");
                             Navigator.pop(context);
                           }, // button pressed
                           child: const Column(
@@ -283,9 +283,9 @@ class AuthScreenState extends State<AuthScreen> {
     var succ = false;
     if (first == second) {
       succ = true;
-      await SecureStorage.writeStorage(key: "PIN", value: first.toString());
+      await secureStore.write("PIN", first.toString());
     } else {
-      await SecureStorage.deleteStorage(key: "PIN");
+      await secureStore.delete("PIN");
     }
     if (context.mounted) Navigator.of(context).pop(succ);
   }

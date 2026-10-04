@@ -635,7 +635,7 @@ class DepositPageState extends State<DepositPage> {
                             Navigator.pop(context);
                           },
                           onLongPress: () {
-                            Share.share(qr);
+                            SharePlus.instance.share(ShareParams(text: qr));
                             Navigator.pop(context);
                           },
                           child: QrImageView(

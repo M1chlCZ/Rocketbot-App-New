@@ -10,15 +10,14 @@ import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:core_utils_kit/core_utils_kit.dart';
 import 'package:rocketbot/firebase_options.dart';
 import 'package:rocketbot/screens/login_screen.dart';
 import 'package:rocketbot/support/get_setup.dart';
 import 'package:rocketbot/support/globals.dart' as globals;
 import 'package:rocketbot/support/notification_helper.dart';
-import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/app_services.dart';
 import 'package:rocketbot/support/utils.dart';
-
-import 'Support/material_color_generator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -81,10 +80,10 @@ class MyAppState extends State<MyApp> {
   }
 
   Future<void> _handleStuff() async {
-    String? s = await SecureStorage.readStorage(key: "nxgn");
+    String? s = await secureStore.read("nxgn");
     if (s == null) {
-      await SecureStorage.deleteAll();
-      await SecureStorage.writeStorage(key: "nxgn", value: "1");
+      await secureStore.deleteAll();
+      await secureStore.write("nxgn", "1");
     }
 
     _getSetLang();
@@ -124,7 +123,7 @@ class MyAppState extends State<MyApp> {
   }
 
   void _getSetLang() async {
-    String? ll = await SecureStorage.readStorage(key: globals.localeApp);
+    String? ll = await secureStore.read(globals.localeApp);
     if (ll != null) {
       Locale l;
       List<String> ls = ll.split('_');

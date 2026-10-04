@@ -5,7 +5,7 @@ import 'package:rocketbot/endpoints/get_stake_coins.dart';
 import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/support/globals.dart' as globals;
-import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/app_services.dart';
 import 'package:rxdart/rxdart.dart';
 
 class StakeBalanceBloc {
@@ -33,7 +33,7 @@ class StakeBalanceBloc {
     coinsListSink.add(ApiResponse.loading('Fetching All Coins'));
     try {
       if (sort == null) {
-        var i = await SecureStorage.readStorage(key: globals.sortType);
+        var i = await secureStore.read(globals.sortType);
         if (i != null) {
           _sort = int.parse(i);
         } else {

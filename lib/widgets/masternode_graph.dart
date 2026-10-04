@@ -8,7 +8,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:rocketbot/models/graph_stake_data.dart';
 import 'package:rocketbot/models/masternode_data.dart';
-import 'package:rocketbot/support/duration_extension.dart';
+import 'package:core_utils_kit/core_utils_kit.dart';
 
 class CoinMasternodeGraph extends StatefulWidget {
   final MasternodeData? rewards;

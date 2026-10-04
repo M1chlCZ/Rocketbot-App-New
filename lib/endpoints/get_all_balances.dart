@@ -4,7 +4,7 @@ import 'package:rocketbot/models/Holdings_res.dart';
 import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/models/pos_coins_list.dart';
 import 'package:rocketbot/netinterface/interface.dart';
-import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/app_services.dart';
 
 class CoinBalances {
   final NetInterface _interface = NetInterface();
@@ -15,7 +15,7 @@ class CoinBalances {
     String? posToken;
     try {
       pl = await _getPosCoins();
-      posToken = await SecureStorage.readStorage(key: NetInterface.posToken);
+      posToken = await secureStore.read(NetInterface.posToken);
       if (kDebugMode) {
             print(posToken ?? "NULL TOKEN");
           }

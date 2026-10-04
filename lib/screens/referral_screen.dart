@@ -14,7 +14,7 @@ import 'package:rocketbot/models/deposit_address.dart';
 import 'package:rocketbot/netInterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/dialogs.dart';
-import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/app_services.dart';
 import 'package:rocketbot/widgets/referral_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -74,9 +74,10 @@ class _ReferralScreenState extends State<ReferralScreen> {
         final directory = await getTemporaryDirectory();
         final imagePath = await File('${directory.path}/qr_code.png').create();
         await imagePath.writeAsBytes(imageBytes);
-        Share.shareXFiles([XFile('${directory.path}/qr_code.png')],
+        SharePlus.instance.share(ShareParams(
+            files: [XFile('${directory.path}/qr_code.png')],
             text:
-                "Earn $reward free coins now! \nDownload RocketBot wallet app, and get paid to engage on social media with giveaways & airdrops.\n\nUse my referral code: $refCode \n\niOS - https://apple.co/38lAzWO \nAndroid - https://bit.ly/33NZlfS\n#Merge @rocketbotpro");
+                "Earn $reward free coins now! \nDownload RocketBot wallet app, and get paid to engage on social media with giveaways & airdrops.\n\nUse my referral code: $refCode \n\niOS - https://apple.co/38lAzWO \nAndroid - https://bit.ly/33NZlfS\n#Merge @rocketbotpro"));
       }
     } catch (e) {
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
@@ -88,7 +89,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
     if (code != null) {
       try {
         await interface.post('code/submit', {"referral": code, "uuid": udid, "ver": 3}, pos: true);
-        await SecureStorage.writeStorage(key: "refCode", value: code);
+        await secureStore.write("refCode", code);
         _checkStatus();
         if (context.mounted) {
           Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way!");
@@ -100,7 +101,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
         debugPrint(e.toString());
       }
     }
-    await SecureStorage.deleteStorage(key: 'r_code');
+    await secureStore.delete('r_code');
     _checkStatus();
   }
 
@@ -404,12 +405,12 @@ class _ReferralScreenState extends State<ReferralScreen> {
   _codesUpload() async {
     try {
       String udid = await FlutterUdid.consistentUdid;
-      String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
+      String? firebase = await secureStore.read('firebase_token');
       String? depAddr = await _getMergeDepositAddr();
       if (depAddr != null) {
         var m = {"uuid": udid, "firebase": firebase, "mergeDeposit": depAddr};
         await interface.post('auth/codes', m, pos: true);
-        String? rewardCode = await SecureStorage.readStorage(key: 'r_code');
+        String? rewardCode = await secureStore.read('r_code');
         if (rewardCode != null && rewardCode.isNotEmpty) {
           _getReward(rewardCode);
         }
@@ -425,7 +426,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
   _reUploadCodes() {
     Future.delayed(const Duration(seconds: 5), () async {
       await _codesUpload();
-      String? rewardCode = await SecureStorage.readStorage(key: 'r_code');
+      String? rewardCode = await secureStore.read('r_code');
       if (rewardCode != null && rewardCode.isNotEmpty) {
         _getReward(rewardCode);
       }
@@ -434,7 +435,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
 
   _checkIssues() async {
     String? udid = await FlutterUdid.consistentUdid;
-    // String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
+    // String? firebase = await secureStore.read('firebase_token');
     String? depAddr = await _getMergeDepositAddr();
 
     deviceID = true;
@@ -455,7 +456,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
   }
 
   _checkStatus() async {
-    String? s = await SecureStorage.readStorage(key: 'refCode');
+    String? s = await secureStore.read('refCode');
     if (s == null || s.isEmpty) {
       String udid = await FlutterUdid.consistentUdid;
       Map<String, dynamic> m = await interface.post('code/check', {"uuid": udid}, pos: true);
@@ -476,7 +477,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
   }
 
   Future<String?> _getMergeDepositAddr() async {
-    String? s = await SecureStorage.readStorage(key: 'merge_addr');
+    String? s = await secureStore.read('merge_addr');
     if (s == null || s.isEmpty) {
       Map<String, dynamic> request = {
         "coinId": 2,
@@ -484,7 +485,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
       try {
         final response = await interface.post("Transfers/CreateDepositAddress", request);
         var d = DepositAddress.fromJson(response);
-        await SecureStorage.writeStorage(key: 'merge_addr', value: d.data!.address!);
+        await secureStore.write('merge_addr', d.data!.address!);
         return d.data!.address!;
       } catch (e) {
         // Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Can't get Merge deposit address, please verify your account!");

@@ -35,8 +35,8 @@ import 'package:rocketbot/screens/notification_screen.dart';
 import 'package:rocketbot/storage/app_database.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/globals.dart' as globals;
-import 'package:rocketbot/support/life_cycle_watcher.dart';
-import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/app_services.dart';
+import 'package:core_utils_kit/core_utils_kit.dart';
 import 'package:rocketbot/support/utils.dart';
 
 import '../models/user.dart';
@@ -53,7 +53,8 @@ class PortfolioScreen extends ConsumerStatefulWidget {
   PortfolioScreenState createState() => PortfolioScreenState();
 }
 
-class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with AutomaticKeepAliveClientMixin<PortfolioScreen> {
+class PortfolioScreenState extends ConsumerState<PortfolioScreen>
+    with WidgetsBindingObserver, AutomaticKeepAliveClientMixin<PortfolioScreen>, LifecycleWatcher<PortfolioScreen> {
   final NetInterface _interface = NetInterface();
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<ScrollDirection> scrollDirectionNotifier = ValueNotifier<ScrollDirection>(ScrollDirection.forward);
@@ -114,7 +115,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
         AppLocalizations.of(context)!.by_amount,
         AppLocalizations.of(context)!.by_value
       ];
-      var i = await SecureStorage.readStorage(key: globals.sortType);
+      var i = await secureStore.read(globals.sortType);
       if (i == null) {
         _dropValue = _dropValues[0];
       } else {
@@ -226,12 +227,12 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   _codesUpload() async {
     try {
       String udid = await FlutterUdid.consistentUdid;
-      String? firebase = await SecureStorage.readStorage(key: 'firebase_token');
+      String? firebase = await secureStore.read('firebase_token');
       String? depAddr = await _getMergeDepositAddr();
       if (depAddr != null) {
         var m = {"uuid": udid, "firebase": firebase, "mergeDeposit": depAddr};
         await _interface.post('auth/codes', m, pos: true);
-        String? rewardCode = await SecureStorage.readStorage(key: 'r_code');
+        String? rewardCode = await secureStore.read('r_code');
         if (rewardCode != null && rewardCode.isNotEmpty) {
           _getReward(rewardCode);
         }
@@ -247,7 +248,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   _reUploadCodes() {
     Future.delayed(const Duration(seconds: 5), () async {
       await _codesUpload();
-      String? rewardCode = await SecureStorage.readStorage(key: 'r_code');
+      String? rewardCode = await secureStore.read('r_code');
       if (rewardCode != null && rewardCode.isNotEmpty) {
         _getReward(rewardCode);
       }
@@ -255,7 +256,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   }
 
   Future<String?> _getMergeDepositAddr() async {
-    String? s = await SecureStorage.readStorage(key: 'merge_addr');
+    String? s = await secureStore.read('merge_addr');
     if (s == null || s.isEmpty) {
       Map<String, dynamic> request = {
         "coinId": 2,
@@ -263,7 +264,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
       try {
         final response = await _interface.post("Transfers/CreateDepositAddress", request);
         var d = DepositAddress.fromJson(response);
-        await SecureStorage.writeStorage(key: 'merge_addr', value: d.data!.address!);
+        await secureStore.write('merge_addr', d.data!.address!);
         return d.data!.address!;
       } catch (e) {
         // Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, "Can't get Merge deposit address, please verify your account!");
@@ -302,14 +303,14 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
     if (code != null) {
       try {
         await _interface.post('code/submit', {"referral": code, "uuid": udid, "ver": 3}, pos: true);
-        await SecureStorage.writeStorage(key: "refCode", value: code);
+        await secureStore.write("refCode", code);
         if (context.mounted) {
           Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way|");
         }
       } catch (e) {
         if (context.mounted) Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.error.toLowerCase()}", e.toString());
       }
-      await SecureStorage.deleteStorage(key: 'r_code');
+      await secureStore.delete('r_code');
     }
   }
 
@@ -699,7 +700,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
                                         });
                                         await Future.delayed(const Duration(milliseconds: 100), () {});
                                         int sort = _dropValues.indexWhere((element) => element == _dropValue);
-                                        await SecureStorage.writeStorage(key: globals.sortType, value: sort.toString());
+                                        await secureStore.write(globals.sortType, sort.toString());
                                         await _bloc!.fetchBalancesList(sort: sort);
                                         await _checkZero();
                                       },
@@ -1264,7 +1265,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   }
 
   Future _getPinFuture() async {
-    var s = SecureStorage.readStorage(key: "PIN");
+    var s = secureStore.read("PIN");
     return s;
   }
 
@@ -1278,24 +1279,24 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   }
 
   @override
-  void onDetached() {
+  void onAppDetached() {
     _paused = true;
   }
 
   @override
-  void onInactive() {}
+  void onAppInactive() {}
 
   @override
-  void onPaused() async {
+  void onAppPaused() async {
     if (!_paused) {
       var endTime = DateTime.now().millisecondsSinceEpoch + (1000 * 60);
-      await SecureStorage.writeStorage(key: globals.countdown, value: endTime.toString());
+      await secureStore.write(globals.countdown, endTime.toString());
       _paused = true;
     }
   }
 
   @override
-  void onResumed() async {
+  void onAppResumed() async {
     await _getPin();
     await _getNotifications();
     if (_pinEnabled == true && _paused) {
@@ -1330,7 +1331,7 @@ class PortfolioScreenState extends LifecycleWatcherState<PortfolioScreen> with A
   }
 
   Future<bool> _checkCountdown() async {
-    var countDown = await SecureStorage.readStorage(key: globals.countdown);
+    var countDown = await secureStore.read(globals.countdown);
     if (countDown != null) {
       int nowDate = DateTime.now().millisecondsSinceEpoch;
       int countTime = int.parse(countDown);

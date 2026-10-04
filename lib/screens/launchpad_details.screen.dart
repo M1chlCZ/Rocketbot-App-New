@@ -3,12 +3,12 @@ import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:core_utils_kit/core_utils_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rocketbot/providers/launchpad_provider.dart';
 import 'package:rocketbot/providers/network_provider.dart';
 import 'package:rocketbot/support/dialogs.dart';
-import 'package:rocketbot/support/extensions.dart';
 import 'package:rocketbot/support/utils.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/launchpad_members.dart';

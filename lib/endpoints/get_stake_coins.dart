@@ -4,7 +4,7 @@ import 'package:rocketbot/models/Holdings_res.dart';
 import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/models/pos_coins_list.dart';
 import 'package:rocketbot/netinterface/interface.dart';
-import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/app_services.dart';
 
 class StakeBalances {
   final NetInterface _interface = NetInterface();
@@ -15,7 +15,7 @@ class StakeBalances {
   Future<List<CoinBalance>?> fetchStakeBalances() async {
     // print("|FIRST STAKING BEGIN| " + DateTime.now().toString());
     pl = await _getPosCoins();
-    String? posToken = await SecureStorage.readStorage(key: NetInterface.posToken);
+    String? posToken = await secureStore.read(NetInterface.posToken);
     if (kDebugMode) {
       print(posToken ?? "NULL TOKEN");
     }

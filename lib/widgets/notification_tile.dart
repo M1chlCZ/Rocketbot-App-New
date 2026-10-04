@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:core_utils_kit/core_utils_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:rocketbot/models/notifications.dart';
 import 'package:rocketbot/support/utils.dart';
@@ -40,7 +42,7 @@ class NotificationTile extends StatelessWidget {
                                 minFontSize: 8.0,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500))),
-                        AutoSizeText(Utils.convertDate(node.datePosted!),
+                        AutoSizeText(DateFormats.convertDate(node.datePosted!, Platform.localeName),
                             maxLines: 1,
                             minFontSize: 8.0,
                             overflow: TextOverflow.ellipsis,

@@ -751,7 +751,7 @@ class _BotScreenState extends ConsumerState<BotScreen> {
                                               s = "/${widget.type} ${getAmountWinner(_amountController.text, _valueUsers)} ${selectedCoin!.coin!.ticker} ${_valueUsers.toInt()}";
                                             }
                                             if (s.isNotEmpty) {
-                                              Share.share(s);
+                                              SharePlus.instance.share(ShareParams(text: s));
                                             }
                                           }
                                           break;

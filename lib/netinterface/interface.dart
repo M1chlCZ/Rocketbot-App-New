@@ -3,13 +3,12 @@ import 'dart:io';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:rocketbot/models/pos_token_auth.dart';
 import 'package:rocketbot/models/refresh_token.dart';
 import 'package:rocketbot/models/signin_code.dart';
 import 'package:rocketbot/models/signin_key.dart';
-import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/app_services.dart';
 import 'package:rocketbot/support/user_agent.dart';
 import 'package:rocketbot/support/globals.dart' as globals;
 
@@ -28,7 +27,7 @@ class NetInterface {
 
   Future<dynamic> get(String url, {String? request, bool pos = false, bool web = false, bool launchpad = false, bool debug = false}) async {
     String userAgent = await UserAgentProvider.get();
-    var tk = await SecureStorage.readStorage(key: pos || web || launchpad ? posToken : token); //TODO
+    var tk = await secureStore.read(pos || web || launchpad ? posToken : token); //TODO
     print(tk);
     dynamic responseJson;
     try {
@@ -63,7 +62,7 @@ class NetInterface {
       if (response.statusCode == 401 || response.statusCode == 403) {
         var isPos = (pos || launchpad) ? true : false;
         await refreshToken(pos: isPos);
-        var tk = await SecureStorage.readStorage(key: pos ? posToken : token);
+        var tk = await secureStore.read(pos ? posToken : token);
         final res = await http.get(Uri.parse(curl), headers: {
           'User-Agent': userAgent.toLowerCase(),
           "Authorization": " ${pos ? "JWT" : "Bearer"} $tk",
@@ -81,7 +80,7 @@ class NetInterface {
 
   Future<dynamic> post(String url, Map<String, dynamic> request, {bool pos = false, bool launchpad = false, bool web = false, bool debug = false}) async {
     String userAgent = await UserAgentProvider.get();
-    var tk = await SecureStorage.readStorage(key: pos || web || launchpad  ? posToken : token);
+    var tk = await secureStore.read(pos || web || launchpad  ? posToken : token);
     dynamic responseJson;
     var query = json.encoder.convert(request);
     // print(_query);
@@ -118,7 +117,7 @@ class NetInterface {
       if (response.statusCode == 401 || response.statusCode == 403) {
         var isPos = (pos || launchpad)  ? true : false;
         await refreshToken(pos: isPos);
-        var tk = await SecureStorage.readStorage(key: pos ? posToken : token); //TODO
+        var tk = await secureStore.read(pos ? posToken : token); //TODO
         final res = await http.post(Uri.parse(curl),
             headers: {
               "content-type": "application/json",
@@ -230,9 +229,9 @@ class NetInterface {
 
       if (response.statusCode == 200) {
         SignCode? res = SignCode.fromJson(json.decode(response.body));
-        await SecureStorage.writeStorage(key: NetInterface.token, value: res.data!.token!);
-        await SecureStorage.writeStorage(key: NetInterface.tokenRefresh, value: res.data!.refreshToken!);
-        await SecureStorage.writeStorage(key: globals.id, value: res.data!.user!.id!.toString());
+        await secureStore.write(NetInterface.token, res.data!.token!);
+        await secureStore.write(NetInterface.tokenRefresh, res.data!.refreshToken!);
+        await secureStore.write(globals.id, res.data!.user!.id!.toString());
         return res.data!.token!;
       } else {
         // await const FlutterSecureStorage().delete(key: NetInterface.token);
@@ -262,9 +261,9 @@ class NetInterface {
       if (response.statusCode == 200) {
         SignCode? res = SignCode.fromJson(json.decode(response.body));
         if (res.data!.token != null) {
-          await SecureStorage.writeStorage(key: NetInterface.token, value: res.data!.token!);
-          await SecureStorage.writeStorage(key: NetInterface.tokenRefresh, value: res.data!.refreshToken!);
-          await SecureStorage.writeStorage(key: globals.id, value: res.data!.user!.id!.toString());
+          await secureStore.write(NetInterface.token, res.data!.token!);
+          await secureStore.write(NetInterface.tokenRefresh, res.data!.refreshToken!);
+          await secureStore.write(globals.id, res.data!.user!.id!.toString());
           return res.data!.token!;
         } else {
           return null;
@@ -296,9 +295,9 @@ class NetInterface {
       if (response.statusCode == 200) {
         SignCode? res = SignCode.fromJson(json.decode(response.body));
         if (res.data!.token != null) {
-          await SecureStorage.writeStorage(key: NetInterface.token, value: res.data!.token!);
-          await SecureStorage.writeStorage(key: NetInterface.tokenRefresh, value: res.data!.refreshToken!);
-          await SecureStorage.writeStorage(key: globals.id, value: res.data!.user!.id!.toString());
+          await secureStore.write(NetInterface.token, res.data!.token!);
+          await secureStore.write(NetInterface.tokenRefresh, res.data!.refreshToken!);
+          await secureStore.write(globals.id, res.data!.user!.id!.toString());
           return res.data!.token!;
         } else {
           return null;
@@ -339,9 +338,9 @@ class NetInterface {
       if (response.statusCode == 200) {
         SignCode? res = SignCode.fromJson(json.decode(response.body));
         if (res.data!.token != null) {
-          await SecureStorage.writeStorage(key: NetInterface.token, value: res.data!.token!);
-          await SecureStorage.writeStorage(key: NetInterface.tokenRefresh, value: res.data!.refreshToken!);
-          await SecureStorage.writeStorage(key: globals.id, value: res.data!.user!.id!.toString());
+          await secureStore.write(NetInterface.token, res.data!.token!);
+          await secureStore.write(NetInterface.tokenRefresh, res.data!.refreshToken!);
+          await secureStore.write(globals.id, res.data!.user!.id!.toString());
         }
       }
       return response.body;
@@ -384,8 +383,8 @@ class NetInterface {
       _refreshingToken = true;
 
       String userAgent = await UserAgentProvider.get();
-      await const FlutterSecureStorage().delete(key: pos ? NetInterface.posToken : NetInterface.token);
-      String? enc = await SecureStorage.readStorage(key: pos ? NetInterface.posTokenRefresh : NetInterface.tokenRefresh);
+      await secureStore.delete(pos ? NetInterface.posToken : NetInterface.token);
+      String? enc = await secureStore.read(pos ? NetInterface.posTokenRefresh : NetInterface.tokenRefresh);
       Map request = {
         "token": enc,
       };
@@ -406,19 +405,19 @@ class NetInterface {
       TokenRefresh? res = TokenRefresh.fromJson(json.decode(resp.body));
       if (res.data!.token != null) {
         if (pos) {
-          await SecureStorage.writeStorage(key: NetInterface.posToken, value: res.data!.token!);
-          await SecureStorage.writeStorage(key: NetInterface.posTokenRefresh, value: res.data!.refreshToken!);
+          await secureStore.write(NetInterface.posToken, res.data!.token!);
+          await secureStore.write(NetInterface.posTokenRefresh, res.data!.refreshToken!);
         } else {
-          await SecureStorage.writeStorage(key: NetInterface.token, value: res.data!.token!);
-          await SecureStorage.writeStorage(key: NetInterface.tokenRefresh, value: res.data!.refreshToken!);
+          await secureStore.write(NetInterface.token, res.data!.token!);
+          await secureStore.write(NetInterface.tokenRefresh, res.data!.refreshToken!);
         }
         _refreshingToken = false;
       }
       _refreshingToken = false;
     } catch (e) {
       if (pos) {
-        await SecureStorage.deleteStorage(key: NetInterface.posToken);
-        await SecureStorage.deleteStorage(key: NetInterface.posTokenRefresh);
+        await secureStore.delete(NetInterface.posToken);
+        await secureStore.delete(NetInterface.posTokenRefresh);
       }
       _refreshingToken = false;
       debugPrint(e.toString());
@@ -447,8 +446,8 @@ class NetInterface {
       // print(response.statusCode);
       if (response.statusCode == 200) {
         PosTokenAuth? res = PosTokenAuth.fromJson(json.decode(response.body));
-        await SecureStorage.writeStorage(key: NetInterface.posToken, value: res.token!);
-        await SecureStorage.writeStorage(key: NetInterface.posTokenRefresh, value: res.refreshToken!);
+        await secureStore.write(NetInterface.posToken, res.token!);
+        await secureStore.write(NetInterface.posTokenRefresh, res.refreshToken!);
       } else {
         // print(response.body);
         debugPrint("//// PoS TOKEN ERROR ////");
@@ -459,9 +458,9 @@ class NetInterface {
   }
 
   static Future<void> registerPosHandle() async {
-    String? posToken = await SecureStorage.readStorage(key: NetInterface.posToken);
+    String? posToken = await secureStore.read(NetInterface.posToken);
     if (posToken == null) {
-      String? token = await SecureStorage.readStorage(key: NetInterface.token);
+      String? token = await secureStore.read(NetInterface.token);
       await NetInterface.registerPos(token!);
     } else {
       debugPrint(posToken);

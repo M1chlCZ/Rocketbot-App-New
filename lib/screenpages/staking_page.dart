@@ -25,7 +25,7 @@ import 'package:rocketbot/screens/keyboard_overlay.dart';
 import 'package:rocketbot/storage/app_database.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
-import 'package:rocketbot/support/life_cycle_watcher.dart';
+import 'package:core_utils_kit/core_utils_kit.dart';
 import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:rocketbot/widgets/stake_graph.dart';
 import 'package:slide_to_act/slide_to_act.dart';
@@ -59,7 +59,8 @@ class StakingPage extends ConsumerStatefulWidget {
   StakingPageState createState() => StakingPageState();
 }
 
-class StakingPageState extends LifecycleWatcherState<StakingPage> {
+class StakingPageState extends ConsumerState<StakingPage>
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin, LifecycleWatcher<StakingPage> {
   // final _storage = const FlutterSecureStorage();
   final NetInterface _interface = NetInterface();
   final _graphKey = GlobalKey<CoinPriceGraphState>();
@@ -1170,28 +1171,28 @@ class StakingPageState extends LifecycleWatcherState<StakingPage> {
   }
 
   @override
-  void onDetached() {
+  void onAppDetached() {
     if (!_paused) {
       _paused = true;
     }
   }
 
   @override
-  void onInactive() {
+  void onAppInactive() {
     if (!_paused) {
       _paused = true;
     }
   }
 
   @override
-  void onPaused() {
+  void onAppPaused() {
     if (!_paused) {
       _paused = true;
     }
   }
 
   @override
-  void onResumed() {
+  void onAppResumed() {
     if (_paused) {
       _getPos();
       _paused = false;

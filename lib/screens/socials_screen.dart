@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
+import 'package:core_utils_kit/core_utils_kit.dart';
 import 'package:rocketbot/models/socials.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/dialogs.dart';
-import 'package:rocketbot/support/life_cycle_watcher.dart';
 import 'package:rocketbot/support/utils.dart';
 import 'package:rocketbot/widgets/social_card.dart';
 
@@ -21,7 +21,8 @@ class SocialScreen extends ConsumerStatefulWidget {
   SocialScreenState createState() => SocialScreenState();
 }
 
-class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
+class SocialScreenState extends ConsumerState<SocialScreen>
+    with WidgetsBindingObserver, LifecycleWatcher<SocialScreen> {
   final NetInterface _interface = NetInterface();
   final TextEditingController _discordTextController = TextEditingController();
   List<int> _socials = [];
@@ -330,22 +331,22 @@ class SocialScreenState extends LifecycleWatcherState<SocialScreen> {
   }
 
   @override
-  void onDetached() {
+  void onAppDetached() {
     _paused = true;
   }
 
   @override
-  void onInactive() {
+  void onAppInactive() {
     _paused = true;
   }
 
   @override
-  void onPaused() {
+  void onAppPaused() {
     _paused = true;
   }
 
   @override
-  void onResumed() async {
+  void onAppResumed() async {
     if (_paused) {
       _getUserInfo();
       _paused = false;

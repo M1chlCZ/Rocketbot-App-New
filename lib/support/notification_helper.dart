@@ -6,7 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rocketbot/netinterface/interface.dart';
-import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/app_services.dart';
 import 'package:rocketbot/support/utils.dart';
 
 Future<void> onBackgroundMessage(RemoteMessage message) async {
@@ -111,7 +111,7 @@ class FCM {
     final token = await _firebaseMessaging.getToken();
     if (token != null) {
       _tokenUpload(token);
-      SecureStorage.writeStorage(key: 'firebase_token', value: token);
+      secureStore.write('firebase_token', token);
     }
   }
 

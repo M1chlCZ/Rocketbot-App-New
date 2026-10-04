@@ -18,7 +18,7 @@ import 'package:rocketbot/screens/auth_screen.dart';
 import 'package:rocketbot/support/auto_size_text_field.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/qr_code_scanner.dart';
-import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/app_services.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:slide_to_act/slide_to_act.dart';
@@ -93,7 +93,7 @@ class SendPageState extends State<SendPage> {
   }
 
   void _handlePIN() async {
-    String? p = await SecureStorage.readStorage(key: "PIN");
+    String? p = await secureStore.read("PIN");
     if (p == null) {
       _authCallback(true);
       return;

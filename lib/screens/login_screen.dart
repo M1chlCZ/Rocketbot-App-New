@@ -13,7 +13,7 @@ import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/main_menu.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/firebase_service.dart';
-import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/app_services.dart';
 import 'package:rocketbot/widgets/button_apple.dart';
 import 'package:rocketbot/widgets/login_register.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -89,7 +89,7 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   _loggedIN() async {
-    String? lg = await SecureStorage.readStorage(key: NetInterface.token);
+    String? lg = await secureStore.read(NetInterface.token);
     if (lg != null && lg.isNotEmpty) {
       return true;
     } else {
@@ -180,10 +180,10 @@ class LoginScreenState extends State<LoginScreen> {
   void _getToken(String key, String code) async {
     String? res = await NetInterface.getToken(key, code);
     if (res != null) {
-      await SecureStorage.writeStorage(key: NetInterface.token, value: res);
-      String? wer = await SecureStorage.readStorage(key: NetInterface.token);
+      await secureStore.write(NetInterface.token, res);
+      String? wer = await secureStore.read(NetInterface.token);
       await NetInterface.registerPosHandle();
-      String? poser = await SecureStorage.readStorage(key: NetInterface.posToken);
+      String? poser = await secureStore.read(NetInterface.posToken);
       if (poser != null) {
         if (context.mounted) {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MainMenuScreen()));
@@ -208,9 +208,9 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   _nextPage() async {
-    String? res = await SecureStorage.readStorage(key: "PIN");
+    String? res = await secureStore.read("PIN");
     if (referralCode != null && referralCode!.isNotEmpty) {
-      await SecureStorage.writeStorage(key: "r_code", value: referralCode!);
+      await secureStore.write("r_code", referralCode!);
     }
     // String? res;
     if (res == null) {

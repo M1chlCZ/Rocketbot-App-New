@@ -13,7 +13,7 @@ import 'package:rocketbot/screens/security_screen.dart';
 import 'package:rocketbot/screens/socials_screen.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/globals.dart' as globals;
-import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/app_services.dart';
 import 'package:rocketbot/widgets/menu_node.dart';
 import 'package:rocketbot/widgets/menu_section.dart';
 
@@ -202,7 +202,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                                             l = Locale.fromSubtags(countryCode: ls[2], scriptCode: ls[1], languageCode: ls[0]);
                                           }
                                           MyApp.of(context)?.setLocale(l);
-                                          SecureStorage.writeStorage(key: globals.localeApp, value: globals.languageCodes[index]);
+                                          secureStore.write(globals.localeApp, globals.languageCodes[index]);
                                         });
                                       },
                                       items: globals.languages
@@ -323,7 +323,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   void _handlePIN() async {
     var bl = false;
-    String? p = await SecureStorage.readStorage(key: "PIN");
+    String? p = await secureStore.read("PIN");
     if (p == null) {
       bl = true;
     }
@@ -400,7 +400,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   _logOut() {
     Dialogs.openLogOutBox(context, () async {
-      await SecureStorage.deleteAll();
+      await secureStore.deleteAll();
       if (context.mounted) {
         Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
           return const LoginScreen();
