@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:lock_screen_pin/lock_screen_pin.dart';
 import 'package:rocketbot/screens/main_menu.dart';
 import 'package:rocketbot/screens/security_screen.dart';
 import 'package:rocketbot/support/secure_storage.dart';
-import 'package:rocketbot/widgets/screen_lock.dart';
 
 class AuthScreen extends StatefulWidget {
   final bool setupPIN;
@@ -102,8 +102,10 @@ class AuthScreenState extends State<AuthScreen> {
                 child: LockScreen(
                     title: AppLocalizations.of(context)!.as_enter_pin,
                     passLength: 6,
-                    numColor: Colors.white70,
-                    bgImage: "images/pending_rocket_pin.png",
+                    styles: const PinLockTheme(
+                      numberColor: Colors.white70,
+                      dotBorderColor: Colors.white,
+                    ),
                     fingerPrintImage: ShaderMask(
                       shaderCallback: (bounds) {
                         return const LinearGradient(colors: [
@@ -121,11 +123,13 @@ class AuthScreenState extends State<AuthScreen> {
                     showFingerPass: _showFinger,
                     fingerFunction: biometrics,
                     fingerVerify: _isFingerprint,
-                    borderColor: Colors.white,
                     showWrongPassDialog: false,
-                    wrongPassContent: AppLocalizations.of(context)!.as_wrong_pin,
-                    wrongPassTitle: "Opps!",
-                    wrongPassCancelButtonText: "Cancel",
+                    strings: PinLockStrings(
+                      wrongPassTitle: 'Opps!',
+                      wrongPassContent:
+                          AppLocalizations.of(context)!.as_wrong_pin,
+                      wrongPassCancelButtonText: 'Cancel',
+                    ),
                     passCodeVerify: (passcode) async {
                       for (int i = 0; i < _myPass.length; i++) {
                         if (passcode[i] != _myPass[i]) {
@@ -171,17 +175,20 @@ class AuthScreenState extends State<AuthScreen> {
                       child: LockScreen(
                           title: AppLocalizations.of(context)!.as_enter_desired_pin,
                           passLength: 6,
-                          numColor: Colors.white70,
-                          bgImage: "images/pending_rocket_pin.png",
+                          styles: const PinLockTheme(
+                            numberColor: Colors.white70,
+                            dotBorderColor: Colors.white,
+                          ),
                           fingerPrintImage: null,
                           showFingerPass: false,
                           fingerFunction: biometrics,
                           fingerVerify: _isFingerprint,
-                          borderColor: Colors.white,
                           showWrongPassDialog: false,
-                          wrongPassContent: "",
-                          wrongPassTitle: "",
-                          wrongPassCancelButtonText: "Cancel",
+                          strings: const PinLockStrings(
+                            wrongPassTitle: '',
+                            wrongPassContent: '',
+                            wrongPassCancelButtonText: 'Cancel',
+                          ),
                           passCodeVerify: (passcode) async {
                             if (passcode.length != 6) {
                               return false;
@@ -202,17 +209,20 @@ class AuthScreenState extends State<AuthScreen> {
                       child: LockScreen(
                           title: AppLocalizations.of(context)!.as_enter_desired_confirm_pin,
                           passLength: 6,
-                          numColor: Colors.white70,
-                          bgImage: "images/pending_rocket_pin.png",
+                          styles: const PinLockTheme(
+                            numberColor: Colors.white70,
+                            dotBorderColor: Colors.white,
+                          ),
                           fingerPrintImage: null,
                           showFingerPass: false,
                           fingerFunction: biometrics,
                           fingerVerify: _isFingerprint,
-                          borderColor: Colors.white,
                           showWrongPassDialog: false,
-                          wrongPassContent: "",
-                          wrongPassTitle: "",
-                          wrongPassCancelButtonText: "Cancel",
+                          strings: const PinLockStrings(
+                            wrongPassTitle: '',
+                            wrongPassContent: '',
+                            wrongPassCancelButtonText: 'Cancel',
+                          ),
                           passCodeVerify: (passcode) async {
                             if (passcode.length != 6) {
                               return false;

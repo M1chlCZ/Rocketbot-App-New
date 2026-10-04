@@ -69,6 +69,8 @@ dependencies:
   rxdart: ^0.28.0
   logger: any
   app_links: ^6.3.2
+  lock_screen_pin:
+    path: packages/lock_screen_pin
 
 linter:
   rules:
