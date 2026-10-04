@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_biometrics/flutter_biometrics.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:rocketbot/component_widgets/container_neu.dart';
 import 'package:rocketbot/screens/auth_screen.dart';

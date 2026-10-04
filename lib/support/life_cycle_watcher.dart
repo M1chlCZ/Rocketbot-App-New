@@ -35,6 +35,8 @@ abstract class LifecycleWatcherState<T extends ConsumerStatefulWidget> extends C
       case AppLifecycleState.detached:
         onDetached();
         break;
+      case AppLifecycleState.hidden:
+        break;
     }
   }
 

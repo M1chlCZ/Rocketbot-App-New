@@ -4,7 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rocketbot/widgets/button_flat.dart';

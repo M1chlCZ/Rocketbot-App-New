@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:rocketbot/models/user.dart';
 import 'package:rocketbot/support/dialogs.dart';
 

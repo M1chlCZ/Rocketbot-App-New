@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rocketbot/l10n/app_localizations.dart';
 
 class AppleSignInButton extends StatelessWidget {
   final ValueSetter<AuthorizationCredentialAppleID> onSignIn;

@@ -11,7 +11,7 @@ import 'package:rocketbot/component_widgets/button_neu.dart';
 import 'package:rocketbot/models/coin_graph.dart';
 import 'package:rocketbot/models/transaction_data.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rocketbot/l10n/app_localizations.dart';
 
 
 class CoinWithdrawalView extends StatefulWidget {
