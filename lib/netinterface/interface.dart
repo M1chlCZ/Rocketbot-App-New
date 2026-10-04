@@ -4,13 +4,13 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_user_agent/flutter_user_agent.dart';
 import 'package:http/http.dart' as http;
 import 'package:rocketbot/models/pos_token_auth.dart';
 import 'package:rocketbot/models/refresh_token.dart';
 import 'package:rocketbot/models/signin_code.dart';
 import 'package:rocketbot/models/signin_key.dart';
 import 'package:rocketbot/support/secure_storage.dart';
+import 'package:rocketbot/support/user_agent.dart';
 import 'package:rocketbot/support/globals.dart' as globals;
 
 import 'app_exception.dart';
@@ -27,7 +27,7 @@ class NetInterface {
   static bool _refreshingToken = false;
 
   Future<dynamic> get(String url, {String? request, bool pos = false, bool web = false, bool launchpad = false, bool debug = false}) async {
-    String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
+    String userAgent = await UserAgentProvider.get();
     var tk = await SecureStorage.readStorage(key: pos || web || launchpad ? posToken : token); //TODO
     print(tk);
     dynamic responseJson;
@@ -80,7 +80,7 @@ class NetInterface {
   }
 
   Future<dynamic> post(String url, Map<String, dynamic> request, {bool pos = false, bool launchpad = false, bool web = false, bool debug = false}) async {
-    String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
+    String userAgent = await UserAgentProvider.get();
     var tk = await SecureStorage.readStorage(key: pos || web || launchpad  ? posToken : token);
     dynamic responseJson;
     var query = json.encoder.convert(request);
@@ -162,7 +162,7 @@ class NetInterface {
 
   static Future<String?> getKey(String login, String pass) async {
     try {
-      String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
+      String userAgent = await UserAgentProvider.get();
       Map request = {"email": login, "password": pass};
       var query = json.encoder.convert(request);
       final response = await http.post(Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/Signin"),
@@ -188,7 +188,7 @@ class NetInterface {
 
   static Future<bool> getEmailCode(String key) async {
     try {
-      String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
+      String userAgent = await UserAgentProvider.get();
       Map request = {"key": key};
       var query = json.encoder.convert(request);
       final response = await http.post(Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/SendEmailCodeForSignin"),
@@ -214,7 +214,7 @@ class NetInterface {
 
   static Future<String?> getToken(String key, String code) async {
     try {
-      String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
+      String userAgent = await UserAgentProvider.get();
       Map request = {
         "key": key,
         "emailCode": code,
@@ -247,7 +247,7 @@ class NetInterface {
   static Future<String?> getTokenGoogle(String tokenID) async {
     log("getTokenGoogle: $tokenID");
     try {
-      String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
+      String userAgent = await UserAgentProvider.get();
       Map request = {
         "token": tokenID,
       };
@@ -281,7 +281,7 @@ class NetInterface {
 
   static Future<String?> getTokenApple(String authorizationCode) async {
     try {
-      String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
+      String userAgent = await UserAgentProvider.get();
       Map request = {
         "authorizationCode": authorizationCode,
       };
@@ -321,7 +321,7 @@ class NetInterface {
       required String surname,
       required bool agreed}) async {
     try {
-      String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
+      String userAgent = await UserAgentProvider.get();
       Map request = {"email": email, "password": pass, "confirmPassword": passConf, "name": name, "surname": surname, "agreeToConditions": agreed};
       var query = json.encoder.convert(request);
       // // print(_query);
@@ -354,7 +354,7 @@ class NetInterface {
 
   static Future<int> forgotPass(String email) async {
     try {
-      String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
+      String userAgent = await UserAgentProvider.get();
       Map<String, dynamic> request = {
         "email": email,
       };
@@ -383,7 +383,7 @@ class NetInterface {
       }
       _refreshingToken = true;
 
-      String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
+      String userAgent = await UserAgentProvider.get();
       await const FlutterSecureStorage().delete(key: pos ? NetInterface.posToken : NetInterface.token);
       String? enc = await SecureStorage.readStorage(key: pos ? NetInterface.posTokenRefresh : NetInterface.tokenRefresh);
       Map request = {
@@ -427,7 +427,7 @@ class NetInterface {
 
   static Future<void> registerPos(String token) async {
     try {
-      String userAgent = await FlutterUserAgent.getPropertyAsync('userAgent');
+      String userAgent = await UserAgentProvider.get();
       Map request = {
         "token": token,
       };

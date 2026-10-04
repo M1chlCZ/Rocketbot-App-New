@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 1.2.70+218
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ^3.8.0
 
 dependencies:
   flutter:
@@ -44,10 +44,6 @@ dependencies:
   slide_to_act: ^2.0.2
   mobile_scanner: ^6.0.0
   share_plus: ^10.0.3
-  walletconnect_dart:
-    git:
-        url: https://github.com/AstroxNetwork/walletconnect-dart-sdk
-        ref: master
   device_info_plus: ^11.0.0
   flutter_app_badger:
     git:
@@ -65,10 +61,6 @@ dependencies:
   animated_text_kit: ^4.2.2
   get_it: any
   web_socket_channel: ^2.4.0
-  flutter_user_agent:
-    git:
-      url: https://github.com/M1chlCZ/flutter_user_agent.git
-      ref: master
   flutter_biometrics:
     git:
       url: https://github.com/M1chlCZ/flutter_biometrics.git
@@ -87,7 +79,7 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
-  melos: 6.2.0
+  melos: 6.3.3
 
 
 
