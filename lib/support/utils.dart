@@ -1,7 +1,7 @@
 import 'package:core_utils_kit/core_utils_kit.dart' as core_utils;
 import 'package:flutter/cupertino.dart';
-import 'package:rocketbot/NetInterface/interface.dart';
-import 'package:rocketbot/support/qr_code_scanner.dart';
+import 'package:rocketbot/netinterface/interface.dart';
+import 'package:qr_scanner_kit/qr_scanner_kit.dart';
 
 class Utils {
   static Future<bool> openLink(String? s) async {
@@ -25,8 +25,8 @@ class Utils {
     String? data;
     FocusScope.of(context).unfocus();
     await Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-      return QScanWidget(
-        scanResult: (String s) {
+      return QrScanner(
+        onScan: (String s) {
           data = s;
         },
       );

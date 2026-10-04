@@ -17,7 +17,7 @@ import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/auth_screen.dart';
 import 'package:rocketbot/support/auto_size_text_field.dart';
 import 'package:rocketbot/support/dialogs.dart';
-import 'package:rocketbot/support/qr_code_scanner.dart';
+import 'package:qr_scanner_kit/qr_scanner_kit.dart';
 import 'package:rocketbot/support/app_services.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/coin_image.dart';
@@ -556,8 +556,8 @@ class SendPageState extends State<SendPage> {
         if (r.isGranted) {
           if (context.mounted) {
             Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-              return QScanWidget(
-                scanResult: (String s) {
+              return QrScanner(
+                onScan: (String s) {
                   _addressController.text = s;
                 },
               );
@@ -569,8 +569,8 @@ class SendPageState extends State<SendPage> {
       } else {
         if (context.mounted) {
           Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-            return QScanWidget(
-              scanResult: (String s) {
+            return QrScanner(
+              onScan: (String s) {
                 _addressController.text = s;
               },
             );

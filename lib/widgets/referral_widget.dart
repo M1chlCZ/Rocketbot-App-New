@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/support/auto_size_text_field.dart';
-import 'package:rocketbot/support/qr_code_scanner.dart';
+import 'package:qr_scanner_kit/qr_scanner_kit.dart';
 
 class ReferralWidget extends StatefulWidget {
   final Function(String) refCode;
@@ -86,9 +86,9 @@ class ReferralWidgetState extends State<ReferralWidget> {
         if (r.isGranted) {
           if (context.mounted) {
             Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-              return QScanWidget(
-                header: 'Scan referral QR code',
-                scanResult: (String s) {
+              return QrScanner(
+                title: 'Scan referral QR code',
+                onScan: (String s) {
                   controller.text = s;
                 },
               );
@@ -100,9 +100,9 @@ class ReferralWidgetState extends State<ReferralWidget> {
       } else {
         if (context.mounted) {
           Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
-            return QScanWidget(
-              header: 'Scan referral QR code',
-              scanResult: (String s) {
+            return QrScanner(
+              title: 'Scan referral QR code',
+              onScan: (String s) {
                 controller.text = s;
               },
             );

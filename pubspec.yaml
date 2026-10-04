@@ -41,7 +41,6 @@ dependencies:
   jiffy: ^6.3.1
   sprintf: any
   slide_to_act: ^2.0.2
-  mobile_scanner: ^6.0.0
   share_plus: ^13.3.1
   device_info_plus: ^13.3.0
   flutter_app_badger:
@@ -76,6 +75,8 @@ dependencies:
     path: packages/atomic_ui_kit
   core_utils_kit:
     path: packages/core_utils_kit
+  qr_scanner_kit:
+    path: packages/qr_scanner_kit
 
 linter:
   rules:
