@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:rocketbot/cache/balances_cache.dart';
 import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/providers/network_provider.dart';
@@ -34,14 +33,15 @@ final balancesProvider = FutureProvider<List<CoinBalance>>((ref) async {
   }
 });
 
-final dropdownProvider = StateNotifierProvider<DropDownController, AsyncValue<List<CoinBalance>>>((ref) {
-  return DropDownController();
-});
+final dropdownProvider = NotifierProvider<DropDownController, AsyncValue<List<CoinBalance>>>(DropDownController.new);
 
-class DropDownController extends StateNotifier<AsyncValue<List<CoinBalance>>> {
+class DropDownController extends Notifier<AsyncValue<List<CoinBalance>>> {
   final _entries = <CoinBalance>[];
 
-  DropDownController() : super(const AsyncLoading());
+  @override
+  AsyncValue<List<CoinBalance>> build() {
+    return const AsyncLoading();
+  }
 
   void getData() async {
     _entries.clear();
@@ -50,6 +50,7 @@ class DropDownController extends StateNotifier<AsyncValue<List<CoinBalance>>> {
     if (list.isNotEmpty) {
       _entries.addAll(list);
     }
+    if (!ref.mounted) return;
     state = AsyncValue.data(_entries);
   }
 }

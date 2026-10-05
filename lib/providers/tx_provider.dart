@@ -1,23 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
-import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/endpoints/get_transactions.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:rocketbot/models/transaction_data.dart';
 import 'package:rocketbot/providers/network_provider.dart';
 
-final transactionProvider = StateNotifierProvider<TransactionProvider, AsyncValue<List<TransactionData>?>>((ref) {
-  final net = ref.watch(networkProvider);
-  return TransactionProvider(net);
-});
+final transactionProvider = NotifierProvider<TransactionProvider, AsyncValue<List<TransactionData>?>>(TransactionProvider.new);
 
-class TransactionProvider extends StateNotifier<AsyncValue<List<TransactionData>?>> {
-  RocketbotClient? netProvider;
+class TransactionProvider extends Notifier<AsyncValue<List<TransactionData>?>> {
   List<TransactionData>? coins;
   final TransactionList _coinBalances = TransactionList();
 
-  TransactionProvider(RocketbotClient net) : super(const AsyncLoading()) {
-    netProvider = net;
+  @override
+  AsyncValue<List<TransactionData>?> build() {
+    ref.watch(networkProvider);
+    return const AsyncLoading();
   }
   void fetchTransactionData(Coin coin, {List<TransactionData>? list, bool force = false}) async {
     try {
@@ -27,8 +23,10 @@ class TransactionProvider extends StateNotifier<AsyncValue<List<TransactionData>
       }else{
         coins = list;
       }
+      if (!ref.mounted) return;
       state = AsyncValue.data(coins);
       }catch (e, st) {
+        if (!ref.mounted) return;
         state = AsyncValue.error(e, st);
       }
   }
