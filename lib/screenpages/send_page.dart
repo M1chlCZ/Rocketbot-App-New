@@ -550,13 +550,10 @@ class SendPageState extends State<SendPage> {
     FocusScope.of(context).unfocus();
 
     Future.delayed(const Duration(milliseconds: 200), () async {
-      var status = await Permission.camera.status;
-      if (await Permission.camera.isPermanentlyDenied) {
-        // await Dialogs.openAlertBoxReturn(context, "Warning", "Please grant this app permissions for Camera");
-        openAppSettings();
-      } else if (status.isDenied) {
-        var r = await Permission.camera.request();
-        if (r.isGranted) {
+      final status = await Permission.camera.status;
+      if (status.isDenied || status.isPermanentlyDenied) {
+        final result = await Permission.camera.request();
+        if (result.isGranted) {
           if (context.mounted) {
             Navigator.of(context).push(PageRouteBuilder(pageBuilder: (BuildContext context, _, __) {
               return QrScanner(
@@ -568,6 +565,8 @@ class SendPageState extends State<SendPage> {
               return FadeTransition(opacity: animation, child: child);
             }));
           }
+        } else if (result.isPermanentlyDenied) {
+          openAppSettings();
         }
       } else {
         if (context.mounted) {
