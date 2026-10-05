@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:rocketbot/models/balance_list.dart';
 import 'package:rocketbot/models/coin_graph.dart';
 import 'package:rocketbot/netinterface/interface.dart';
+import 'package:rocketbot/providers/balance_provider.dart';
 import 'package:rocketbot/providers/coins_provider.dart';
 import 'package:rocketbot/providers/network_provider.dart';
 
@@ -62,5 +64,21 @@ void main() {
     await container.read(coinsProvider.notifier).getData(1);
 
     expect(container.read(coinsProvider), isA<AsyncError<PriceData>>());
+  });
+
+  test('dropdownProvider notifies when the same list is wrapped again', () {
+    final container = ProviderContainer.test();
+    final notifier = container.read(dropdownProvider.notifier);
+    final list = <CoinBalance>[];
+
+    expect(
+      notifier.updateShouldNotify(
+        AsyncValue.data(list),
+        AsyncValue.data(list),
+      ),
+      isTrue,
+    );
+    final state = AsyncValue.data(list);
+    expect(notifier.updateShouldNotify(state, state), isFalse);
   });
 }
