@@ -476,7 +476,7 @@ class CoinMasternodeGraphState extends State<CoinMasternodeGraph> {
             touchTooltipData: LineTouchTooltipData(
                 fitInsideHorizontally: true,
                 fitInsideVertically: true,
-                tooltipRoundedRadius: 4,
+                tooltipBorderRadius: BorderRadius.circular(4),
                 tooltipMargin: 12.0,
                 getTooltipColor: (LineBarSpot barSpot) => const Color(0xFFF68DB2),
                 getTooltipItems: (List<LineBarSpot> touchedBarSpots) {

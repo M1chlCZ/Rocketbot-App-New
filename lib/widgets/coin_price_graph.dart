@@ -163,7 +163,7 @@ class CoinPriceGraphState extends State<CoinPriceGraph> {
           touchTooltipData: LineTouchTooltipData(
               fitInsideHorizontally: true,
               fitInsideVertically: true,
-              tooltipRoundedRadius: 4,
+              tooltipBorderRadius: BorderRadius.circular(4),
               getTooltipColor: (LineBarSpot barSpot) => Colors.black54,
               getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
                 return touchedBarSpots.map((barSpot) {

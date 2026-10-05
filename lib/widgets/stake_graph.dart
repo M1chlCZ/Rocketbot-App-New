@@ -476,7 +476,7 @@ class CoinStakeGraphState extends State<CoinStakeGraph> {
             touchTooltipData: LineTouchTooltipData(
                 fitInsideHorizontally: true,
                 fitInsideVertically: true,
-                tooltipRoundedRadius: 4,
+                tooltipBorderRadius: BorderRadius.circular(4),
                 tooltipMargin: 12.0,
                 getTooltipColor: (LineBarSpot barSpot) => const Color(0xFF9BD41E),
                 getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
