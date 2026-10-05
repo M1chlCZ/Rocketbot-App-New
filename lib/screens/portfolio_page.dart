@@ -55,7 +55,7 @@ class PortfolioScreen extends ConsumerStatefulWidget {
 
 class PortfolioScreenState extends ConsumerState<PortfolioScreen>
     with WidgetsBindingObserver, AutomaticKeepAliveClientMixin<PortfolioScreen>, LifecycleWatcher<PortfolioScreen> {
-  final NetInterface _interface = NetInterface();
+  final RocketbotClient _interface = RocketbotClient();
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<ScrollDirection> scrollDirectionNotifier = ValueNotifier<ScrollDirection>(ScrollDirection.forward);
   BalancesBloc? _bloc;
@@ -217,7 +217,7 @@ class PortfolioScreenState extends ConsumerState<PortfolioScreen>
     } catch (e) {
       debugPrint('register');
       try {
-        await NetInterface.registerPosHandle();
+        await RocketbotClient.registerPosHandle();
       } catch (e) {
         debugPrint(e.toString());
       }
@@ -1144,7 +1144,7 @@ class PortfolioScreenState extends ConsumerState<PortfolioScreen>
         if (s.contains('loginqr')) {
           var ss = s.split(";")[1];
           try {
-            NetInterface interface = NetInterface();
+            RocketbotClient interface = RocketbotClient();
             var tok = ss;
             await interface.post("/login/qr/auth", {"token": tok}, web: true, debug: false);
             if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Login successful")));

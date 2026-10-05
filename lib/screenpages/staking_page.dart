@@ -18,8 +18,7 @@ import 'package:rocketbot/models/stake_check.dart';
 import 'package:rocketbot/models/stake_data.dart';
 import 'package:rocketbot/models/withdraw_confirm.dart';
 import 'package:rocketbot/models/withdraw_pwid.dart';
-import 'package:rocketbot/netInterface/api_response.dart';
-import 'package:rocketbot/netInterface/app_exception.dart';
+import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/keyboard_overlay.dart';
 import 'package:rocketbot/storage/app_database.dart';
@@ -61,7 +60,7 @@ class StakingPage extends ConsumerStatefulWidget {
 
 class StakingPageState extends ConsumerState<StakingPage>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin, LifecycleWatcher<StakingPage> {
-  final NetInterface _interface = NetInterface();
+  final RocketbotClient _interface = RocketbotClient();
   final _graphKey = GlobalKey<CoinPriceGraphState>();
   final _percentageKey = GlobalKey<PercentSwitchState>();
   final GlobalKey<SlideActionState> _keyStake = GlobalKey();
@@ -1031,7 +1030,7 @@ class StakingPageState extends ConsumerState<StakingPage>
     } on ConflictDataException catch (r) {
       if (context.mounted) Navigator.of(context).pop();
       _keyStake.currentState!.reset();
-      var err = json.decode(r.toString());
+      var err = json.decode(r.message);
       if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage']);
     } catch (e) {
       if (context.mounted) Navigator.of(context).pop();

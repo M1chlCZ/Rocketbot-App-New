@@ -4,7 +4,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:core_utils_kit/core_utils_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:rocketbot/models/masternode_info.dart';
-import 'package:rocketbot/netInterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
@@ -19,7 +18,7 @@ class MasternodeManageScreen extends StatefulWidget {
 }
 
 class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
-  NetInterface interface = NetInterface();
+  RocketbotClient interface = RocketbotClient();
   List<MnList> sortedList = [];
 
   @override
@@ -250,7 +249,7 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
     } catch (ee) {
       try {
         var err = ee as ConflictDataException;
-        Dialogs.openAlertBox(context, "Error", err.toString());
+        Dialogs.openAlertBox(context, "Error", err.message);
       } catch (e) {
         Dialogs.openAlertBox(context, "Error", ee.toString());
       }

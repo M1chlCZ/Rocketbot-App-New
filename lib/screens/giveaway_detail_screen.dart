@@ -9,7 +9,7 @@ import 'package:rocketbot/support/utils.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/members_tile.dart';
 
-import '../netinterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 
 class GiveawayDetailScreen extends StatefulWidget {
   final Giveaway giveaway;
@@ -22,7 +22,7 @@ class GiveawayDetailScreen extends StatefulWidget {
 
 //TODO Translations
 class _GiveawayDetailScreenState extends State<GiveawayDetailScreen> {
-  final NetInterface interface = NetInterface();
+  final RocketbotClient interface = RocketbotClient();
   GiveawayDetailBloc? bloc;
   ActiveGiveaway? activeGiveaway;
   List<Members>? giveawayMembers;

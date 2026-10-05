@@ -4,7 +4,7 @@ import 'package:rocketbot/models/stake_data.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 
 class StakeList {
-  final NetInterface _interface = NetInterface();
+  final RocketbotClient _interface = RocketbotClient();
 
   Future<StakingData> getStakingData(int coinID, int type) async {
     Map<String, dynamic> m = {

@@ -9,7 +9,7 @@ import 'package:rocketbot/screens/games_switch.dart';
 import 'package:rocketbot/screens/launchpad_details.screen.dart';
 import 'package:rocketbot/widgets/launchpad_tile.dart';
 
-import '../netinterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 
 class LaunchpadScreen extends ConsumerStatefulWidget {
@@ -31,7 +31,7 @@ class _LaunchpadScreenState extends ConsumerState<LaunchpadScreen> with Automati
   final ValueNotifier<ScrollDirection> scrollDirectionNotifier = ValueNotifier<ScrollDirection>(ScrollDirection.forward);
   ValueNotifier<bool> isDialOpen = ValueNotifier(false);
   final _switchKey = GlobalKey<GameSwitcherState>();
-  final NetInterface interface = NetInterface();
+  final RocketbotClient interface = RocketbotClient();
   ScrollController gwScroll = ScrollController();
   ScrollController adScroll = ScrollController();
   ScrollController ltScroll = ScrollController();

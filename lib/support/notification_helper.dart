@@ -24,7 +24,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
 
 class FCM {
   final _firebaseMessaging = FirebaseMessaging.instance;
-  final NetInterface _interface = NetInterface();
+  final RocketbotClient _interface = RocketbotClient();
   final streamCtlr = StreamController<String>.broadcast();
   final titleCtlr = StreamController<String>.broadcast();
   final bodyCtlr = StreamController<String>.broadcast();

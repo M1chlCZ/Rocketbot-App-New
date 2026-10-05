@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:rocketbot/endpoints/get_masternode_graph.dart';
 import 'package:rocketbot/models/masternode_data.dart';
-import 'package:rocketbot/netInterface/api_response.dart';
+import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MasternodeGraphBloc {

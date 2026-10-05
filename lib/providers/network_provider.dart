@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rocketbot/NetInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 
-final networkProvider = Provider<NetInterface>((ref) {
-  final cm = NetInterface();
+final networkProvider = Provider<RocketbotClient>((ref) {
+  final cm = RocketbotClient();
   return cm;
 });

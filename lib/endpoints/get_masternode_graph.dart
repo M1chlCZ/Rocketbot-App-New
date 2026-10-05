@@ -4,7 +4,7 @@ import 'package:rocketbot/models/masternode_data.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 
 class MasternodeList {
-  final NetInterface _interface = NetInterface();
+  final RocketbotClient _interface = RocketbotClient();
 
   Future<MasternodeData> getStakingData(int coinID, int type) async {
     Map<String, dynamic> m = {

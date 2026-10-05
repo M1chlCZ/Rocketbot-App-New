@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rocketbot/NetInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/endpoints/get_transactions.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:rocketbot/models/transaction_data.dart';
@@ -11,11 +11,11 @@ final transactionProvider = StateNotifierProvider<TransactionProvider, AsyncValu
 });
 
 class TransactionProvider extends StateNotifier<AsyncValue<List<TransactionData>?>> {
-  NetInterface? netProvider;
+  RocketbotClient? netProvider;
   List<TransactionData>? coins;
   final TransactionList _coinBalances = TransactionList();
 
-  TransactionProvider(NetInterface net) : super(const AsyncLoading()) {
+  TransactionProvider(RocketbotClient net) : super(const AsyncLoading()) {
     netProvider = net;
   }
   void fetchTransactionData(Coin coin, {List<TransactionData>? list, bool force = false}) async {

@@ -9,7 +9,7 @@ import 'package:rocketbot/support/utils.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/lottery_member_tile.dart';
 
-import '../netinterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 
 class LotteryDetailScreen extends StatefulWidget {
   final Lottery lottery;
@@ -22,7 +22,7 @@ class LotteryDetailScreen extends StatefulWidget {
 
 //TODO Translations
 class _LotteryDetailScreenState extends State<LotteryDetailScreen> {
-  final NetInterface interface = NetInterface();
+  final RocketbotClient interface = RocketbotClient();
   LotteryDetailBloc? bloc;
   LotteryDetailsData? activeGiveaway;
   List<AirdropMembers>? giveawayMembers;

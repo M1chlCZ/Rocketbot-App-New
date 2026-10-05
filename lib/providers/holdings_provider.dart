@@ -8,14 +8,14 @@ import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/app_services.dart';
 
 class CoinBalances {
-  final NetInterface _interface = NetInterface();
+  final RocketbotClient _interface = RocketbotClient();
   PosCoinsList? pl;
 
   Future<List<CoinBalance>?> fetchAllBalances(bool force) async {
     String? posToken;
     try {
       pl = await _getPosCoins();
-      posToken = await secureStore.read(NetInterface.posToken);
+      posToken = await secureStore.read(RocketbotClient.posToken);
       if (kDebugMode) {
         print(posToken ?? "NULL TOKEN");
       }
@@ -23,10 +23,10 @@ class CoinBalances {
       debugPrint(e.toString());
     }
     if (pl == null) {
-      await NetInterface.registerPosHandle();
+      await RocketbotClient.registerPosHandle();
       pl = await _getPosCoins();
     } else if (pl == null && posToken != null) {
-      await NetInterface.registerPosHandle();
+      await RocketbotClient.registerPosHandle();
       pl = await _getPosCoins();
     }
     List<CoinBalance> list = await BalanceCache.getAllRecords(forceRefresh: false);

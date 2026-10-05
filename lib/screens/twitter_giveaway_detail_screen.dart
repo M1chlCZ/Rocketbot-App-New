@@ -9,7 +9,7 @@ import 'package:rocketbot/support/utils.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/widgets/members_tile.dart';
 
-import '../netinterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 
 class TwitterGiveawayDetailScreen extends StatefulWidget {
   final Giveaway giveaway;
@@ -21,7 +21,7 @@ class TwitterGiveawayDetailScreen extends StatefulWidget {
 }
 
 class _TwitterGiveawayDetailScreenState extends State<TwitterGiveawayDetailScreen> {
-  final NetInterface interface = NetInterface();
+  final RocketbotClient interface = RocketbotClient();
   GiveawayDetailBloc? bloc;
 
   @override

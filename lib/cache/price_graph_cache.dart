@@ -1,7 +1,7 @@
 import 'package:rocketbot/models/coin_graph.dart';
 import 'package:rocketbot/models/transaction_data.dart';
 
-import '../NetInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 
 class PriceGraphCache extends TransactionData {
   static Duration? _cacheValidDuration;
@@ -12,7 +12,7 @@ class PriceGraphCache extends TransactionData {
 
   static Future<void> refreshAllRecords({bool force = false}) async {
     if(_allRecords.isEmpty || force) {
-      final NetInterface helper = NetInterface();
+      final RocketbotClient helper = RocketbotClient();
       var f = await helper.get("Coin/GetPriceData?IncludeHistoryPrices=true&IncludeVolume=false&IncludeMarketcap=false&IncludeChange=true");
       _allRecords.addAll(f);
       _lastFetchTime = DateTime.now();

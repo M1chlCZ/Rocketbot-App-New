@@ -21,7 +21,7 @@ import 'package:rocketbot/widgets/airdrop_tile.dart';
 import 'package:rocketbot/widgets/giveaway_tile.dart';
 import 'package:rocketbot/widgets/lottery_tile.dart';
 
-import '../netinterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 
 class GiveAwayScreen extends StatefulWidget {
   final VoidCallback prevScreen;
@@ -42,7 +42,7 @@ class _GiveAwayScreenState extends State<GiveAwayScreen> with AutomaticKeepAlive
   final ValueNotifier<ScrollDirection> scrollDirectionNotifier = ValueNotifier<ScrollDirection>(ScrollDirection.forward);
   ValueNotifier<bool> isDialOpen = ValueNotifier(false);
   final _switchKey = GlobalKey<GameSwitcherState>();
-  final NetInterface interface = NetInterface();
+  final RocketbotClient interface = RocketbotClient();
   ScrollController gwScroll = ScrollController();
   ScrollController adScroll = ScrollController();
   ScrollController ltScroll = ScrollController();

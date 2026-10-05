@@ -26,7 +26,7 @@ class MainMenuScreen extends StatefulWidget {
 }
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
-  final NetInterface _interface = NetInterface();
+  final RocketbotClient _interface = RocketbotClient();
   final _firebaseMessaging = GetIt.I.get<FCM>();
   final _pageController = PageController(initialPage: 0);
   final _appLinks = AppLinks();

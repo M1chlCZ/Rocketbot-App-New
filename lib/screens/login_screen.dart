@@ -89,7 +89,7 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   _loggedIN() async {
-    String? lg = await secureStore.read(NetInterface.token);
+    String? lg = await secureStore.read(RocketbotClient.token);
     if (lg != null && lg.isNotEmpty) {
       return true;
     } else {
@@ -100,7 +100,7 @@ class LoginScreenState extends State<LoginScreen> {
   _goodCredentials() async {
     // _nextPage();
     try {
-      int i = await NetInterface.checkToken();
+      int i = await RocketbotClient.checkToken();
       if (i == 0) {
         _nextPage();
       } else {
@@ -137,9 +137,9 @@ class LoginScreenState extends State<LoginScreen> {
     setState(() {
       _curtain = true;
     });
-    String? res = await NetInterface.getKey(login, pass);
+    String? res = await RocketbotClient.getKey(login, pass);
     if (res != null) {
-      bool code = await NetInterface.getEmailCode(res);
+      bool code = await RocketbotClient.getEmailCode(res);
       if (code) {
         if (context.mounted) Dialogs.open2FAbox(context, res, _getToken);
       } else {
@@ -178,12 +178,12 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   void _getToken(String key, String code) async {
-    String? res = await NetInterface.getToken(key, code);
+    String? res = await RocketbotClient.getToken(key, code);
     if (res != null) {
-      await secureStore.write(NetInterface.token, res);
-      String? wer = await secureStore.read(NetInterface.token);
-      await NetInterface.registerPosHandle();
-      String? poser = await secureStore.read(NetInterface.posToken);
+      await secureStore.write(RocketbotClient.token, res);
+      String? wer = await secureStore.read(RocketbotClient.token);
+      await RocketbotClient.registerPosHandle();
+      String? poser = await secureStore.read(RocketbotClient.posToken);
       if (poser != null) {
         if (context.mounted) {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MainMenuScreen()));
@@ -283,7 +283,7 @@ class LoginScreenState extends State<LoginScreen> {
     setState(() {
       _registerButton = false;
     });
-    String? res = await NetInterface.registerUser(
+    String? res = await RocketbotClient.registerUser(
         agreed: _termsAgreed,
         passConf: passwordRegConfirmController.text,
         email: emailRegController.text,
@@ -317,7 +317,7 @@ class LoginScreenState extends State<LoginScreen> {
   void _forgotPass(String email) async {
     if(context.mounted) Navigator.of(context).pop();
     Dialogs.openWaitBox(context);
-    var i = await NetInterface.forgotPass(email);
+    var i = await RocketbotClient.forgotPass(email);
     if(context.mounted) Navigator.of(context).pop();
     if (i == 1) {
       if(context.mounted)Dialogs.openAlertBox(context, "Success", "Please check your email for reset code");
@@ -492,8 +492,8 @@ class LoginScreenState extends State<LoginScreen> {
                                     _curtain = true;
                                   });
                                   if (tokenID != null) {
-                                    var asdf = await NetInterface.getTokenGoogle(tokenID);
-                                    await NetInterface.registerPosHandle();
+                                    var asdf = await RocketbotClient.getTokenGoogle(tokenID);
+                                    await RocketbotClient.registerPosHandle();
                                     if (asdf != null) {
                                       _nextPage();
                                     } else {
@@ -539,7 +539,7 @@ class LoginScreenState extends State<LoginScreen> {
                                 children: [
                                   AppleSignInButton(
                                     onSignIn: (AuthorizationCredentialAppleID value) async {
-                                      var asdf = await NetInterface.getTokenApple(value.authorizationCode);
+                                      var asdf = await RocketbotClient.getTokenApple(value.authorizationCode);
                                       if (asdf != null) {
                                         _nextPage();
                                       } else {

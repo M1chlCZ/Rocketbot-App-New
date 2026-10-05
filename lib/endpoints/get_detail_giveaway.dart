@@ -4,7 +4,7 @@ import 'package:rocketbot/models/twitter_giveaway.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 
 class GiveawayDetail {
-  final NetInterface _helper = NetInterface();
+  final RocketbotClient _helper = RocketbotClient();
 
   Future<Map<String, dynamic>?> fetchGiveaways(int id, int socialNetwork) async {
     if (socialNetwork != 3) {

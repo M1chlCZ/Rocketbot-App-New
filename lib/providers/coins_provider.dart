@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rocketbot/NetInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/models/coin_graph.dart';
 import 'package:rocketbot/providers/network_provider.dart';
 
@@ -9,9 +9,9 @@ return CoinsProvider(net);
 });
 
 class CoinsProvider extends StateNotifier<AsyncValue<PriceData>> {
-  NetInterface? netProvider;
+  RocketbotClient? netProvider;
 
-  CoinsProvider(NetInterface net) : super(const AsyncLoading()) {
+  CoinsProvider(RocketbotClient net) : super(const AsyncLoading()) {
     netProvider = net;
   }
   void getData(int idCoin) async {

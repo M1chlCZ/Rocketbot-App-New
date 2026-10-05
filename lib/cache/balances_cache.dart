@@ -1,6 +1,6 @@
 import 'package:rocketbot/models/coin_graph.dart';
 
-import '../NetInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 import '../models/balance_list.dart';
 
 class BalanceCache extends BalanceList {
@@ -11,7 +11,7 @@ class BalanceCache extends BalanceList {
   BalanceCache() : super();
 
   static Future<void> _refreshAllRecords() async {
-    final NetInterface helper = NetInterface();
+    final RocketbotClient helper = RocketbotClient();
     final response = await helper.get("User/GetBalances");
     final priceData = await helper.get("Coin/GetPriceData?IncludeHistoryPrices=false&IncludeVolume=false&IncludeMarketcap=false&IncludeChange=true");
     Map<String, dynamic> m = {"response": response, "priceData": priceData};

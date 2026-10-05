@@ -58,7 +58,7 @@ class CoinScreen extends ConsumerStatefulWidget {
 
 class CoinScreenState extends ConsumerState<CoinScreen> with SingleTickerProviderStateMixin {
   final _graphKey = GlobalKey<CoinPriceGraphState>();
-  final NetInterface _interface = NetInterface();
+  final RocketbotClient _interface = RocketbotClient();
   late List<CoinBalance> _listCoins;
   CoinBalance? _balanceData;
   late Coin _coinActive;

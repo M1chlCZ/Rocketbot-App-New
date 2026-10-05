@@ -2,7 +2,7 @@ import 'package:rocketbot/models/giveaways.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 
 class GiveawaysList {
-  final NetInterface _helper = NetInterface();
+  final RocketbotClient _helper = RocketbotClient();
 
   Future<List<Giveaway>?> fetchGiveaways(int page) async {
     List<Giveaway>? m = [];

@@ -3,7 +3,7 @@ import 'package:rocketbot/models/aidrop_details.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 
 class AirdropDetail {
-  final NetInterface _helper = NetInterface();
+  final RocketbotClient _helper = RocketbotClient();
 
   Future<Map<String, dynamic>?> fetchAirdrop(int id) async {
     var s = await _helper.get("Games/Airdrop", request: "id=$id", debug: false);

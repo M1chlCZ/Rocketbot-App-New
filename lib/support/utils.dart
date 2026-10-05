@@ -42,7 +42,7 @@ class Utils {
 
   static Future<bool> getTwoFactorStatic() async {
     try {
-      NetInterface ci = NetInterface();
+      RocketbotClient ci = RocketbotClient();
       Map<String, dynamic> m = await ci.get("/twofactor/check", pos: true, debug: false);
       return m['twoFactor'] as bool;
     } catch (e) {
@@ -52,7 +52,7 @@ class Utils {
 
   static Future<bool> check2FA(String s) async {
     try {
-      NetInterface ci = NetInterface();
+      RocketbotClient ci = RocketbotClient();
       Map<String, dynamic> m = await ci.post("/twofactor/auth", {"token": s}, pos: true, debug: false);
       return true;
     } catch (e) {

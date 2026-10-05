@@ -12,7 +12,6 @@ import 'package:rocketbot/models/balance_portfolio.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:rocketbot/models/fees.dart';
 import 'package:rocketbot/models/withdraw_pwid.dart';
-import 'package:rocketbot/netinterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/auth_screen.dart';
 import 'package:rocketbot/support/auto_size_text_field.dart';
@@ -38,7 +37,7 @@ class SendPageState extends State<SendPage> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final GlobalKey<SlideActionState> _keyStake = GlobalKey();
-  final NetInterface _interface = NetInterface();
+  final RocketbotClient _interface = RocketbotClient();
 
   Coin? _coinActive;
   bool _curtain = true;
@@ -168,7 +167,7 @@ class SendPageState extends State<SendPage> {
       }
     } on ConflictDataException catch (r) {
       _keyStake.currentState!.reset();
-      var err = json.decode(r.toString());
+      var err = json.decode(r.message);
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['error']);
     } catch (e) {
       _keyStake.currentState!.reset();

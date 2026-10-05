@@ -33,7 +33,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class MainScreenState extends State<MainScreen> {
-  final NetInterface _interface = NetInterface();
+  final RocketbotClient _interface = RocketbotClient();
   final _portfolioKey = GlobalKey<PortfolioScreenState>();
   final _coinKey = GlobalKey<CoinScreenState>();
   final _depositKey = GlobalKey<DepositPageState>();

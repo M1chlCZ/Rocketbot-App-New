@@ -3,7 +3,7 @@ import 'package:rocketbot/models/loterries.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 
 class LotteryList {
-  final NetInterface _helper = NetInterface();
+  final RocketbotClient _helper = RocketbotClient();
 
   Future<List<Lottery>?> fetchLotteries(int page) async {
     List<Lottery>? m = [];

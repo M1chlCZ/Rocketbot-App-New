@@ -27,7 +27,7 @@ class EarningsScreen extends StatefulWidget {
 }
 
 class _EarningsScreenState extends State<EarningsScreen> with AutomaticKeepAliveClientMixin<EarningsScreen> {
-  NetInterface interface = NetInterface();
+  RocketbotClient interface = RocketbotClient();
   List<Sector> list = [];
   double totalUSD = 0.0;
   StakeBalanceBloc? _bloc;

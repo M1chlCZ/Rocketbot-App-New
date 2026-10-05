@@ -23,7 +23,7 @@ class SocialScreen extends ConsumerStatefulWidget {
 
 class SocialScreenState extends ConsumerState<SocialScreen>
     with WidgetsBindingObserver, LifecycleWatcher<SocialScreen> {
-  final NetInterface _interface = NetInterface();
+  final RocketbotClient _interface = RocketbotClient();
   final TextEditingController _discordTextController = TextEditingController();
   List<int> _socials = [];
   bool _paused = false;

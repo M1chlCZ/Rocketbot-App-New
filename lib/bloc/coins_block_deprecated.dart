@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:rocketbot/endpoints/get_all_coins.dart';
 import 'package:rocketbot/models/coin.dart';
-import 'package:rocketbot/netInterface/api_response.dart';
+import 'package:rocketbot/netinterface/api_response.dart';
 
 class CoinsBloc {
   final CoinsList _coinsList = CoinsList();

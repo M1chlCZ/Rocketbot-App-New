@@ -1,20 +1,35 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
+import 'package:json_rest_client/json_rest_client.dart' hide UserAgentProvider;
 import 'package:rocketbot/models/pos_token_auth.dart';
 import 'package:rocketbot/models/refresh_token.dart';
 import 'package:rocketbot/models/signin_code.dart';
 import 'package:rocketbot/models/signin_key.dart';
 import 'package:rocketbot/support/app_services.dart';
 import 'package:rocketbot/support/user_agent.dart';
-import 'package:rocketbot/support/globals.dart' as globals;
 
-import 'app_exception.dart';
+export 'package:json_rest_client/json_rest_client.dart'
+    show
+        BadRequestException,
+        ConflictDataException,
+        DeserializationException,
+        InvalidInputException,
+        NetworkException,
+        NotFoundException,
+        RequestTimeoutException,
+        RestClientException,
+        ServerErrorException,
+        UnauthorizedException;
 
-class NetInterface {
+class _SecureTokenStore implements TokenStore {
+  const _SecureTokenStore();
+
+  @override
+  Future<String?> read(String key) => secureStore.read(key);
+}
+
+class RocketbotClient {
   static const String baseUrl = "https://app.rocketbot.pro/api/mobile/";
   static String posUrl = "https://mobileapp.rocketbot.pro/api/"; //TODO REFRESH TOKEN are separate!!!
   static String webURL = "https://mobileapp.rocketbot.pro/web/v1";
@@ -23,161 +38,114 @@ class NetInterface {
   static const String posToken = "posToken";
   static const String tokenRefresh = "refreshToken";
   static const String posTokenRefresh = "posRefreshToken";
-  static bool _refreshingToken = false;
 
-  Future<dynamic> get(String url, {String? request, bool pos = false, bool web = false, bool launchpad = false, bool debug = false}) async {
-    String userAgent = await UserAgentProvider.get();
-    var tk = await secureStore.read(pos || web || launchpad ? posToken : token); //TODO
-    print(tk);
-    dynamic responseJson;
-    try {
-      var curl = "";
-      if (pos) {
-        curl = posUrl + url;
-      } else if (web) {
-        curl = webURL + url;
-      } else if (launchpad) {
-        curl = mobileLaunchUrl + url;
-      } else {
-        curl = baseUrl + url;
-      }
-      // pos ? curl = posUrl + url : curl = baseUrl + url;
-      if (request != null) {
-        curl += "/?$request";
-      }
-      // print(curl);
-      final response = await http.get(Uri.parse(curl), headers: {
-        'User-Agent': userAgent.toLowerCase(),
-        "Authorization": " ${pos || web || launchpad  ? "JWT" : "Bearer"} $tk",
-      }).timeout(
-        const Duration(seconds: 120),
-        onTimeout: () {
-          return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
-        },
-      );
-      if(debug) {
-        print(response.statusCode);
-        print(response.body.toString());
-      }
-      if (response.statusCode == 401 || response.statusCode == 403) {
-        var isPos = (pos || launchpad) ? true : false;
-        await refreshToken(pos: isPos);
-        var tk = await secureStore.read(pos ? posToken : token);
-        final res = await http.get(Uri.parse(curl), headers: {
-          'User-Agent': userAgent.toLowerCase(),
-          "Authorization": " ${pos ? "JWT" : "Bearer"} $tk",
-        });
-      } else {
-        responseJson = await _returnResponse(response);
-      }
-      // print(responseJson.toString());
-    } on SocketException {
-      print("shit");
-      throw FetchDataException('No Internet connection');
+  static const _SecureTokenStore _tokenStore = _SecureTokenStore();
+
+  static final JsonRestClient _mainClient = JsonRestClient(
+    baseUrl: baseUrl,
+    tokenStore: _tokenStore,
+    authScheme: 'Bearer',
+    authTokenKey: token,
+    timeout: const Duration(seconds: 120),
+    userAgentProvider: UserAgentProvider.get,
+    onUnauthorized: () => refreshToken(),
+  );
+
+  static final JsonRestClient _posClient = JsonRestClient(
+    baseUrl: posUrl,
+    tokenStore: _tokenStore,
+    authScheme: 'JWT',
+    authTokenKey: posToken,
+    timeout: const Duration(seconds: 120),
+    userAgentProvider: UserAgentProvider.get,
+    onUnauthorized: _refreshPosToken,
+  );
+
+  static final JsonRestClient _launchpadClient = JsonRestClient(
+    baseUrl: mobileLaunchUrl,
+    tokenStore: _tokenStore,
+    authScheme: 'JWT',
+    authTokenKey: posToken,
+    timeout: const Duration(seconds: 120),
+    userAgentProvider: UserAgentProvider.get,
+    onUnauthorized: _refreshPosToken,
+  );
+
+  static final JsonRestClient _webClient = JsonRestClient(
+    baseUrl: webURL,
+    tokenStore: _tokenStore,
+    authScheme: 'JWT',
+    authTokenKey: posToken,
+    timeout: const Duration(seconds: 120),
+    userAgentProvider: UserAgentProvider.get,
+    onUnauthorized: _refreshPosToken,
+  );
+
+  static final JsonRestClient _authClient = JsonRestClient(
+    baseUrl: baseUrl,
+    tokenStore: _tokenStore,
+    timeout: const Duration(seconds: 15),
+    userAgentProvider: UserAgentProvider.get,
+  );
+
+  static final JsonRestClient _posAuthClient = JsonRestClient(
+    baseUrl: posUrl,
+    tokenStore: _tokenStore,
+    timeout: const Duration(seconds: 15),
+    userAgentProvider: UserAgentProvider.get,
+  );
+
+  static Future<String?>? _posRefreshInFlight;
+
+  static Future<String?> _refreshPosToken() =>
+      _posRefreshInFlight ??= refreshToken(pos: true).whenComplete(() => _posRefreshInFlight = null);
+
+  static JsonRestClient _clientFor({required bool pos, required bool web, required bool launchpad}) {
+    if (pos) {
+      return _posClient;
     }
-    return responseJson;
+    if (web) {
+      return _webClient;
+    }
+    if (launchpad) {
+      return _launchpadClient;
+    }
+    return _mainClient;
   }
 
-  Future<dynamic> post(String url, Map<String, dynamic> request, {bool pos = false, bool launchpad = false, bool web = false, bool debug = false}) async {
-    String userAgent = await UserAgentProvider.get();
-    var tk = await secureStore.read(pos || web || launchpad  ? posToken : token);
-    dynamic responseJson;
-    var query = json.encoder.convert(request);
-    // print(_query);
-    try {
-      var curl = "";
-      if (pos) {
-        curl = posUrl + url;
-      } else if (web) {
-        curl = webURL + url;
-      } else if (launchpad) {
-        curl = mobileLaunchUrl + url;
-      } else {
-        curl = baseUrl + url;
-      }
-      // print(_curl);
-      final response = await http
-          .post(Uri.parse(curl),
-              headers: {
-                "content-type": "application/json",
-                'User-Agent': userAgent.toLowerCase(),
-                "Authorization": "${pos || web || launchpad ? "JWT" : "Bearer"} $tk",
-              },
-              body: query)
-          .timeout(
-        const Duration(seconds: 120),
-        onTimeout: () {
-          return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
-        },
-      );
-      if (debug) {
-      print(response.body);
-      print(response.statusCode);
-      }
-      if (response.statusCode == 401 || response.statusCode == 403) {
-        var isPos = (pos || launchpad)  ? true : false;
-        await refreshToken(pos: isPos);
-        var tk = await secureStore.read(pos ? posToken : token); //TODO
-        final res = await http.post(Uri.parse(curl),
-            headers: {
-              "content-type": "application/json",
-              'User-Agent': userAgent.toLowerCase(),
-              "Authorization": "${pos ? "JWT" : "Bearer"} $tk",
-            },
-            body: query);
-        responseJson = await _returnResponse(res);
-      } else {
-        responseJson = await _returnResponse(response);
-      }
-      // print(responseJson.toString());
-    } on SocketException {
-      throw FetchDataException('No Internet connection');
-    }
-    return responseJson;
+  // `auth` defaults to true because the old transport always attached the
+  // Authorization header; no call site opts out.
+  Future<dynamic> get(String url,
+      {String? request, bool pos = false, bool web = false, bool launchpad = false, bool auth = true, bool debug = false}) async {
+    final response = await _clientFor(pos: pos, web: web, launchpad: launchpad).get<dynamic>(
+      url,
+      query: request == null ? null : Uri.splitQueryString(request),
+      auth: auth,
+      debug: debug,
+    );
+    return response;
   }
 
-  dynamic _returnResponse(http.Response response) async {
-    switch (response.statusCode) {
-      case 200:
-        var responseJson = json.decode(response.body.toString());
-        return responseJson;
-      case 400:
-        throw BadRequestException(response.body.toString());
-      case 401:
-        throw UnauthorisedException(response.body.toString());
-      case 403:
-        await checkToken();
-        break;
-      // throw UnauthorisedException(response.body.toString());
-      case 500:
-      case 409:
-        throw ConflictDataException(response.body.toString());
-      default:
-        print(response.statusCode.toString());
-        print(response.body.toString());
-        throw FetchDataException('Error occurred while communication with server: ${response.body}');
-    }
+  Future<dynamic> post(String url, Map<String, dynamic> request,
+      {bool pos = false, bool launchpad = false, bool web = false, bool auth = true, bool debug = false}) async {
+    final response = await _clientFor(pos: pos, web: web, launchpad: launchpad).post<dynamic>(
+      url,
+      body: request,
+      auth: auth,
+      debug: debug,
+    );
+    return response;
   }
 
   static Future<String?> getKey(String login, String pass) async {
     try {
-      String userAgent = await UserAgentProvider.get();
-      Map request = {"email": login, "password": pass};
-      var query = json.encoder.convert(request);
-      final response = await http.post(Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/Signin"),
-          body: query, headers: {'User-Agent': userAgent.toLowerCase(), "accept": "application/json", "content-type": "application/json"}).timeout(
-        const Duration(seconds: 15),
-        onTimeout: () {
-          return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
-        },
+      final response = await _authClient.post<Map<String, dynamic>>(
+        'Auth/Signin',
+        body: {"email": login, "password": pass},
+        headers: {'accept': 'application/json'},
       );
-
-      if (response.statusCode == 200) {
-        var js = SignKey.fromJson(json.decode(response.body));
-        return js.data!.key!;
-      } else {
-        return null;
-      }
+      var js = SignKey.fromJson(response);
+      return js.data!.key!;
     } catch (e) {
       debugPrint(e.toString());
       return null;
@@ -186,23 +154,12 @@ class NetInterface {
 
   static Future<bool> getEmailCode(String key) async {
     try {
-      String userAgent = await UserAgentProvider.get();
-      Map request = {"key": key};
-      var query = json.encoder.convert(request);
-      final response = await http.post(Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/SendEmailCodeForSignin"),
-          body: query, headers: {'User-Agent': userAgent.toLowerCase(), "accept": "application/json", "content-type": "application/json"}).timeout(
-        const Duration(seconds: 15),
-        onTimeout: () {
-          return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
-        },
+      await _authClient.post(
+        'Auth/SendEmailCodeForSignin',
+        body: {"key": key},
+        headers: {'accept': 'application/json'},
       );
-
-      if (response.statusCode == 200) {
-        // var js = SignKey.fromJson(json.decode(response.body));
-        return true;
-      } else {
-        return false;
-      }
+      return true;
     } catch (e) {
       debugPrint(e.toString());
       return false;
@@ -211,29 +168,15 @@ class NetInterface {
 
   static Future<String?> getToken(String key, String code) async {
     try {
-      String userAgent = await UserAgentProvider.get();
-      Map request = {
-        "key": key,
-        "emailCode": code,
-      };
-      var query = json.encoder.convert(request);
-      final response = await http.post(Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/ConfirmSignin"),
-          body: query, headers: {"accept": "application/json", 'User-Agent': userAgent.toLowerCase(), "content-type": "application/json"}).timeout(
-        const Duration(seconds: 15),
-        onTimeout: () {
-          return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
-        },
+      final response = await _authClient.post<Map<String, dynamic>>(
+        'Auth/ConfirmSignin',
+        body: {"key": key, "emailCode": code},
+        headers: {'accept': 'application/json'},
       );
-
-      if (response.statusCode == 200) {
-        SignCode? res = SignCode.fromJson(json.decode(response.body));
-        await secureStore.write(NetInterface.token, res.data!.token!);
-        await secureStore.write(NetInterface.tokenRefresh, res.data!.refreshToken!);
-        await secureStore.write(globals.id, res.data!.user!.id!.toString());
-        return res.data!.token!;
-      } else {
-        return null;
-      }
+      SignCode? res = SignCode.fromJson(response);
+      await secureStore.write(token, res.data!.token!);
+      await secureStore.write(tokenRefresh, res.data!.refreshToken!);
+      return res.data!.token!;
     } catch (e) {
       debugPrint(e.toString());
       return null;
@@ -241,30 +184,17 @@ class NetInterface {
   }
 
   static Future<String?> getTokenGoogle(String tokenID) async {
-    log("getTokenGoogle: $tokenID");
     try {
-      String userAgent = await UserAgentProvider.get();
-      Map request = {
-        "token": tokenID,
-      };
-      var query = json.encoder.convert(request);
-      final response = await http.post(Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/SignWithGoogle"),
-          body: query, headers: {"accept": "application/json", 'User-Agent': userAgent.toLowerCase(), "content-type": "application/json"}).timeout(
-        const Duration(seconds: 15),
-        onTimeout: () {
-          return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
-        },
+      final response = await _authClient.post<Map<String, dynamic>>(
+        'Auth/SignWithGoogle',
+        body: {"token": tokenID},
+        headers: {'accept': 'application/json'},
       );
-      if (response.statusCode == 200) {
-        SignCode? res = SignCode.fromJson(json.decode(response.body));
-        if (res.data!.token != null) {
-          await secureStore.write(NetInterface.token, res.data!.token!);
-          await secureStore.write(NetInterface.tokenRefresh, res.data!.refreshToken!);
-          await secureStore.write(globals.id, res.data!.user!.id!.toString());
-          return res.data!.token!;
-        } else {
-          return null;
-        }
+      SignCode? res = SignCode.fromJson(response);
+      if (res.data!.token != null) {
+        await secureStore.write(token, res.data!.token!);
+        await secureStore.write(tokenRefresh, res.data!.refreshToken!);
+        return res.data!.token!;
       } else {
         return null;
       }
@@ -276,28 +206,16 @@ class NetInterface {
 
   static Future<String?> getTokenApple(String authorizationCode) async {
     try {
-      String userAgent = await UserAgentProvider.get();
-      Map request = {
-        "authorizationCode": authorizationCode,
-      };
-      var query = json.encoder.convert(request);
-      final response = await http.post(Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/SignWithApple"),
-          body: query, headers: {"accept": "application/json", 'User-Agent': userAgent.toLowerCase(), "content-type": "application/json"}).timeout(
-        const Duration(seconds: 15),
-        onTimeout: () {
-          return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
-        },
+      final response = await _authClient.post<Map<String, dynamic>>(
+        'Auth/SignWithApple',
+        body: {"authorizationCode": authorizationCode},
+        headers: {'accept': 'application/json'},
       );
-      if (response.statusCode == 200) {
-        SignCode? res = SignCode.fromJson(json.decode(response.body));
-        if (res.data!.token != null) {
-          await secureStore.write(NetInterface.token, res.data!.token!);
-          await secureStore.write(NetInterface.tokenRefresh, res.data!.refreshToken!);
-          await secureStore.write(globals.id, res.data!.user!.id!.toString());
-          return res.data!.token!;
-        } else {
-          return null;
-        }
+      SignCode? res = SignCode.fromJson(response);
+      if (res.data!.token != null) {
+        await secureStore.write(token, res.data!.token!);
+        await secureStore.write(tokenRefresh, res.data!.refreshToken!);
+        return res.data!.token!;
       } else {
         return null;
       }
@@ -315,45 +233,46 @@ class NetInterface {
       required String surname,
       required bool agreed}) async {
     try {
-      String userAgent = await UserAgentProvider.get();
-      Map request = {"email": email, "password": pass, "confirmPassword": passConf, "name": name, "surname": surname, "agreeToConditions": agreed};
-      var query = json.encoder.convert(request);
-      // // print(_query);
-      final response = await http.post(Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/Signup"),
-          body: query, headers: {'User-Agent': userAgent.toLowerCase(), "accept": "application/json", "content-type": "application/json"}).timeout(
-        const Duration(seconds: 15),
-        onTimeout: () {
-          return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
-        },
+      final response = await _authClient.post<Map<String, dynamic>>(
+        'Auth/Signup',
+        body: {"email": email, "password": pass, "confirmPassword": passConf, "name": name, "surname": surname, "agreeToConditions": agreed},
+        headers: {'accept': 'application/json'},
       );
-
-      // print(response.body);
-      // print(response.headers);
-      // print(response.statusCode);
-      if (response.statusCode == 200) {
-        SignCode? res = SignCode.fromJson(json.decode(response.body));
-        if (res.data!.token != null) {
-          await secureStore.write(NetInterface.token, res.data!.token!);
-          await secureStore.write(NetInterface.tokenRefresh, res.data!.refreshToken!);
-          await secureStore.write(globals.id, res.data!.user!.id!.toString());
-        }
+      if (response == null) {
+        return null;
       }
-      return response.body;
+      SignCode? res = SignCode.fromJson(response);
+      if (res.data != null && res.data!.token != null) {
+        await secureStore.write(token, res.data!.token!);
+        await secureStore.write(tokenRefresh, res.data!.refreshToken!);
+      }
+      return jsonEncode(response);
+    } on NetworkException catch (e) {
+      debugPrint(e.toString());
+      return null;
+    } on RequestTimeoutException catch (e) {
+      debugPrint(e.toString());
+      return null;
+    } on DeserializationException catch (e) {
+      debugPrint(e.toString());
+      return null;
+    } on RestClientException catch (e) {
+      return e.message;
     } catch (e) {
       debugPrint(e.toString());
-      // // print(e);
       return null;
     }
   }
 
   static Future<int> forgotPass(String email) async {
     try {
-      String userAgent = await UserAgentProvider.get();
-      Map<String, dynamic> request = {
-        "email": email,
-      };
-      await NetInterface().post("Auth/ForgotPassword", request, debug: true);
-        return 1;
+      await _mainClient.post(
+        "Auth/ForgotPassword",
+        body: {"email": email},
+        auth: true,
+        debug: true,
+      );
+      return 1;
     } catch (e) {
       debugPrint(e.toString());
       return 0;
@@ -370,93 +289,61 @@ class NetInterface {
     }
   }
 
-  static Future<void> refreshToken({bool pos = false}) async {
+  static Future<String?> refreshToken({bool pos = false}) async {
     try {
-      if (_refreshingToken) {
-        return;
-      }
-      _refreshingToken = true;
-
-      String userAgent = await UserAgentProvider.get();
-      await secureStore.delete(pos ? NetInterface.posToken : NetInterface.token);
-      String? enc = await secureStore.read(pos ? NetInterface.posTokenRefresh : NetInterface.tokenRefresh);
-      Map request = {
-        "token": enc,
-      };
-      final resp = await http.post(
-          pos ? Uri.parse("https://mobileapp.rocketbot.pro/api/auth/refreshToken") : Uri.parse("https://app.rocketbot.pro/api/mobile/Auth/RefreshToken"),
-          body: json.encode(request),
-          headers: {
-            'User-Agent': userAgent.toLowerCase(),
-            "accept": "application/json",
-            "content-type": "application/json",
-            "Auth-Type": "rsa"
-          }).timeout(
-        const Duration(seconds: 15),
-        onTimeout: () {
-          return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
-        },
+      await secureStore.delete(pos ? posToken : token);
+      String? enc = await secureStore.read(pos ? posTokenRefresh : tokenRefresh);
+      final response = await (pos ? _posAuthClient : _authClient).post<Map<String, dynamic>>(
+        pos ? "auth/refreshToken" : "Auth/RefreshToken",
+        body: {"token": enc},
+        headers: {"Auth-Type": "rsa"},
+        timeout: const Duration(seconds: 15),
       );
-      TokenRefresh? res = TokenRefresh.fromJson(json.decode(resp.body));
-      if (res.data!.token != null) {
+      TokenRefresh? res = TokenRefresh.fromJson(response);
+      if (res.data != null && res.data!.token != null) {
         if (pos) {
-          await secureStore.write(NetInterface.posToken, res.data!.token!);
-          await secureStore.write(NetInterface.posTokenRefresh, res.data!.refreshToken!);
+          await secureStore.write(posToken, res.data!.token!);
+          await secureStore.write(posTokenRefresh, res.data!.refreshToken!);
         } else {
-          await secureStore.write(NetInterface.token, res.data!.token!);
-          await secureStore.write(NetInterface.tokenRefresh, res.data!.refreshToken!);
+          await secureStore.write(token, res.data!.token!);
+          await secureStore.write(tokenRefresh, res.data!.refreshToken!);
         }
-        _refreshingToken = false;
+        return res.data!.token;
       }
-      _refreshingToken = false;
+      return null;
     } catch (e) {
       if (pos) {
-        await secureStore.delete(NetInterface.posToken);
-        await secureStore.delete(NetInterface.posTokenRefresh);
+        await secureStore.delete(posToken);
+        await secureStore.delete(posTokenRefresh);
       }
-      _refreshingToken = false;
       debugPrint(e.toString());
+      return null;
     }
   }
 
   static Future<void> registerPos(String token) async {
     try {
-      String userAgent = await UserAgentProvider.get();
-      Map request = {
-        "token": token,
-      };
-      var query = json.encoder.convert(request);
-      final response = await http.post(Uri.parse("https://mobileapp.rocketbot.pro/api/auth"), body: query, headers: {
-        "Content-Type": "application/json",
-        "accept": "application/json",
-        'User-Agent': userAgent.toLowerCase(),
-        "Auth-Type": "rsa"
-      }).timeout(
-        const Duration(seconds: 15),
-        onTimeout: () {
-          return http.Response('ErrorTimeOut', 500); // Request Timeout response status code
-        },
+      final response = await _posAuthClient.post<Map<String, dynamic>>(
+        "auth",
+        body: {"token": token},
+        headers: {"accept": "application/json", "Auth-Type": "rsa"},
+        timeout: const Duration(seconds: 15),
       );
-      // print(response.body);
-      // print(response.statusCode);
-      if (response.statusCode == 200) {
-        PosTokenAuth? res = PosTokenAuth.fromJson(json.decode(response.body));
-        await secureStore.write(NetInterface.posToken, res.token!);
-        await secureStore.write(NetInterface.posTokenRefresh, res.refreshToken!);
-      } else {
-        // print(response.body);
-        debugPrint("//// PoS TOKEN ERROR ////");
-      }
+      PosTokenAuth? res = PosTokenAuth.fromJson(response);
+      await secureStore.write(posToken, res.token!);
+      await secureStore.write(posTokenRefresh, res.refreshToken!);
+    } on RestClientException {
+      debugPrint("//// PoS TOKEN ERROR ////");
     } catch (e) {
       debugPrint(e.toString());
     }
   }
 
   static Future<void> registerPosHandle() async {
-    String? posToken = await secureStore.read(NetInterface.posToken);
+    String? posToken = await secureStore.read(RocketbotClient.posToken);
     if (posToken == null) {
-      String? token = await secureStore.read(NetInterface.token);
-      await NetInterface.registerPos(token!);
+      String? token = await secureStore.read(RocketbotClient.token);
+      await RocketbotClient.registerPos(token!);
     } else {
       debugPrint(posToken);
     }

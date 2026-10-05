@@ -29,7 +29,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
-  NetInterface interface = NetInterface();
+  RocketbotClient interface = RocketbotClient();
   var dropLanguageValue = globals.languages[0];
   final List<int> _socials = [];
   var firstValue = false;
@@ -413,7 +413,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   getTwoFactor() async {
     try {
-      NetInterface ci = NetInterface();
+      RocketbotClient ci = RocketbotClient();
       Map<String, dynamic> m = await ci.get("/twofactor/check", pos: true, debug: false);
       Future.delayed(Duration.zero, () {
         setState(() {
@@ -437,7 +437,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     if (!run) {
       run = true;
       try {
-        NetInterface interface = NetInterface();
+        RocketbotClient interface = RocketbotClient();
         await interface.post("/twofactor/activate", {"code": s}, pos: true, debug: false);
         if (mounted) Navigator.of(context).pop();
         setState(() {
@@ -463,7 +463,7 @@ class SettingsScreenState extends State<SettingsScreen> {
     }
     Navigator.of(context).pop();
     try {
-      NetInterface interface = NetInterface();
+      RocketbotClient interface = RocketbotClient();
       await interface.post("/twofactor/remove", {"token": s}, pos: true, debug: false);
 
       setState(() {
@@ -499,7 +499,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   _get2FACode() async {
     try {
-      NetInterface interface = NetInterface();
+      RocketbotClient interface = RocketbotClient();
       Map<String, dynamic> m = await interface.post("/twofactor", {}, pos: true, debug: false);
 
       _set2FA(m['code']);

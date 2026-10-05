@@ -2,7 +2,7 @@ import 'package:rocketbot/models/airdrops.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 
 class AirdropList {
-  final NetInterface _helper = NetInterface();
+  final RocketbotClient _helper = RocketbotClient();
 
   Future<List<Airdrop>?> fetchAirdrops(int page) async {
     List<Airdrop>? m = [];

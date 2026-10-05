@@ -7,7 +7,7 @@ import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/app_services.dart';
 
 class StakeBalances {
-  final NetInterface _interface = NetInterface();
+  final RocketbotClient _interface = RocketbotClient();
   PosCoinsList? pl;
 
   List<CoinBalance> finalList = [];
@@ -15,15 +15,15 @@ class StakeBalances {
   Future<List<CoinBalance>?> fetchStakeBalances() async {
     // print("|FIRST STAKING BEGIN| " + DateTime.now().toString());
     pl = await _getPosCoins();
-    String? posToken = await secureStore.read(NetInterface.posToken);
+    String? posToken = await secureStore.read(RocketbotClient.posToken);
     if (kDebugMode) {
       print(posToken ?? "NULL TOKEN");
     }
     if (pl == null) {
-      await NetInterface.registerPosHandle();
+      await RocketbotClient.registerPosHandle();
       pl = await _getPosCoins();
     } else if (pl == null && posToken != null) {
-      await NetInterface.registerPosHandle();
+      await RocketbotClient.registerPosHandle();
       pl = await _getPosCoins();
     }
     // print("|SECOND STAKING DONE| " + DateTime.now().toString());

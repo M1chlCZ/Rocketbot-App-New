@@ -18,8 +18,7 @@ import 'package:rocketbot/models/masternode_lock.dart';
 import 'package:rocketbot/models/pgwid.dart';
 import 'package:rocketbot/models/withdraw_confirm.dart';
 import 'package:rocketbot/models/withdraw_pwid.dart';
-import 'package:rocketbot/netInterface/api_response.dart';
-import 'package:rocketbot/netInterface/app_exception.dart';
+import 'package:rocketbot/netinterface/api_response.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/keyboard_overlay.dart';
 import 'package:rocketbot/screens/mn_manage_screen.dart';
@@ -61,7 +60,7 @@ class MasternodePage extends ConsumerStatefulWidget {
 
 class MasternodePageState extends ConsumerState<MasternodePage>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin, LifecycleWatcher<MasternodePage> {
-  final NetInterface _interface = NetInterface();
+  final RocketbotClient _interface = RocketbotClient();
   final _graphKey = GlobalKey<CoinPriceGraphState>();
   final GlobalKey<SlideActionState> _keyStake = GlobalKey();
   AppDatabase db = GetIt.I.get<AppDatabase>();
@@ -1233,7 +1232,7 @@ class MasternodePageState extends ConsumerState<MasternodePage>
       await _interface.post("masternode/unlock", queryLock, pos: true, debug: false);
       if (context.mounted) Navigator.of(context).pop();
       _keyStake.currentState?.reset();
-      var err = json.decode(e.toString());
+      var err = json.decode(e.message);
       if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage']);
     } catch (e) {
       Map<String, dynamic> queryLock = {"idNode": mnLock?.node?.id};
@@ -1338,7 +1337,7 @@ class MasternodePageState extends ConsumerState<MasternodePage>
         _getMN();
       }
     } on ConflictDataException catch (e) {
-      var err = json.decode(e.toString());
+      var err = json.decode(e.message);
       if (context.mounted)
         Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage'].toString());
     } catch (e) {

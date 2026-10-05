@@ -3,7 +3,7 @@ import 'package:rocketbot/models/get_deposits.dart';
 import 'package:rocketbot/models/get_withdraws.dart';
 import 'package:rocketbot/models/transaction_data.dart';
 
-import '../NetInterface/interface.dart';
+import 'package:rocketbot/netinterface/interface.dart';
 
 class TransactionCache extends TransactionData {
   static Duration? _cacheValidDuration;
@@ -13,7 +13,7 @@ class TransactionCache extends TransactionData {
   TransactionCache() : super();
 
   static Future<void> _refreshAllRecords(int coinID) async {
-    final NetInterface helper = NetInterface();
+    final RocketbotClient helper = RocketbotClient();
     final deposits = await helper.get("Transfers/GetDeposits?page=1&pageSize=50&coinId=$coinID");
     final withdrawals = await helper.get("Transfers/GetWithdraws?page=1&pageSize=50&coinId=$coinID");
     // final price = await _helper.get("Coin/GetPriceData?coinId=$coinID&IncludeHistoryPrices=false&IncludeVolume=false&IncludeMarketcap=false&IncludeChange=true");

@@ -11,7 +11,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/models/deposit_address.dart';
-import 'package:rocketbot/netInterface/app_exception.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:rocketbot/support/app_services.dart';
@@ -28,7 +27,7 @@ class ReferralScreen extends StatefulWidget {
 class _ReferralScreenState extends State<ReferralScreen> {
   GlobalKey globalKey = GlobalKey();
   GlobalKey<ReferralWidgetState> refKey = GlobalKey();
-  NetInterface interface = NetInterface();
+  RocketbotClient interface = RocketbotClient();
   String? refCode;
   double reward = 0.0;
   bool refUsed = true;
@@ -53,7 +52,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
       reward = double.parse(res['reward'].toString());
       codeErr = false;
     } on ConflictDataException catch (e) {
-      var err = json.decode(e.toString());
+      var err = json.decode(e.message);
       Dialogs.openAlertBox(context, "Error", err['errorMessage'].toString());
       codeErr = true;
     } catch (e) {
