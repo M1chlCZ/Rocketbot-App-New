@@ -27,16 +27,16 @@ dependencies:
   decimal: ^3.0.2
   flutter_snake_navigationbar: any
   appinio_social_share: ^0.3.2
-  cached_network_image: ^3.4.1
+  cached_network_image: ^4.0.4
   permission_handler: ^11.3.1
   local_auth: ^2.3.0
   flutter_phoenix: ^1.1.1
   package_info_plus: ^10.2.2
   path_provider: any
   sign_in_with_apple: ^6.1.3
-  flutter_displaymode: ^0.6.0
+  flutter_displaymode: ^0.7.0
   flutter_local_notifications: ^17.2.3
-  flutter_udid: ^3.0.0
+  flutter_udid: ^4.1.6
   sqflite: ^2.4.0
   jiffy: ^6.3.1
   sprintf: any
@@ -55,11 +55,11 @@ dependencies:
   sliding_number: ^0.0.4
   animated_text_kit: ^4.2.2
   get_it: any
-  web_socket_channel: ^2.4.0
-  cupertino_icons: ^1.0.8
+  web_socket_channel: ^3.0.3
+  cupertino_icons: ^2.0.0
   rxdart: ^0.28.0
   logger: any
-  app_links: ^6.3.2
+  app_links: ^7.2.1
   lock_screen_pin:
     path: packages/lock_screen_pin
   disk_cached_image:
