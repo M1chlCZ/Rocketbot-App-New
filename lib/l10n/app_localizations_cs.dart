@@ -538,4 +538,8 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get web_login => 'Rocket.art login';
+
+  @override
+  String get biometric_unavailable =>
+      'Biometrické ověření není dostupné. Zapněte ho v nastavení systému nebo použijte PIN.';
 }

@@ -172,5 +172,6 @@
   "st_amount": "Subtract amount",
   "qr_scan" : "QR scanner",
   "qr_scan_error" : "QR code is not valid for this app",
-  "web_login" : "Rocket.art login"
+  "web_login" : "Rocket.art login",
+  "biometric_unavailable" : "Biometric authentication is unavailable. Enable it in system settings or use your PIN."
 }

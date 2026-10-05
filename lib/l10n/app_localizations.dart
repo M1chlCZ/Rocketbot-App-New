@@ -1113,6 +1113,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rocket.art login'**
   String get web_login;
+
+  /// No description provided for @biometric_unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric authentication is unavailable. Enable it in system settings or use your PIN.'**
+  String get biometric_unavailable;
 }
 
 class _AppLocalizationsDelegate

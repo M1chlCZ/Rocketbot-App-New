@@ -172,5 +172,6 @@
   "st_amount": "Odebrat množství",
   "qr_scan" : "QR scanner",
   "qr_scan_error" : "QR scanner není platný",
-   "web_login" : "Rocket.art login"
+   "web_login" : "Rocket.art login",
+   "biometric_unavailable" : "Biometrické ověření není dostupné. Zapněte ho v nastavení systému nebo použijte PIN."
 }

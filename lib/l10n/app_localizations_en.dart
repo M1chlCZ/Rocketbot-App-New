@@ -543,4 +543,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get web_login => 'Rocket.art login';
+
+  @override
+  String get biometric_unavailable =>
+      'Biometric authentication is unavailable. Enable it in system settings or use your PIN.';
 }

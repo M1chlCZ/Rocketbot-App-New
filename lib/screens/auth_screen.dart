@@ -6,6 +6,7 @@ import 'package:lock_screen_pin/lock_screen_pin.dart';
 import 'package:rocketbot/screens/main_menu.dart';
 import 'package:rocketbot/screens/security_screen.dart';
 import 'package:rocketbot/support/app_services.dart';
+import 'package:rocketbot/support/dialogs.dart';
 
 class AuthScreen extends StatefulWidget {
   final bool setupPIN;
@@ -71,11 +72,22 @@ class AuthScreenState extends State<AuthScreen> {
         biometricOnly: true,
       );
     } on LocalAuthException catch (e) {
+      if (!mounted) return;
       setState(() {
         _showFinger = false;
       });
       if (kDebugMode) {
         print(e);
+      }
+      if (mounted &&
+          (e.code == LocalAuthExceptionCode.noCredentialsSet ||
+              e.code == LocalAuthExceptionCode.noBiometricsEnrolled ||
+              e.code == LocalAuthExceptionCode.noBiometricHardware ||
+              e.code == LocalAuthExceptionCode.biometricLockout)) {
+        Dialogs.openAlertBox(
+            context,
+            AppLocalizations.of(context)!.alert,
+            AppLocalizations.of(context)!.biometric_unavailable);
       }
     }
     if (!context.mounted) return;
