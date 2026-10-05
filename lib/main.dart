@@ -46,7 +46,7 @@ void main() async {
 
   runApp(
     Phoenix(
-      child: const ProviderScope(child: MyApp()),
+      child: ProviderScope(retry: (_, __) => null, child: const MyApp()),
     ),
   );
 }

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/models/coin_graph.dart';
 import 'package:rocketbot/providers/network_provider.dart';
