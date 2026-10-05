@@ -488,20 +488,26 @@ class LoginScreenState extends State<LoginScreen> {
                                 try {
                                   String? tokenID = await service.signInwithGoogle();
 
-                                  setState(() {
-                                    _curtain = true;
-                                  });
-                                  if (tokenID != null) {
-                                    var asdf = await RocketbotClient.getTokenGoogle(tokenID);
-                                    await RocketbotClient.registerPosHandle();
-                                    if (asdf != null) {
-                                      _nextPage();
-                                    } else {
-                                      if (context.mounted) Dialogs.openAlertBox(context, "Error", "Error Sign in with Google");
+                                  if (tokenID == null) {
+                                    if (mounted) {
                                       setState(() {
                                         _curtain = false;
                                       });
                                     }
+                                    return;
+                                  }
+                                  setState(() {
+                                    _curtain = true;
+                                  });
+                                  var asdf = await RocketbotClient.getTokenGoogle(tokenID);
+                                  await RocketbotClient.registerPosHandle();
+                                  if (asdf != null) {
+                                    _nextPage();
+                                  } else {
+                                    if (context.mounted) Dialogs.openAlertBox(context, "Error", "Error Sign in with Google");
+                                    setState(() {
+                                      _curtain = false;
+                                    });
                                   }
                                 } catch (e) {
                                   if (kDebugMode) {
@@ -509,6 +515,11 @@ class LoginScreenState extends State<LoginScreen> {
                                   }
                                   if (e is FirebaseAuthException) {
                                     if (kDebugMode) print(e.message!);
+                                  }
+                                  if (mounted) {
+                                    setState(() {
+                                      _curtain = false;
+                                    });
                                   }
                                   Dialogs.openAlertBox(context, "Error", "Error Sign in with Google");
                                 }
