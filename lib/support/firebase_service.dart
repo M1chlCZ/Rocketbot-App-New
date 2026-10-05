@@ -8,8 +8,14 @@ class FirebaseService {
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
   static Future<void>? _googleSignInInitialization;
 
-  Future<void> _ensureGoogleSignInInitialized() {
-    return _googleSignInInitialization ??= _googleSignIn.initialize();
+  Future<void> _ensureGoogleSignInInitialized() async {
+    final future = _googleSignInInitialization ??= _googleSignIn.initialize();
+    try {
+      await future;
+    } catch (_) {
+      _googleSignInInitialization = null;
+      rethrow;
+    }
   }
 
   Future<String?> signInwithGoogle() async {
@@ -26,6 +32,9 @@ class FirebaseService {
       // print("///" + credential.toString());
       await _auth.signInWithCredential(credential);
       return googleSignInAuthentication.idToken;
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled) return null;
+      rethrow;
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) {
         print("/////${e.message}");
