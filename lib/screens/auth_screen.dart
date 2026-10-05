@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:lock_screen_pin/lock_screen_pin.dart';
@@ -66,15 +65,12 @@ class AuthScreenState extends State<AuthScreen> {
 
     try {
       authenticated = await auth.authenticate(
-        options: const AuthenticationOptions(
-          useErrorDialogs: true,
-          stickyAuth: true,
-          sensitiveTransaction: true,
-          biometricOnly: true,
-        ),
         localizedReason: 'Scan your fingerprint to authenticate',
+        persistAcrossBackgrounding: true,
+        sensitiveTransaction: true,
+        biometricOnly: true,
       );
-    } on PlatformException catch (e) {
+    } on LocalAuthException catch (e) {
       setState(() {
         _showFinger = false;
       });

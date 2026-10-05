@@ -5,27 +5,27 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  static Future<void>? _googleSignInInitialization;
+
+  Future<void> _ensureGoogleSignInInitialized() {
+    return _googleSignInInitialization ??= _googleSignIn.initialize();
+  }
 
   Future<String?> signInwithGoogle() async {
     try {
-      final GoogleSignInAccount? googleSignInAccount =
-      await _googleSignIn.signIn();
-      final ggAuth = await googleSignInAccount!.authentication;
-
-      // print("=============");
-      // log(ggAuth.idToken.toString());
-      // log(ggAuth.accessToken.toString());
+      await _ensureGoogleSignInInitialized();
+      final GoogleSignInAccount googleSignInAccount =
+      await _googleSignIn.authenticate();
       final GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount.authentication;
+      googleSignInAccount.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
       // print("///" + credential.token.toString());
       // print("///" + credential.toString());
       await _auth.signInWithCredential(credential);
-      return ggAuth.idToken!;
+      return googleSignInAuthentication.idToken;
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) {
         print("/////${e.message}");
@@ -36,6 +36,7 @@ class FirebaseService {
   }
 
   Future<void> signOutFromGoogle() async{
+    await _ensureGoogleSignInInitialized();
     await _googleSignIn.signOut();
     await _auth.signOut();
   }
