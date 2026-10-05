@@ -1,6 +1,6 @@
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'package:app_badge_plus/app_badge_plus.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rocketbot/netinterface/interface.dart';
@@ -39,7 +39,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     _firebaseMessaging.setNotifications();
     super.initState();
     _getUserInfo();
-    FlutterAppBadger.removeBadge();
+    AppBadgePlus.updateBadge(0);
     _appLinks.uriLinkStream.listen((uri) {
       if (uri.queryParameters.containsKey("auth")) {
         _webToken(uri.queryParameters["auth"]!);

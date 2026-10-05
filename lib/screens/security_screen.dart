@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_biometrics/flutter_biometrics.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:rocketbot/l10n/app_localizations.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
 import 'package:rocketbot/screens/auth_screen.dart';
@@ -36,7 +36,16 @@ class SecurityScreenState extends State<SecurityScreen> {
   _getBiometrics() async {
     try {
       if (Platform.isIOS) {
-        _biometrics = await FlutterBiometrics.availableBiometrics;
+        final biometrics = await LocalAuthentication().getAvailableBiometrics();
+        if (biometrics.contains(BiometricType.face)) {
+          _biometrics = 'Face ID';
+        } else if (biometrics.contains(BiometricType.fingerprint)) {
+          _biometrics = 'Touch ID';
+        } else if (biometrics.contains(BiometricType.iris)) {
+          _biometrics = 'Iris';
+        } else {
+          _biometrics = 'nothing';
+        }
         _dropValues.clear();
         if (_biometrics != null && _biometrics != "nothing") {
           _dropValues.add('PIN');

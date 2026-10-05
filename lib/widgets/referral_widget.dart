@@ -6,7 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:atomic_ui_kit/atomic_ui_kit.dart';
-import 'package:rocketbot/support/auto_size_text_field.dart';
+import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:qr_scanner_kit/qr_scanner_kit.dart';
 
 class ReferralWidget extends StatefulWidget {

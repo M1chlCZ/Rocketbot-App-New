@@ -31,7 +31,7 @@ import 'package:slide_to_act/slide_to_act.dart';
 
 import '../models/balance_list.dart';
 import '../models/coin.dart';
-import '../support/auto_size_text_field.dart';
+import 'package:auto_size_text_field/auto_size_text_field.dart';
 import '../widgets/coin_price_graph.dart';
 
 class StakingPage extends ConsumerStatefulWidget {

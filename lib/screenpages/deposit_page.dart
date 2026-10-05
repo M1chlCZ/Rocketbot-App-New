@@ -10,7 +10,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:rocketbot/widgets/coin_image.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../support/auto_size_text_field.dart';
+import 'package:auto_size_text_field/auto_size_text_field.dart';
 
 class DepositPage extends StatefulWidget {
   final Coin? coin;

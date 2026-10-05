@@ -14,7 +14,7 @@ import 'package:rocketbot/models/fees.dart';
 import 'package:rocketbot/models/withdraw_pwid.dart';
 import 'package:rocketbot/netinterface/interface.dart';
 import 'package:rocketbot/screens/auth_screen.dart';
-import 'package:rocketbot/support/auto_size_text_field.dart';
+import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:rocketbot/support/dialogs.dart';
 import 'package:qr_scanner_kit/qr_scanner_kit.dart';
 import 'package:rocketbot/support/app_services.dart';
