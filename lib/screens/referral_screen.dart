@@ -55,6 +55,10 @@ class _ReferralScreenState extends State<ReferralScreen> {
       var err = json.decode(e.message);
       Dialogs.openAlertBox(context, "Error", err['errorMessage'].toString());
       codeErr = true;
+    } on ServerErrorException catch (e) {
+      var err = json.decode(e.message);
+      if (mounted) Dialogs.openAlertBox(context, "Error", err['errorMessage'].toString());
+      codeErr = true;
     } catch (e) {
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
       debugPrint(e.toString());
@@ -94,7 +98,9 @@ class _ReferralScreenState extends State<ReferralScreen> {
           Dialogs.openAlertBox(context, "Referral ${AppLocalizations.of(context)!.alert.toLowerCase()}", "Your reward is on the way!");
         }
       } on ConflictDataException catch (e) {
-        if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
+        if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.message);
+      } on ServerErrorException catch (e) {
+        if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.message);
       } catch (e) {
         if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
         debugPrint(e.toString());

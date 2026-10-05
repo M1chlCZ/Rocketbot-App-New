@@ -48,7 +48,7 @@ class RocketbotClient {
     authTokenKey: token,
     timeout: const Duration(seconds: 120),
     userAgentProvider: UserAgentProvider.get,
-    onUnauthorized: () => refreshToken(),
+    onUnauthorized: _refreshMainToken,
   );
 
   static final JsonRestClient _posClient = JsonRestClient(
@@ -95,7 +95,11 @@ class RocketbotClient {
     userAgentProvider: UserAgentProvider.get,
   );
 
+  static Future<String?>? _mainRefreshInFlight;
   static Future<String?>? _posRefreshInFlight;
+
+  static Future<String?> _refreshMainToken() =>
+      _mainRefreshInFlight ??= refreshToken().whenComplete(() => _mainRefreshInFlight = null);
 
   static Future<String?> _refreshPosToken() =>
       _posRefreshInFlight ??= refreshToken(pos: true).whenComplete(() => _posRefreshInFlight = null);
@@ -281,7 +285,7 @@ class RocketbotClient {
 
   static Future<int> checkToken() async {
     try {
-      await refreshToken();
+      await _refreshMainToken();
       return 0;
     } catch (e) {
       debugPrint(e.toString());
@@ -296,7 +300,7 @@ class RocketbotClient {
       final response = await (pos ? _posAuthClient : _authClient).post<Map<String, dynamic>>(
         pos ? "auth/refreshToken" : "Auth/RefreshToken",
         body: {"token": enc},
-        headers: {"Auth-Type": "rsa"},
+        headers: {"accept": "application/json", "Auth-Type": "rsa"},
         timeout: const Duration(seconds: 15),
       );
       TokenRefresh? res = TokenRefresh.fromJson(response);
@@ -309,6 +313,10 @@ class RocketbotClient {
           await secureStore.write(tokenRefresh, res.data!.refreshToken!);
         }
         return res.data!.token;
+      }
+      if (pos) {
+        await secureStore.delete(posToken);
+        await secureStore.delete(posTokenRefresh);
       }
       return null;
     } catch (e) {

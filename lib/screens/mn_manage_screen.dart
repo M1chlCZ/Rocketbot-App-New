@@ -247,10 +247,9 @@ class _MasternodeManageScreenState extends State<MasternodeManageScreen> {
       await interface.post("masternode/withdraw", m, pos: true);
       if (context.mounted) Dialogs.openAlertBox(context, "Info", "Tokens are on the way!");
     } catch (ee) {
-      try {
-        var err = ee as ConflictDataException;
-        Dialogs.openAlertBox(context, "Error", err.message);
-      } catch (e) {
+      if (ee is ConflictDataException || ee is ServerErrorException) {
+        Dialogs.openAlertBox(context, "Error", (ee as RestClientException).message);
+      } else {
         Dialogs.openAlertBox(context, "Error", ee.toString());
       }
     }

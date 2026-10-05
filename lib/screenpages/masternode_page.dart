@@ -1234,6 +1234,13 @@ class MasternodePageState extends ConsumerState<MasternodePage>
       _keyStake.currentState?.reset();
       var err = json.decode(e.message);
       if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage']);
+    } on ServerErrorException catch (e) {
+      Map<String, dynamic> queryLock = {"idNode": mnLock?.node?.id};
+      await _interface.post("masternode/unlock", queryLock, pos: true, debug: false);
+      if (mounted) Navigator.of(context).pop();
+      _keyStake.currentState?.reset();
+      var err = json.decode(e.message);
+      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage']);
     } catch (e) {
       Map<String, dynamic> queryLock = {"idNode": mnLock?.node?.id};
       await _interface.post("masternode/unlock", queryLock, pos: true, debug: false);
@@ -1340,6 +1347,9 @@ class MasternodePageState extends ConsumerState<MasternodePage>
       var err = json.decode(e.message);
       if (context.mounted)
         Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage'].toString());
+    } on ServerErrorException catch (e) {
+      var err = json.decode(e.message);
+      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage'].toString());
     } catch (e) {
       Navigator.of(context).pop();
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());

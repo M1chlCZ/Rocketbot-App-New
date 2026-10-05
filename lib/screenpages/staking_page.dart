@@ -1026,12 +1026,17 @@ class StakingPageState extends ConsumerState<StakingPage>
     } on BadRequestException catch (r) {
       if (context.mounted) Navigator.of(context).pop();
       _keyStake.currentState!.reset();
-      if (context.mounted) Dialogs.openAlertBox(context,AppLocalizations.of(context)!.error, r.toString());
+      if (context.mounted) Dialogs.openAlertBox(context,AppLocalizations.of(context)!.error, r.message);
     } on ConflictDataException catch (r) {
       if (context.mounted) Navigator.of(context).pop();
       _keyStake.currentState!.reset();
       var err = json.decode(r.message);
       if (context.mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage']);
+    } on ServerErrorException catch (r) {
+      if (mounted) Navigator.of(context).pop();
+      _keyStake.currentState!.reset();
+      var err = json.decode(r.message);
+      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['errorMessage']);
     } catch (e) {
       if (context.mounted) Navigator.of(context).pop();
       _keyStake.currentState!.reset();
@@ -1138,7 +1143,18 @@ class StakingPageState extends ConsumerState<StakingPage>
       }
       setState(() {});
       Navigator.of(context).pop();
-      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.toString());
+      Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.message);
+    } on ServerErrorException catch (e) {
+      if (rewardParam == 2) {
+        _adjustReward = false;
+      } else if (rewardParam == 1) {
+        _loadingReward = false;
+      } else {
+        _loadingCoins = false;
+      }
+      setState(() {});
+      if (mounted) Navigator.of(context).pop();
+      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, e.message);
     } catch (e) {
       if (rewardParam == 2) {
         _adjustReward = false;

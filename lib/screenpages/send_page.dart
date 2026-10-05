@@ -169,6 +169,10 @@ class SendPageState extends State<SendPage> {
       _keyStake.currentState!.reset();
       var err = json.decode(r.message);
       Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['error']);
+    } on ServerErrorException catch (r) {
+      _keyStake.currentState!.reset();
+      var err = json.decode(r.message);
+      if (mounted) Dialogs.openAlertBox(context, AppLocalizations.of(context)!.error, err['error']);
     } catch (e) {
       _keyStake.currentState!.reset();
       // var err = InvalidReq.fromJson(e.toString());
