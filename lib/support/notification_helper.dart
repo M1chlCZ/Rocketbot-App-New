@@ -65,10 +65,10 @@ class FCM {
     }
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@drawable/ic_notification');
     final DarwinInitializationSettings initializationSettingsIOS =
-    DarwinInitializationSettings(onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
+    DarwinInitializationSettings();
     final InitializationSettings initializationSettings =
     InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings, onDidReceiveNotificationResponse: (payload) {
+    flutterLocalNotificationsPlugin.initialize(settings: initializationSettings, onDidReceiveNotificationResponse: (payload) {
     });
     FirebaseMessaging.instance.requestPermission(
       alert: true,
@@ -81,13 +81,13 @@ class FCM {
       (message) async {
         if (message.notification?.title != null) {
           flutterLocalNotificationsPlugin.show(
-              message.hashCode,
-              message.notification!.title,
-              message.notification!.body,
-              const NotificationDetails(
-                  android: AndroidNotificationDetails("rocket1", "Rocketbot Deposit/Withdrawal Info",
-                      importance: Importance.max, priority: Priority.high, playSound: true, enableVibration: true, icon: "@drawable/ic_notification"),
-                  iOS: DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true, sound: "default")),
+            id: message.hashCode,
+            title: message.notification!.title,
+            body: message.notification!.body,
+            notificationDetails: const NotificationDetails(
+                android: AndroidNotificationDetails("rocket1", "Rocketbot Deposit/Withdrawal Info",
+                    importance: Importance.max, priority: Priority.high, playSound: true, enableVibration: true, icon: "@drawable/ic_notification"),
+                iOS: DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true, sound: "default")),
             payload: message.data["dataLink"],
           );
         }
@@ -113,10 +113,6 @@ class FCM {
       _tokenUpload(token);
       secureStore.write('firebase_token', token);
     }
-  }
-
-  void _onDidReceiveLocalNotification(int id, String? title, String? body, String? payload) {
-    // Dialogs.openAlertBox(context, "Alert", payload!);
   }
 
   onNotificationRegister() {
