@@ -40,8 +40,15 @@ class DropDownController extends Notifier<AsyncValue<List<CoinBalance>>> {
 
   @override
   AsyncValue<List<CoinBalance>> build() {
+    _entries.clear();
     return const AsyncLoading();
   }
+
+  @override
+  bool updateShouldNotify(
+    AsyncValue<List<CoinBalance>> previous,
+    AsyncValue<List<CoinBalance>> next,
+  ) => !identical(previous, next);
 
   void getData() async {
     _entries.clear();

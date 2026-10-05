@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rocketbot/endpoints/get_transactions.dart';
 import 'package:rocketbot/models/coin.dart';
 import 'package:rocketbot/models/transaction_data.dart';
-import 'package:rocketbot/providers/network_provider.dart';
 
 final transactionProvider = NotifierProvider<TransactionProvider, AsyncValue<List<TransactionData>?>>(TransactionProvider.new);
 
@@ -12,9 +11,16 @@ class TransactionProvider extends Notifier<AsyncValue<List<TransactionData>?>> {
 
   @override
   AsyncValue<List<TransactionData>?> build() {
-    ref.watch(networkProvider);
+    coins = null;
     return const AsyncLoading();
   }
+
+  @override
+  bool updateShouldNotify(
+    AsyncValue<List<TransactionData>?> previous,
+    AsyncValue<List<TransactionData>?> next,
+  ) => !identical(previous, next);
+
   void fetchTransactionData(Coin coin, {List<TransactionData>? list, bool force = false}) async {
     try {
       if(list == null ) {

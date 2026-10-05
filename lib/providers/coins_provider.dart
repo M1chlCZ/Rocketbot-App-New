@@ -15,7 +15,14 @@ class CoinsProvider extends Notifier<AsyncValue<PriceData>> {
     _net = ref.watch(networkProvider);
     return const AsyncLoading();
   }
-  void getData(int idCoin) async {
+
+  @override
+  bool updateShouldNotify(
+    AsyncValue<PriceData> previous,
+    AsyncValue<PriceData> next,
+  ) => !identical(previous, next);
+
+  Future<void> getData(int idCoin) async {
     final response = await _net.get("Coin/GetPriceData?coinID=$idCoin&IncludeHistoryPrices=true&IncludeChange=true", debug: false);
     if (!ref.mounted) return;
     final data = CoinGraph.fromJson(response,idCoin.toString()).data;
