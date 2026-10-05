@@ -31,7 +31,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace ("com.m1chl.rocketbot")
-    compileSdk 36
+    compileSdk 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -105,5 +105,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.biometric:biometric:1.2.0-alpha05'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
 }
